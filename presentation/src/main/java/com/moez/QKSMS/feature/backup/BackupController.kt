@@ -29,7 +29,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -209,7 +208,7 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     override fun fabClicks(): Observable<*> = fab.clicks()
 
     override fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        (activity as? BackupActivity)?.storagePermissionLauncher?.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun selectFile() = backupFilesDialog.show()

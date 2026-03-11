@@ -24,7 +24,7 @@ import timber.log.Timber
 
 class CrashlyticsTree : Timber.Tree() {
 
-    override fun log(priority: Int, tag: String?, message: String?, throwable: Throwable?) {
+    override fun log(priority: Int, tag: String?, message: String, throwable: Throwable?) {
         val crashlytics = FirebaseCrashlytics.getInstance()
         val priorityString = when (priority) {
             Log.VERBOSE -> "V"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 /**
  * Utility for helping with Android O changes. This means that we need to explicitly send broadcasts
@@ -23,8 +24,13 @@ public class BroadcastUtils {
         PackageManager pm = context.getPackageManager();
 
         try {
-            PackageInfo packageInfo =
-                    pm.getPackageInfo(context.getPackageName(), PackageManager.GET_RECEIVERS);
+            PackageInfo packageInfo;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageInfo = pm.getPackageInfo(context.getPackageName(),
+                        PackageManager.PackageInfoFlags.of(PackageManager.GET_RECEIVERS));
+            } else {
+                packageInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_RECEIVERS);
+            }
 
             ActivityInfo[] receivers = packageInfo.receivers;
             for (ActivityInfo receiver : receivers) {

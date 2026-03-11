@@ -20,6 +20,8 @@ package com.moez.QKSMS.common.util.extensions
 
 import android.app.job.JobScheduler
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.TypedValue
@@ -81,11 +83,24 @@ fun Context.makeToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
 }
 
 fun Context.isInstalled(packageName: String): Boolean {
-    return tryOrNull(false) { packageManager.getApplicationInfo(packageName, 0).enabled } ?: false
+    return tryOrNull(false) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0)).enabled
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getApplicationInfo(packageName, 0).enabled
+        }
+    } ?: false
 }
 
 val Context.versionCode: Int
-    get() = packageManager.getPackageInfo(packageName, 0).versionCode
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+            .longVersionCode.toInt()
+    } else {
+        @Suppress("DEPRECATION")
+        packageManager.getPackageInfo(packageName, 0).versionCode
+    }
 
 val Context.jobScheduler: JobScheduler
     get() = getSystemService()!!

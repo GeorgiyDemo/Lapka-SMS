@@ -20,7 +20,9 @@ package com.moez.QKSMS.feature.main
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
+import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -33,7 +35,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -160,6 +161,8 @@ class MainActivity : QkThemedActivity(), MainView {
     private val snackbarButton: TextView? get() = findViewById(R.id.snackbarButton)
     private val backPressedSubject: Subject<NavItem> = PublishSubject.create()
 
+    private val permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -231,6 +234,10 @@ class MainActivity : QkThemedActivity(), MainView {
             Snackbar.make(drawerLayout, R.string.global_key_isnt_set, Snackbar.LENGTH_LONG)
                 .setAction(R.string.global_key_set) { navigator.showGlobalKeysSettings() }
                 .show()
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            backPressedSubject.onNext(NavItem.BACK)
         }
     }
 
@@ -403,10 +410,10 @@ class MainActivity : QkThemedActivity(), MainView {
     }
 
     override fun requestPermissions() {
-        ActivityCompat.requestPermissions(this, arrayOf(
+        permissionsLauncher.launch(arrayOf(
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
-                Manifest.permission.READ_CONTACTS), 0)
+                Manifest.permission.READ_CONTACTS))
     }
 
     override fun clearSearch() {
@@ -456,10 +463,6 @@ class MainActivity : QkThemedActivity(), MainView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemIntent.onNext(item.itemId)
         return true
-    }
-
-    override fun onBackPressed() {
-        backPressedSubject.onNext(NavItem.BACK)
     }
 
 }

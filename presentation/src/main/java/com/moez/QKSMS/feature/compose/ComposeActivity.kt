@@ -21,6 +21,8 @@ package com.moez.QKSMS.feature.compose
 import android.Manifest
 import android.animation.LayoutTransition
 import android.app.Activity
+import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ContentValues
@@ -40,7 +42,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
-import androidx.core.app.ActivityCompat
 import androidx.core.view.inputmethod.EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -88,12 +89,6 @@ import javax.inject.Inject
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
     companion object {
-        private const val SelectContactRequestCode = 0
-        private const val TakePhotoRequestCode = 1
-        private const val AttachPhotoRequestCode = 2
-        private const val AttachContactRequestCode = 3
-        private const val SetEncryptionKeyRequestCode = 202
-
         private const val CameraDestinationKey = "camera_destination"
     }
 
@@ -103,6 +98,47 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var messageAdapter: MessagesAdapter
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val selectContactLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        chipsSelectedIntent.onNext(result.data?.getSerializableExtra(ContactsActivity.ChipsKey)
+            ?.let { serializable -> serializable as? HashMap<String, String?> }
+            ?: hashMapOf())
+    }
+
+    private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            cameraDestination?.let(attachmentSelectedIntent::onNext)
+        }
+    }
+
+    private val attachPhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            data?.clipData?.itemCount
+                ?.let { count -> 0 until count }
+                ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
+                ?.forEach(attachmentSelectedIntent::onNext)
+                ?: data?.data?.let(attachmentSelectedIntent::onNext)
+        }
+    }
+
+    private val attachContactLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let(contactSelectedIntent::onNext)
+        }
+    }
+
+    private val encryptionKeyLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
+                encryptionKeySetIntent.onNext(Unit)
+            }
+        }
+    }
+
+    private val storagePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
+    private val smsPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
 
     private val contentView: ConstraintLayout by lazy { findViewById(R.id.contentView) }
     private val messageList: RecyclerView by lazy { findViewById(R.id.messageList) }
@@ -205,6 +241,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .subscribe()
 
         window.callback = ComposeWindowCallback(window.callback, this)
+
+        onBackPressedDispatcher.addCallback(this) {
+            backPressedIntent.onNext(Unit)
+        }
 
         // These theme attributes don't apply themselves on API 21
         if (Build.VERSION.SDK_INT <= 22) {
@@ -316,13 +356,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun requestSmsPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(
+        smsPermissionLauncher.launch(arrayOf(
             Manifest.permission.READ_SMS,
-            Manifest.permission.SEND_SMS), 0)
+            Manifest.permission.SEND_SMS))
     }
 
     override fun requestDatePicker() {
@@ -347,7 +387,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(Intent.ACTION_PICK)
             .setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
 
-        startActivityForResult(Intent.createChooser(intent, null), AttachContactRequestCode)
+        attachContactLauncher.launch(Intent.createChooser(intent, null))
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
@@ -356,7 +396,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(this, ContactsActivity::class.java)
             .putExtra(ContactsActivity.SharingKey, sharing)
             .putExtra(ContactsActivity.ChipsKey, serialized)
-        startActivityForResult(intent, SelectContactRequestCode)
+        selectContactLauncher.launch(intent)
     }
 
     override fun themeChanged() {
@@ -376,7 +416,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), TakePhotoRequestCode)
+        takePhotoLauncher.launch(Intent.createChooser(intent, null))
     }
 
     override fun requestGallery() {
@@ -386,7 +426,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             .setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, null), AttachPhotoRequestCode)
+        attachPhotoLauncher.launch(Intent.createChooser(intent, null))
     }
 
     override fun setDraft(draft: String) {
@@ -423,35 +463,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         return super.getColoredMenuItems() + R.id.call
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when {
-            requestCode == SelectContactRequestCode -> {
-                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
-                    ?.let { serializable -> serializable as? HashMap<String, String?> }
-                    ?: hashMapOf())
-            }
-            requestCode == TakePhotoRequestCode && resultCode == Activity.RESULT_OK -> {
-                cameraDestination?.let(attachmentSelectedIntent::onNext)
-            }
-            requestCode == AttachPhotoRequestCode && resultCode == Activity.RESULT_OK -> {
-                data?.clipData?.itemCount
-                    ?.let { count -> 0 until count }
-                    ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
-                    ?.forEach(attachmentSelectedIntent::onNext)
-                    ?: data?.data?.let(attachmentSelectedIntent::onNext)
-            }
-            requestCode == AttachContactRequestCode && resultCode == Activity.RESULT_OK -> {
-                data?.data?.let(contactSelectedIntent::onNext)
-            }
-            requestCode == SetEncryptionKeyRequestCode && resultCode == Activity.RESULT_OK -> {
-                data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
-                    encryptionKeySetIntent.onNext(Unit)
-                }
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(CameraDestinationKey, cameraDestination)
         super.onSaveInstanceState(outState)
@@ -462,14 +473,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         super.onRestoreInstanceState(savedInstanceState)
     }
 
-    override fun onBackPressed() = backPressedIntent.onNext(Unit)
-
     override fun showEncryptionKeySettings(conversation: Conversation) {
         (threadId as BehaviorSubject?)?.value?.let { threadId ->
             if (threadId != 0L) {
                 val intent = Intent(this, KeySettingsActivity::class.java)
                     .putExtra("threadId", threadId)
-                startActivityForResult(intent, SetEncryptionKeyRequestCode)
+                encryptionKeyLauncher.launch(intent)
             }
         }
     }

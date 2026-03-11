@@ -18,7 +18,11 @@
  */
 package com.moez.QKSMS.feature.backup
 
+import android.Manifest
 import android.os.Bundle
+import androidx.activity.addCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -32,6 +36,9 @@ class BackupActivity : QkThemedActivity() {
 
     private lateinit var router: Router
 
+    val storagePermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -41,11 +48,12 @@ class BackupActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BackupController()))
         }
-    }
 
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
+        onBackPressedDispatcher.addCallback(this) {
+            if (!router.handleBack()) {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 

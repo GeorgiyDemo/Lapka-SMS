@@ -20,12 +20,12 @@ package com.moez.QKSMS.feature.gallery
 
 import android.Manifest
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +57,8 @@ class GalleryActivity : QkActivity(), GalleryView {
     private val toolbarSubtitle: QkTextView by lazy { findViewById(R.id.toolbarSubtitle) }
 
     val partId by lazy { intent.getLongExtra("partId", 0L) }
+
+    private val storagePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     private val optionsItemSubject: Subject<Int> = PublishSubject.create()
     private val pageChangedSubject: Subject<MmsPart> = PublishSubject.create()
@@ -121,7 +123,7 @@ class GalleryActivity : QkActivity(), GalleryView {
     override fun pageChanged(): Observable<MmsPart> = pageChangedSubject
 
     override fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,7 +133,7 @@ class GalleryActivity : QkActivity(), GalleryView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> onBackPressed()
+            android.R.id.home -> onBackPressedDispatcher.onBackPressed()
             else -> optionsItemSubject.onNext(item.itemId)
         }
         return true

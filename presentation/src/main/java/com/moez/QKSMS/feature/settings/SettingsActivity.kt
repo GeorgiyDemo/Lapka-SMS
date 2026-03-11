@@ -19,6 +19,7 @@
 package com.moez.QKSMS.feature.settings
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -40,11 +41,12 @@ class SettingsActivity : QkThemedActivity() {
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(SettingsController()))
         }
-    }
 
-    override fun onBackPressed() {
-        if (!router.handleBack()) {
-            super.onBackPressed()
+        onBackPressedDispatcher.addCallback(this) {
+            if (!router.handleBack()) {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 

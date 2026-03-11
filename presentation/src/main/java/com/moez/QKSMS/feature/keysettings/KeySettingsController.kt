@@ -1,7 +1,7 @@
 package com.moez.QKSMS.feature.keysettings
 
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -52,7 +52,6 @@ class KeySettingsController(
 
     companion object {
         const val EncryptionKeyKey = "encryption_key"
-        private const val ScanQrRequestCode = 201
     }
 
     @Inject lateinit var prefs: Preferences
@@ -268,12 +267,19 @@ class KeySettingsController(
     }
 
     override fun scanQrCode() {
+        val keySettingsActivity = activity as? KeySettingsActivity ?: return
         val intent = IntentIntegrator(this.themedActivity)
             .setBeepEnabled(false)
             .setOrientationLocked(true)
             .setBarcodeImageEnabled(true)
             .createScanIntent()
-        startActivityForResult(intent, ScanQrRequestCode)
+        keySettingsActivity.onQrResult = { data ->
+            val qrResult = IntentIntegrator.parseActivityResult(Activity.RESULT_OK, data)
+            if (qrResult != null && qrResult.contents != null) {
+                scannedQr = qrResult.contents
+            }
+        }
+        keySettingsActivity.qrScanLauncher.launch(intent)
     }
 
     override fun keySet() {
@@ -286,16 +292,6 @@ class KeySettingsController(
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
     override fun keyChanged(): Observable<String> = keyTextWatcher.keyChanged
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ScanQrRequestCode) {
-            val qrResult = IntentIntegrator.parseActivityResult(resultCode, data)
-            if (qrResult != null && qrResult.contents != null) {
-                scannedQr = qrResult.contents
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
 
     private fun EditText.copyToClipboard(): Boolean {
         val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
@@ -308,7 +304,7 @@ class KeySettingsController(
     override fun showCompatibilityModeDialog() = compatibilityModeDialog.show(activity!!)
 
     override fun showResetKeyDialog(disableKey: Boolean) {
-        AlertDialog.Builder(this.activity)
+        AlertDialog.Builder(this.activity!!)
             .setMessage(R.string.settings_reset_key_confirmation_text)
             .setNegativeButton(R.string.button_cancel, null)
             .setPositiveButton(R.string.button_reset) { _, _ ->
@@ -323,7 +319,7 @@ class KeySettingsController(
     }
 
     override fun showSaveDialog(allowSave: Boolean) {
-        val builder = AlertDialog.Builder(this.activity)
+        val builder = AlertDialog.Builder(this.activity!!)
             .setMessage(R.string.settings_exit_with_no_changes)
             .setNeutralButton(R.string.button_cancel, null)
             .setNegativeButton(R.string.rate_dismiss) { _, _ -> exitWithSavingIntent.onNext(false) }

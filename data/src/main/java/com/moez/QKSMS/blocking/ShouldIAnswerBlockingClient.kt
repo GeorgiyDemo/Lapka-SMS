@@ -20,11 +20,14 @@ package com.moez.QKSMS.blocking
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import androidx.core.os.bundleOf
@@ -89,18 +92,28 @@ class ShouldIAnswerBlockingClient @Inject constructor(
         private var serviceMessenger: Messenger? = null
         private var isBound: Boolean = false
 
+        private fun getAppEnabled(packageName: String): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getApplicationInfo(packageName,
+                    PackageManager.ApplicationInfoFlags.of(0)).enabled
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getApplicationInfo(packageName, 0).enabled
+            }
+        }
+
         fun isBlocked(): Single<Boolean> {
             // If either version of Should I Answer? is installed and SIA is enabled, build the
             // intent to request a rating
             val intent: Intent? = tryOrNull(false) {
-                context.packageManager.getApplicationInfo("org.mistergroup.shouldianswer", 0).enabled
+                getAppEnabled("org.mistergroup.shouldianswer")
                 Intent("org.mistergroup.shouldianswer.PublicService").setPackage("org.mistergroup.shouldianswer")
             } ?: tryOrNull(false) {
-                context.packageManager.getApplicationInfo("org.mistergroup.shouldianswerpersonal", 0).enabled
+                getAppEnabled("org.mistergroup.shouldianswerpersonal")
                 Intent("org.mistergroup.shouldianswerpersonal.PublicService")
                         .setPackage("org.mistergroup.shouldianswerpersonal")
             } ?: tryOrNull(false) {
-                context.packageManager.getApplicationInfo("org.mistergroup.muzutozvednout", 0).enabled
+                getAppEnabled("org.mistergroup.muzutozvednout")
                 Intent("org.mistergroup.muzutozvednout.PublicService").setPackage("org.mistergroup.muzutozvednout")
             }
 
@@ -140,7 +153,7 @@ class ShouldIAnswerBlockingClient @Inject constructor(
         }
     }
 
-    private class IncomingHandler(private val callback: (response: Response) -> Unit) : Handler() {
+    private class IncomingHandler(private val callback: (response: Response) -> Unit) : Handler(Looper.getMainLooper()) {
         class Response(bundle: Bundle) {
             val rating: Int = bundle.getInt("rating")
             val wantBlock = bundle.getInt("wantBlock") == 1

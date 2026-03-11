@@ -24,6 +24,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
@@ -73,6 +74,13 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
     override val previewModeSelectedIntent by lazy { previewModeDialog.adapter.menuItemClicks }
     override val ringtoneSelectedIntent: Subject<String> = PublishSubject.create()
     override val actionsSelectedIntent by lazy { actionsDialog.adapter.menuItemClicks }
+
+    private val ringtoneLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            ringtoneSelectedIntent.onNext(uri?.toString() ?: "")
+        }
+    }
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
@@ -147,20 +155,12 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, default)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-        startActivityForResult(intent, 123)
+        ringtoneLauncher.launch(intent)
     }
 
     override fun showActionDialog(selected: Int) {
         actionsDialog.adapter.selectedItem = selected
         actionsDialog.show(this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            val uri: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            ringtoneSelectedIntent.onNext(uri?.toString() ?: "")
-        }
     }
 
 }

@@ -75,6 +75,18 @@ android {
         signingConfigs.release.storePassword = System.getenv("keystore_password")
         signingConfigs.release.keyAlias = System.getenv("key_alias")
         signingConfigs.release.keyPassword = System.getenv("key_password")
+    } else {
+        def localProps = new Properties()
+        def localPropsFile = rootProject.file("local.properties")
+        if (localPropsFile.exists()) {
+            localProps.load(new FileInputStream(localPropsFile))
+        }
+        if (localProps['release.storeFile'] != null) {
+            signingConfigs.release.storeFile = file(localProps['release.storeFile'])
+            signingConfigs.release.storePassword = localProps['release.storePassword']
+            signingConfigs.release.keyAlias = localProps['release.keyAlias']
+            signingConfigs.release.keyPassword = localProps['release.keyPassword']
+        }
     }
 
     applicationVariants.all { variant ->

@@ -23,6 +23,7 @@ import android.app.role.RoleManager
 import android.content.*
 import android.net.Uri
 import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
@@ -81,11 +82,11 @@ class Navigator @Inject constructor(
     /**
      * This won't work unless we use startActivityForResult
      */
-    fun showDefaultSmsDialog(context: Activity) {
+    fun showDefaultSmsDialog(context: Activity, launcher: ActivityResultLauncher<Intent>? = null) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val roleManager = context.getSystemService(RoleManager::class.java) as RoleManager
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
-            context.startActivityForResult(intent, 42389)
+            launcher?.launch(intent) ?: context.startActivity(intent)
         } else {
             val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)

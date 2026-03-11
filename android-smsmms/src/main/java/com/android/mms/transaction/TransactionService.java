@@ -145,7 +145,7 @@ public class TransactionService extends Service implements Observer {
 
     private PowerManager.WakeLock mWakeLock;
 
-    public Handler mToastHandler = new Handler() {
+    public Handler mToastHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             String str = null;

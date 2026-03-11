@@ -19,7 +19,7 @@
 package com.moez.QKSMS.feature.blocking
 
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import com.moez.QKSMS.R
 import com.moez.QKSMS.blocking.BlockingClient
