@@ -180,7 +180,11 @@ public class TransactionService extends Service implements Observer {
         mReceiver = new ConnectivityBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mReceiver, intentFilter);
+        }
     }
 
     private void initServiceHandler() {
@@ -519,18 +523,15 @@ public class TransactionService extends Service implements Observer {
             }
         }
 
-        int result = mConnMgr.startUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE, "enableMMS");
-
-        Timber.v("beginMmsConnectivity: result=" + result);
-
-        switch (result) {
-            case 0:
-            case 1:
-                acquireWakeLock();
-                return result;
+        // startUsingNetworkFeature was removed in API 23+.
+        // On modern Android, MMS connectivity is handled by the system.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Timber.v("beginMmsConnectivity: using system MMS connectivity (API 23+)");
+            acquireWakeLock();
+            return 0;
         }
 
-        throw new IOException("Cannot establish MMS connectivity");
+        throw new IOException("Cannot establish MMS connectivity on legacy API without startUsingNetworkFeature");
     }
 
     protected void endMmsConnectivity() {
@@ -539,11 +540,8 @@ public class TransactionService extends Service implements Observer {
 
             // cancel timer for renewal of lease
             mServiceHandler.removeMessages(EVENT_CONTINUE_MMS_CONNECTIVITY);
-            if (mConnMgr != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                mConnMgr.stopUsingNetworkFeature(
-                        ConnectivityManager.TYPE_MOBILE,
-                        "enableMMS");
-            }
+            // stopUsingNetworkFeature was removed in API 23+.
+            // On modern Android, no explicit cleanup needed.
         } finally {
             releaseWakeLock();
         }

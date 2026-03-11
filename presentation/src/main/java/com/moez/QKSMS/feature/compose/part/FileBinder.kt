@@ -34,7 +34,9 @@ import com.moez.QKSMS.model.MmsPart
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.mms_file_list_item.*
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import javax.inject.Inject
 
 class FileBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -54,7 +56,7 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
         canGroupWithNext: Boolean
     ) {
         BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe())
-                .let(holder.fileBackground::setBackgroundResource)
+                .let(holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground)::setBackgroundResource)
 
         holder.containerView.setOnClickListener { clicks.onNext(part.id) }
 
@@ -71,23 +73,23 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { size -> holder.size.text = size }
+                .subscribe { size -> holder.itemView.findViewById<TextView>(R.id.size).text = size }
 
-        holder.filename.text = part.name
+        holder.itemView.findViewById<TextView>(R.id.filename).text = part.name
 
-        val params = holder.fileBackground.layoutParams as FrameLayout.LayoutParams
+        val params = holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground).layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.START }
-            holder.fileBackground.setBackgroundTint(theme.theme)
-            holder.icon.setTint(theme.textPrimary)
-            holder.filename.setTextColor(theme.textPrimary)
-            holder.size.setTextColor(theme.textTertiary)
+            holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground).layoutParams = params.apply { gravity = Gravity.START }
+            holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground).setBackgroundTint(theme.theme)
+            holder.itemView.findViewById<ImageView>(R.id.icon).setTint(theme.textPrimary)
+            holder.itemView.findViewById<TextView>(R.id.filename).setTextColor(theme.textPrimary)
+            holder.itemView.findViewById<TextView>(R.id.size).setTextColor(theme.textTertiary)
         } else {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.END }
-            holder.fileBackground.setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
-            holder.icon.setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
-            holder.filename.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))
-            holder.size.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
+            holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground).layoutParams = params.apply { gravity = Gravity.END }
+            holder.itemView.findViewById<ConstraintLayout>(R.id.fileBackground).setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
+            holder.itemView.findViewById<ImageView>(R.id.icon).setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
+            holder.itemView.findViewById<TextView>(R.id.filename).setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))
+            holder.itemView.findViewById<TextView>(R.id.size).setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
         }
     }
 

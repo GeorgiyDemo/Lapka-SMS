@@ -30,11 +30,18 @@ import com.moez.QKSMS.R
 import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
 import com.moez.QKSMS.common.util.extensions.resolveThemeAttribute
 import com.moez.QKSMS.common.util.extensions.setVisible
-import kotlinx.android.synthetic.main.blocking_manager_preference_view.view.*
+import android.widget.FrameLayout
 
 class BlockingManagerPreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
+
+
+    private val iconImg: ImageView by lazy { findViewById(R.id.iconView) }
+    private val titleTv: TextView by lazy { findViewById(R.id.titleView) }
+    private val summaryTv: TextView by lazy { findViewById(R.id.summaryView) }
+    private val widgetFrameView: FrameLayout by lazy { findViewById(R.id.widgetFrame) }
+    val action: ImageView by lazy { findViewById(R.id.action) }
 
     var icon: Drawable? = null
         set(value) {
@@ -43,7 +50,7 @@ class BlockingManagerPreferenceView @JvmOverloads constructor(
             if (isInEditMode) {
                 findViewById<ImageView>(R.id.iconView).setImageDrawable(value)
             } else {
-                iconView.setImageDrawable(value)
+                iconImg.setImageDrawable(value)
             }
         }
 
@@ -54,7 +61,7 @@ class BlockingManagerPreferenceView @JvmOverloads constructor(
             if (isInEditMode) {
                 findViewById<TextView>(R.id.titleView).text = value
             } else {
-                titleView.text = value
+                titleTv.text = value
             }
         }
 
@@ -68,8 +75,8 @@ class BlockingManagerPreferenceView @JvmOverloads constructor(
                     setVisible(value?.isNotEmpty() == true)
                 }
             } else {
-                summaryView.text = value
-                summaryView.setVisible(value?.isNotEmpty() == true)
+                summaryTv.text = value
+                summaryTv.setVisible(value?.isNotEmpty() == true)
             }
         }
 
@@ -84,7 +91,7 @@ class BlockingManagerPreferenceView @JvmOverloads constructor(
 
             // If there's a custom view used for the preference's widget, inflate it
             getResourceId(R.styleable.BlockingManagerPreferenceView_widget, -1).takeIf { it != -1 }?.let { id ->
-                View.inflate(context, id, widgetFrame)
+                View.inflate(context, id, widgetFrameView)
             }
 
             recycle()

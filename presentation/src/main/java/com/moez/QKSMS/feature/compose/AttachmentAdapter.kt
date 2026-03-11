@@ -35,10 +35,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.attachment_contact_list_item.*
-import kotlinx.android.synthetic.main.attachment_image_list_item.*
-import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
 import javax.inject.Inject
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 
 class AttachmentAdapter @Inject constructor(
     private val context: Context
@@ -55,7 +55,7 @@ class AttachmentAdapter @Inject constructor(
         val inflater = LayoutInflater.from(parent.context)
         val view = when (viewType) {
             VIEW_TYPE_IMAGE -> inflater.inflate(R.layout.attachment_image_list_item, parent, false)
-                    .apply { thumbnailBounds.clipToOutline = true }
+                    .apply { findViewById<FrameLayout>(R.id.thumbnailBounds).clipToOutline = true }
 
             VIEW_TYPE_CONTACT -> inflater.inflate(R.layout.attachment_contact_list_item, parent, false)
 
@@ -76,7 +76,7 @@ class AttachmentAdapter @Inject constructor(
         when (attachment) {
             is Attachment.Image -> Glide.with(context)
                     .load(attachment.getUri())
-                    .into(holder.thumbnail)
+                    .into(holder.itemView.findViewById<ImageView>(R.id.thumbnail))
 
             is Attachment.Contact -> Observable.just(attachment.vCard)
                     .mapNotNull { vCard -> Ezvcard.parse(vCard).first() }
@@ -84,8 +84,8 @@ class AttachmentAdapter @Inject constructor(
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { displayName ->
-                        holder.name?.text = displayName
-                        holder.name?.isVisible = displayName.isNotEmpty()
+                        holder.itemView.findViewById<TextView>(R.id.name)?.text = displayName
+                        holder.itemView.findViewById<TextView>(R.id.name)?.isVisible = displayName.isNotEmpty()
                     }
         }
     }

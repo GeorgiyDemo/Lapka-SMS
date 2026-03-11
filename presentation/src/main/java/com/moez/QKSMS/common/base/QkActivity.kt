@@ -23,9 +23,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import android.widget.TextView
+import com.moez.QKSMS.R
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.toolbar.*
 
 abstract class QkActivity : AppCompatActivity() {
 
@@ -49,7 +51,7 @@ abstract class QkActivity : AppCompatActivity() {
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
         title = title // The title may have been set before layout inflation
     }
 
@@ -59,7 +61,7 @@ abstract class QkActivity : AppCompatActivity() {
 
     override fun setTitle(title: CharSequence?) {
         super.setTitle(title)
-        toolbarTitle?.text = title
+        findViewById<TextView>(R.id.toolbarTitle)?.text = title
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -13,8 +13,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.google.zxing.BarcodeFormat
@@ -29,6 +35,7 @@ import com.moez.QKSMS.common.util.TextViewStyler
 import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.QkSwitch
 import com.moez.QKSMS.extensions.Optional
 import com.moez.QKSMS.feature.keysettings.injection.KeySettingsModule
 import com.moez.QKSMS.injection.appComponent
@@ -36,24 +43,6 @@ import com.moez.QKSMS.util.Preferences
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.settings_keys_activity.copyKey
-import kotlinx.android.synthetic.main.settings_keys_activity.enableKey
-import kotlinx.android.synthetic.main.settings_keys_activity.encodingSchemes
-import kotlinx.android.synthetic.main.settings_keys_activity.encryptionKeyCategory
-import kotlinx.android.synthetic.main.settings_keys_activity.generateKey
-import kotlinx.android.synthetic.main.settings_keys_activity.keyField
-import kotlinx.android.synthetic.main.settings_keys_activity.keyInputGroup
-import kotlinx.android.synthetic.main.settings_keys_activity.legacyEncryption
-import kotlinx.android.synthetic.main.settings_keys_activity.legacyEncryptionConversation
-import kotlinx.android.synthetic.main.settings_keys_activity.preferences
-import kotlinx.android.synthetic.main.settings_keys_activity.qrCodeImage
-import kotlinx.android.synthetic.main.settings_keys_activity.resetKey
-import kotlinx.android.synthetic.main.settings_keys_activity.scanQr
-import kotlinx.android.synthetic.main.settings_keys_activity.schemeBase64
-import kotlinx.android.synthetic.main.settings_keys_activity.schemeBase64Cyrillic
-import kotlinx.android.synthetic.main.settings_keys_activity.schemeDefault
-import kotlinx.android.synthetic.main.settings_keys_activity.schemeRussianWords
-import kotlinx.android.synthetic.main.settings_switch_widget.view.checkbox
 import javax.inject.Inject
 
 
@@ -86,6 +75,25 @@ class KeySettingsController(
     private val keyTextWatcher = KeyTextWatcher()
     private var scannedQr: String? = null
     private var savedState: KeySettingsState? = null
+
+    // View accessors
+    private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
+    private val encryptionKeyCategory: TextView get() = containerView!!.findViewById(R.id.encryptionKeyCategory)
+    private val enableKey: PreferenceView get() = containerView!!.findViewById(R.id.enableKey)
+    private val keyInputGroup: LinearLayoutCompat get() = containerView!!.findViewById(R.id.keyInputGroup)
+    private val scanQr: PreferenceView get() = containerView!!.findViewById(R.id.scanQr)
+    private val generateKey: PreferenceView get() = containerView!!.findViewById(R.id.generateKey)
+    private val resetKey: PreferenceView get() = containerView!!.findViewById(R.id.resetKey)
+    private val keyField: EditText get() = containerView!!.findViewById(R.id.keyField)
+    private val copyKey: ImageButton get() = containerView!!.findViewById(R.id.copyKey)
+    private val qrCodeImage: ImageView get() = containerView!!.findViewById(R.id.qrCodeImage)
+    private val legacyEncryption: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryption)
+    private val legacyEncryptionConversation: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryptionConversation)
+    private val encodingSchemes: RadioGroup get() = containerView!!.findViewById(R.id.encodingSchemes)
+    private val schemeBase64: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64)
+    private val schemeBase64Cyrillic: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64Cyrillic)
+    private val schemeRussianWords: RadioButton get() = containerView!!.findViewById(R.id.schemeRussianWords)
+    private val schemeDefault: RadioButton get() = containerView!!.findViewById(R.id.schemeDefault)
 
     init {
         appComponent
@@ -124,7 +132,7 @@ class KeySettingsController(
             if (!state.isConversation) context.getText(R.string.settings_global_encryption_key_title)
             else context.getText(R.string.settings_conversation_encryption_key_title)
 
-        enableKey.checkbox.isChecked = state.keyEnabled
+        enableKey.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.keyEnabled
 
         keyInputGroup.visibility = if (state.keySettingsIsShown) View.VISIBLE else View.GONE
         scanQr.visibility = if (state.keySettingsIsShown) View.VISIBLE else View.GONE
@@ -161,7 +169,7 @@ class KeySettingsController(
             compatibilityModeDialog.adapter.selectedItem = selectedItem
         } else {
             legacyEncryption.visibility = View.VISIBLE
-            legacyEncryption.checkbox.isChecked = state.legacyEncryptionEnabled ?: false
+            legacyEncryption.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.legacyEncryptionEnabled ?: false
             legacyEncryption.isEnabled = nonKeyEncryptionSettingsEnabled
             legacyEncryptionConversation.visibility = View.GONE
         }
@@ -214,7 +222,7 @@ class KeySettingsController(
 
     override fun onViewCreated() {
         super.onViewCreated()
-        preferences.postDelayed( { preferences?.animateLayoutChanges = true }, 100)
+        preferences.postDelayed( { containerView?.findViewById<LinearLayout>(R.id.preferences)?.animateLayoutChanges = true }, 100)
 
         keyField.addTextChangedListener(keyTextWatcher)
         copyKey.setOnClickListener { copyKey() }

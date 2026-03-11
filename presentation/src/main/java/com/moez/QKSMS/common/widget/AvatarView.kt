@@ -30,8 +30,9 @@ import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.model.Recipient
 import com.moez.QKSMS.util.GlideApp
-import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
+import android.widget.ImageView
+import com.moez.QKSMS.common.widget.QkTextView
 
 class AvatarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -39,6 +40,11 @@ class AvatarView @JvmOverloads constructor(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
+
+
+    private val initialView: QkTextView by lazy { findViewById(R.id.initial) }
+    private val iconView: ImageView by lazy { findViewById(R.id.icon) }
+    private val photoView: ImageView by lazy { findViewById(R.id.photo) }
 
     private var lookupKey: String? = null
     private var fullName: String? = null
@@ -81,8 +87,8 @@ class AvatarView @JvmOverloads constructor(
     private fun updateView() {
         // Apply theme
         setBackgroundTint(theme.theme)
-        initial.setTextColor(theme.textPrimary)
-        icon.setTint(theme.textPrimary)
+        initialView.setTextColor(theme.textPrimary)
+        iconView.setTint(theme.textPrimary)
 
         val initials = fullName
                 ?.substringBefore(',')
@@ -93,18 +99,18 @@ class AvatarView @JvmOverloads constructor(
                 .map { initial -> initial.toString() }
 
         if (initials.isNotEmpty()) {
-            initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
-            icon.visibility = GONE
+            initialView.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
+            iconView.visibility = GONE
         } else {
-            initial.text = null
-            icon.visibility = VISIBLE
+            initialView.text = null
+            iconView.visibility = VISIBLE
         }
 
-        photo.setImageDrawable(null)
+        photoView.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            GlideApp.with(photo)
+            GlideApp.with(photoView)
                     .load(photoUri)
-                    .into(photo)
+                    .into(photoView)
         }
     }
 }

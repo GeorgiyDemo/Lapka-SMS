@@ -22,8 +22,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -35,6 +37,7 @@ import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.showKeyboard
 import com.moez.QKSMS.common.widget.QkDialog
+import com.moez.QKSMS.common.widget.QkEditText
 import com.moez.QKSMS.extensions.Optional
 import com.moez.QKSMS.feature.compose.editing.ComposeItem
 import com.moez.QKSMS.feature.compose.editing.ComposeItemAdapter
@@ -44,7 +47,6 @@ import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.contacts_activity.*
 import javax.inject.Inject
 
 class ContactsActivity : QkThemedActivity(), ContactsContract {
@@ -58,6 +60,11 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
+    // View properties
+    private val search: QkEditText by lazy { findViewById(R.id.search) }
+    private val cancel: ImageView by lazy { findViewById(R.id.cancel) }
+    private val contacts: RecyclerView by lazy { findViewById(R.id.contacts) }
+
     override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
     override val queryClearedIntent: Observable<*> by lazy { cancel.clicks() }
     override val queryEditorActionIntent: Observable<Int> by lazy { search.editorActions() }
@@ -66,7 +73,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     override val phoneNumberSelectedIntent: Subject<Optional<Long>> by lazy { phoneNumberAdapter.selectedItemChanges }
     override val phoneNumberActionIntent: Subject<PhoneNumberAction> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ContactsViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ContactsViewModel::class.java] }
 
     private val phoneNumberDialog by lazy {
         QkDialog(this).apply {

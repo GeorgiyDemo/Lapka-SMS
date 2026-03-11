@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
+import android.os.Build;
 import android.provider.Telephony.Mms.Rate;
 import timber.log.Timber;
 
@@ -124,8 +125,14 @@ public class RateController {
         }
         sMutexLock = true;
 
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(RATE_LIMIT_CONFIRMED_ACTION));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mContext.registerReceiver(mBroadcastReceiver,
+                    new IntentFilter(RATE_LIMIT_CONFIRMED_ACTION),
+                    Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            mContext.registerReceiver(mBroadcastReceiver,
+                    new IntentFilter(RATE_LIMIT_CONFIRMED_ACTION));
+        }
 
         mAnswer = NO_ANSWER;
         try {

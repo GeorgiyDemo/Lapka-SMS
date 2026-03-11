@@ -36,7 +36,6 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.tab_view.view.*
 import javax.inject.Inject
 
 class PagerTitleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs) {
@@ -67,7 +66,7 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
 
         pager?.adapter?.count?.forEach { position ->
             val view = LayoutInflater.from(context).inflate(R.layout.tab_view, this, false)
-            view.label.text = pager?.adapter?.getPageTitle(position)
+            view.findViewById<TextView>(R.id.label).text = pager?.adapter?.getPageTitle(position)
             view.setOnClickListener { pager?.currentItem = position }
 
             addView(view)

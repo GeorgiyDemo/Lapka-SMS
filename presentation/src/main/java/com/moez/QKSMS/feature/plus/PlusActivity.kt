@@ -20,9 +20,13 @@ package com.moez.QKSMS.feature.plus
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.BuildConfig
 import com.moez.QKSMS.R
@@ -34,12 +38,10 @@ import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.plus.experiment.UpgradeButtonExperiment
 import com.moez.QKSMS.manager.BillingManager
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.collapsing_toolbar.*
-import kotlinx.android.synthetic.main.preference_view.view.*
-import kotlinx.android.synthetic.main.qksms_plus_activity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,7 +54,24 @@ class PlusActivity : QkThemedActivity(), PlusView {
     @Inject lateinit var upgradeButtonExperiment: UpgradeButtonExperiment
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[PlusViewModel::class.java] }
+    // View properties
+    private val upgrade: QkTextView by lazy { findViewById(R.id.upgrade) }
+    private val upgradeDonate: QkTextView by lazy { findViewById(R.id.upgradeDonate) }
+    private val donate: QkTextView by lazy { findViewById(R.id.donate) }
+    private val themes: PreferenceView by lazy { findViewById(R.id.themes) }
+    private val schedule: PreferenceView by lazy { findViewById(R.id.schedule) }
+    private val backup: PreferenceView by lazy { findViewById(R.id.backup) }
+    private val delayed: PreferenceView by lazy { findViewById(R.id.delayed) }
+    private val night: PreferenceView by lazy { findViewById(R.id.night) }
+    private val free: LinearLayout by lazy { findViewById(R.id.free) }
+    private val toUpgrade: LinearLayout by lazy { findViewById(R.id.toUpgrade) }
+    private val upgraded: ConstraintLayout by lazy { findViewById(R.id.upgraded) }
+    private val collapsingToolbar: CollapsingToolbarLayout by lazy { findViewById(R.id.collapsingToolbar) }
+    private val linearLayout: LinearLayout by lazy { findViewById(R.id.linearLayout) }
+    private val thanksIcon: ImageView by lazy { findViewById(R.id.thanksIcon) }
+    private val description: QkTextView by lazy { findViewById(R.id.description) }
+
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[PlusViewModel::class.java] }
 
     override val upgradeIntent by lazy { upgrade.clicks() }
     override val upgradeDonateIntent by lazy { upgradeDonate.clicks() }
@@ -84,7 +103,7 @@ class PlusActivity : QkThemedActivity(), PlusView {
         // Make the list titles bold
         linearLayout.children
                 .mapNotNull { it as? PreferenceView }
-                .map { it.titleView }
+                .map { it.findViewById<android.widget.TextView>(R.id.titleView) }
                 .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
 
         val textPrimary = resolveThemeColor(android.R.attr.textColorPrimary)

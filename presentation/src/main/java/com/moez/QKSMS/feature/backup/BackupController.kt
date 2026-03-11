@@ -23,10 +23,16 @@ import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkController
@@ -42,9 +48,6 @@ import com.moez.QKSMS.repository.BackupRepository
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.backup_controller.*
-import kotlinx.android.synthetic.main.backup_list_dialog.view.*
-import kotlinx.android.synthetic.main.preference_view.view.*
 import javax.inject.Inject
 
 class BackupController : QkController<BackupView, BackupState, BackupPresenter>(), BackupView {
@@ -57,12 +60,29 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     private val confirmRestoreSubject: Subject<Unit> = PublishSubject.create()
     private val stopRestoreSubject: Subject<Unit> = PublishSubject.create()
 
+    private val progressBar: ProgressBar get() = containerView!!.findViewById(R.id.progressBar)
+    private val fab: LinearLayout get() = containerView!!.findViewById(R.id.fab)
+    private val fabIcon: ImageView get() = containerView!!.findViewById(R.id.fabIcon)
+    private val fabLabel: TextView get() = containerView!!.findViewById(R.id.fabLabel)
+    private val linearLayout: LinearLayout get() = containerView!!.findViewById(R.id.linearLayout)
+    private val progress: ConstraintLayout get() = containerView!!.findViewById(R.id.progress)
+    private val progressIcon: ImageView get() = containerView!!.findViewById(R.id.progressIcon)
+    private val progressTitle: TextView get() = containerView!!.findViewById(R.id.progressTitle)
+    private val progressSummary: TextView get() = containerView!!.findViewById(R.id.progressSummary)
+    private val progressCancel: ImageView get() = containerView!!.findViewById(R.id.progressCancel)
+    private val backup: PreferenceView get() = containerView!!.findViewById(R.id.backup)
+    private val restore: PreferenceView get() = containerView!!.findViewById(R.id.restore)
+
     private val backupFilesDialog by lazy {
-        val view = View.inflate(activity, R.layout.backup_list_dialog, null)
-                .apply { files.adapter = adapter.apply { emptyView = empty } }
+        val dialogView = View.inflate(activity, R.layout.backup_list_dialog, null)
+                .apply {
+                    findViewById<RecyclerView>(R.id.files).adapter = adapter.apply {
+                        emptyView = findViewById(R.id.empty)
+                    }
+                }
 
         AlertDialog.Builder(activity!!)
-                .setView(view)
+                .setView(dialogView)
                 .setCancelable(true)
                 .create()
     }
@@ -111,7 +131,7 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
         // Make the list titles bold
         linearLayout.children
                 .mapNotNull { it as? PreferenceView }
-                .map { it.titleView }
+                .map { it.findViewById<TextView>(R.id.titleView) }
                 .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
     }
 

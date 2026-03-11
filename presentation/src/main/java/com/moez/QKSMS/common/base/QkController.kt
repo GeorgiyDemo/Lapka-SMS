@@ -21,16 +21,15 @@ package com.moez.QKSMS.common.base
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
+import com.moez.QKSMS.R
+import android.widget.TextView
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.toolbar.view.*
 
-abstract class QkController<ViewContract : QkViewContract<State>, State, Presenter : QkPresenter<ViewContract, State>> : LifecycleController(), LayoutContainer {
+abstract class QkController<ViewContract : QkViewContract<State>, State : Any, Presenter : QkPresenter<ViewContract, State>> : LifecycleController() {
 
     abstract var presenter: Presenter
 
@@ -44,7 +43,7 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
         return activity!!
     }
 
-    override var containerView: View? = null
+    var containerView: View? = null
 
     @LayoutRes
     var layoutRes: Int = 0
@@ -65,7 +64,7 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
 
     fun setTitle(title: CharSequence?) {
         activity?.title = title
-        view?.toolbarTitle?.text = title
+        view?.findViewById<TextView>(R.id.toolbarTitle)?.text = title
     }
 
     fun showBackButton(show: Boolean) {
@@ -74,7 +73,6 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
 
     override fun onDestroyView(view: View) {
         containerView = null
-        clearFindViewByIdCache()
     }
 
     override fun onDestroy() {

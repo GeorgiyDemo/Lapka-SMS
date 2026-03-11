@@ -41,11 +41,12 @@ import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.util.PhoneNumberUtils
+import com.moez.QKSMS.common.widget.GroupAvatarView
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.util.Preferences
-import kotlinx.android.synthetic.main.conversation_list_item.*
-import kotlinx.android.synthetic.main.conversation_list_item.view.*
-import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 
 class ConversationsAdapter @Inject constructor(
     private val colors: Colors,
@@ -68,16 +69,16 @@ class ConversationsAdapter @Inject constructor(
         if (viewType == 1) {
             val textColorPrimary = parent.context.resolveThemeColor(android.R.attr.textColorPrimary)
 
-            view.title.setTypeface(view.title.typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.title).setTypeface(view.findViewById<QkTextView>(R.id.title).typeface, Typeface.BOLD)
 
-            view.snippet.setTypeface(view.snippet.typeface, Typeface.BOLD)
-            view.snippet.setTextColor(textColorPrimary)
-            view.snippet.maxLines = 5
+            view.findViewById<QkTextView>(R.id.snippet).setTypeface(view.findViewById<QkTextView>(R.id.snippet).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.snippet).setTextColor(textColorPrimary)
+            view.findViewById<QkTextView>(R.id.snippet).maxLines = 5
 
-            view.unread.isVisible = true
+            view.findViewById<ImageView>(R.id.unread).isVisible = true
 
-            view.date.setTypeface(view.date.typeface, Typeface.BOLD)
-            view.date.setTextColor(textColorPrimary)
+            view.findViewById<QkTextView>(R.id.date).setTypeface(view.findViewById<QkTextView>(R.id.date).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.date).setTextColor(textColorPrimary)
         }
 
         return QkViewHolder(view).apply {
@@ -112,15 +113,15 @@ class ConversationsAdapter @Inject constructor(
 
         holder.containerView.isActivated = isSelected(conversation.id)
 
-        holder.avatars.recipients = conversation.recipients
-        holder.title.collapseEnabled = conversation.recipients.size > 1
-        holder.title.text = buildSpannedString {
+        holder.itemView.findViewById<GroupAvatarView>(R.id.avatars).recipients = conversation.recipients
+        holder.itemView.findViewById<QkTextView>(R.id.title).collapseEnabled = conversation.recipients.size > 1
+        holder.itemView.findViewById<QkTextView>(R.id.title).text = buildSpannedString {
             append(conversation.getTitle())
             if (conversation.draft.isNotEmpty()) {
                 color(theme) { append(" " + context.getString(R.string.main_draft)) }
             }
         }
-        holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
+        holder.itemView.findViewById<QkTextView>(R.id.date).text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
         val snippetMessage = try {
             if (conversation.encryptionKey.isNotEmpty()) {
@@ -142,13 +143,13 @@ class ConversationsAdapter @Inject constructor(
             snippetMessage.text
         }
 
-        holder.snippet.text = when {
+        holder.itemView.findViewById<QkTextView>(R.id.snippet).text = when {
             conversation.draft.isNotEmpty() -> conversation.draft
             conversation.me -> context.getString(R.string.main_sender_you, snippetText)
             else -> snippetText
         }
-        holder.pinned.isVisible = conversation.pinned
-        holder.unread.setTint(theme)
+        holder.itemView.findViewById<ImageView>(R.id.pinned).isVisible = conversation.pinned
+        holder.itemView.findViewById<ImageView>(R.id.unread).setTint(theme)
     }
 
     override fun getItemId(position: Int): Long {

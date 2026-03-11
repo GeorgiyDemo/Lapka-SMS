@@ -31,14 +31,24 @@ import com.moez.QKSMS.common.util.extensions.resolveThemeAttribute
 import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.injection.appComponent
-import kotlinx.android.synthetic.main.radio_preference_view.view.*
 import javax.inject.Inject
+import android.widget.FrameLayout
+import android.widget.RadioButton
 
 class RadioPreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
+
+
+    val radioButton: RadioButton by lazy { findViewById(R.id.radioButton) }
+    val titleView: TextView by lazy { findViewById(R.id.titleView) }
+    val summaryView: TextView by lazy { findViewById(R.id.summaryView) }
+    private val radioButtonView: RadioButton get() = radioButton
+    private val titleTv: TextView get() = titleView
+    private val summaryTv: TextView get() = summaryView
+    private val widgetFrameView: FrameLayout by lazy { findViewById(R.id.widgetFrame) }
 
     var title: String? = null
         set(value) {
@@ -47,7 +57,7 @@ class RadioPreferenceView @JvmOverloads constructor(
             if (isInEditMode) {
                 findViewById<TextView>(R.id.titleView).text = value
             } else {
-                titleView.text = value
+                titleTv.text = value
             }
         }
 
@@ -62,8 +72,8 @@ class RadioPreferenceView @JvmOverloads constructor(
                     setVisible(value?.isNotEmpty() == true)
                 }
             } else {
-                summaryView.text = value
-                summaryView.setVisible(value?.isNotEmpty() == true)
+                summaryTv.text = value
+                summaryTv.setVisible(value?.isNotEmpty() == true)
             }
         }
 
@@ -84,8 +94,8 @@ class RadioPreferenceView @JvmOverloads constructor(
             false -> colors.theme().theme
         }
         val textSecondary = context.resolveThemeColor(android.R.attr.textColorTertiary)
-        radioButton.buttonTintList = ColorStateList(states, intArrayOf(themeColor, textSecondary))
-        radioButton.forwardTouches(this)
+        radioButtonView.buttonTintList = ColorStateList(states, intArrayOf(themeColor, textSecondary))
+        radioButtonView.forwardTouches(this)
 
         context.obtainStyledAttributes(attrs, R.styleable.RadioPreferenceView)?.run {
             title = getString(R.styleable.RadioPreferenceView_title)
@@ -93,7 +103,7 @@ class RadioPreferenceView @JvmOverloads constructor(
 
             // If there's a custom view used for the preference's widget, inflate it
             getResourceId(R.styleable.RadioPreferenceView_widget, -1).takeIf { it != -1 }?.let { id ->
-                View.inflate(context, id, widgetFrame)
+                View.inflate(context, id, widgetFrameView)
             }
 
             recycle()

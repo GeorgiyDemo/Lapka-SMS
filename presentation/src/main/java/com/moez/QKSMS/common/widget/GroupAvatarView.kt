@@ -29,11 +29,17 @@ import com.moez.QKSMS.common.util.extensions.getColorCompat
 import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.model.Recipient
-import kotlinx.android.synthetic.main.group_avatar_view.view.*
+import android.widget.FrameLayout
 
 class GroupAvatarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
+
+
+    private val avatar1Frame: FrameLayout by lazy { findViewById(R.id.avatar1Frame) }
+    private val avatar1: AvatarView by lazy { findViewById(R.id.avatar1) }
+    private val avatar2Frame: FrameLayout by lazy { findViewById(R.id.avatar2Frame) }
+    private val avatar2: AvatarView by lazy { findViewById(R.id.avatar2) }
 
     var recipients: List<Recipient> = ArrayList()
         set(value) {

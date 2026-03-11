@@ -33,12 +33,18 @@ import android.provider.MediaStore
 import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
 import androidx.core.app.ActivityCompat
 import androidx.core.view.inputmethod.EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
@@ -55,6 +61,9 @@ import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.common.util.extensions.showKeyboard
+import com.moez.QKSMS.common.widget.QkEditText
+import com.moez.QKSMS.common.widget.QkSwitch
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.compose.editing.ChipsAdapter
 import com.moez.QKSMS.feature.contacts.ContactsActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
@@ -70,39 +79,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.compose_activity.attach
-import kotlinx.android.synthetic.main.compose_activity.attaching
-import kotlinx.android.synthetic.main.compose_activity.attachingBackground
-import kotlinx.android.synthetic.main.compose_activity.attachments
-import kotlinx.android.synthetic.main.compose_activity.camera
-import kotlinx.android.synthetic.main.compose_activity.cameraLabel
-import kotlinx.android.synthetic.main.compose_activity.chips
-import kotlinx.android.synthetic.main.compose_activity.composeBar
-import kotlinx.android.synthetic.main.compose_activity.contact
-import kotlinx.android.synthetic.main.compose_activity.contactLabel
-import kotlinx.android.synthetic.main.compose_activity.contentView
-import kotlinx.android.synthetic.main.compose_activity.counter
-import kotlinx.android.synthetic.main.compose_activity.gallery
-import kotlinx.android.synthetic.main.compose_activity.galleryLabel
-import kotlinx.android.synthetic.main.compose_activity.loading
-import kotlinx.android.synthetic.main.compose_activity.message
-import kotlinx.android.synthetic.main.compose_activity.messageBackground
-import kotlinx.android.synthetic.main.compose_activity.messageList
-import kotlinx.android.synthetic.main.compose_activity.messagesEmpty
-import kotlinx.android.synthetic.main.compose_activity.schedule
-import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
-import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
-import kotlinx.android.synthetic.main.compose_activity.scheduledGroup
-import kotlinx.android.synthetic.main.compose_activity.scheduledTime
-import kotlinx.android.synthetic.main.compose_activity.send
-import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
-import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
-import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
-import kotlinx.android.synthetic.main.compose_activity.sim
-import kotlinx.android.synthetic.main.compose_activity.simIndex
-import kotlinx.android.synthetic.main.compose_activity.toolbar
-import kotlinx.android.synthetic.main.compose_activity.toolbarSubtitle
-import kotlinx.android.synthetic.main.compose_activity.toolbarTitle
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -127,6 +103,40 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var messageAdapter: MessagesAdapter
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val contentView: ConstraintLayout by lazy { findViewById(R.id.contentView) }
+    private val messageList: RecyclerView by lazy { findViewById(R.id.messageList) }
+    private val messagesEmpty: QkTextView by lazy { findViewById(R.id.messagesEmpty) }
+    private val loading: ProgressBar by lazy { findViewById(R.id.loading) }
+    private val sendAsGroup: Group by lazy { findViewById(R.id.sendAsGroup) }
+    private val sendAsGroupBackground: View by lazy { findViewById(R.id.sendAsGroupBackground) }
+    private val sendAsGroupSwitch: QkSwitch by lazy { findViewById(R.id.sendAsGroupSwitch) }
+    private val chips: RecyclerView by lazy { findViewById(R.id.chips) }
+    private val toolbar: androidx.appcompat.widget.Toolbar by lazy { findViewById(R.id.toolbar) }
+    private val toolbarSubtitle: QkTextView by lazy { findViewById(R.id.toolbarSubtitle) }
+    private val toolbarTitle: QkTextView by lazy { findViewById(R.id.toolbarTitle) }
+    private val composeBar: Group by lazy { findViewById(R.id.composeBar) }
+    private val messageBackground: View by lazy { findViewById(R.id.messageBackground) }
+    private val message: QkEditText by lazy { findViewById(R.id.message) }
+    private val attachments: RecyclerView by lazy { findViewById(R.id.attachments) }
+    private val attach: ImageView by lazy { findViewById(R.id.attach) }
+    private val attachingBackground: View by lazy { findViewById(R.id.attachingBackground) }
+    private val attaching: Group by lazy { findViewById(R.id.attaching) }
+    private val camera: ImageView by lazy { findViewById(R.id.camera) }
+    private val cameraLabel: QkTextView by lazy { findViewById(R.id.cameraLabel) }
+    private val gallery: ImageView by lazy { findViewById(R.id.gallery) }
+    private val galleryLabel: QkTextView by lazy { findViewById(R.id.galleryLabel) }
+    private val schedule: ImageView by lazy { findViewById(R.id.schedule) }
+    private val scheduleLabel: QkTextView by lazy { findViewById(R.id.scheduleLabel) }
+    private val contact: ImageView by lazy { findViewById(R.id.contact) }
+    private val contactLabel: QkTextView by lazy { findViewById(R.id.contactLabel) }
+    private val scheduledGroup: Group by lazy { findViewById(R.id.scheduledGroup) }
+    private val scheduledTime: QkTextView by lazy { findViewById(R.id.scheduledTime) }
+    private val scheduledCancel: ImageView by lazy { findViewById(R.id.scheduledCancel) }
+    private val counter: QkTextView by lazy { findViewById(R.id.counter) }
+    private val sim: ImageView by lazy { findViewById(R.id.sim) }
+    private val simIndex: QkTextView by lazy { findViewById(R.id.simIndex) }
+    private val send: ImageView by lazy { findViewById(R.id.send) }
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
@@ -156,7 +166,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val encryptionKeySetIntent: Subject<Unit> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
 
@@ -261,7 +271,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
         messageAdapter.encryptionKey.onNext(state.encryptionKey ?: "")
-        messageAdapter.data = state.messages
+        messageAdapter.conversationData = state.messages
         messageAdapter.highlight = state.searchSelectionId
 
         scheduledGroup.isVisible = state.scheduled != 0L
@@ -385,7 +395,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun scrollToMessage(id: Long) {
-        messageAdapter.data?.second
+        messageAdapter.conversationData?.second
             ?.indexOfLast { message -> message.id == id }
             ?.takeIf { position -> position != -1 }
             ?.let(messageList::scrollToPosition)
@@ -447,8 +457,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        cameraDestination = savedInstanceState?.getParcelable(CameraDestinationKey)
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        cameraDestination = savedInstanceState.getParcelable(CameraDestinationKey)
         super.onRestoreInstanceState(savedInstanceState)
     }
 

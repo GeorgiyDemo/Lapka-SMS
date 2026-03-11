@@ -42,7 +42,6 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.text_input_dialog.view.*
 import javax.inject.Inject
 import javax.inject.Named
 

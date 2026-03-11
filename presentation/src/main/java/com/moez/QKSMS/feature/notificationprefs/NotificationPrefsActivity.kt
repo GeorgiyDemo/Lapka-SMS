@@ -24,9 +24,10 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.QkDialog
@@ -34,14 +35,14 @@ import com.moez.QKSMS.common.base.QkThemedActivity
 import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.QkSwitch
+import com.moez.QKSMS.common.widget.QkTextView
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.notification_prefs_activity.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import javax.inject.Inject
 
 class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
@@ -50,13 +51,31 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
     @Inject lateinit var actionsDialog: QkDialog
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    // View properties
+    private val preferences: LinearLayout by lazy { findViewById(R.id.preferences) }
+    private val notificationsO: PreferenceView by lazy { findViewById(R.id.notificationsO) }
+    private val notifications: PreferenceView by lazy { findViewById(R.id.notifications) }
+    private val previews: PreferenceView by lazy { findViewById(R.id.previews) }
+    private val wake: PreferenceView by lazy { findViewById(R.id.wake) }
+    private val vibration: PreferenceView by lazy { findViewById(R.id.vibration) }
+    private val ringtone: PreferenceView by lazy { findViewById(R.id.ringtone) }
+    private val action1: PreferenceView by lazy { findViewById(R.id.action1) }
+    private val action2: PreferenceView by lazy { findViewById(R.id.action2) }
+    private val action3: PreferenceView by lazy { findViewById(R.id.action3) }
+    private val qkreply: PreferenceView by lazy { findViewById(R.id.qkreply) }
+    private val qkreplyTapDismiss: PreferenceView by lazy { findViewById(R.id.qkreplyTapDismiss) }
+    private val actionsDivider: View by lazy { findViewById(R.id.actionsDivider) }
+    private val qkreplyDivider: View by lazy { findViewById(R.id.qkreplyDivider) }
+    private val actionsTitle: QkTextView by lazy { findViewById(R.id.actionsTitle) }
+    private val qkreplyTitle: QkTextView by lazy { findViewById(R.id.qkreplyTitle) }
+
     override val preferenceClickIntent: Subject<PreferenceView> = PublishSubject.create()
     override val previewModeSelectedIntent by lazy { previewModeDialog.adapter.menuItemClicks }
     override val ringtoneSelectedIntent: Subject<String> = PublishSubject.create()
     override val actionsSelectedIntent by lazy { actionsDialog.adapter.menuItemClicks }
 
     private val viewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,11 +114,11 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
             title = state.conversationTitle
         }
 
-        notifications.checkbox.isChecked = state.notificationsEnabled
+        notifications.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.notificationsEnabled
         previews.summary = state.previewSummary
         previewModeDialog.adapter.selectedItem = state.previewId
-        wake.checkbox.isChecked = state.wakeEnabled
-        vibration.checkbox.isChecked = state.vibrationEnabled
+        wake.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.wakeEnabled
+        vibration.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.vibrationEnabled
         ringtone.summary = state.ringtoneName
 
         actionsDivider.isVisible = state.threadId == 0L
@@ -113,11 +132,11 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
 
         qkreplyDivider.isVisible = state.threadId == 0L
         qkreplyTitle.isVisible = state.threadId == 0L
-        qkreply.checkbox.isChecked = state.qkReplyEnabled
+        qkreply.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.qkReplyEnabled
         qkreply.isVisible = state.threadId == 0L
         qkreplyTapDismiss.isVisible = state.threadId == 0L
         qkreplyTapDismiss.isEnabled = state.qkReplyEnabled
-        qkreplyTapDismiss.checkbox.isChecked = state.qkReplyTapDismiss
+        qkreplyTapDismiss.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.qkReplyTapDismiss
     }
 
     override fun showPreviewModeDialog() = previewModeDialog.show(this)

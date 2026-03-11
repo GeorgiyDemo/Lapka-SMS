@@ -19,20 +19,25 @@
 apply plugin: 'com.android.library'
 apply plugin: 'realm-android' // Realm needs to be before Kotlin or the build will fail
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    namespace "com.moez.QKSMS.domain"
+    compileSdkVersion 34
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 34
     }
 }
 

@@ -24,6 +24,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkController
 import com.moez.QKSMS.common.util.Colors
@@ -31,8 +34,6 @@ import com.moez.QKSMS.feature.blocking.BlockingDialog
 import com.moez.QKSMS.injection.appComponent
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.blocked_messages_controller.*
-import kotlinx.android.synthetic.main.container_activity.*
 import javax.inject.Inject
 
 class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessagesState, BlockedMessagesPresenter>(),
@@ -50,6 +51,9 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     @Inject lateinit var colors: Colors
     @Inject lateinit var context: Context
     @Inject override lateinit var presenter: BlockedMessagesPresenter
+
+    private val empty: TextView get() = containerView!!.findViewById(R.id.empty)
+    private val conversations: RecyclerView get() = containerView!!.findViewById(R.id.conversations)
 
     init {
         appComponent.inject(this)
@@ -90,8 +94,8 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     override fun render(state: BlockedMessagesState) {
         blockedMessagesAdapter.updateData(state.data)
 
-        themedActivity?.toolbar?.menu?.findItem(R.id.block)?.isVisible = state.selected > 0
-        themedActivity?.toolbar?.menu?.findItem(R.id.delete)?.isVisible = state.selected > 0
+        themedActivity?.findViewById<Toolbar>(R.id.toolbar)?.menu?.findItem(R.id.block)?.isVisible = state.selected > 0
+        themedActivity?.findViewById<Toolbar>(R.id.toolbar)?.menu?.findItem(R.id.delete)?.isVisible = state.selected > 0
 
         setTitle(when (state.selected) {
             0 -> context.getString(R.string.blocked_messages_title)

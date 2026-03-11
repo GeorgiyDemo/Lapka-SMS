@@ -15,8 +15,6 @@ import com.moez.QKSMS.util.Preferences
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.blocking_manager_controller.*
-import kotlinx.android.synthetic.main.blocking_manager_list_option.view.*
 import javax.inject.Inject
 
 class BlockingManagerController : QkController<BlockingManagerView, BlockingManagerState, BlockingManagerPresenter>(),
@@ -26,6 +24,11 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
     @Inject override lateinit var presenter: BlockingManagerPresenter
 
     private val activityResumedSubject: PublishSubject<Unit> = PublishSubject.create()
+
+    private val qksms: BlockingManagerPreferenceView get() = containerView!!.findViewById(R.id.qksms)
+    private val callBlocker: BlockingManagerPreferenceView get() = containerView!!.findViewById(R.id.callBlocker)
+    private val callControl: BlockingManagerPreferenceView get() = containerView!!.findViewById(R.id.callControl)
+    private val shouldIAnswer: BlockingManagerPreferenceView get() = containerView!!.findViewById(R.id.shouldIAnswer)
 
     init {
         appComponent.inject(this)

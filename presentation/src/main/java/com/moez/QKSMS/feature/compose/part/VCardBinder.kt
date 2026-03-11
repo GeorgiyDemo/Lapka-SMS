@@ -38,7 +38,9 @@ import ezvcard.Ezvcard
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.mms_vcard_list_item.*
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import javax.inject.Inject
 
 class VCardBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -56,7 +58,7 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
         canGroupWithNext: Boolean
     ) {
         BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe())
-                .let(holder.vCardBackground::setBackgroundResource)
+                .let(holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground)::setBackgroundResource)
 
         holder.containerView.setOnClickListener { clicks.onNext(part.id) }
 
@@ -67,23 +69,23 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { displayName ->
-                    holder.name?.text = displayName
-                    holder.name.isVisible = displayName.isNotEmpty()
+                    holder.itemView.findViewById<TextView>(R.id.name)?.text = displayName
+                    holder.itemView.findViewById<TextView>(R.id.name).isVisible = displayName.isNotEmpty()
                 }
 
-        val params = holder.vCardBackground.layoutParams as FrameLayout.LayoutParams
+        val params = holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground).layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
-            holder.vCardBackground.layoutParams = params.apply { gravity = Gravity.START }
-            holder.vCardBackground.setBackgroundTint(theme.theme)
-            holder.vCardAvatar.setTint(theme.textPrimary)
-            holder.name.setTextColor(theme.textPrimary)
-            holder.label.setTextColor(theme.textTertiary)
+            holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground).layoutParams = params.apply { gravity = Gravity.START }
+            holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground).setBackgroundTint(theme.theme)
+            holder.itemView.findViewById<ImageView>(R.id.vCardAvatar).setTint(theme.textPrimary)
+            holder.itemView.findViewById<TextView>(R.id.name).setTextColor(theme.textPrimary)
+            holder.itemView.findViewById<TextView>(R.id.label).setTextColor(theme.textTertiary)
         } else {
-            holder.vCardBackground.layoutParams = params.apply { gravity = Gravity.END }
-            holder.vCardBackground.setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
-            holder.vCardAvatar.setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
-            holder.name.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))
-            holder.label.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
+            holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground).layoutParams = params.apply { gravity = Gravity.END }
+            holder.itemView.findViewById<ConstraintLayout>(R.id.vCardBackground).setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
+            holder.itemView.findViewById<ImageView>(R.id.vCardAvatar).setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
+            holder.itemView.findViewById<TextView>(R.id.name).setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))
+            holder.itemView.findViewById<TextView>(R.id.label).setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
         }
     }
 

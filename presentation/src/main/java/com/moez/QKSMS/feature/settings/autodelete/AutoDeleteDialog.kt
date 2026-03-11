@@ -23,7 +23,7 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.moez.QKSMS.R
-import kotlinx.android.synthetic.main.settings_auto_delete_dialog.view.*
+import android.widget.EditText
 
 class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {
 
@@ -36,14 +36,14 @@ class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog
         setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.button_cancel)) { _, _ -> }
         setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.settings_auto_delete_never)) { _, _ -> listener(0) }
         setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.button_save)) { _, _ ->
-            listener(layout.field.text.toString().toIntOrNull() ?: 0)
+            listener(layout.findViewById<EditText>(R.id.field).text.toString().toIntOrNull() ?: 0)
         }
     }
 
     fun setExpiry(days: Int): AutoDeleteDialog {
         when (days) {
-            0 -> layout.field.text = null
-            else -> layout.field.setText(days.toString())
+            0 -> layout.findViewById<EditText>(R.id.field).text = null
+            else -> layout.findViewById<EditText>(R.id.field).setText(days.toString())
         }
         return this
     }

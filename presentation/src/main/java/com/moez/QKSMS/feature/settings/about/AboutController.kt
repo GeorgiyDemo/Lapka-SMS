@@ -19,6 +19,7 @@
 package com.moez.QKSMS.feature.settings.about
 
 import android.view.View
+import android.widget.LinearLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.BuildConfig
 import com.moez.QKSMS.R
@@ -26,12 +27,14 @@ import com.moez.QKSMS.common.base.QkController
 import com.moez.QKSMS.common.widget.PreferenceView
 import com.moez.QKSMS.injection.appComponent
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.about_controller.*
 import javax.inject.Inject
 
 class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutView {
 
     @Inject override lateinit var presenter: AboutPresenter
+
+    private val version: PreferenceView get() = containerView!!.findViewById(R.id.version)
+    private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
 
     init {
         appComponent.inject(this)

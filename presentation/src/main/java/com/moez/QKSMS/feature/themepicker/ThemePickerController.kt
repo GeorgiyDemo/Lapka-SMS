@@ -20,7 +20,13 @@ package com.moez.QKSMS.feature.themepicker
 
 import android.animation.ObjectAnimator
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
@@ -29,13 +35,12 @@ import com.moez.QKSMS.common.util.Colors
 import com.moez.QKSMS.common.util.extensions.dpToPx
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setVisible
+import com.moez.QKSMS.common.widget.PagerTitleView
 import com.moez.QKSMS.feature.themepicker.injection.ThemePickerModule
 import com.moez.QKSMS.injection.appComponent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.theme_picker_controller.*
-import kotlinx.android.synthetic.main.theme_picker_hsv.*
 import javax.inject.Inject
 
 class ThemePickerController(
@@ -49,6 +54,15 @@ class ThemePickerController(
     @Inject lateinit var themePagerAdapter: ThemePagerAdapter
 
     private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
+
+    private val pager: ViewPager get() = containerView!!.findViewById(R.id.pager)
+    private val tabs: PagerTitleView get() = containerView!!.findViewById(R.id.tabs)
+    private val materialColors: RecyclerView get() = containerView!!.findViewById(R.id.materialColors)
+    private val picker: HSVPickerView get() = containerView!!.findViewById(R.id.picker)
+    private val hex: EditText get() = containerView!!.findViewById(R.id.hex)
+    private val applyGroup: Group get() = containerView!!.findViewById(R.id.applyGroup)
+    private val apply: TextView get() = containerView!!.findViewById(R.id.apply)
+    private val clear: ImageView get() = containerView!!.findViewById(R.id.clear)
 
     init {
         appComponent
@@ -91,7 +105,7 @@ class ThemePickerController(
     }
 
     override fun showQksmsPlusSnackbar() {
-        Snackbar.make(contentView, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
+        Snackbar.make(view!!, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
             setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
             setActionTextColor(colors.theme().theme)
             show()

@@ -25,7 +25,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkThemedActivity
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.container_activity.*
+import android.widget.FrameLayout
 
 
 class BackupActivity : QkThemedActivity() {
@@ -37,7 +37,7 @@ class BackupActivity : QkThemedActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.container_activity)
 
-        router = Conductor.attachRouter(this, container, savedInstanceState)
+        router = Conductor.attachRouter(this, findViewById<FrameLayout>(R.id.container), savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BackupController()))
         }

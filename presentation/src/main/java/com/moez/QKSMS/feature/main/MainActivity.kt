@@ -27,14 +27,20 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -50,6 +56,8 @@ import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.common.widget.KeyInputDialog
+import com.moez.QKSMS.common.widget.QkEditText
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.blocking.BlockingDialog
 import com.moez.QKSMS.feature.changelog.ChangelogDialog
 import com.moez.QKSMS.feature.conversations.ConversationItemTouchCallback
@@ -63,10 +71,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.drawer_view.*
-import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.main_permission_hint.*
-import kotlinx.android.synthetic.main.main_syncing.*
 import javax.inject.Inject
 
 class MainActivity : QkThemedActivity(), MainView {
@@ -79,6 +83,34 @@ class MainActivity : QkThemedActivity(), MainView {
     @Inject lateinit var searchAdapter: SearchAdapter
     @Inject lateinit var itemTouchCallback: ConversationItemTouchCallback
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val drawerLayout: DrawerLayout by lazy { findViewById(R.id.drawerLayout) }
+    private val toolbar: androidx.appcompat.widget.Toolbar by lazy { findViewById(R.id.toolbar) }
+    private val toolbarSearch: QkEditText by lazy { findViewById(R.id.toolbarSearch) }
+    private val toolbarTitle: QkTextView by lazy { findViewById(R.id.toolbarTitle) }
+    private val recyclerView: RecyclerView by lazy { findViewById(R.id.recyclerView) }
+    private val compose: ImageView by lazy { findViewById(R.id.compose) }
+    private val empty: QkTextView by lazy { findViewById(R.id.empty) }
+    private val drawer: View by lazy { findViewById(R.id.drawer) }
+    private val inbox: LinearLayout by lazy { findViewById(R.id.inbox) }
+    private val inboxIcon: ImageView by lazy { findViewById(R.id.inboxIcon) }
+    private val archived: LinearLayout by lazy { findViewById(R.id.archived) }
+    private val archivedIcon: ImageView by lazy { findViewById(R.id.archivedIcon) }
+    private val backup: LinearLayout by lazy { findViewById(R.id.backup) }
+    private val scheduled: LinearLayout by lazy { findViewById(R.id.scheduled) }
+    private val blocking: LinearLayout by lazy { findViewById(R.id.blocking) }
+    private val settings: LinearLayout by lazy { findViewById(R.id.settings) }
+    private val plus: LinearLayout by lazy { findViewById(R.id.plus) }
+    private val help: LinearLayout by lazy { findViewById(R.id.help) }
+    private val invite: LinearLayout by lazy { findViewById(R.id.invite) }
+    private val plusBadge1: QkTextView by lazy { findViewById(R.id.plusBadge1) }
+    private val plusBadge2: QkTextView by lazy { findViewById(R.id.plusBadge2) }
+    private val plusBanner: ConstraintLayout by lazy { findViewById(R.id.plusBanner) }
+    private val plusIcon: ImageView by lazy { findViewById(R.id.plusIcon) }
+    private val rateLayout: ConstraintLayout by lazy { findViewById(R.id.rateLayout) }
+    private val rateIcon: ImageView by lazy { findViewById(R.id.rateIcon) }
+    private val rateDismiss: QkTextView by lazy { findViewById(R.id.rateDismiss) }
+    private val rateOkay: QkTextView by lazy { findViewById(R.id.rateOkay) }
 
     override val onNewIntentIntent: Subject<Intent> = PublishSubject.create()
     override val activityResumedIntent: Subject<Boolean> = PublishSubject.create()
@@ -115,13 +147,17 @@ class MainActivity : QkThemedActivity(), MainView {
     override val undoArchiveIntent: Subject<Unit> = PublishSubject.create()
     override val snackbarButtonIntent: Subject<Unit> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java] }
     private val toggle by lazy { ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.main_drawer_open_cd, 0) }
     private val itemTouchHelper by lazy { ItemTouchHelper(itemTouchCallback) }
+    private val syncingProgress: ProgressBar? get() = findViewById(R.id.syncingProgress)
     private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
     private val changelogDialog by lazy { ChangelogDialog(this) }
     private val snackbar by lazy { findViewById<View>(R.id.snackbar) }
     private val syncing by lazy { findViewById<View>(R.id.syncing) }
+    private val snackbarTitle: TextView? get() = findViewById(R.id.snackbarTitle)
+    private val snackbarMessage: TextView? get() = findViewById(R.id.snackbarMessage)
+    private val snackbarButton: TextView? get() = findViewById(R.id.snackbarButton)
     private val backPressedSubject: Subject<NavItem> = PublishSubject.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,9 +170,9 @@ class MainActivity : QkThemedActivity(), MainView {
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         (snackbar as? ViewStub)?.setOnInflateListener { _, _ ->
-            snackbarButton.clicks()
-                    .autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
-                    .subscribe(snackbarButtonIntent)
+            snackbarButton?.clicks()
+                    ?.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+                    ?.subscribe(snackbarButtonIntent)
         }
 
         (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
@@ -305,9 +341,9 @@ class MainActivity : QkThemedActivity(), MainView {
 
             is SyncRepository.SyncProgress.Running -> {
                 syncing.isVisible = true
-                syncingProgress.max = state.syncing.max
-                progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncing.progress) }.start()
-                syncingProgress.isIndeterminate = state.syncing.indeterminate
+                syncingProgress?.max = state.syncing.max
+                progressAnimator.apply { setIntValues(syncingProgress?.progress ?: 0, state.syncing.progress) }.start()
+                syncingProgress?.isIndeterminate = state.syncing.indeterminate
                 snackbar.isVisible = false
             }
         }

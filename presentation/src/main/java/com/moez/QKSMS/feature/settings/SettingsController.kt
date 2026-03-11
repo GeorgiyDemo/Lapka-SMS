@@ -25,6 +25,8 @@ import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
@@ -44,6 +46,7 @@ import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.common.widget.KeyInputDialog
 import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.QkSwitch
 import com.moez.QKSMS.common.widget.TextInputDialog
 import com.moez.QKSMS.feature.settings.about.AboutController
 import com.moez.QKSMS.feature.settings.autodelete.AutoDeleteDialog
@@ -60,10 +63,6 @@ import io.reactivex.subjects.Subject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import kotlinx.android.synthetic.main.settings_controller.*
-import kotlinx.android.synthetic.main.settings_controller.view.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
-import kotlinx.android.synthetic.main.settings_theme_widget.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -106,6 +105,32 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val globalEncryptionKeySubject: Subject<String> = PublishSubject.create()
     private val smsForResetSubject: Subject<String> = PublishSubject.create()
 
+    // View accessors — use containerView instead of view because view is null during onViewCreated
+    private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
+    private val themePreview: View get() = containerView!!.findViewById(R.id.themePreview)
+    private val night: PreferenceView get() = containerView!!.findViewById(R.id.night)
+    private val nightStart: PreferenceView get() = containerView!!.findViewById(R.id.nightStart)
+    private val nightEnd: PreferenceView get() = containerView!!.findViewById(R.id.nightEnd)
+    private val black: PreferenceView get() = containerView!!.findViewById(R.id.black)
+    private val autoEmoji: PreferenceView get() = containerView!!.findViewById(R.id.autoEmoji)
+    private val delayed: PreferenceView get() = containerView!!.findViewById(R.id.delayed)
+    private val delivery: PreferenceView get() = containerView!!.findViewById(R.id.delivery)
+    private val signature: PreferenceView get() = containerView!!.findViewById(R.id.signature)
+    private val textSize: PreferenceView get() = containerView!!.findViewById(R.id.textSize)
+    private val autoColor: PreferenceView get() = containerView!!.findViewById(R.id.autoColor)
+    private val systemFont: PreferenceView get() = containerView!!.findViewById(R.id.systemFont)
+    private val unicode: PreferenceView get() = containerView!!.findViewById(R.id.unicode)
+    private val mobileOnly: PreferenceView get() = containerView!!.findViewById(R.id.mobileOnly)
+    private val autoDelete: PreferenceView get() = containerView!!.findViewById(R.id.autoDelete)
+    private val longAsMms: PreferenceView get() = containerView!!.findViewById(R.id.longAsMms)
+    private val mmsSize: PreferenceView get() = containerView!!.findViewById(R.id.mmsSize)
+    private val syncingProgress: ProgressBar get() = containerView!!.findViewById(R.id.syncingProgress)
+    private val about: PreferenceView get() = containerView!!.findViewById(R.id.about)
+    private val globalEncryptionKey: PreferenceView get() = containerView!!.findViewById(R.id.globalEncryptionKey)
+    private val deleteEncryptedAfter: PreferenceView get() = containerView!!.findViewById(R.id.deleteEncryptedAfter)
+    private val smsForReset: PreferenceView get() = containerView!!.findViewById(R.id.smsForReset)
+    private val showInTaskSwitcher: PreferenceView get() = containerView!!.findViewById(R.id.showInTaskSwitcher)
+
     private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
 
     init {
@@ -119,7 +144,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     }
 
     override fun onViewCreated() {
-        preferences.postDelayed({ preferences?.animateLayoutChanges = true }, 100)
+        preferences.postDelayed({ containerView?.findViewById<LinearLayout>(R.id.preferences)?.animateLayoutChanges = true }, 100)
 
         when (Build.VERSION.SDK_INT >= 29) {
             true -> nightModeDialog.adapter.setData(R.array.night_modes)
@@ -185,14 +210,14 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         nightEnd.summary = state.nightEnd
 
         black.setVisible(state.nightModeId != Preferences.NIGHT_MODE_OFF)
-        black.checkbox.isChecked = state.black
+        black.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.black
 
-        autoEmoji.checkbox.isChecked = state.autoEmojiEnabled
+        autoEmoji.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.autoEmojiEnabled
 
         delayed.summary = state.sendDelaySummary
         sendDelayDialog.adapter.selectedItem = state.sendDelayId
 
-        delivery.checkbox.isChecked = state.deliveryEnabled
+        delivery.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.deliveryEnabled
 
         signature.summary = state.signature.takeIf { it.isNotBlank() }
                 ?: context.getString(R.string.settings_signature_summary)
@@ -200,12 +225,12 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         textSize.summary = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
 
-        autoColor.checkbox.isChecked = state.autoColor
+        autoColor.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.autoColor
 
-        systemFont.checkbox.isChecked = state.systemFontEnabled
+        systemFont.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.systemFontEnabled
 
-        unicode.checkbox.isChecked = state.stripUnicodeEnabled
-        mobileOnly.checkbox.isChecked = state.mobileOnly
+        unicode.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.stripUnicodeEnabled
+        mobileOnly.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.mobileOnly
 
         autoDelete.summary = when (state.autoDelete) {
             0 -> context.getString(R.string.settings_auto_delete_never)
@@ -213,7 +238,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
                     R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
         }
 
-        longAsMms.checkbox.isChecked = state.longAsMms
+        longAsMms.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.longAsMms
 
         mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
@@ -238,7 +263,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         smsForReset.summary = state.smsForReset
 
-        showInTaskSwitcher.checkbox.isChecked = state.showInTaskSwitcher
+        showInTaskSwitcher.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.showInTaskSwitcher
 
         if (state.showInTaskSwitcher) {
             activity!!.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
@@ -248,8 +273,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     }
 
     override fun showQksmsPlusSnackbar() {
-        view?.run {
-            Snackbar.make(contentView, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
+        view?.let { v ->
+            Snackbar.make(v, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
                 setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
                 setActionTextColor(colors.theme().theme)
                 show()

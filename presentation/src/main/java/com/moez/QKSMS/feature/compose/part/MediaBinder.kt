@@ -29,8 +29,8 @@ import com.moez.QKSMS.extensions.isVideo
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.util.GlideApp
-import kotlinx.android.synthetic.main.mms_preview_list_item.*
 import javax.inject.Inject
+import android.widget.ImageView
 
 class MediaBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
 
@@ -46,17 +46,17 @@ class MediaBinder @Inject constructor(colors: Colors, private val context: Conte
         canGroupWithPrevious: Boolean,
         canGroupWithNext: Boolean
     ) {
-        holder.video.setVisible(part.isVideo())
+        holder.itemView.findViewById<ImageView>(R.id.video).setVisible(part.isVideo())
         holder.containerView.setOnClickListener { clicks.onNext(part.id) }
 
-        holder.thumbnail.bubbleStyle = when {
+        holder.itemView.findViewById<BubbleImageView>(R.id.thumbnail).bubbleStyle = when {
             !canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
             canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
             canGroupWithPrevious && !canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
             else -> BubbleImageView.Style.ONLY
         }
 
-        GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+        GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.itemView.findViewById<BubbleImageView>(R.id.thumbnail))
     }
 
 }

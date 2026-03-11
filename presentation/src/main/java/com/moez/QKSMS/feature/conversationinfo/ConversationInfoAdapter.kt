@@ -18,11 +18,11 @@ import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.*
 import com.moez.QKSMS.util.GlideApp
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.conversation_info_settings.*
-import kotlinx.android.synthetic.main.conversation_info_settings.notifications
-import kotlinx.android.synthetic.main.conversation_media_list_item.*
-import kotlinx.android.synthetic.main.conversation_recipient_list_item.*
-import kotlinx.android.synthetic.main.conversation_recipient_list_item.theme
+import android.widget.ImageView
+import android.widget.TextView
+import com.moez.QKSMS.common.widget.AvatarView
+import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.SquareImageView
 import javax.inject.Inject
 
 class ConversationInfoAdapter @Inject constructor(
@@ -62,22 +62,22 @@ class ConversationInfoAdapter @Inject constructor(
                     true
                 }
 
-                theme.setOnClickListener {
+                itemView.findViewById<ImageView>(R.id.theme).setOnClickListener {
                     val item = getItem(adapterPosition) as? ConversationInfoRecipient
                     item?.value?.id?.run(themeClicks::onNext)
                 }
             }
 
             1 -> QkViewHolder(inflater.inflate(R.layout.conversation_info_settings, parent, false)).apply {
-                groupName.clicks().subscribe(nameClicks)
-                notifications.clicks().subscribe(notificationClicks)
-                archive.clicks().subscribe(archiveClicks)
-                block.clicks().subscribe(blockClicks)
-                delete.clicks().subscribe(deleteClicks)
-                encryptionKey.clicks().subscribe(encryptionKeyClicks)
-                conversationDeleteEncryptedAfter.clicks().subscribe(deleteEncryptedAfterClicks)
-                conversationDeleteReceivedAfter.clicks().subscribe(deleteReceivedAfterClicks)
-                conversationDeleteSentAfter.clicks().subscribe(deleteSentAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.groupName).clicks().subscribe(nameClicks)
+                itemView.findViewById<PreferenceView>(R.id.notifications).clicks().subscribe(notificationClicks)
+                itemView.findViewById<PreferenceView>(R.id.archive).clicks().subscribe(archiveClicks)
+                itemView.findViewById<PreferenceView>(R.id.block).clicks().subscribe(blockClicks)
+                itemView.findViewById<PreferenceView>(R.id.delete).clicks().subscribe(deleteClicks)
+                itemView.findViewById<PreferenceView>(R.id.encryptionKey).clicks().subscribe(encryptionKeyClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).clicks().subscribe(deleteEncryptedAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).clicks().subscribe(deleteReceivedAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).clicks().subscribe(deleteSentAfterClicks)
             }
 
             2 -> QkViewHolder(inflater.inflate(R.layout.conversation_media_list_item, parent, false)).apply {
@@ -95,50 +95,50 @@ class ConversationInfoAdapter @Inject constructor(
         when (val item = getItem(position)) {
             is ConversationInfoRecipient -> {
                 val recipient = item.value
-                holder.avatar.setRecipient(recipient)
+                holder.itemView.findViewById<AvatarView>(R.id.avatar).setRecipient(recipient)
 
-                holder.name.text = recipient.contact?.name ?: recipient.address
+                holder.itemView.findViewById<TextView>(R.id.name).text = recipient.contact?.name ?: recipient.address
 
-                holder.address.text = recipient.address
-                holder.address.setVisible(recipient.contact != null)
+                holder.itemView.findViewById<TextView>(R.id.address).text = recipient.address
+                holder.itemView.findViewById<TextView>(R.id.address).setVisible(recipient.contact != null)
 
-                holder.add.setVisible(recipient.contact == null)
+                holder.itemView.findViewById<ImageView>(R.id.add).setVisible(recipient.contact == null)
 
                 val theme = colors.theme(recipient)
-                holder.theme.setTint(theme.theme)
+                holder.itemView.findViewById<ImageView>(R.id.theme).setTint(theme.theme)
             }
 
             is ConversationInfoSettings -> {
-                holder.groupName.isVisible = item.recipients.size > 1
-                holder.groupName.summary = item.name
+                holder.itemView.findViewById<PreferenceView>(R.id.groupName).isVisible = item.recipients.size > 1
+                holder.itemView.findViewById<PreferenceView>(R.id.groupName).summary = item.name
 
-                holder.notifications.isEnabled = !item.blocked
+                holder.itemView.findViewById<PreferenceView>(R.id.notifications).isEnabled = !item.blocked
 
-                holder.archive.isEnabled = !item.blocked
-                holder.archive.title = context.getString(when (item.archived) {
+                holder.itemView.findViewById<PreferenceView>(R.id.archive).isEnabled = !item.blocked
+                holder.itemView.findViewById<PreferenceView>(R.id.archive).title = context.getString(when (item.archived) {
                     true -> R.string.info_unarchive
                     false -> R.string.info_archive
                 })
 
-                holder.block.title = context.getString(when (item.blocked) {
+                holder.itemView.findViewById<PreferenceView>(R.id.block).title = context.getString(when (item.blocked) {
                     true -> R.string.info_unblock
                     false -> R.string.info_block
                 })
 
                 // partisan
-                holder.encryptionKey.summary = if (item.encryptionKeyExist) "***" else ""
+                holder.itemView.findViewById<PreferenceView>(R.id.encryptionKey).summary = if (item.encryptionKeyExist) "***" else ""
 
                 val labels = context.resources.getStringArray(R.array.delete_message_after_labels)
 
-                holder.conversationDeleteEncryptedAfter.visibility =
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).visibility =
                     if (item.encryptionKeyExist) View.VISIBLE else View.GONE
-                holder.conversationDeleteEncryptedAfter.summary = labels[item.deleteEncryptedAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).summary = labels[item.deleteEncryptedAfter]
                 deleteEncryptedAfterDialog.adapter.selectedItem = item.deleteEncryptedAfter
 
-                holder.conversationDeleteReceivedAfter.summary = labels[item.deleteReceivedAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).summary = labels[item.deleteReceivedAfter]
                 deleteReceivedAfterDialog.adapter.selectedItem = item.deleteReceivedAfter
 
-                holder.conversationDeleteSentAfter.summary = labels[item.deleteSentAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).summary = labels[item.deleteSentAfter]
                 deleteSentAfterDialog.adapter.selectedItem = item.deleteSentAfter
             }
 
@@ -148,9 +148,9 @@ class ConversationInfoAdapter @Inject constructor(
                 GlideApp.with(context)
                         .load(part.getUri())
                         .fitCenter()
-                        .into(holder.thumbnail)
+                        .into(holder.itemView.findViewById<SquareImageView>(R.id.thumbnail))
 
-                holder.video.isVisible = part.isVideo()
+                holder.itemView.findViewById<ImageView>(R.id.video).isVisible = part.isVideo()
             }
         }
     }

@@ -22,6 +22,7 @@ import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bluelinelabs.conductor.RouterTransaction
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.Navigator
@@ -39,7 +40,6 @@ import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.conversation_info_controller.*
 import javax.inject.Inject
 
 class ConversationInfoController(
@@ -51,6 +51,8 @@ class ConversationInfoController(
     @Inject lateinit var blockingDialog: BlockingDialog
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var adapter: ConversationInfoAdapter
+
+    private val recyclerView: RecyclerView get() = containerView!!.findViewById(R.id.recyclerView)
 
     private val nameDialog: TextInputDialog by lazy {
         TextInputDialog(activity!!, activity!!.getString(R.string.info_name), nameChangeSubject::onNext)

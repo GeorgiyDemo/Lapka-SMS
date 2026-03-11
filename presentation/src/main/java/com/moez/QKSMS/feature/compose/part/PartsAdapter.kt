@@ -31,8 +31,11 @@ import com.moez.QKSMS.feature.compose.BubbleUtils.canGroup
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.MmsPart
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject
+import com.moez.QKSMS.R
+import com.moez.QKSMS.common.widget.TightTextView
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 
 class PartsAdapter @Inject constructor(
     colors: Colors,
@@ -62,7 +65,7 @@ class PartsAdapter @Inject constructor(
         this.previous = previous
         this.next = next
         this.holder = holder
-        this.bodyVisible = holder.body.visibility == View.VISIBLE
+        this.bodyVisible = holder.itemView.findViewById<TightTextView>(R.id.body).visibility == View.VISIBLE
         this.data = message.parts.filter { !it.isSmil() && !it.isText() }
     }
 

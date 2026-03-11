@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Telephony;
@@ -57,7 +58,12 @@ public class DownloadManager {
         mMap.put(location, receiver);
 
         // Use unique action in order to avoid cancellation of notifying download result.
-        context.getApplicationContext().registerReceiver(receiver, new IntentFilter(receiver.mAction));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getApplicationContext().registerReceiver(receiver,
+                    new IntentFilter(receiver.mAction), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            context.getApplicationContext().registerReceiver(receiver, new IntentFilter(receiver.mAction));
+        }
 
         Timber.v("receiving with system method");
         final String fileName = "download." + String.valueOf(Math.abs(new Random().nextLong())) + ".dat";
@@ -73,7 +79,7 @@ public class DownloadManager {
         download.putExtra(MmsReceivedReceiver.EXTRA_TRIGGER_PUSH, byPush);
         download.putExtra(MmsReceivedReceiver.EXTRA_URI, uri);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, 0, download, PendingIntent.FLAG_CANCEL_CURRENT);
+                context, 0, download, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
 
         final SmsManager smsManager = SmsManagerFactory.INSTANCE.createSmsManager(subscriptionId);
         Bundle configOverrides = new Bundle();

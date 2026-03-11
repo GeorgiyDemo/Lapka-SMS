@@ -35,8 +35,8 @@ import com.moez.QKSMS.repository.ContactRepository
 import com.moez.QKSMS.util.PhoneNumberUtils
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.scheduled_message_list_item.*
-import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
+import android.widget.TextView
+import com.moez.QKSMS.common.widget.GroupAvatarView
 import javax.inject.Inject
 
 class ScheduledMessageAdapter @Inject constructor(
@@ -55,8 +55,8 @@ class ScheduledMessageAdapter @Inject constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.scheduled_message_list_item, parent, false)
 
-        view.attachments.adapter = ScheduledMessageAttachmentAdapter(context)
-        view.attachments.setRecycledViewPool(imagesViewPool)
+        view.findViewById<RecyclerView>(R.id.attachments).adapter = ScheduledMessageAttachmentAdapter(context)
+        view.findViewById<RecyclerView>(R.id.attachments).setRecycledViewPool(imagesViewPool)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -70,18 +70,18 @@ class ScheduledMessageAdapter @Inject constructor(
         val message = getItem(position) ?: return
 
         // GroupAvatarView only accepts recipients, so map the phone numbers to recipients
-        holder.avatars.recipients = message.recipients.map { address -> Recipient(address = address) }
+        holder.itemView.findViewById<GroupAvatarView>(R.id.avatars).recipients = message.recipients.map { address -> Recipient(address = address) }
 
-        holder.recipients.text = message.recipients.joinToString(",") { address ->
+        holder.itemView.findViewById<TextView>(R.id.recipients).text = message.recipients.joinToString(",") { address ->
             contactCache[address]?.name?.takeIf { it.isNotBlank() } ?: address
         }
 
-        holder.date.text = dateFormatter.getScheduledTimestamp(message.date)
-        holder.body.text = message.body
+        holder.itemView.findViewById<TextView>(R.id.date).text = dateFormatter.getScheduledTimestamp(message.date)
+        holder.itemView.findViewById<TextView>(R.id.body).text = message.body
 
-        val adapter = holder.attachments.adapter as ScheduledMessageAttachmentAdapter
+        val adapter = holder.itemView.findViewById<RecyclerView>(R.id.attachments).adapter as ScheduledMessageAttachmentAdapter
         adapter.data = message.attachments.map(Uri::parse)
-        holder.attachments.isVisible = message.attachments.isNotEmpty()
+        holder.itemView.findViewById<RecyclerView>(R.id.attachments).isVisible = message.attachments.isNotEmpty()
     }
 
     /**

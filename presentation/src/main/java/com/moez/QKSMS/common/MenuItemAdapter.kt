@@ -33,9 +33,9 @@ import com.moez.QKSMS.common.util.extensions.setVisible
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.menu_list_item.*
-import kotlinx.android.synthetic.main.menu_list_item.view.*
 import javax.inject.Inject
+import android.widget.ImageView
+import android.widget.TextView
 
 data class MenuItem(val title: String, val actionId: Int)
 
@@ -72,7 +72,7 @@ class MenuItemAdapter @Inject constructor(private val context: Context, private 
                 intArrayOf(-android.R.attr.state_activated))
 
         val text = parent.context.resolveThemeColor(android.R.attr.textColorTertiary)
-        view.check.imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, text))
+        view.findViewById<ImageView>(R.id.check).imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, text))
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -85,9 +85,9 @@ class MenuItemAdapter @Inject constructor(private val context: Context, private 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val menuItem = getItem(position)
 
-        holder.title.text = menuItem.title
-        holder.check.isActivated = (menuItem.actionId == selectedItem)
-        holder.check.setVisible(selectedItem != null)
+        holder.itemView.findViewById<TextView>(R.id.title).text = menuItem.title
+        holder.itemView.findViewById<ImageView>(R.id.check).isActivated = (menuItem.actionId == selectedItem)
+        holder.itemView.findViewById<ImageView>(R.id.check).setVisible(selectedItem != null)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

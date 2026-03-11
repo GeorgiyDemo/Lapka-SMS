@@ -28,7 +28,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-abstract class QkPresenter<View : QkViewContract<State>, State>(initialState: State) {
+abstract class QkPresenter<View : QkViewContract<State>, State : Any>(initialState: State) {
 
     protected val disposables = CompositeDisposable()
     protected val state: Subject<State> = BehaviorSubject.createDefault(initialState)

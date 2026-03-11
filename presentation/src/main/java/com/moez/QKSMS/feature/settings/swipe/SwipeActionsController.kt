@@ -19,6 +19,9 @@
 package com.moez.QKSMS.feature.settings.swipe
 
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
@@ -34,7 +37,6 @@ import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.swipe_actions_controller.*
 import javax.inject.Inject
 
 class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState, SwipeActionsPresenter>(), SwipeActionsView {
@@ -47,6 +49,13 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
      * Allows us to subscribe to [actionClicks] more than once
      */
     private val actionClicks: Subject<SwipeActionsView.Action> = PublishSubject.create()
+
+    private val right: ConstraintLayout get() = containerView!!.findViewById(R.id.right)
+    private val rightIcon: ImageView get() = containerView!!.findViewById(R.id.rightIcon)
+    private val rightLabel: TextView get() = containerView!!.findViewById(R.id.rightLabel)
+    private val left: ConstraintLayout get() = containerView!!.findViewById(R.id.left)
+    private val leftIcon: ImageView get() = containerView!!.findViewById(R.id.leftIcon)
+    private val leftLabel: TextView get() = containerView!!.findViewById(R.id.leftLabel)
 
     init {
         appComponent.inject(this)
@@ -63,8 +72,8 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
             leftIcon.setTint(theme.textPrimary)
         }
 
-        right.postDelayed({ right?.animateLayoutChanges = true }, 100)
-        left.postDelayed({ left?.animateLayoutChanges = true }, 100)
+        right.postDelayed({ containerView?.findViewById<ConstraintLayout>(R.id.right)?.animateLayoutChanges = true }, 100)
+        left.postDelayed({ containerView?.findViewById<ConstraintLayout>(R.id.left)?.animateLayoutChanges = true }, 100)
 
         Observable.merge(
                 right.clicks().map { SwipeActionsView.Action.RIGHT },

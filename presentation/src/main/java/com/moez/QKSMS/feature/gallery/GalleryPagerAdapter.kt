@@ -22,13 +22,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.mms.ContentType
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkRealmAdapter
@@ -39,9 +36,6 @@ import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.util.GlideApp
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.gallery_image_page.*
-import kotlinx.android.synthetic.main.gallery_image_page.view.*
-import kotlinx.android.synthetic.main.gallery_video_page.*
 import java.util.*
 import javax.inject.Inject
 
@@ -66,6 +60,7 @@ class GalleryPagerAdapter @Inject constructor(private val context: Context) : Qk
                 // When calling the public setter, it doesn't allow the midscale to be the same as the
                 // maxscale or the minscale. We don't want 3 levels and we don't want to modify the library
                 // so let's celebrate the invention of reflection!
+                val image = findViewById<PhotoView>(R.id.image)
                 image.attacher.run {
                     javaClass.getDeclaredField("mMinScale").run {
                         isAccessible = true
@@ -98,25 +93,23 @@ class GalleryPagerAdapter @Inject constructor(private val context: Context) : Qk
                     ContentType.IMAGE_GIF -> GlideApp.with(context)
                             .asGif()
                             .load(part.getUri())
-                            .into(holder.image)
+                            .into(holder.itemView.findViewById<PhotoView>(R.id.image))
 
                     else -> GlideApp.with(context)
                             .asBitmap()
                             .load(part.getUri())
-                            .into(holder.image)
+                            .into(holder.itemView.findViewById<PhotoView>(R.id.image))
                 }
             }
 
             VIEW_TYPE_VIDEO -> {
-                val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(null)
-                val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-                val exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
-                holder.video.player = exoPlayer
+                val exoPlayer = ExoPlayer.Builder(context).build()
+                holder.itemView.findViewById<PlayerView>(R.id.video).player = exoPlayer
                 exoPlayers.add(exoPlayer)
 
-                val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "QKSMS"))
-                val videoSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(part.getUri())
-                exoPlayer?.prepare(videoSource)
+                val mediaItem = MediaItem.fromUri(part.getUri())
+                exoPlayer.setMediaItem(mediaItem)
+                exoPlayer.prepare()
             }
         }
     }

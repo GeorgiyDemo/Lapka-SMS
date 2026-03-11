@@ -20,7 +20,11 @@ package com.moez.QKSMS.feature.blocking.numbers
 
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkController
@@ -32,8 +36,6 @@ import com.moez.QKSMS.util.PhoneNumberUtils
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.blocked_numbers_add_dialog.view.*
-import kotlinx.android.synthetic.main.blocked_numbers_controller.*
 import javax.inject.Inject
 
 class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbersState, BlockedNumbersPresenter>(),
@@ -45,6 +47,10 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
 
     private val adapter = BlockedNumbersAdapter()
     private val saveAddressSubject: Subject<String> = PublishSubject.create()
+
+    private val add: ImageView get() = containerView!!.findViewById(R.id.add)
+    private val empty: TextView get() = containerView!!.findViewById(R.id.empty)
+    private val numbers: RecyclerView get() = containerView!!.findViewById(R.id.numbers)
 
     init {
         appComponent.inject(this)
@@ -77,11 +83,12 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
 
     override fun showAddDialog() {
         val layout = LayoutInflater.from(activity).inflate(R.layout.blocked_numbers_add_dialog, null)
-        val textWatcher = BlockedNumberTextWatcher(layout.input, phoneNumberUtils)
+        val input = layout.findViewById<EditText>(R.id.input)
+        val textWatcher = BlockedNumberTextWatcher(input, phoneNumberUtils)
         val dialog = AlertDialog.Builder(activity!!)
                 .setView(layout)
                 .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
-                    saveAddressSubject.onNext(layout.input.text.toString())
+                    saveAddressSubject.onNext(input.text.toString())
                 }
                 .setNegativeButton(R.string.button_cancel) { _, _ -> }
                 .setOnDismissListener { textWatcher.dispose() }

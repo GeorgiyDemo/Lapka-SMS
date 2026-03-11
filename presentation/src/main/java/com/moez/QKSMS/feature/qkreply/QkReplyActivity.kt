@@ -22,11 +22,13 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -36,11 +38,12 @@ import com.moez.QKSMS.common.util.extensions.autoScrollToStart
 import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setVisible
+import com.moez.QKSMS.common.widget.QkEditText
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.compose.MessagesAdapter
 import dagger.android.AndroidInjection
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.qkreply_activity.*
 import javax.inject.Inject
 
 class QkReplyActivity : QkThemedActivity(), QkReplyView {
@@ -48,12 +51,26 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
     @Inject lateinit var adapter: MessagesAdapter
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    // View properties
+    private val message: QkEditText by lazy { findViewById(R.id.message) }
+    private val sim: ImageView by lazy { findViewById(R.id.sim) }
+    private val send: ImageView by lazy { findViewById(R.id.send) }
+    private val messages: RecyclerView by lazy { findViewById(R.id.messages) }
+    private val toolbar: Toolbar by lazy { findViewById(R.id.toolbar) }
+    private val background: View by lazy { findViewById(R.id.background) }
+    private val messageBackground: View by lazy { findViewById(R.id.messageBackground) }
+    private val composeBackgroundGradient: View by lazy { findViewById(R.id.composeBackgroundGradient) }
+    private val composeBackgroundSolid: View by lazy { findViewById(R.id.composeBackgroundSolid) }
+    private val counter: QkTextView by lazy { findViewById(R.id.counter) }
+    private val simIndex: QkTextView by lazy { findViewById(R.id.simIndex) }
+    private val toolbarTitle: QkTextView by lazy { findViewById(R.id.toolbarTitle) }
+
     override val menuItemIntent: Subject<Int> = PublishSubject.create()
     override val textChangedIntent by lazy { message.textChanges() }
     override val changeSimIntent by lazy { sim.clicks() }
     override val sendIntent by lazy { send.clicks() }
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[QkReplyViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[QkReplyViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -97,7 +114,7 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         toolbar.menu.findItem(R.id.expand)?.isVisible = !state.expanded
         toolbar.menu.findItem(R.id.collapse)?.isVisible = state.expanded
 
-        adapter.data = state.data
+        adapter.conversationData = state.data
 
         counter.text = state.remaining
         counter.setVisible(counter.text.isNotBlank())

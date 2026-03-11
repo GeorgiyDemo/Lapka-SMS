@@ -24,10 +24,10 @@ import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkRealmAdapter
 import com.moez.QKSMS.common.base.QkViewHolder
 import com.moez.QKSMS.model.BlockedNumber
+import android.widget.ImageView
+import android.widget.TextView
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.blocked_number_list_item.*
-import kotlinx.android.synthetic.main.blocked_number_list_item.view.*
 
 class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
 
@@ -36,7 +36,7 @@ class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_number_list_item, parent, false)
         return QkViewHolder(view).apply {
-            containerView.unblock.setOnClickListener {
+            containerView.findViewById<ImageView>(R.id.unblock).setOnClickListener {
                 val number = getItem(adapterPosition) ?: return@setOnClickListener
                 unblockAddress.onNext(number.id)
             }
@@ -46,7 +46,7 @@ class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val item = getItem(position)!!
 
-        holder.number.text = item.address
+        holder.itemView.findViewById<TextView>(R.id.number).text = item.address
     }
 
 }

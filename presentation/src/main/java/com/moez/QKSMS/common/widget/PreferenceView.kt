@@ -29,11 +29,18 @@ import com.moez.QKSMS.common.util.extensions.resolveThemeAttribute
 import com.moez.QKSMS.common.util.extensions.resolveThemeColorStateList
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.injection.appComponent
-import kotlinx.android.synthetic.main.preference_view.view.*
+import android.widget.ImageView
+import android.widget.FrameLayout
 
 class PreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayoutCompat(context, attrs) {
+
+
+    private val iconImg: ImageView by lazy { findViewById(R.id.icon) }
+    private val titleTv: TextView by lazy { findViewById(R.id.titleView) }
+    private val summaryTv: TextView by lazy { findViewById(R.id.summaryView) }
+    private val widgetFrameView: FrameLayout by lazy { findViewById(R.id.widgetFrame) }
 
     var title: String? = null
         set(value) {
@@ -42,7 +49,7 @@ class PreferenceView @JvmOverloads constructor(
             if (isInEditMode) {
                 findViewById<TextView>(R.id.titleView).text = value
             } else {
-                titleView.text = value
+                titleTv.text = value
             }
         }
 
@@ -57,8 +64,8 @@ class PreferenceView @JvmOverloads constructor(
                     setVisible(value?.isNotEmpty() == true)
                 }
             } else {
-                summaryView.text = value
-                summaryView.setVisible(value?.isNotEmpty() == true)
+                summaryTv.text = value
+                summaryTv.setVisible(value?.isNotEmpty() == true)
             }
         }
 
@@ -72,7 +79,7 @@ class PreferenceView @JvmOverloads constructor(
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
 
-        icon.imageTintList = context.resolveThemeColorStateList(android.R.attr.textColorSecondary)
+        iconImg.imageTintList = context.resolveThemeColorStateList(android.R.attr.textColorSecondary)
 
         context.obtainStyledAttributes(attrs, R.styleable.PreferenceView).run {
             title = getString(R.styleable.PreferenceView_title)
@@ -80,13 +87,13 @@ class PreferenceView @JvmOverloads constructor(
 
             // If there's a custom view used for the preference's widget, inflate it
             getResourceId(R.styleable.PreferenceView_widget, -1).takeIf { it != -1 }?.let { id ->
-                View.inflate(context, id, widgetFrame)
+                View.inflate(context, id, widgetFrameView)
             }
 
             // If an icon is being used, set up the icon view
             getResourceId(R.styleable.PreferenceView_icon, -1).takeIf { it != -1 }?.let { id ->
-                icon.setVisible(true)
-                icon.setImageResource(id)
+                iconImg.setVisible(true)
+                iconImg.setImageResource(id)
             }
 
             recycle()

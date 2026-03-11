@@ -28,12 +28,22 @@ import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.model.Recipient
-import kotlinx.android.synthetic.main.contact_chip_detailed.view.*
 import javax.inject.Inject
+import android.widget.ImageView
+import com.moez.QKSMS.common.widget.AvatarView
+import com.moez.QKSMS.common.widget.QkTextView
+import com.google.android.material.card.MaterialCardView
 
 class DetailedChipView(context: Context) : RelativeLayout(context) {
 
     @Inject lateinit var colors: Colors
+
+
+    private val avatarView: AvatarView by lazy { findViewById(R.id.avatar) }
+    private val nameView: QkTextView by lazy { findViewById(R.id.name) }
+    private val infoView: QkTextView by lazy { findViewById(R.id.info) }
+    private val deleteView: ImageView by lazy { findViewById(R.id.delete) }
+    private val cardView: MaterialCardView by lazy { findViewById(R.id.card) }
 
     init {
         View.inflate(context, R.layout.contact_chip_detailed, this)
@@ -48,15 +58,15 @@ class DetailedChipView(context: Context) : RelativeLayout(context) {
     }
 
     fun setRecipient(recipient: Recipient) {
-        avatar.setRecipient(recipient)
-        name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
-        info.text = recipient.address
+        avatarView.setRecipient(recipient)
+        nameView.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
+        infoView.text = recipient.address
 
         colors.theme(recipient).let { theme ->
-            card.setBackgroundTint(theme.theme)
-            name.setTextColor(theme.textPrimary)
-            info.setTextColor(theme.textTertiary)
-            delete.setTint(theme.textPrimary)
+            cardView.setBackgroundTint(theme.theme)
+            nameView.setTextColor(theme.textPrimary)
+            infoView.setTextColor(theme.textTertiary)
+            deleteView.setTint(theme.textPrimary)
         }
     }
 
@@ -77,7 +87,7 @@ class DetailedChipView(context: Context) : RelativeLayout(context) {
     }
 
     fun setOnDeleteListener(listener: (View) -> Unit) {
-        delete.setOnClickListener(listener)
+        deleteView.setOnClickListener(listener)
     }
 
 }

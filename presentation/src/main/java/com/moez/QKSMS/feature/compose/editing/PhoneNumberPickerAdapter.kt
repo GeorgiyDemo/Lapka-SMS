@@ -29,10 +29,9 @@ import com.moez.QKSMS.extensions.Optional
 import com.moez.QKSMS.model.PhoneNumber
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.phone_number_list_item.*
-import kotlinx.android.synthetic.main.radio_preference_view.*
-import kotlinx.android.synthetic.main.radio_preference_view.view.*
+import com.moez.QKSMS.common.widget.RadioPreferenceView
 import javax.inject.Inject
+import android.widget.FrameLayout
 
 class PhoneNumberPickerAdapter @Inject constructor(
     private val context: Context
@@ -52,7 +51,7 @@ class PhoneNumberPickerAdapter @Inject constructor(
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.phone_number_list_item, parent, false)
         return QkViewHolder(view).apply {
-            radioButton.forwardTouches(itemView)
+            itemView.findViewById<RadioPreferenceView>(R.id.number).radioButton.forwardTouches(itemView)
 
             view.setOnClickListener {
                 val phoneNumber = getItem(adapterPosition)
@@ -64,9 +63,9 @@ class PhoneNumberPickerAdapter @Inject constructor(
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val phoneNumber = getItem(position)
 
-        holder.number.radioButton.isChecked = phoneNumber.id == selectedItem
-        holder.number.titleView.text = phoneNumber.address
-        holder.number.summaryView.text = when (phoneNumber.isDefault) {
+        holder.itemView.findViewById<RadioPreferenceView>(R.id.number).radioButton.isChecked = phoneNumber.id == selectedItem
+        holder.itemView.findViewById<RadioPreferenceView>(R.id.number).titleView.text = phoneNumber.address
+        holder.itemView.findViewById<RadioPreferenceView>(R.id.number).summaryView.text = when (phoneNumber.isDefault) {
             true -> context.getString(R.string.compose_number_picker_default, phoneNumber.type)
             false -> phoneNumber.type
         }

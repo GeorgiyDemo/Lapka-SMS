@@ -19,6 +19,7 @@
 package com.moez.QKSMS.feature.blocking
 
 import android.view.View
+import android.widget.LinearLayout
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
@@ -26,15 +27,21 @@ import com.moez.QKSMS.common.QkChangeHandler
 import com.moez.QKSMS.common.base.QkController
 import com.moez.QKSMS.common.util.Colors
 import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
+import com.moez.QKSMS.common.widget.PreferenceView
+import com.moez.QKSMS.common.widget.QkSwitch
 import com.moez.QKSMS.feature.blocking.manager.BlockingManagerController
 import com.moez.QKSMS.feature.blocking.messages.BlockedMessagesController
 import com.moez.QKSMS.feature.blocking.numbers.BlockedNumbersController
 import com.moez.QKSMS.injection.appComponent
-import kotlinx.android.synthetic.main.blocking_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import javax.inject.Inject
 
 class BlockingController : QkController<BlockingView, BlockingState, BlockingPresenter>(), BlockingView {
+
+    private val blockingManager: PreferenceView get() = containerView!!.findViewById(R.id.blockingManager)
+    private val blockedNumbers: PreferenceView get() = containerView!!.findViewById(R.id.blockedNumbers)
+    private val blockedMessages: PreferenceView get() = containerView!!.findViewById(R.id.blockedMessages)
+    private val drop: PreferenceView get() = containerView!!.findViewById(R.id.drop)
+    private val parent: LinearLayout get() = containerView!!.findViewById(R.id.parent)
 
     override val blockingManagerIntent by lazy { blockingManager.clicks() }
     override val blockedNumbersIntent by lazy { blockedNumbers.clicks() }
@@ -52,7 +59,7 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
 
     override fun onViewCreated() {
         super.onViewCreated()
-        parent.postDelayed({ parent?.animateLayoutChanges = true }, 100)
+        parent.postDelayed({ containerView?.findViewById<LinearLayout>(R.id.parent)?.animateLayoutChanges = true }, 100)
     }
 
     override fun onAttach(view: View) {
@@ -64,7 +71,7 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
 
     override fun render(state: BlockingState) {
         blockingManager.summary = state.blockingManager
-        drop.checkbox.isChecked = state.dropEnabled
+        drop.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.dropEnabled
         blockedMessages.isEnabled = !state.dropEnabled
     }
 

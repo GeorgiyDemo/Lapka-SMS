@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
 import com.moez.QKSMS.R
-import kotlinx.android.synthetic.main.key_input_dialog.view.*
 import javax.crypto.KeyGenerator
+import android.view.View
 
 
 class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> Unit) : AlertDialog(context) {
@@ -21,12 +21,12 @@ class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> 
 
     init {
         layout.apply {
-            field.hint = hint
-            btnGenerateKey.setOnClickListener {
+            findViewById<EditText>(R.id.field).hint = hint
+            findViewById<View>(R.id.btnGenerateKey).setOnClickListener {
                 generateKey()
             }
-            btnCopyKey.setOnClickListener {
-                field.apply {
+            findViewById<View>(R.id.btnCopyKey).setOnClickListener {
+                findViewById<EditText>(R.id.field).apply {
                     if(copyToClipboard()) {
                         selectAll()
                         Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
@@ -43,10 +43,10 @@ class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> 
 
     fun setText(text: String): KeyInputDialog {
         if (validate(text)) {
-            layout.field.setText(text)
+            layout.findViewById<EditText>(R.id.field).setText(text)
         } else {
-            layout.field.setText(text)
-            layout.field.error = context.resources.getString(R.string.invalid_key)
+            layout.findViewById<EditText>(R.id.field).setText(text)
+            layout.findViewById<EditText>(R.id.field).error = context.resources.getString(R.string.invalid_key)
         }
         return this
     }
@@ -77,17 +77,17 @@ class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> 
         val keyGen = KeyGenerator.getInstance("AES")
         keyGen.init(256)
         val secretKey = keyGen.generateKey()
-        layout.field.setText(Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP))
+        layout.findViewById<EditText>(R.id.field).setText(Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP))
     }
 
     override fun show() {
         super.show()
         getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
-            if (validate(layout.field.text.toString())) {
-                listener(layout.field.text.toString())
+            if (validate(layout.findViewById<EditText>(R.id.field).text.toString())) {
+                listener(layout.findViewById<EditText>(R.id.field).text.toString())
                 dismiss()
             } else {
-                layout.field.error = context.resources.getString(R.string.invalid_key)
+                layout.findViewById<EditText>(R.id.field).error = context.resources.getString(R.string.invalid_key)
             }
         }
     }

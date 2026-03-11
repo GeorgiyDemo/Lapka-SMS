@@ -24,23 +24,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkActivity
 import com.moez.QKSMS.common.util.DateFormatter
 import com.moez.QKSMS.common.util.extensions.setVisible
+import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.util.Preferences
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.gallery_activity.*
 import javax.inject.Inject
 
 class GalleryActivity : QkActivity(), GalleryView {
@@ -50,11 +50,17 @@ class GalleryActivity : QkActivity(), GalleryView {
     @Inject lateinit var pagerAdapter: GalleryPagerAdapter
     @Inject lateinit var prefs: Preferences
 
+    // View properties
+    private val pager: ViewPager2 by lazy { findViewById(R.id.pager) }
+    private val toolbar: Toolbar by lazy { findViewById(R.id.toolbar) }
+    private val toolbarTitle: QkTextView by lazy { findViewById(R.id.toolbarTitle) }
+    private val toolbarSubtitle: QkTextView by lazy { findViewById(R.id.toolbarSubtitle) }
+
     val partId by lazy { intent.getLongExtra("partId", 0L) }
 
     private val optionsItemSubject: Subject<Int> = PublishSubject.create()
     private val pageChangedSubject: Subject<MmsPart> = PublishSubject.create()
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[GalleryViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[GalleryViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
@@ -73,7 +79,7 @@ class GalleryActivity : QkActivity(), GalleryView {
 
         pagerAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
-                pagerAdapter.data?.takeIf { pagerAdapter.itemCount > 0 }
+                pagerAdapter.getData()?.takeIf { pagerAdapter.itemCount > 0 }
                         ?.indexOfFirst { part -> part.id == partId }
                         ?.let { index ->
                             onPageSelected(index)

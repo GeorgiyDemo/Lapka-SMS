@@ -32,7 +32,9 @@ import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.model.Recipient
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.contact_chip.*
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.moez.QKSMS.common.widget.AvatarView
 import javax.inject.Inject
 
 class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
@@ -46,7 +48,7 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
         return QkViewHolder(view).apply {
             // These theme attributes don't apply themselves on API 21
             if (Build.VERSION.SDK_INT <= 22) {
-                content.setBackgroundTint(view.context.resolveThemeColor(R.attr.bubbleColor))
+                itemView.findViewById<LinearLayout>(R.id.content).setBackgroundTint(view.context.resolveThemeColor(R.attr.bubbleColor))
             }
 
             view.setOnClickListener {
@@ -59,8 +61,8 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val recipient = getItem(position)
 
-        holder.avatar.setRecipient(recipient)
-        holder.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
+        holder.itemView.findViewById<AvatarView>(R.id.avatar).setRecipient(recipient)
+        holder.itemView.findViewById<TextView>(R.id.name).text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }
 
     /**
