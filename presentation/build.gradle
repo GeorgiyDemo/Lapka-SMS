@@ -31,8 +31,8 @@ android {
         applicationId "com.moez.QKSMS"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 4007
-        versionName "4.0.0"
+        versionCode 4008
+        versionName "4.1.0"
         setProperty("archivesBaseName", "P-SMS-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
