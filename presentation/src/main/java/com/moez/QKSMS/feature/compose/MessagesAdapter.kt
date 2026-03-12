@@ -29,7 +29,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
-import by.cyberpartisan.psms.Message as PSmsMessage
+import org.lapka.sms.Message as PSmsMessage
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkRealmAdapter
@@ -61,7 +61,7 @@ import android.util.Base64
 import com.moez.QKSMS.common.widget.AvatarView
 import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.common.widget.TightTextView
-import by.cyberpartisan.psms.InvalidVersionException
+import org.lapka.sms.InvalidVersionException
 import io.reactivex.subjects.BehaviorSubject
 
 class MessagesAdapter @Inject constructor(

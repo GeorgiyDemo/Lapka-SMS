@@ -1,6 +1,6 @@
 package com.moez.QKSMS.crypto
 
-import by.cyberpartisan.psms.PSmsEncryptor
+import org.lapka.sms.PSmsEncryptor
 import timber.log.Timber
 
 object KSmsEncryptorFactory {

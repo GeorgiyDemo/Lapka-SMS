@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace "by.cyberpartisan.psms"
+    namespace "org.lapka.sms"
     compileSdkVersion 34
 
     compileOptions {
@@ -30,4 +30,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "commons-codec:commons-codec:1.15"
     implementation "com.ionspin.kotlin:bignum:0.3.8"
+
+    testImplementation "junit:junit:4.13.2"
 }

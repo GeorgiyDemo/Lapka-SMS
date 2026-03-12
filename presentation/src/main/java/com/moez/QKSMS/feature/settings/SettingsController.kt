@@ -156,7 +156,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
         deleteEncryptedAfterDialog.adapter.setData(R.array.delete_message_after_labels)
 
-        about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME, "3.9.4", by.cyberpartisan.psms.VERSION.toString())
+        about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME, "3.9.4", org.lapka.sms.VERSION.toString())
     }
 
     override fun onAttach(view: View) {

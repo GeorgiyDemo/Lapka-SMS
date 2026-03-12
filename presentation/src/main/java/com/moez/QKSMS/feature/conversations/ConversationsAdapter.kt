@@ -28,9 +28,9 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import by.cyberpartisan.psms.InvalidVersionException
+import org.lapka.sms.InvalidVersionException
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
-import by.cyberpartisan.psms.Message as PSmsMessage
+import org.lapka.sms.Message as PSmsMessage
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.Navigator
 import com.moez.QKSMS.common.base.QkRealmAdapter

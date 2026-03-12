@@ -63,7 +63,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
-import by.cyberpartisan.psms.Message as PSmsMessage
+import org.lapka.sms.Message as PSmsMessage
 
 class ComposeViewModel @Inject constructor(
     @Named("query") private val query: String,

@@ -1,5 +1,3 @@
--dontobfuscate
-
 # autodispose
 -dontwarn com.uber.autodispose.**
 
