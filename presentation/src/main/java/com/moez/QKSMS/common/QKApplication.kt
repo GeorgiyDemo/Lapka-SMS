@@ -70,11 +70,49 @@ class QKApplication : Application(), HasAndroidInjector {
         appComponent.inject(this)
 
         Realm.init(this)
-        Realm.setDefaultConfiguration(RealmConfiguration.Builder()
+        val realmKey = com.moez.QKSMS.common.util.RealmKeyProvider.getOrCreateRealmKey(this)
+        val realmConfigBuilder = RealmConfiguration.Builder()
                 .compactOnLaunch()
                 .migration(realmMigration)
                 .schemaVersion(QkRealmMigration.SchemaVersion)
-                .build())
+
+        if (realmKey != null) {
+            // Migrate from unencrypted to encrypted Realm if needed
+            try {
+                realmConfigBuilder.encryptionKey(realmKey)
+                val config = realmConfigBuilder.build()
+                Realm.getInstance(config).close() // Test if encrypted DB works
+                Realm.setDefaultConfiguration(config)
+            } catch (e: Exception) {
+                // Existing unencrypted DB — migrate by copying data
+                Timber.w(e, "Migrating Realm to encrypted storage")
+                try {
+                    val unencryptedConfig = RealmConfiguration.Builder()
+                            .compactOnLaunch()
+                            .migration(realmMigration)
+                            .schemaVersion(QkRealmMigration.SchemaVersion)
+                            .build()
+                    val unencryptedRealm = Realm.getInstance(unencryptedConfig)
+                    val encryptedConfig = RealmConfiguration.Builder()
+                            .name("lapka_encrypted.realm")
+                            .compactOnLaunch()
+                            .migration(realmMigration)
+                            .schemaVersion(QkRealmMigration.SchemaVersion)
+                            .encryptionKey(realmKey)
+                            .build()
+                    val encryptedFile = java.io.File(encryptedConfig.path)
+                    unencryptedRealm.writeEncryptedCopyTo(encryptedFile, realmKey)
+                    unencryptedRealm.close()
+                    Realm.deleteRealm(unencryptedConfig)
+                    Realm.setDefaultConfiguration(encryptedConfig)
+                } catch (migrationError: Exception) {
+                    Timber.e(migrationError, "Realm encryption migration failed, using unencrypted")
+                    Realm.setDefaultConfiguration(realmConfigBuilder.build())
+                }
+            }
+        } else {
+            Realm.setDefaultConfiguration(realmConfigBuilder.build())
+        }
 
         qkMigration.performMigration()
 

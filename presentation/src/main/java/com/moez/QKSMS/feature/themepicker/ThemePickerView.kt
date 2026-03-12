@@ -28,6 +28,7 @@ interface ThemePickerView : QkViewContract<ThemePickerState> {
     fun clearHsvThemeClicks(): Observable<*>
     fun applyHsvThemeClicks(): Observable<*>
     fun viewQksmsPlusClicks(): Observable<*>
+    fun systemDefaultClicks(): Observable<*>
 
     fun setCurrentTheme(color: Int)
     fun showQksmsPlusSnackbar()

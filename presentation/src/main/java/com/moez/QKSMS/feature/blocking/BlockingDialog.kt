@@ -28,6 +28,7 @@ import com.moez.QKSMS.interactor.MarkBlocked
 import com.moez.QKSMS.interactor.MarkUnblocked
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.util.Preferences
+import timber.log.Timber
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -59,10 +60,10 @@ class BlockingDialog @Inject constructor(
             // If we can block/unblock in the external manager, then just fire that off and exit
             if (block) {
                 markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                blockingManager.block(addresses).subscribe()
+                blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
             } else {
                 markUnblocked.execute(conversationIds)
-                blockingManager.unblock(addresses).subscribe()
+                blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
             }
         } else if (block == allBlocked(addresses)) {
             // If all of the addresses are already in their correct state in the blocking manager, just marked the
@@ -112,10 +113,10 @@ class BlockingDialog @Inject constructor(
                 .setPositiveButton(R.string.button_continue) { _, _ ->
                     if (block) {
                         markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                        blockingManager.block(addresses).subscribe()
+                        blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
                     } else {
                         markUnblocked.execute(conversationIds)
-                        blockingManager.unblock(addresses).subscribe()
+                        blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
                     }
                 }
                 .setNegativeButton(R.string.button_cancel) { _, _ -> }

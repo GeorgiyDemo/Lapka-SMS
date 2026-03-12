@@ -3,6 +3,8 @@ package com.moez.QKSMS.common.widget
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +47,12 @@ class KeyInputDialog(private val context: Activity, private val hint: String, pr
                 )
                 field.selectAll()
                 Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
+                // Auto-clear clipboard after 30 seconds for security
+                Handler(Looper.getMainLooper()).postDelayed({
+                    try {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+                    } catch (_: Exception) {}
+                }, 30_000)
             }
         }
 

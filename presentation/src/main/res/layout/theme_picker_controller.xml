@@ -35,6 +35,17 @@
         android:paddingStart="12dp"
         android:paddingEnd="12dp" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/systemDefault"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/theme_system_default" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"

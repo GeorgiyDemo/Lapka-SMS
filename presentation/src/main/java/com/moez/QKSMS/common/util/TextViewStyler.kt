@@ -132,7 +132,7 @@ class TextViewStyler @Inject constructor(
         setTextSize(textView, textSizeAttr)
 
         if (textView is EditText) {
-            val drawable = textView.resources.getDrawable(R.drawable.cursor).apply { setTint(colors.theme().theme) }
+            val drawable = androidx.core.content.res.ResourcesCompat.getDrawable(textView.resources, R.drawable.cursor, textView.context.theme)?.apply { setTint(colors.theme().theme) }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 textView.textCursorDrawable = drawable
             }

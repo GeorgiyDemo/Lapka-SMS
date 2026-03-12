@@ -316,6 +316,12 @@ class KeySettingsController(
         val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
         return if (text.isNotBlank() && clipboard != null) {
             clipboard.setPrimaryClip(ClipData.newPlainText(resources.getString(R.string.conversation_encryption_key_title), text))
+            // Auto-clear clipboard after 30 seconds for security
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                try {
+                    clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+                } catch (_: Exception) {}
+            }, 30_000)
             true
         } else false
     }

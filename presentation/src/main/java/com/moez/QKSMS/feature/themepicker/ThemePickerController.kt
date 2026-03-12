@@ -63,6 +63,7 @@ class ThemePickerController(
     private val applyGroup: Group get() = containerView!!.findViewById(R.id.applyGroup)
     private val apply: TextView get() = containerView!!.findViewById(R.id.apply)
     private val clear: ImageView get() = containerView!!.findViewById(R.id.clear)
+    private val systemDefault: View get() = containerView!!.findViewById(R.id.systemDefault)
 
     init {
         appComponent
@@ -121,6 +122,8 @@ class ThemePickerController(
     override fun applyHsvThemeClicks(): Observable<*> = apply.clicks()
 
     override fun viewQksmsPlusClicks(): Observable<*> = viewQksmsPlusSubject
+
+    override fun systemDefaultClicks(): Observable<*> = systemDefault.clicks()
 
     override fun render(state: ThemePickerState) {
         tabs.setRecipientId(state.recipientId)

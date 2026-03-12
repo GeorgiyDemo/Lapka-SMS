@@ -25,6 +25,7 @@
     <string name="title_settings">Настройки</string>
     <string name="title_notification_prefs">Уведомления</string>
     <string name="title_theme">Тема</string>
+    <string name="theme_system_default">Системный цвет</string>
     <string name="title_conversations">Поиск во входящих&#8230;</string>
     <string name="title_compose">Написать</string>
     <string name="setup_skip">Пропустить</string>

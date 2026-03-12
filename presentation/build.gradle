@@ -33,8 +33,6 @@ android {
         versionName "5.0.0"
         setProperty("archivesBaseName", "Lapka-SMS-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "Lapka-SMS-v${versionName}")
     }
 
     signingConfigs {

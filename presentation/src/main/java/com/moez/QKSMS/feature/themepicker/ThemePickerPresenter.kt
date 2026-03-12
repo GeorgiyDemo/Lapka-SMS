@@ -99,6 +99,16 @@ class ThemePickerPresenter @Inject constructor(
                 .withLatestFrom(theme.asObservable()) { _, color -> color }
                 .autoDisposable(view.scope())
                 .subscribe { color -> view.setCurrentTheme(color) }
+
+        // Reset to system default color
+        view.systemDefaultClicks()
+                .autoDisposable(view.scope())
+                .subscribe {
+                    theme.set(Preferences.THEME_DEFAULT_DYNAMIC)
+                    if (recipientId == 0L) {
+                        widgetManager.updateTheme()
+                    }
+                }
     }
 
 }
