@@ -31,9 +31,7 @@
     <string name="setup_next">Tęsti</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Skambinti</string>
-    <string name="menu_info">Dėtalės</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_info">Dėtalės</string>    <string name="menu_share">Share</string>
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d pasirinkta(s)</string>
     <string name="main_menu_clear">Ištrinti</string>
@@ -113,10 +111,7 @@
     <string name="compose_details_sent">Sent: %s</string>
     <string name="compose_details_received">Received: %s</string>
     <string name="compose_details_delivered">Delivered: %s</string>
-    <string name="compose_details_error_code">Error code: %d</string>
-<string name="compose_gallery_cd">Pridėti nuotrauką</string>
-<string name="compose_contact_cd">Attach a contact</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Error code: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Siųsti žinutę</string>
@@ -132,15 +127,7 @@
     <string name="info_unarchive">Išarchyvuoti</string>
     <string name="info_block">Blokuoti</string>
     <string name="info_unblock">Atblokuoti</string>
-    <string name="info_delete">Ištrinti pokalbį</string>
-<string name="gallery_toast_saved">Saved to gallery</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
-    <string name="settings_category_appearance">Išvaizda</string>
+    <string name="info_delete">Ištrinti pokalbį</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Išvaizda</string>
     <string name="settings_category_general">Bendra</string>
     <string name="settings_category_qkreply">Greitas atsakas</string>
     <string name="settings_theme_title">Tema</string>
@@ -201,9 +188,7 @@
         <item quantity="few">After %d days</item>
         <item quantity="many">After %d days</item>
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-<string name="settings_sync_title">Sinchronizuoti pranešimus</string>
+    </plurals><string name="settings_sync_title">Sinchronizuoti pranešimus</string>
     <string name="settings_sync_summary">Iš naujo sinchronizuoti Android pranešimų duomenų bazę</string>
     <string name="settings_about_title">Apie QKSMS</string>
     <string name="settings_version">Versija %s %s %s</string>

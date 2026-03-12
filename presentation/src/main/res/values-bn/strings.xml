@@ -31,9 +31,7 @@
     <string name="setup_next">আগাও</string>
     <string name="menu_add_person">কাউকে যুক্ত করো</string>
     <string name="menu_call">কল করো</string>
-    <string name="menu_info">বিস্তারিত</string>
-    <string name="menu_save">গ্যালারিতে সংরক্ষণ করো</string>
-    <string name="menu_share">শেয়ার</string>
+    <string name="menu_info">বিস্তারিত</string>    <string name="menu_share">শেয়ার</string>
     <string name="main_drawer_open_cd">ন্যাভিগেশন ড্রয়ার খুলো</string>
     <string name="main_title_selected">%d নির্বাচিত</string>
     <string name="main_menu_clear">পরিষ্কার</string>
@@ -111,10 +109,7 @@
     <string name="compose_details_sent">প্রেরিত: %s</string>
     <string name="compose_details_received">গৃহীত: %s</string>
     <string name="compose_details_delivered">প্রেরিত হয়েছে: %s</string>
-    <string name="compose_details_error_code">ত্রুটি কোড: %d</string>
-<string name="compose_gallery_cd">ছবি সংযুক্ত করুন</string>
-<string name="compose_contact_cd">একটি পরিচিতি সংযুক্ত করুন</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">ত্রুটি কোড: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">সিম %1$d (%2$s) নির্বাচিত</string>
     <string name="compose_sim_cd">নির্বাচিত, %s সিম কার্ড পরিবর্তন করুন</string>
     <string name="compose_send_cd">বার্তা পাঠাও</string>
@@ -130,15 +125,7 @@
     <string name="info_unarchive">আনআর্কাইভ</string>
     <string name="info_block">ব্লক করুন</string>
     <string name="info_unblock">আনব্লক করুন</string>
-    <string name="info_delete">আলাপ মুছে ফেলো</string>
-<string name="gallery_toast_saved">গ্যালারীতে সেভ করুন</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>এখন পাঠাও</item>
-        <item>লেখা অনুলিপি করো</item>
-        <item>মুছো</item>
-    </string-array>
-    <string name="settings_category_appearance">উপস্থিতি</string>
+    <string name="info_delete">আলাপ মুছে ফেলো</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">উপস্থিতি</string>
     <string name="settings_category_general">সাধারণ</string>
     <string name="settings_category_qkreply">QK উত্তর</string>
     <string name="settings_theme_title">থিম</string>
@@ -197,9 +184,7 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">যদি তোমার দীর্ঘ বার্তা পাঠানো ব্যর্থ হয় বা ভুল ক্রমানুসারে পাঠানো হয় তবে তুমি তার পরিবর্তে বার্তাগুলো এমএমএস বার্তা হিসাবে প্রেরণ করতে পারো। অতিরিক্ত চার্জ প্রযোজ্য হতে পারে</string>
-<string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
+    </plurals><string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
     <string name="settings_sync_summary">তোমার বার্তাগুলি অ্যান্ড্রয়েডের নিজস্ব এসএমএস এর ডাটাবেসের সাথে পুনরায় সিঙ্ক করো</string>
     <string name="settings_about_title">QKSMS সম্পর্কে</string>
     <string name="settings_version">সংস্করণ %s  %s %s</string>

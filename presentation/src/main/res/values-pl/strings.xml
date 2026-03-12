@@ -31,9 +31,7 @@
     <string name="setup_next">Kontynuuj</string>
     <string name="menu_add_person">Dodaj osobę</string>
     <string name="menu_call">Zadzwoń</string>
-    <string name="menu_info">Szczegóły</string>
-    <string name="menu_save">Zapisz w galerii</string>
-    <string name="menu_share">Udostepnij</string>
+    <string name="menu_info">Szczegóły</string>    <string name="menu_share">Udostepnij</string>
     <string name="main_drawer_open_cd">Otwórz panel nawigacyjny</string>
     <string name="main_title_selected">%d wybrano</string>
     <string name="main_menu_clear">Wyczyść</string>
@@ -113,10 +111,7 @@
     <string name="compose_details_sent">Wysłano: %s</string>
     <string name="compose_details_received">Otrzymano: %s</string>
     <string name="compose_details_delivered">Dostarczono: %s</string>
-    <string name="compose_details_error_code">Kod błędu: %d</string>
-<string name="compose_gallery_cd">Załącz zdjęcie</string>
-<string name="compose_contact_cd">Załącz kontakt</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Kod błędu: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Wybrano kartę SIM %1$d (%2$s)</string>
     <string name="compose_sim_cd">Wybrano %s, zmień kartę SIM</string>
     <string name="compose_send_cd">Wyślij wiadomość</string>
@@ -132,15 +127,7 @@
     <string name="info_unarchive">Usuń z archiwum</string>
     <string name="info_block">Zablokuj</string>
     <string name="info_unblock">Odblokuj</string>
-    <string name="info_delete">Usuń rozmowę</string>
-<string name="gallery_toast_saved">Zapisano w galerii</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Wyślij teraz</item>
-        <item>Skopiuj treść</item>
-        <item>Usuń</item>
-    </string-array>
-    <string name="settings_category_appearance">Wygląd</string>
+    <string name="info_delete">Usuń rozmowę</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Wygląd</string>
     <string name="settings_category_general">Ogólne</string>
     <string name="settings_category_qkreply">QK Reply</string>
     <string name="settings_theme_title">Motyw</string>
@@ -201,9 +188,7 @@
         <item quantity="few">Po %d dniach</item>
         <item quantity="many">Po %d dniach</item>
         <item quantity="other">Po %d dniach</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Jeśli dłuższe wiadomości tekstowe nie są wysyłane lub wysyłane są w złej kolejności, możesz wysyłać je jako wiadomości MMS. Mogą zostać naliczone dodatkowe opłaty</string>
-<string name="settings_sync_title">Synchronizuj wiadomości</string>
+    </plurals><string name="settings_sync_title">Synchronizuj wiadomości</string>
     <string name="settings_sync_summary">Zsynchronizuj wiadomości z systemową bazą danych</string>
     <string name="settings_about_title">O aplikacji</string>
     <string name="settings_version">Wersja %s %s %s</string>

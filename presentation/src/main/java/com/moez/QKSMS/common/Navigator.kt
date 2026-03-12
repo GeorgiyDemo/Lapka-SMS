@@ -128,17 +128,17 @@ class Navigator @Inject constructor(
     }
 
     fun showSourceCode() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wrwrabbit/Partisan-SMS"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeorgiyDemo/Lapka-SMS/"))
         startActivityExternal(intent)
     }
 
     fun showChangelog() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wrwrabbit/Partisan-SMS/releases"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeorgiyDemo/Lapka-SMS/releases"))
         startActivityExternal(intent)
     }
 
     fun showLicense() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wrwrabbit/Partisan-SMS/blob/master/LICENSE"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeorgiyDemo/Lapka-SMS/blob/master/LICENSE"))
         startActivityExternal(intent)
     }
 

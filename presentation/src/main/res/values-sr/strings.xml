@@ -31,9 +31,7 @@
     <string name="setup_next">Настави</string>
     <string name="menu_add_person">Додај контакт</string>
     <string name="menu_call">Позови</string>
-    <string name="menu_info">Детаљи</string>
-    <string name="menu_save">Сачувај у галерију</string>
-    <string name="menu_share">Подели</string>
+    <string name="menu_info">Детаљи</string>    <string name="menu_share">Подели</string>
     <string name="main_drawer_open_cd">Отвори панел за навигацију</string>
     <string name="main_title_selected">%d  обележено</string>
     <string name="main_menu_clear">Обриши</string>
@@ -112,10 +110,7 @@
     <string name="compose_details_sent">Послато: %s</string>
     <string name="compose_details_received">Примљено: %s</string>
     <string name="compose_details_delivered">Испоручено: %s</string>
-    <string name="compose_details_error_code">Кôд грешке: %d</string>
-<string name="compose_gallery_cd">Приложи фотографију</string>
-<string name="compose_contact_cd">Приложи контакт</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Кôд грешке: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Изабрана SIM картица %1$d (%2$s)</string>
     <string name="compose_sim_cd">Изабрано: %s; промените SIM картицу</string>
     <string name="compose_send_cd">Пошаљи поруку</string>
@@ -131,15 +126,7 @@
     <string name="info_unarchive">Врати у примљене</string>
     <string name="info_block">Блокирај</string>
     <string name="info_unblock">Одблокирај</string>
-    <string name="info_delete">Обриши разговор</string>
-<string name="gallery_toast_saved">Сачувано у галерију</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Пошаљи одмах</item>
-        <item>Копирај текст</item>
-        <item>Обриши</item>
-    </string-array>
-    <string name="settings_category_appearance">Уреди изглед</string>
+    <string name="info_delete">Обриши разговор</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Уреди изглед</string>
     <string name="settings_category_general">Опште</string>
     <string name="settings_category_qkreply">Брзи одговор</string>
     <string name="settings_theme_title">Тема</string>
@@ -199,9 +186,7 @@
         <item quantity="one">Након 1 дана</item>
         <item quantity="few">Након %d дана</item>
         <item quantity="other">Након %d дана</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Ако дугачке поруке не могу да се пошаљу или се шаљу погрешним редоследом, можете их послати као MMS, што може имати додатне трошкове.</string>
-<string name="settings_sync_title">Синхронизуј поруке</string>
+    </plurals><string name="settings_sync_title">Синхронизуј поруке</string>
     <string name="settings_sync_summary">Поново синхронизуј поруке са изворном Андроид SMS базом података.</string>
     <string name="settings_about_title">О апликацији</string>
     <string name="settings_version">Верзија %s %s %s</string>

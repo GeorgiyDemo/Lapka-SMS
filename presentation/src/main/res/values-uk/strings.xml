@@ -31,9 +31,7 @@
     <string name="setup_next">Продовжити</string>
     <string name="menu_add_person">Додати контакт</string>
     <string name="menu_call">Зателефонувати</string>
-    <string name="menu_info">Деталі</string>
-    <string name="menu_save">Зберегти в галереї</string>
-    <string name="menu_share">Поділитися</string>
+    <string name="menu_info">Деталі</string>    <string name="menu_share">Поділитися</string>
     <string name="main_drawer_open_cd">Відкрити панель навігації</string>
     <string name="main_title_selected">Обрано: %d</string>
     <string name="main_menu_clear">Очистити</string>
@@ -113,10 +111,7 @@
     <string name="compose_details_sent">Надіслано: %s</string>
     <string name="compose_details_received">Отримано: %s</string>
     <string name="compose_details_delivered">Доставлено: %s</string>
-    <string name="compose_details_error_code">Код помилки: %d</string>
-<string name="compose_gallery_cd">Прикріпити фотографію</string>
-<string name="compose_contact_cd">Прикріпити контакт</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Код помилки: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Обрана SIM-карта %1$d (%2$s)</string>
     <string name="compose_sim_cd">%s обрано, змініть SIM-картку</string>
     <string name="compose_send_cd">Надіслати повідомлення</string>
@@ -132,15 +127,7 @@
     <string name="info_unarchive">Розархівувати</string>
     <string name="info_block">Заблокувати</string>
     <string name="info_unblock">Розблокувати</string>
-    <string name="info_delete">Видалити бесіду</string>
-<string name="gallery_toast_saved">Збережено в галереї</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Надіслати зараз</item>
-        <item>Копіювати текст</item>
-        <item>Видалити</item>
-    </string-array>
-    <string name="settings_category_appearance">Зовнішній вигляд</string>
+    <string name="info_delete">Видалити бесіду</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Зовнішній вигляд</string>
     <string name="settings_category_general">Загальні</string>
     <string name="settings_category_qkreply">QK Відповідь</string>
     <string name="settings_theme_title">Тема</string>
@@ -201,9 +188,7 @@
         <item quantity="few">Після %d днів</item>
         <item quantity="many">Після %d днів</item>
         <item quantity="other">Після %d днів</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Якщо частини довгого повідомлення не відправляються або роблять це в хибному порядку, ви можете відправити їх як MMS натомість. Оплата згідно тарифів вашого оператора</string>
-<string name="settings_sync_title">Синхронізація повідомлень</string>
+    </plurals><string name="settings_sync_title">Синхронізація повідомлень</string>
     <string name="settings_sync_summary">Повторна синхронізація ваших повідомлень з власною базою даних SMS Android</string>
     <string name="settings_about_title">Про QKSMS</string>
     <string name="settings_version">Версія %s %s %s</string>

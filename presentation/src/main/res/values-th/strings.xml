@@ -31,9 +31,7 @@
     <string name="setup_next">ทำต่อ</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">โทร</string>
-    <string name="menu_info">รายละเอียด</string>
-    <string name="menu_save">บันทึกรูปภาพ</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_info">รายละเอียด</string>    <string name="menu_share">Share</string>
     <string name="main_drawer_open_cd">เปิดเมนูลัด</string>
     <string name="main_title_selected">%d ถูกเลือก</string>
     <string name="main_menu_clear">ลบออก</string>
@@ -110,10 +108,7 @@
     <string name="compose_details_sent">ส่งแล้ว: %s</string>
     <string name="compose_details_received">รับ: %s</string>
     <string name="compose_details_delivered">การจัดส่ง: %s</string>
-    <string name="compose_details_error_code">รหัสข้อผิดพลาด: %d</string>
-<string name="compose_gallery_cd">แนบรูปภาพ</string>
-<string name="compose_contact_cd">Attach a contact</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">รหัสข้อผิดพลาด: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s เลือก เปลี่ยน SIM การ์ด</string>
     <string name="compose_send_cd">ส่งข้อความ</string>
@@ -129,15 +124,7 @@
     <string name="info_unarchive">ยกเลิกการเก็บ</string>
     <string name="info_block">ปิดกั้น</string>
     <string name="info_unblock">ยกเลิกการปิดกั้น</string>
-    <string name="info_delete">ลบการสนทนา</string>
-<string name="gallery_toast_saved">บันทึกรูปภาพแล้ว</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
-    <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
+    <string name="info_delete">ลบการสนทนา</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
     <string name="settings_category_general">ทั่วไป</string>
     <string name="settings_category_qkreply">QK ตอบกลับ</string>
     <string name="settings_theme_title">รูปแบบการแสดงผล</string>
@@ -195,9 +182,7 @@
     <string name="settings_auto_delete_warning_message">If you proceed, %1$d messages will be deleted now</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-<string name="settings_sync_title">ซิงค์ข้อความ</string>
+    </plurals><string name="settings_sync_title">ซิงค์ข้อความ</string>
     <string name="settings_sync_summary">ซิงค์ข้อความของคุณกับฐานข้อมูลของ Android SMS</string>
     <string name="settings_about_title">เกี่ยวกับ QKSMS</string>
     <string name="settings_version">เวอร์ชัน: %s %s %s</string>

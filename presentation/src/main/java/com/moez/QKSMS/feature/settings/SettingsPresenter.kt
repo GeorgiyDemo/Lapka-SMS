@@ -139,6 +139,13 @@ class SettingsPresenter @Inject constructor(
                 .subscribe { id -> newState { copy(deleteEncryptedAfterSummary =
                 deleteEncryptedAfterDialogLabels[id], deleteEncryptedAfterId = id) } }
 
+        disposables += prefs.language.asObservable()
+                .subscribe { lang ->
+                    val summary = if (lang.isEmpty()) context.getString(R.string.settings_language_system)
+                        else Locale(lang).getDisplayLanguage(Locale(lang)).replaceFirstChar { it.uppercase() }
+                    newState { copy(languageSummary = summary) }
+                }
+
         disposables += syncRepo.syncProgress
                 .sample(16, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
@@ -156,6 +163,8 @@ class SettingsPresenter @Inject constructor(
                     Timber.v("Preference click: ${context.resources.getResourceName(it.id)}")
 
                     when (it.id) {
+                        R.id.language -> view.showLanguageDialog()
+
                         R.id.theme -> view.showThemePicker()
 
                         R.id.night -> view.showNightModeDialog()
@@ -310,6 +319,11 @@ class SettingsPresenter @Inject constructor(
                 .doOnNext { duration ->
                     prefs.deleteEncryptedAfter.set(duration)
                 }
+                .autoDisposable(view.scope())
+                .subscribe()
+
+        view.languageSelected()
+                .doOnNext { lang -> prefs.language.set(lang) }
                 .autoDisposable(view.scope())
                 .subscribe()
     }

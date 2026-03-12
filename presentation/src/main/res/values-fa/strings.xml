@@ -31,9 +31,7 @@
     <string name="setup_next">ادامه</string>
     <string name="menu_add_person">افزودن شخص</string>
     <string name="menu_call">تماس</string>
-    <string name="menu_info">جزئیات</string>
-    <string name="menu_save">ذخیره در گالری</string>
-    <string name="menu_share">هم‌رسانی</string>
+    <string name="menu_info">جزئیات</string>    <string name="menu_share">هم‌رسانی</string>
     <string name="main_drawer_open_cd">بازکردن کشو ناوبری</string>
     <string name="main_title_selected">%d انتخاب شده</string>
     <string name="main_menu_clear">پاکسازی</string>
@@ -114,10 +112,7 @@
     <string name="compose_details_sent">فرستاده‌شده: %s</string>
     <string name="compose_details_received">دریافت شده: %s</string>
     <string name="compose_details_delivered">تحویل داده شده: %s</string>
-    <string name="compose_details_error_code">کد خطا: %d</string>
-<string name="compose_gallery_cd">پیوست یک عکس</string>
-<string name="compose_contact_cd">یک مخاطب پیوست کنید</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">کد خطا: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">سیم‌کارت %1$d (%2$s) انتخاب شد</string>
     <string name="compose_sim_cd">%s انتخاب شد، سیم‌کارت را عوض کنید</string>
     <string name="compose_send_cd">فرستادن پیام</string>
@@ -133,15 +128,7 @@
     <string name="info_unarchive">بیرون آوردن از بایگانی</string>
     <string name="info_block">مسدود کردن</string>
     <string name="info_unblock">رفع مسدودیت</string>
-    <string name="info_delete">حذف گفتگو</string>
-<string name="gallery_toast_saved">در گالری ذخیره شد</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>هم اکنون بفرست</item>
-        <item>کپی متن</item>
-        <item>حذف</item>
-    </string-array>
-    <string name="settings_category_appearance">ظاهر</string>
+    <string name="info_delete">حذف گفتگو</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">ظاهر</string>
     <string name="settings_category_general">عمومی</string>
     <string name="settings_category_qkreply">پاسخ سریع</string>
     <string name="settings_theme_title">پوسته</string>
@@ -200,9 +187,7 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">بعد از ۱ روز</item>
         <item quantity="other">بعد از %d روز</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">اگر پیام های متنی طولانی شما نتوانسته اند ارسال شوند یا به ترتیب اشتباه ارسال شوند ، می توانید به جای آنها پیام های MMS ارسال کنید. هزینه های اضافی ممکن است اعمال شود</string>
-<string name="settings_sync_title">همگام‌سازی پیام‌ها</string>
+    </plurals><string name="settings_sync_title">همگام‌سازی پیام‌ها</string>
     <string name="settings_sync_summary">همگام‌سازی مجدد پیام‌ها با پایگاه‌داده بومی پیامک اندروید</string>
     <string name="settings_about_title">درباره P-SMS</string>
     <string name="settings_version">نسخه %s\nQKSMS نسخه %s\nP-SMS-lib نسخه %s</string>

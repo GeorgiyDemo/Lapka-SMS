@@ -31,9 +31,7 @@
     <string name="setup_next">계속</string>
     <string name="menu_add_person">대화 상대 추가하기</string>
     <string name="menu_call">전화</string>
-    <string name="menu_info">자세히</string>
-    <string name="menu_save">갤러리에 저장하기</string>
-    <string name="menu_share">공유</string>
+    <string name="menu_info">자세히</string>    <string name="menu_share">공유</string>
     <string name="main_drawer_open_cd">메뉴 열기</string>
     <string name="main_title_selected">%d 개가 선택됨</string>
     <string name="main_menu_clear">삭제하기</string>
@@ -110,10 +108,7 @@
     <string name="compose_details_sent">전송됨: %s</string>
     <string name="compose_details_received">받음: %s</string>
     <string name="compose_details_delivered">보냄: %s</string>
-    <string name="compose_details_error_code">오류 코드: %d</string>
-<string name="compose_gallery_cd">사진 첨부</string>
-<string name="compose_contact_cd">연락처 첨부</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">오류 코드: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) 선택 됨</string>
     <string name="compose_sim_cd">%s 선택됨, SIM 카드를 변경하세요.</string>
     <string name="compose_send_cd">메시지 보내기</string>
@@ -129,15 +124,7 @@
     <string name="info_unarchive">보관 해제</string>
     <string name="info_block">차단</string>
     <string name="info_unblock">차단 해제</string>
-    <string name="info_delete">대화 삭제</string>
-<string name="gallery_toast_saved">갤러리에 저장하기</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>지금 보내기</item>
-        <item>텍스트 복사하기</item>
-        <item>삭제</item>
-    </string-array>
-    <string name="settings_category_appearance">디자인</string>
+    <string name="info_delete">대화 삭제</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">디자인</string>
     <string name="settings_category_general">일반 설정</string>
     <string name="settings_category_qkreply">빠른 응답</string>
     <string name="settings_theme_title">테마</string>
@@ -195,9 +182,7 @@
     <string name="settings_auto_delete_warning_message">이대로 진행하면, %1$d 개의 메시지가 지금 삭제됩니다</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 일 후</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">만약 장문의 메시지가 보내지지 않거나, 잘못된 순서로 보내진다면, MMS 메시지로 보낼 수 있습니다. (MMS로 인한 추가요금이 발생할 수 있습니다)</string>
-<string name="settings_sync_title">메시지 동기화하기</string>
+    </plurals><string name="settings_sync_title">메시지 동기화하기</string>
     <string name="settings_sync_summary">기본 안드로이드 SMS 데이터베이스에 다시 동기화하기</string>
     <string name="settings_about_title">QKSMS에 대해...</string>
     <string name="settings_version">버전 정보 %s %s %s</string>

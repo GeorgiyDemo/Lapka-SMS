@@ -104,6 +104,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     // partisan
     private val globalEncryptionKeySubject: Subject<String> = PublishSubject.create()
     private val smsForResetSubject: Subject<String> = PublishSubject.create()
+    private val languageSubject: Subject<String> = PublishSubject.create()
 
     // View accessors — use containerView instead of view because view is null during onViewCreated
     private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
@@ -128,6 +129,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val deleteEncryptedAfter: PreferenceView get() = containerView!!.findViewById(R.id.deleteEncryptedAfter)
     private val smsForReset: PreferenceView get() = containerView!!.findViewById(R.id.smsForReset)
     private val showInTaskSwitcher: PreferenceView get() = containerView!!.findViewById(R.id.showInTaskSwitcher)
+    private val language: PreferenceView get() = containerView!!.findViewById(R.id.language)
 
     private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
 
@@ -202,7 +204,10 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun deleteEncryptedAfterSelected(): Observable<Int> = deleteEncryptedAfterDialog.adapter.menuItemClicks
 
+    override fun languageSelected(): Observable<String> = languageSubject
+
     override fun render(state: SettingsState) {
+        language.summary = state.languageSummary
         themePreview.setBackgroundTint(state.theme)
         night.summary = state.nightModeSummary
         nightModeDialog.adapter.selectedItem = state.nightModeId
@@ -335,6 +340,75 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun showGlobalEncryptionKeySettings() = navigator.showGlobalKeysSettings()
 
     override fun showSmsForResetDialog(smsForReset: String) = smsForResetDialog.setText(smsForReset).show()
+
+    override fun showLanguageDialog() {
+        val locales = listOf(
+            "" to context.getString(R.string.settings_language_system),
+            "ar" to "العربية",
+            "bn" to "বাংলা",
+            "cs" to "Čeština",
+            "da" to "Dansk",
+            "de" to "Deutsch",
+            "el" to "Ελληνικά",
+            "en" to "English",
+            "es" to "Español",
+            "fa" to "فارسی",
+            "fi" to "Suomi",
+            "fr" to "Français",
+            "hi" to "हिन्दी",
+            "hr" to "Hrvatski",
+            "hu" to "Magyar",
+            "in" to "Bahasa Indonesia",
+            "it" to "Italiano",
+            "iw" to "עברית",
+            "ja" to "日本語",
+            "ko" to "한국어",
+            "lt" to "Lietuvių",
+            "nb" to "Norsk bokmål",
+            "ne" to "नेपाली",
+            "nl" to "Nederlands",
+            "pl" to "Polski",
+            "pt" to "Português",
+            "pt-rBR" to "Português (Brasil)",
+            "ro" to "Română",
+            "ru" to "Русский",
+            "sk" to "Slovenčina",
+            "sl" to "Slovenščina",
+            "sr" to "Српски",
+            "sv" to "Svenska",
+            "th" to "ไทย",
+            "tl" to "Filipino",
+            "tr" to "Türkçe",
+            "uk" to "Українська",
+            "ur" to "اردو",
+            "vi" to "Tiếng Việt",
+            "zh" to "繁體中文",
+            "zh-rCN" to "简体中文"
+        )
+        val names = locales.map { it.second }.toTypedArray()
+        val codes = locales.map { it.first }
+        val currentLang = prefs.language.get()
+        val checkedItem = codes.indexOf(currentLang).coerceAtLeast(0)
+
+        MaterialAlertDialogBuilder(activity!!)
+            .setTitle(R.string.settings_language_title)
+            .setSingleChoiceItems(names, checkedItem) { dialog, which ->
+                languageSubject.onNext(codes[which])
+                dialog.dismiss()
+                applyLocale(codes[which])
+            }
+            .show()
+    }
+
+    private fun applyLocale(lang: String) {
+        val localeList = if (lang.isEmpty()) {
+            androidx.core.os.LocaleListCompat.getEmptyLocaleList()
+        } else {
+            val tag = lang.replace("-r", "-")
+            androidx.core.os.LocaleListCompat.forLanguageTags(tag)
+        }
+        androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(localeList)
+    }
 
     override fun showDeleteEncryptedAfterDialog() = deleteEncryptedAfterDialog.show(activity!!)
 

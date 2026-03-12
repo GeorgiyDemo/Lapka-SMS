@@ -31,9 +31,7 @@
     <string name="setup_next">Weiter</string>
     <string name="menu_add_person">Person hinzufügen</string>
     <string name="menu_call">Anrufen</string>
-    <string name="menu_info">Details</string>
-    <string name="menu_save">In Galerie speichern</string>
-    <string name="menu_share">Teilen</string>
+    <string name="menu_info">Details</string>    <string name="menu_share">Teilen</string>
     <string name="main_drawer_open_cd">Öffne den Navigation Drawer</string>
     <string name="main_title_selected">%d ausgewählt</string>
     <string name="main_menu_clear">Zurücksetzen</string>
@@ -111,10 +109,7 @@
     <string name="compose_details_sent">Gesendet: %s</string>
     <string name="compose_details_received">Erhalten: %s</string>
     <string name="compose_details_delivered">Zugestellt: %s</string>
-    <string name="compose_details_error_code">Fehlercode: %d</string>
-<string name="compose_gallery_cd">Foto anhängen</string>
-<string name="compose_contact_cd">Kontakt anhängen</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Fehlercode: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) ausgewählt</string>
     <string name="compose_sim_cd">%s ausgewählt, SIM-Karte ändern</string>
     <string name="compose_send_cd">Nachricht senden</string>
@@ -130,15 +125,7 @@
     <string name="info_unarchive">Wiederherstellen</string>
     <string name="info_block">Blockieren</string>
     <string name="info_unblock">Entsperren</string>
-    <string name="info_delete">Unterhaltung löschen</string>
-<string name="gallery_toast_saved">In Galerie gespeichert</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Sofort senden</item>
-        <item>Text kopieren</item>
-        <item>Löschen</item>
-    </string-array>
-    <string name="settings_category_appearance">Aussehen</string>
+    <string name="info_delete">Unterhaltung löschen</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Aussehen</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_qkreply">Schnellantwort</string>
     <string name="settings_theme_title">Erscheinungsbild</string>
@@ -197,9 +184,7 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Nach 1 Tag</item>
         <item quantity="other">Nach %d Tagen</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
-<string name="settings_sync_title">Nachrichten synchronisieren</string>
+    </plurals><string name="settings_sync_title">Nachrichten synchronisieren</string>
     <string name="settings_sync_summary">Nachrichten mit der Android SMS-Datenbank abgleichen</string>
     <string name="settings_about_title">Über QKSMS</string>
     <string name="settings_version">Version %s %s %s</string>

@@ -1,6 +1,6 @@
-# Koshka-SMS - Encrypted SMS Messenger
+# Lapka SMS - Encrypted SMS Messenger
 
-Koshka-SMS is a fork of [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) with modernized dependencies, updated Android APIs, and significantly improved encryption.
+Lapka SMS is a fork of [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) with modernized dependencies, updated Android APIs, and significantly improved encryption.
 
 ## Origin & Attribution
 
@@ -23,6 +23,12 @@ All original copyright notices and license terms are preserved.
 - **Encrypted key storage** — global encryption key stored in Android EncryptedSharedPreferences (AES-256-GCM, backed by Android Keystore)
 - **Key fingerprint** — SHA-256 fingerprint displayed in key settings for out-of-band verification
 
+### SMS-only focus
+
+- Removed MMS/attachments support — the app is SMS-only for simplicity and security
+- Removed backup/restore functionality
+- Removed scheduled messages
+
 ### Codebase
 
 - `psms-lib` module built from source instead of pre-compiled AAR
@@ -31,10 +37,11 @@ All original copyright notices and license terms are preserved.
 - Removed jcenter() repository dependency
 - Added SDK version checks for PackageManager APIs
 - Migrated to AndroidX ActivityResult APIs
+- In-app language selector (40 languages)
 
 ## Threat Model
 
-The primary adversary is the **mobile operator** who can read SMS content and metadata. Koshka-SMS encrypts message content via steganography (encoded as Russian text, Base64, or Cyrillic Base64) so the operator sees only innocuous-looking messages.
+The primary adversary is the **mobile operator** who can read SMS content and metadata. Lapka SMS encrypts message content via steganography (encoded as Russian text, Base64, or Cyrillic Base64) so the operator sees only innocuous-looking messages.
 
 **What is protected:**
 - Message content (AES-256-GCM encryption)
@@ -43,19 +50,19 @@ The primary adversary is the **mobile operator** who can read SMS content and me
 
 **What is NOT protected:**
 - Communication metadata (who messages whom, when, how often)
-- The fact that both parties use Koshka-SMS (if operator inspects app installs)
+- The fact that both parties use Lapka SMS (if operator inspects app installs)
 
 ## Building
 
 ```
-./gradlew assembleNoAnalyticsDebug
+./gradlew assembleDebug
 ```
 
 Requires JDK 17.
 
 ## License
 
-Koshka-SMS is released under the **GNU General Public License v3.0 (GPLv3)**, the same license as the original Partisan-SMS and QKSMS projects. The full license text can be found in the `LICENSE` file.
+Lapka SMS is released under the **GNU General Public License v3.0 (GPLv3)**, the same license as the original Partisan-SMS and QKSMS projects. The full license text can be found in the `LICENSE` file.
 
 In compliance with GPLv3:
 - The complete source code of this fork is available in this repository

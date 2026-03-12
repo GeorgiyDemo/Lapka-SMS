@@ -31,9 +31,7 @@
     <string name="setup_next">继续</string>
     <string name="menu_add_person">添加人物</string>
     <string name="menu_call">致电</string>
-    <string name="menu_info">详情</string>
-    <string name="menu_save">保存到图库</string>
-    <string name="menu_share">分享</string>
+    <string name="menu_info">详情</string>    <string name="menu_share">分享</string>
     <string name="main_drawer_open_cd">打开导航栏</string>
     <string name="main_title_selected">已选择 %d 项</string>
     <string name="main_menu_clear">清除</string>
@@ -110,10 +108,7 @@
     <string name="compose_details_sent">发送时间：%s</string>
     <string name="compose_details_received">接收时间：%s</string>
     <string name="compose_details_delivered">送达时间：%s</string>
-    <string name="compose_details_error_code">错误码：%d</string>
-<string name="compose_gallery_cd">添加照片</string>
-<string name="compose_contact_cd">附加联系人</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">错误码：%d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">已选择 SIM 卡 %1$d (%2$s)</string>
     <string name="compose_sim_cd">%s 已选择，更改 SIM 卡</string>
     <string name="compose_send_cd">发送消息</string>
@@ -129,15 +124,7 @@
     <string name="info_unarchive">取消存档</string>
     <string name="info_block">拦截</string>
     <string name="info_unblock">取消拦截</string>
-    <string name="info_delete">删除对话</string>
-<string name="gallery_toast_saved">保存到图库</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>现在发送</item>
-        <item>复制文本</item>
-        <item>删除</item>
-    </string-array>
-    <string name="settings_category_appearance">外观</string>
+    <string name="info_delete">删除对话</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">外观</string>
     <string name="settings_category_general">通用</string>
     <string name="settings_category_qkreply">快速回复</string>
     <string name="settings_theme_title">主题</string>
@@ -195,9 +182,7 @@
     <string name="settings_auto_delete_warning_message">如果您继续，现在将删除 %1$d 条消息</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 天后</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">如果您无法发送较长的信息，或者是以错误的顺序发送，您可以将其作为彩信发送。可能会收取额外的费用</string>
-<string name="settings_sync_title">同步消息</string>
+    </plurals><string name="settings_sync_title">同步消息</string>
     <string name="settings_sync_summary">重新与安卓原生短信数据库进行同步</string>
     <string name="settings_about_title">关于 QKSMS</string>
     <string name="settings_version">版本 %s %s %s</string>

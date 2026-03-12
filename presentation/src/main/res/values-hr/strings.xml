@@ -31,9 +31,7 @@
     <string name="setup_next">Nastavi</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Nazovi</string>
-    <string name="menu_info">Detalji</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_info">Detalji</string>    <string name="menu_share">Share</string>
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d odabrano</string>
     <string name="main_menu_clear">Očisti</string>
@@ -112,10 +110,7 @@
     <string name="compose_details_sent">Sent: %s</string>
     <string name="compose_details_received">Received: %s</string>
     <string name="compose_details_delivered">Delivered: %s</string>
-    <string name="compose_details_error_code">Error code: %d</string>
-<string name="compose_gallery_cd">Priloži fotografiju</string>
-<string name="compose_contact_cd">Attach a contact</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Error code: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Pošalji poruku</string>
@@ -131,15 +126,7 @@
     <string name="info_unarchive">Dearhiviraj</string>
     <string name="info_block">Blokiraj</string>
     <string name="info_unblock">Deblokiraj</string>
-    <string name="info_delete">Izbriši razgovor</string>
-<string name="gallery_toast_saved">Saved to gallery</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
-    <string name="settings_category_appearance">Izgled</string>
+    <string name="info_delete">Izbriši razgovor</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Izgled</string>
     <string name="settings_category_general">Općenito</string>
     <string name="settings_category_qkreply">QK odgovor</string>
     <string name="settings_theme_title">Tema</string>
@@ -199,9 +186,7 @@
         <item quantity="one">After 1 day</item>
         <item quantity="few">After %d days</item>
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-<string name="settings_sync_title">Uskladi poruke</string>
+    </plurals><string name="settings_sync_title">Uskladi poruke</string>
     <string name="settings_sync_summary">Ponovno uskladite svoje poruke sa nativnom Android SMS bazom podataka</string>
     <string name="settings_about_title">O aplikaciji</string>
     <string name="settings_version">Verzija %s %s %s</string>

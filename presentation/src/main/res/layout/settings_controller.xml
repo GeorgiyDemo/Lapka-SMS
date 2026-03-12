@@ -98,6 +98,14 @@
             android:clipToPadding="true">
 
             <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_translate_black_24dp"
+                app:title="@string/settings_language_title"
+                tools:summary="System default" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
                 android:id="@+id/theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

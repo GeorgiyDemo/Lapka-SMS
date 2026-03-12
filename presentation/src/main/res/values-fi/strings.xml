@@ -31,9 +31,7 @@
     <string name="setup_next">Jatka</string>
     <string name="menu_add_person">Lisää henkilö</string>
     <string name="menu_call">Soita</string>
-    <string name="menu_info">Lisätiedot</string>
-    <string name="menu_save">Tallenna galleriaan</string>
-    <string name="menu_share">Jaa</string>
+    <string name="menu_info">Lisätiedot</string>    <string name="menu_share">Jaa</string>
     <string name="main_drawer_open_cd">Avaa navigointilaatikko</string>
     <string name="main_title_selected">%d valittu</string>
     <string name="main_menu_clear">Tyhjennä</string>
@@ -111,10 +109,7 @@
     <string name="compose_details_sent">Lähetetty: %s</string>
     <string name="compose_details_received">Vastaanotettu: %s</string>
     <string name="compose_details_delivered">Toimitettu: %s</string>
-    <string name="compose_details_error_code">Virhekoodi: %d</string>
-<string name="compose_gallery_cd">Liitä kuva</string>
-<string name="compose_contact_cd">Liitä yhteystieto</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Virhekoodi: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) valittu</string>
     <string name="compose_sim_cd">%s valittu, vaihda SIM-korttia</string>
     <string name="compose_send_cd">Lähetä viesti</string>
@@ -130,15 +125,7 @@
     <string name="info_unarchive">Poista arkistosta</string>
     <string name="info_block">Estä</string>
     <string name="info_unblock">Salli</string>
-    <string name="info_delete">Poista keskustelu</string>
-<string name="gallery_toast_saved">Tallennettu galleriaan</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Lähetä nyt</item>
-        <item>Kopioi teksti</item>
-        <item>Poista</item>
-    </string-array>
-    <string name="settings_category_appearance">Ulkonäkö</string>
+    <string name="info_delete">Poista keskustelu</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Ulkonäkö</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_qkreply">QK-vastaus</string>
     <string name="settings_theme_title">Teema</string>
@@ -197,9 +184,7 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Jos pidempien viestiesi lähetys epäonnistuu, tai viestit lähtevät väärässä järjestyksessä, voit lähettää ne multimediaviesteinä. Operaattori saattaa veloittaa tästä lisämaksuja.</string>
-<string name="settings_sync_title">Synkronoi viestit</string>
+    </plurals><string name="settings_sync_title">Synkronoi viestit</string>
     <string name="settings_sync_summary">Synkronoi viestisi uudelleen Androidin oman SMS-tietokannan kanssa</string>
     <string name="settings_about_title">Tietoja QKSMS:tä</string>
     <string name="settings_version">Versio %s %s %s</string>

@@ -31,9 +31,7 @@
     <string name="setup_next">続行</string>
     <string name="menu_add_person">人を追加</string>
     <string name="menu_call">通話</string>
-    <string name="menu_info">詳細</string>
-    <string name="menu_save">ギャラリーに保存</string>
-    <string name="menu_share">共有</string>
+    <string name="menu_info">詳細</string>    <string name="menu_share">共有</string>
     <string name="main_drawer_open_cd">ナビゲーション引き出しを開く</string>
     <string name="main_title_selected">%d 選択された</string>
     <string name="main_menu_clear">消去しました</string>
@@ -110,10 +108,7 @@
     <string name="compose_details_sent">送られた: %s</string>
     <string name="compose_details_received">受け取った: %s</string>
     <string name="compose_details_delivered">配達: %s</string>
-    <string name="compose_details_error_code">エラーコード:%d</string>
-<string name="compose_gallery_cd">写真を添付する</string>
-<string name="compose_contact_cd">連絡先を添付する</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">エラーコード:%d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) を選択しました</string>
     <string name="compose_sim_cd">%s 選択、SIMカードを交換</string>
     <string name="compose_send_cd">メッセージを送る</string>
@@ -129,15 +124,7 @@
     <string name="info_unarchive">アーカイブ解除</string>
     <string name="info_block">ブロック</string>
     <string name="info_unblock">ブロックを解除</string>
-    <string name="info_delete">会話を削除</string>
-<string name="gallery_toast_saved">ギャラリーに保存</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>今すぐ送る</item>
-        <item>テキストをコピー</item>
-        <item>削除</item>
-    </string-array>
-    <string name="settings_category_appearance">外観</string>
+    <string name="info_delete">会話を削除</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">外観</string>
     <string name="settings_category_general">全般</string>
     <string name="settings_category_qkreply">QK 返信</string>
     <string name="settings_theme_title">テーマ</string>
@@ -195,9 +182,7 @@
     <string name="settings_auto_delete_warning_message">続行すると、今すぐ %1$d 件のメッセージが削除されます</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 日後</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">長いテキストメッセージの送信が失敗する場合、または間違った順序で送信される場合は、代わりにMMSメッセージとして送信できます。 追加料金が適用される場合があります</string>
-<string name="settings_sync_title">メッセージを同期</string>
+    </plurals><string name="settings_sync_title">メッセージを同期</string>
     <string name="settings_sync_summary">メッセージをネイティブの Android SMS データベースと再同期します</string>
     <string name="settings_about_title">QKSMS について</string>
     <string name="settings_version">バージョン %s %s %s</string>

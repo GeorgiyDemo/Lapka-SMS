@@ -31,9 +31,7 @@
     <string name="setup_next">Pokračovať</string>
     <string name="menu_add_person">Pridať osobu</string>
     <string name="menu_call">Volať</string>
-    <string name="menu_info">Podrobnosti</string>
-    <string name="menu_save">Uložiť do galérie</string>
-    <string name="menu_share">Zdielať</string>
+    <string name="menu_info">Podrobnosti</string>    <string name="menu_share">Zdielať</string>
     <string name="main_drawer_open_cd">Otvoriť navigačné menu</string>
     <string name="main_title_selected">%d vybraných</string>
     <string name="main_menu_clear">Vymazať</string>
@@ -113,10 +111,7 @@
     <string name="compose_details_sent">Odoslané: %s</string>
     <string name="compose_details_received">Prijaté: %s</string>
     <string name="compose_details_delivered">Doručené: %s</string>
-    <string name="compose_details_error_code">Kód chyby: %d</string>
-<string name="compose_gallery_cd">Priložiť fotografiu</string>
-<string name="compose_contact_cd">Pripojiť kontakt</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Kód chyby: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Vybrána SIM %1$d (%2$s)</string>
     <string name="compose_sim_cd">%s vybrané, zmeňte SIM kartu</string>
     <string name="compose_send_cd">Odoslať správu</string>
@@ -132,15 +127,7 @@
     <string name="info_unarchive">Zrušiť archiváciu</string>
     <string name="info_block">Blokovať</string>
     <string name="info_unblock">Odblokovať</string>
-    <string name="info_delete">Odstrániť konverzáciu</string>
-<string name="gallery_toast_saved">Uložené do galérie</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Odoslať teraz</item>
-        <item>Kopírovať text</item>
-        <item>Odstrániť</item>
-    </string-array>
-    <string name="settings_category_appearance">Vzhľad</string>
+    <string name="info_delete">Odstrániť konverzáciu</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Vzhľad</string>
     <string name="settings_category_general">Všeobecné</string>
     <string name="settings_category_qkreply">Rýchla odpoveď</string>
     <string name="settings_theme_title">Motív</string>
@@ -201,9 +188,7 @@
         <item quantity="few">After %d days</item>
         <item quantity="many">After %d days</item>
         <item quantity="other">After %d days</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Ak zlyháva odosielanie dlhých správ alebo sú odoslané v nesprávnom poradí, môžete ich poslať ako MMS. Môžu byť účtované ďalšie poplatky.</string>
-<string name="settings_sync_title">Synchronizovať správy</string>
+    </plurals><string name="settings_sync_title">Synchronizovať správy</string>
     <string name="settings_sync_summary">Opätovne synchronizovať vaše správy s natívnou SMS databázou</string>
     <string name="settings_about_title">O aplikácii QKSMS</string>
     <string name="settings_version">Verzia %s %s %s</string>

@@ -147,6 +147,7 @@ class Preferences @Inject constructor(
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
     val legacyEncryptionEnabled = rxPrefs.getBoolean("legacyEncryptionEnabled", false)
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
+    val language = rxPrefs.getString("language", "")
 
     init {
         // Migrate sensitive data from plaintext to encrypted storage

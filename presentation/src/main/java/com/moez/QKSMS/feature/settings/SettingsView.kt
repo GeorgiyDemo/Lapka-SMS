@@ -36,8 +36,10 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun globalEncryptionKeySet(): Observable<String>
     fun smsForResetSet(): Observable<String>
     fun deleteEncryptedAfterSelected(): Observable<Int>
+    fun languageSelected(): Observable<String>
 
     fun showQksmsPlusSnackbar()
+    fun showLanguageDialog()
     fun showNightModeDialog()
     fun showStartTimePicker(hour: Int, minute: Int)
     fun showEndTimePicker(hour: Int, minute: Int)

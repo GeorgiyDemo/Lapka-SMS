@@ -31,9 +31,7 @@
     <string name="setup_next">Lanjut</string>
     <string name="menu_add_person">Tambah kontak</string>
     <string name="menu_call">Panggil</string>
-    <string name="menu_info">Detail</string>
-    <string name="menu_save">Simpan ke galeri</string>
-    <string name="menu_share">Berbagi</string>
+    <string name="menu_info">Detail</string>    <string name="menu_share">Berbagi</string>
     <string name="main_drawer_open_cd">Buka laci navigasi</string>
     <string name="main_title_selected">%d dipilih</string>
     <string name="main_menu_clear">Bersihkan</string>
@@ -110,10 +108,7 @@
     <string name="compose_details_sent">Dikirim: %s</string>
     <string name="compose_details_received">Diterima: %s</string>
     <string name="compose_details_delivered">Terkirim: %s</string>
-    <string name="compose_details_error_code">Kode galat: %d</string>
-<string name="compose_gallery_cd">Lampirkan foto</string>
-<string name="compose_contact_cd">Lampirkan kontak</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <string name="compose_details_error_code">Kode galat: %d</string><!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) dipilih</string>
     <string name="compose_sim_cd">%s dipilih, ganti kartu SIM</string>
     <string name="compose_send_cd">Kirim pesan</string>
@@ -129,15 +124,7 @@
     <string name="info_unarchive">Batalkan arsip</string>
     <string name="info_block">Blokir</string>
     <string name="info_unblock">Buka blokir</string>
-    <string name="info_delete">Hapus percakapan</string>
-<string name="gallery_toast_saved">Disimpan ke galeri</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string-array name="scheduled_options">
-        <item>Kirim sekarang</item>
-        <item>Salin teks</item>
-        <item>Hapus</item>
-    </string-array>
-    <string name="settings_category_appearance">Tampilan</string>
+    <string name="info_delete">Hapus percakapan</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Tampilan</string>
     <string name="settings_category_general">Umum</string>
     <string name="settings_category_qkreply">Balasan cepat</string>
     <string name="settings_theme_title">Tema</string>
@@ -195,9 +182,7 @@
     <string name="settings_auto_delete_warning_message">Jika anda lanjutkan, %1$d pesan akan dihapus sekarang</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">Setelah %d hari</item>
-    </plurals>
-<string name="settings_long_as_mms_summary">Jika pesan teks panjang anda gagal dikirim, atau dikirim dalam urutan yang salah, anda bisa mengirimkannya sebagai pesan MMS. Mungkin akan dikenai tagihan tambahan</string>
-<string name="settings_sync_title">Sinkronisasi pesan</string>
+    </plurals><string name="settings_sync_title">Sinkronisasi pesan</string>
     <string name="settings_sync_summary">Sinkronisasi ulang pesan anda dengan basis data aplikasi SMS Android bawaan</string>
     <string name="settings_about_title">Tentang QKSMS</string>
     <string name="settings_version">Versi %s %s %s</string>

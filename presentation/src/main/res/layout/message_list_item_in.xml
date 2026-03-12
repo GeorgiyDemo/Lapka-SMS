@@ -75,8 +75,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toBottomOf="@id/timestamp"
-        tools:itemCount="1"
-        tools:listitem="@layout/mms_preview_list_item" />
+        tools:itemCount="0" />
 
     <com.moez.QKSMS.common.widget.AvatarView
         android:id="@+id/avatar"
