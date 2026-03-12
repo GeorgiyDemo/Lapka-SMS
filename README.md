@@ -1,75 +1,74 @@
-# Lapka SMS - Encrypted SMS Messenger
+<p align="center">
+  <img src="assets/logo.png" width="150" alt="Lapka SMS">
+</p>
 
-Lapka SMS is a fork of [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) with modernized dependencies, updated Android APIs, and significantly improved encryption.
+<h1 align="center">Lapka SMS</h1>
 
-## Origin & Attribution
+<p align="center">
+  <b>Encrypted SMS messenger for Android</b><br>
+  SMS encryption via steganography — your messages look like ordinary text
+</p>
 
-This project is based on the following open-source projects:
+<p align="center">
+  <a href="https://github.com/GeorgiyDemo/Lapka-SMS/actions"><img src="https://github.com/GeorgiyDemo/Lapka-SMS/actions/workflows/android.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/GeorgiyDemo/Lapka-SMS/releases"><img src="https://img.shields.io/github/v/release/GeorgiyDemo/Lapka-SMS?label=release" alt="Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPLv3-blue" alt="License"></a>
+</p>
 
-- **Partisan-SMS** by [Cyber Partisans](https://github.com/wrwrabbit/Partisan-SMS) - encrypted SMS via steganography
-- **QKSMS** by [Moez Bhatti](https://github.com/moezbhatti/qksms) - the original open-source SMS app
+---
 
-All original copyright notices and license terms are preserved.
+## Features
 
-## Changes from Partisan-SMS
+- **AES-256-GCM encryption** with HKDF key derivation and replay protection
+- **Steganography** — encrypted messages encoded as Russian text, Base64, or Cyrillic Base64
+- **Per-conversation encryption keys** with QR code sharing
+- **Key fingerprint verification** (SHA-256)
+- **Encrypted key storage** via Android Keystore
+- **In-app language selector** (40 languages)
+- **SMS-only** — lightweight, no MMS bloat
+- **Themed icons** support (Android 13+)
 
-### Encryption (v2 protocol)
+## Screenshots
 
-- **AES-256-GCM** instead of AES-CFB with 4-byte IV — authenticated encryption with 12-byte random nonce and 128-bit auth tag
-- **HKDF key derivation** (RFC 5869) — separate encryption and MAC keys derived from master key
-- **Replay protection** — 4-byte timestamp in payload, 48-hour acceptance window
-- **PKCS7 padding** — message length hidden from operator (padded to 16-byte blocks)
-- **Constant-time HMAC comparison** — prevents timing side-channel attacks
-- **Encrypted key storage** — global encryption key stored in Android EncryptedSharedPreferences (AES-256-GCM, backed by Android Keystore)
-- **Key fingerprint** — SHA-256 fingerprint displayed in key settings for out-of-band verification
+<!-- TODO: add screenshots -->
 
-### SMS-only focus
+## Download
 
-- Removed MMS/attachments support — the app is SMS-only for simplicity and security
-- Removed backup/restore functionality
-- Removed scheduled messages
-
-### Codebase
-
-- `psms-lib` module built from source instead of pre-compiled AAR
-- Updated 15+ dependencies to current versions (Dagger, Glide, Timber, Material, etc.)
-- Replaced deprecated Android APIs (onBackPressed, startActivityForResult, Handler without Looper, etc.)
-- Removed jcenter() repository dependency
-- Added SDK version checks for PackageManager APIs
-- Migrated to AndroidX ActivityResult APIs
-- In-app language selector (40 languages)
-
-## Threat Model
-
-The primary adversary is the **mobile operator** who can read SMS content and metadata. Lapka SMS encrypts message content via steganography (encoded as Russian text, Base64, or Cyrillic Base64) so the operator sees only innocuous-looking messages.
-
-**What is protected:**
-- Message content (AES-256-GCM encryption)
-- Message length (PKCS7 padding)
-- Key material at rest (EncryptedSharedPreferences)
-
-**What is NOT protected:**
-- Communication metadata (who messages whom, when, how often)
-- The fact that both parties use Lapka SMS (if operator inspects app installs)
+Download the latest APK from [Releases](https://github.com/GeorgiyDemo/Lapka-SMS/releases).
 
 ## Building
 
-```
+```bash
 ./gradlew assembleDebug
 ```
 
-Requires JDK 17.
+Requires **JDK 17**.
+
+## Threat Model
+
+The primary adversary is the **mobile operator** who can read SMS content. Lapka SMS encrypts message content via steganography so the operator sees only innocuous-looking messages.
+
+| Protected | Not Protected |
+|---|---|
+| Message content (AES-256-GCM) | Communication metadata (who, when, how often) |
+| Message length (PKCS7 padding) | The fact that both parties use Lapka SMS |
+| Key material at rest (EncryptedSharedPreferences) | |
+
+## Encryption Protocol (v2)
+
+- **AES-256-GCM** — authenticated encryption with 12-byte random nonce
+- **HKDF** (RFC 5869) — separate encryption and MAC keys from master key
+- **Replay protection** — 4-byte timestamp, 48-hour acceptance window
+- **PKCS7 padding** — hides message length
+- **Constant-time HMAC** — prevents timing attacks
+
+## Credits
+
+Based on open-source projects:
+
+- [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) by Cyber Partisans
+- [QKSMS](https://github.com/moezbhatti/qksms) by Moez Bhatti
 
 ## License
 
-Lapka SMS is released under the **GNU General Public License v3.0 (GPLv3)**, the same license as the original Partisan-SMS and QKSMS projects. The full license text can be found in the `LICENSE` file.
-
-In compliance with GPLv3:
-- The complete source code of this fork is available in this repository
-- All modifications are documented in the git history
-- Original copyright notices from Partisan-SMS and QKSMS are preserved in all source files
-
-## Original Projects
-
-- Partisan-SMS: https://github.com/wrwrabbit/Partisan-SMS
-- QKSMS: https://github.com/moezbhatti/qksms
+[GNU General Public License v3.0](LICENSE)
