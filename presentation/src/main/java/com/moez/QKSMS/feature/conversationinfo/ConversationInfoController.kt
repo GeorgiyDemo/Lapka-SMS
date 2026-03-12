@@ -137,7 +137,8 @@ class ConversationInfoController(
     }
 
     override fun requestDefaultSms() {
-        navigator.showDefaultSmsDialog(activity!!)
+        val launcher = (activity as? ConversationInfoActivity)?.defaultSmsLauncher
+        navigator.showDefaultSmsDialog(activity!!, launcher)
     }
 
     override fun showDeleteDialog() {

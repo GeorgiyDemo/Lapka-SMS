@@ -32,7 +32,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
-import by.cyberpartisan.psms.PSmsEncryptor
+import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import by.cyberpartisan.psms.Message as PSmsMessage
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
@@ -256,7 +256,7 @@ class MessagesAdapter @Inject constructor(
         val isEncrypted = if (conversation != null) {
             if (!encryptionKey.isNullOrEmpty()) {
                 try {
-                    PSmsEncryptor().isEncrypted(message.body, Base64.decode(encryptionKey, Base64.DEFAULT))
+                    KSmsEncryptorFactory.create().isEncrypted(message.body, Base64.decode(encryptionKey, Base64.DEFAULT))
                 } catch (_: InvalidVersionException) {
                     false
                 }
@@ -303,7 +303,7 @@ class MessagesAdapter @Inject constructor(
 
         val decryptedMessage = if (!encryptionKey.isNullOrEmpty()) {
             try {
-                PSmsEncryptor().tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
+                KSmsEncryptorFactory.create().tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
             } catch (_: InvalidVersionException) {
                 PSmsMessage(messageText.toString())
             }
@@ -317,18 +317,10 @@ class MessagesAdapter @Inject constructor(
             holder.itemView.findViewById<TightTextView>(R.id.body).text = decryptedMessage.text
         }
 
-        if (decryptedMessage.isLegacy) {
-            if (message.isMe()) {
-                holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setImageResource(android.R.drawable.ic_partial_secure)
-            } else {
-                holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setImageResource(android.R.drawable.ic_partial_secure)
-            }
+        if (message.isMe()) {
+            holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setImageResource(android.R.drawable.ic_secure)
         } else {
-            if (message.isMe()) {
-                holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setImageResource(android.R.drawable.ic_secure)
-            } else {
-                holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setImageResource(android.R.drawable.ic_secure)
-            }
+            holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setImageResource(android.R.drawable.ic_secure)
         }
 
         holder.itemView.findViewById<TightTextView>(R.id.body).setVisible(message.isSms() || messageText.isNotBlank())

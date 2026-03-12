@@ -35,7 +35,7 @@ import android.telephony.SmsManager
 import android.util.Base64
 import android.webkit.MimeTypeMap
 import androidx.core.content.contentValuesOf
-import by.cyberpartisan.psms.PSmsEncryptor
+import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import com.google.android.mms.ContentType
 import com.google.android.mms.MMSPart
 import com.google.android.mms.pdu_alt.MultimediaMessagePdu
@@ -630,7 +630,7 @@ class MessageRepositoryImpl @Inject constructor(
         if (encryptionKey.isEmpty()) {
             return false
         }
-        return PSmsEncryptor().isEncrypted(message.getText(), Base64.decode(encryptionKey, Base64.DEFAULT))
+        return KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(encryptionKey, Base64.DEFAULT))
     }
 
     override fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long): Message {
@@ -679,12 +679,12 @@ class MessageRepositoryImpl @Inject constructor(
     private fun checkReceivedMessage(message: Message) {
         val conversation = conversationRepository.getConversation(message.threadId)
         val isEncryptedByConversationKey = conversation != null && conversation.encryptionKey.isNotEmpty()
-                && PSmsEncryptor().isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+                && KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
 
         val messageText = if (conversation?.encryptionKey?.isNotEmpty() == true) {
-            PSmsEncryptor().tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
+            KSmsEncryptorFactory.create().tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
         } else if (prefs.globalEncryptionKey.get().isNotEmpty()) {
-            PSmsEncryptor().tryDecode(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)).text
+            KSmsEncryptorFactory.create().tryDecode(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)).text
         } else {
             message.getText()
         }
@@ -698,7 +698,7 @@ class MessageRepositoryImpl @Inject constructor(
             }
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(minTimeoutId))
         } else if (prefs.globalEncryptionKey.get().isNotEmpty() && prefs.deleteEncryptedAfter.get() > 0
-                && PSmsEncryptor().isEncrypted(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))) {
+                && KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))) {
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(prefs.deleteEncryptedAfter.get()))
         }
     }

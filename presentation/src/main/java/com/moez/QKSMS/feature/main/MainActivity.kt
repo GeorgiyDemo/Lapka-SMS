@@ -162,6 +162,7 @@ class MainActivity : QkThemedActivity(), MainView {
     private val backPressedSubject: Subject<NavItem> = PublishSubject.create()
 
     private val permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+    private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -406,7 +407,7 @@ class MainActivity : QkThemedActivity(), MainView {
     }
 
     override fun requestDefaultSms() {
-        navigator.showDefaultSmsDialog(this)
+        navigator.showDefaultSmsDialog(this, defaultSmsLauncher)
     }
 
     override fun requestPermissions() {

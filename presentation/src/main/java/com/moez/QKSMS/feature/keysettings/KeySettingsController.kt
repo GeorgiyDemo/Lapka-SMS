@@ -10,6 +10,7 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Base64
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
@@ -20,6 +21,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import java.security.MessageDigest
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
@@ -86,6 +88,7 @@ class KeySettingsController(
     private val keyField: EditText get() = containerView!!.findViewById(R.id.keyField)
     private val copyKey: ImageButton get() = containerView!!.findViewById(R.id.copyKey)
     private val qrCodeImage: ImageView get() = containerView!!.findViewById(R.id.qrCodeImage)
+    private val keyFingerprint: TextView get() = containerView!!.findViewById(R.id.keyFingerprint)
     private val legacyEncryption: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryption)
     private val legacyEncryptionConversation: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryptionConversation)
     private val encodingSchemes: RadioGroup get() = containerView!!.findViewById(R.id.encodingSchemes)
@@ -146,9 +149,12 @@ class KeySettingsController(
                 keyField.error = null
                 qrCodeImage.visibility = View.VISIBLE
                 renderQr(state.key)
+                keyFingerprint.visibility = View.VISIBLE
+                keyFingerprint.text = context.getString(R.string.key_fingerprint, computeFingerprint(state.key))
             } else {
                 keyField.error = context.getText(R.string.settings_bad_key)
                 qrCodeImage.visibility = View.GONE
+                keyFingerprint.visibility = View.GONE
             }
         }
 
@@ -217,6 +223,16 @@ class KeySettingsController(
                 bitmap.setPixel(i,j, if(matrix[i,j]) Color.BLACK else Color.WHITE)
             }
         qrCodeImage.setImageBitmap(bitmap)
+    }
+
+    private fun computeFingerprint(base64Key: String): String {
+        return try {
+            val keyBytes = Base64.decode(base64Key, Base64.DEFAULT)
+            val hash = MessageDigest.getInstance("SHA-256").digest(keyBytes)
+            hash.take(8).joinToString(" ") { "%02X".format(it) }
+        } catch (e: Exception) {
+            ""
+        }
     }
 
     override fun onViewCreated() {

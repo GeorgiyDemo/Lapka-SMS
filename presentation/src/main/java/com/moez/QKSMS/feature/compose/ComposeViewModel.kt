@@ -25,7 +25,7 @@ import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import android.util.Base64
 import androidx.core.content.getSystemService
-import by.cyberpartisan.psms.PSmsEncryptor
+import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.Navigator
 import com.moez.QKSMS.common.base.QkViewModel
@@ -333,7 +333,7 @@ class ComposeViewModel @Inject constructor(
                     val messages = messageIds.mapNotNull(messageRepo::getMessage).sortedBy { it.date }
 
                     fun Message.getDecodedText() = encryptionKey?.let {
-                        PSmsEncryptor().tryDecode(getText(), Base64.decode(encryptionKey, Base64.DEFAULT)).text
+                        KSmsEncryptorFactory.create().tryDecode(getText(), Base64.decode(encryptionKey, Base64.DEFAULT)).text
                     } ?: getText()
 
                     val text = when (messages.size) {
@@ -665,22 +665,11 @@ class ComposeViewModel @Inject constructor(
                                 .takeIf { it != Conversation.SCHEME_NOT_DEF }
                                 ?: prefs.encodingScheme.get()
 
-                            val legacyEncryptionEnabled = conversation?.legacyEncryptionEnabled
-                                ?: prefs.legacyEncryptionEnabled.get()
-
-                            if (legacyEncryptionEnabled) {
-                                PSmsEncryptor().encodeLegacy(
-                                    message = PSmsMessage(body.toString()),
-                                    key = Base64.decode(encryptionKey, Base64.DEFAULT),
-                                    encryptionSchemeId = encryptionSchemeId
-                                )
-                            } else {
-                                PSmsEncryptor().encode(
-                                    message = PSmsMessage(body.toString()),
-                                    key = Base64.decode(encryptionKey, Base64.DEFAULT),
-                                    encryptionSchemeId = encryptionSchemeId
-                                )
-                            }
+                            KSmsEncryptorFactory.create().encode(
+                                message = PSmsMessage(body.toString()),
+                                key = Base64.decode(encryptionKey, Base64.DEFAULT),
+                                encryptionSchemeId = encryptionSchemeId
+                            )
                         }
                     } else {
                         body

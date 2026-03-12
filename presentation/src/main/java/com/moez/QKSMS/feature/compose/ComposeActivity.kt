@@ -140,6 +140,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     private val smsPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
 
+    private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
+
     private val contentView: ConstraintLayout by lazy { findViewById(R.id.contentView) }
     private val messageList: RecyclerView by lazy { findViewById(R.id.messageList) }
     private val messagesEmpty: QkTextView by lazy { findViewById(R.id.messagesEmpty) }
@@ -352,7 +354,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun requestDefaultSms() {
-        navigator.showDefaultSmsDialog(this)
+        navigator.showDefaultSmsDialog(this, defaultSmsLauncher)
     }
 
     override fun requestStoragePermission() {

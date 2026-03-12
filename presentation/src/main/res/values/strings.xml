@@ -18,7 +18,7 @@
   -->
 <resources>
 
-    <string name="app_name" translatable="false">P-SMS</string>
+    <string name="app_name" translatable="false">Koshka-SMS</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -30,7 +30,7 @@
     <string name="title_theme">Theme</string>
     <string name="title_conversations">Search inbox…</string>
     <string name="title_compose">Type a name or number</string>
-    <string name="title_qksms_plus" translatable="false">P-SMS</string>
+    <string name="title_qksms_plus" translatable="false">K-SMS</string>
 
     <string name="setup_skip">Skip</string>
     <string name="setup_next">Continue</string>
@@ -62,12 +62,12 @@
     <string name="inbox_search_empty_text">No results</string>
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
-    <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Make P-SMS your default SMS app</string>
-    <string name="main_default_sms_change">Change</string>
+    <string name="main_default_sms_title">Set as default SMS app</string>
+    <string name="main_default_sms_message">K-SMS must be your default SMS app to send and receive messages. This is an Android requirement, not an app limitation.</string>
+    <string name="main_default_sms_change">Set default</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">P-SMS needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">P-SMS needs permission to view your contacts</string>
+    <string name="main_permission_sms">K-SMS needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">K-SMS needs permission to view your contacts</string>
     <string name="main_permission_allow">Allow</string>
 
     <string name="drawer_inbox">Inbox</string>
@@ -79,7 +79,7 @@
     <string name="drawer_plus">Donate</string>
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Invite friends</string>
-    <string name="drawer_plus_banner_title" translatable="false">P-SMS</string>
+    <string name="drawer_plus_banner_title" translatable="false">K-SMS</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
     <string name="rate_title">Enjoying QKSMS?</string>
@@ -276,8 +276,8 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
-    <string name="settings_about_title">About P-SMS</string>
-    <string name="settings_version">Version %s\nQKSMS version %s\nP-SMS-lib version %s</string>
+    <string name="settings_about_title">About K-SMS</string>
+    <string name="settings_version">Version %s\nQKSMS version %s\nK-SMS-lib version %s</string>
     <string name="settings_logging_enabled">Debug logging enabled</string>
     <string name="settings_logging_disabled">Debug logging disabled</string>
 
@@ -289,8 +289,8 @@
     <string name="blocking_conversations">Blocked conversations</string>
 
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">P-SMS</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in P-SMS</string>
+    <string name="blocking_manager_qksms_title">K-SMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in K-SMS</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
@@ -342,7 +342,7 @@
     <string name="qksms_plus_thanks_title">Thank you for supporting QKSMS!</string>
     <string name="qksms_plus_thanks_summary">You now have access to all QKSMS+ features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">P-SMS is free application! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">K-SMS is free application! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">Donate</string>
     <string name="qksms_plus_coming_soon">Coming soon</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
@@ -491,7 +491,7 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
-    <string name="settings_category_hidden">Partisan settings</string>
+    <string name="settings_category_hidden">Hidden settings</string>
     <string name="conversation_encryption_key_title">Encryption Key</string>
     <string name="settings_delete_encrypted_after_title">Delete Encrypted Messages After</string>
     <string name="settings_delete_encrypted_after_default">Do not delete</string>
@@ -515,7 +515,8 @@
     <string name="conversation_delete_sent_after">Delete Sent Messages After</string>
     <string name="sms_for_reset">SMS for Reset</string>
     <string name="encoding_scheme">Encoding Scheme</string>
-    <string name="encryption_key_copied">Encryption Key copied to clipboard</string>
+    <string name="encryption_key_copied">Key copied. Delete from clipboard after sharing!</string>
+    <string name="key_fingerprint">Fingerprint: %s</string>
     <string name="copy">Copy</string>
     <string name="encoding_scheme_default">Use Scheme from Settings</string>
     <string name="encoding_scheme_base64">Base64</string>

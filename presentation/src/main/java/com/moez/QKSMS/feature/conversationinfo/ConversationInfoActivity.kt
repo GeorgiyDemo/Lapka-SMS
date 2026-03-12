@@ -18,8 +18,11 @@
  */
 package com.moez.QKSMS.feature.conversationinfo
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.addCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -31,6 +34,9 @@ import android.widget.FrameLayout
 class ConversationInfoActivity : QkThemedActivity() {
 
     private lateinit var router: Router
+
+    val defaultSmsLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

@@ -31,12 +31,12 @@ android {
         applicationId "com.moez.QKSMS"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 4008
-        versionName "4.1.0"
-        setProperty("archivesBaseName", "P-SMS-v${versionName}")
+        versionCode 4009
+        versionName "4.1.1"
+        setProperty("archivesBaseName", "K-SMS-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        setProperty("archivesBaseName", "P-SMS-v${versionName}")
+        setProperty("archivesBaseName", "K-SMS-v${versionName}")
     }
 
     signingConfigs {
@@ -212,8 +212,7 @@ dependencies {
     implementation project(":common")
     implementation project(':data')
     implementation project(':domain')
-    debugImplementation(name:'P-SMS-lib-debug', ext:'aar')
-    releaseImplementation(name:'P-SMS-lib-release', ext:'aar')
+    implementation project(':psms-lib')
 
     withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"

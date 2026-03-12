@@ -22,6 +22,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.moez.QKSMS.common.util.extensions.versionCode
@@ -129,7 +131,18 @@ class Preferences @Inject constructor(
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
     // partisan
-    val globalEncryptionKey = rxPrefs.getString("globalEncryptionKey", "")
+    private val securePrefs: RxSharedPreferences = run {
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val encPrefs = EncryptedSharedPreferences.create(
+            "k_sms_secure_prefs",
+            masterKeyAlias,
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+        RxSharedPreferences.create(encPrefs)
+    }
+    val globalEncryptionKey = securePrefs.getString("globalEncryptionKey", "")
     val smsForReset = rxPrefs.getString("smsForReset", "")
     val deleteEncryptedAfter = rxPrefs.getInteger("deleteEncryptedAfter", 0)
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
@@ -137,6 +150,13 @@ class Preferences @Inject constructor(
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
 
     init {
+        // Migrate global encryption key from plaintext to encrypted storage
+        val oldKey = sharedPrefs.getString("globalEncryptionKey", "")
+        if (!oldKey.isNullOrEmpty()) {
+            globalEncryptionKey.set(oldKey)
+            sharedPrefs.edit().remove("globalEncryptionKey").apply()
+        }
+
         // Migrate from old night mode preference to new one, now that we support android Q night mode
         val nightModeSummary = rxPrefs.getInteger("nightModeSummary")
         if (nightModeSummary.isSet) {

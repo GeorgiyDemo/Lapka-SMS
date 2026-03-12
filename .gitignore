@@ -39,6 +39,10 @@ captures/
 # Keystore files
 *.jks
 
+# Pre-built library archives (sources now in psms-lib/)
+libs/
+*.aar
+
 # Mac .DS_STORE files
 *.DS_STORE
 

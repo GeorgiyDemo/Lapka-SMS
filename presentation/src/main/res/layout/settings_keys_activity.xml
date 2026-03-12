@@ -90,6 +90,18 @@
                 android:contentDescription = ""
                 android:src="@drawable/qr_code"/>
 
+            <com.moez.QKSMS.common.widget.QkTextView
+                android:id="@+id/keyFingerprint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="8dp"
+                android:textIsSelectable="true"
+                android:fontFamily="monospace"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:text="Fingerprint: ABCD 1234 EF56 7890" />
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.moez.QKSMS.common.widget.PreferenceView
