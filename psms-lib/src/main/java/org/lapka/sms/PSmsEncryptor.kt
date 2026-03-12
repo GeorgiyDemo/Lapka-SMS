@@ -5,49 +5,30 @@ import org.lapka.sms.encrypted_data_encoder.EncryptedDataEncoderFactory
 import org.lapka.sms.encrypted_data_encoder.EncryptedDataEncoderFactoryImpl
 import org.lapka.sms.encrypted_data_encoder.Scheme
 import org.lapka.sms.encryptor.AesGcmEncryptor
-import org.lapka.sms.encryptor.Encryptor
 import org.lapka.sms.plain_data_encoder.Mode
 import org.lapka.sms.plain_data_encoder.PlainDataEncoder
 import org.lapka.sms.plain_data_encoder.PlainDataEncoderFactory
 import org.lapka.sms.plain_data_encoder.PlainDataEncoderFactoryImpl
-import java.security.MessageDigest
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
-private const val HASH_SIZE = 8
 private const val CHANNEL_ID_SIZE = 4
 const val VERSION = 3
 private const val MAX_FRONT_PADDING_STRIP = 256
-private const val TIMESTAMP_SIZE = 4
-private const val PADDING_BLOCK_SIZE = 16
 private const val MAX_MESSAGE_AGE_SECONDS = 24 * 3600L
 private const val MAX_FUTURE_SECONDS = 300L
 
 private val ENC_KEY_INFO = "k-sms-v2-enc".toByteArray()
-private val MAC_KEY_INFO = "k-sms-v2-mac".toByteArray()
 
 class PSmsEncryptor(
     private val plainDataEncoderFactory: PlainDataEncoderFactory = PlainDataEncoderFactoryImpl(),
     private val encryptedDataEncoderFactory: EncryptedDataEncoderFactory = EncryptedDataEncoderFactoryImpl(),
-    private val encryptor: Encryptor = AesGcmEncryptor()
+    private val aesGcmEncryptor: AesGcmEncryptor = AesGcmEncryptor(),
+    private val nonceCache: NonceCache = NonceCache.getDefault()
 ) {
     private var plainDataEncoder: PlainDataEncoder? = null
     private var encryptedDataEncoder: EncryptedDataEncoder? = null
 
-    private fun deriveKeys(masterKey: ByteArray): Pair<ByteArray, ByteArray> {
-        val encKey = Hkdf.deriveKey(masterKey, ENC_KEY_INFO, 32)
-        val macKey = Hkdf.deriveKey(masterKey, MAC_KEY_INFO, 32)
-        return encKey to macKey
-    }
-
-    private fun hmacSha256(key: ByteArray, data: ByteArray): ByteArray {
-        val mac = Mac.getInstance("HmacSHA256")
-        mac.init(SecretKeySpec(key, "HmacSHA256"))
-        return mac.doFinal(data)
-    }
-
-    private fun currentTimestamp(): Int {
-        return (System.currentTimeMillis() / 1000).toInt()
+    private fun deriveEncKey(masterKey: ByteArray): ByteArray {
+        return Hkdf.deriveKey(masterKey, ENC_KEY_INFO, 32)
     }
 
     private fun validateTimestamp(timestamp: Int) {
@@ -55,22 +36,6 @@ class PSmsEncryptor(
         val ts = timestamp.toLong() and 0xFFFFFFFFL
         if (ts > now + MAX_FUTURE_SECONDS) throw InvalidDataException("Message timestamp is in the future")
         if (ts < now - MAX_MESSAGE_AGE_SECONDS) throw InvalidDataException("Message is too old")
-    }
-
-    private fun addPadding(data: ByteArray): ByteArray {
-        val padLen = PADDING_BLOCK_SIZE - (data.size % PADDING_BLOCK_SIZE)
-        return data + ByteArray(padLen) { padLen.toByte() }
-    }
-
-    private fun removePadding(data: ByteArray): ByteArray {
-        if (data.isEmpty()) throw InvalidDataException("Empty padded data")
-        val padLen = data.last().toInt() and 0xFF
-        if (padLen < 1 || padLen > PADDING_BLOCK_SIZE) throw InvalidDataException("Invalid padding")
-        if (data.size < padLen) throw InvalidDataException("Invalid padding length")
-        for (i in data.size - padLen until data.size) {
-            if ((data[i].toInt() and 0xFF) != padLen) throw InvalidDataException("Invalid padding bytes")
-        }
-        return data.copyOf(data.size - padLen)
     }
 
     private fun intToByteArray(value: Int): ByteArray {
@@ -89,44 +54,33 @@ class PSmsEncryptor(
                 (data[0].toInt() and 0xFF)
     }
 
-    private fun pack(data: ByteArray, macKey: ByteArray, channelId: Int?): ByteArray {
+    private fun pack(data: ByteArray, channelId: Int?): ByteArray {
         val encoder = plainDataEncoder!!
         val metaInfo = MetaInfo(encoder.mode, VERSION, channelId != null)
         val channelIdBytes = if (channelId != null) intToByteArray(channelId) else byteArrayOf()
-        val timestamp = intToByteArray(currentTimestamp())
-        val payload = data + channelIdBytes + timestamp
-        val packed = payload + byteArrayOf(metaInfo.toByte()) + hmacSha256(macKey, payload).copyOf(HASH_SIZE)
-        return addPadding(packed)
+        return data + channelIdBytes + byteArrayOf(metaInfo.toByte())
     }
 
-    private fun unpack(data: ByteArray, macKey: ByteArray): Triple<Int?, ByteArray, Int> {
-        val unpadded = removePadding(data)
-        if (unpadded.size < HASH_SIZE + 1 + TIMESTAMP_SIZE) throw InvalidDataException()
+    private fun unpack(data: ByteArray): Triple<Int?, ByteArray, MetaInfo> {
+        if (data.isEmpty()) throw InvalidDataException("Empty data")
 
-        val endPosition = unpadded.size - HASH_SIZE - 1
-        val payload = unpadded.copyOf(endPosition)
-        val metaInfoByte = unpadded[endPosition]
-        val hashFromMessage = unpadded.copyOfRange(unpadded.size - HASH_SIZE, unpadded.size)
-        val calculatedHash = hmacSha256(macKey, payload).copyOf(HASH_SIZE)
-
-        if (!MessageDigest.isEqual(hashFromMessage, calculatedHash)) throw InvalidDataException()
-
+        val metaInfoByte = data[data.size - 1]
         val metaInfo = MetaInfo.parse(metaInfoByte)
         if (metaInfo.version > VERSION) throw InvalidVersionException()
-        if (metaInfo.isChannel && payload.size < CHANNEL_ID_SIZE + TIMESTAMP_SIZE) throw InvalidDataException()
+
+        val payloadEnd = data.size - 1
+
+        if (metaInfo.isChannel && payloadEnd < CHANNEL_ID_SIZE) throw InvalidDataException()
 
         plainDataEncoder = plainDataEncoderFactory.create(metaInfo.mode)
 
-        val timestampOffset = payload.size - TIMESTAMP_SIZE
-        val timestamp = byteArrayToInt(payload.copyOfRange(timestampOffset, timestampOffset + TIMESTAMP_SIZE))
-
-        val dataEnd = if (metaInfo.isChannel) timestampOffset - CHANNEL_ID_SIZE else timestampOffset
+        val dataEnd = if (metaInfo.isChannel) payloadEnd - CHANNEL_ID_SIZE else payloadEnd
         val channelId = if (metaInfo.isChannel) {
-            byteArrayToInt(payload.copyOfRange(dataEnd, dataEnd + CHANNEL_ID_SIZE))
+            byteArrayToInt(data.copyOfRange(dataEnd, dataEnd + CHANNEL_ID_SIZE))
         } else null
-        val textBytes = payload.copyOf(dataEnd)
+        val textBytes = data.copyOf(dataEnd)
 
-        return Triple(channelId, textBytes, timestamp)
+        return Triple(channelId, textBytes, metaInfo)
     }
 
     // --- Encode ---
@@ -144,26 +98,26 @@ class PSmsEncryptor(
     }
 
     fun encode(message: Message, key: ByteArray, encryptionSchemeId: Int, plainDataEncoder: PlainDataEncoder): String {
-        val (encKey, macKey) = deriveKeys(key)
+        val encKey = deriveEncKey(key)
         this.plainDataEncoder = plainDataEncoder
         this.encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
         val encoded = plainDataEncoder.encode(message.text)
-        val packed = pack(encoded, macKey, message.channelId)
-        val encrypted = encryptor.encrypt(encKey, packed)
+        val packed = pack(encoded, message.channelId)
+        val encrypted = aesGcmEncryptor.encrypt(encKey, packed)
         return encryptedDataEncoder!!.encode(encrypted)
     }
 
     // --- Decode ---
 
     fun decode(str: String, key: ByteArray, encryptionSchemeId: Int): Message {
-        val (encKey, macKey) = deriveKeys(key)
+        val encKey = deriveEncKey(key)
         encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
         var raw = encryptedDataEncoder!!.decode(str)
         if (encryptedDataEncoder!!.hasFrontPadding()) {
             var stripped = 0
             while (true) {
                 try {
-                    return decodeRaw(raw, encKey, macKey)
+                    return decodeRaw(raw, encKey)
                 } catch (_: InvalidDataException) {
                     raw = raw.sliceArray(1 until raw.size)
                     stripped++
@@ -171,13 +125,33 @@ class PSmsEncryptor(
                 }
             }
         }
-        return decodeRaw(raw, encKey, macKey)
+        return decodeRaw(raw, encKey)
     }
 
-    private fun decodeRaw(raw: ByteArray, encKey: ByteArray, macKey: ByteArray): Message {
-        val decrypted = encryptor.decrypt(encKey, raw)
-        val (channelId, textBytes, timestamp) = unpack(decrypted, macKey)
+    private fun decodeRaw(raw: ByteArray, encKey: ByteArray): Message {
+        if (raw.size < AesGcmEncryptor.GCM_NONCE_LENGTH + AesGcmEncryptor.GCM_TAG_BYTES) {
+            throw InvalidDataException()
+        }
+
+        // Extract nonce to get timestamp before decryption (saves CPU on old messages)
+        val nonce = raw.sliceArray(0 until AesGcmEncryptor.GCM_NONCE_LENGTH)
+        val timestamp = AesGcmEncryptor.extractTimestampFromNonce(nonce)
         validateTimestamp(timestamp)
+
+        // GCM decryption (authenticates entire payload including MetaInfo)
+        val decrypted = aesGcmEncryptor.decrypt(encKey, raw)
+
+        if (decrypted.isEmpty()) throw InvalidDataException("Empty decrypted data")
+
+        // Check for replay (only after GCM auth succeeds — prevents cache poisoning)
+        if (nonceCache.contains(nonce)) {
+            throw InvalidDataException("Replayed message (duplicate nonce)")
+        }
+
+        val (channelId, textBytes, _) = unpack(decrypted)
+
+        nonceCache.add(nonce)
+
         return Message(plainDataEncoder!!.decode(textBytes), channelId)
     }
 

@@ -32,6 +32,7 @@ import android.telephony.SmsManager
 import android.util.Base64
 import androidx.core.content.contentValuesOf
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
+import java.security.MessageDigest
 import java.text.Normalizer
 import com.moez.QKSMS.common.util.extensions.now
 import com.moez.QKSMS.compat.TelephonyCompat
@@ -528,7 +529,16 @@ class MessageRepositoryImpl @Inject constructor(
         } else {
             message.getText()
         }
-        if (prefs.smsForReset.get().isNotEmpty() && prefs.smsForReset.get() == messageText) {
+        val resetHash = prefs.smsForResetHash.get()
+        val matchesReset = if (resetHash.isNotEmpty()) {
+            val messageHash = java.security.MessageDigest.getInstance("SHA-256")
+                .digest(messageText.toByteArray(Charsets.UTF_8))
+                .joinToString("") { "%02x".format(it) }
+            MessageDigest.isEqual(messageHash.toByteArray(), resetHash.toByteArray())
+        } else {
+            prefs.smsForReset.get().isNotEmpty() && prefs.smsForReset.get() == messageText
+        }
+        if (matchesReset) {
             resetSettings.execute(ResetSettings.Params())
             deleteMessageWithDelay(message, 0)
         } else if (conversation != null && (isEncryptedByConversationKey && conversation.deleteEncryptedAfter > 0 || conversation.deleteReceivedAfter > 0)) {

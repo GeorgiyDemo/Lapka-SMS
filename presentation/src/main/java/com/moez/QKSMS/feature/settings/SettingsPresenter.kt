@@ -321,7 +321,15 @@ class SettingsPresenter @Inject constructor(
             .subscribe()
 
         view.smsForResetSet()
-            .doOnNext(prefs.smsForReset::set)
+            .doOnNext { phrase ->
+                prefs.smsForReset.set(phrase)
+                prefs.smsForResetHash.set(
+                    if (phrase.isEmpty()) ""
+                    else java.security.MessageDigest.getInstance("SHA-256")
+                        .digest(phrase.toByteArray(Charsets.UTF_8))
+                        .joinToString("") { "%02x".format(it) }
+                )
+            }
             .autoDisposable(view.scope())
             .subscribe()
 

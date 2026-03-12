@@ -15,15 +15,11 @@ Plaintext
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
-│       Pack          │  Append channel ID + timestamp + metainfo + HMAC
+│       Pack          │  Append channel ID (optional) + MetaInfo byte
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
-│    PKCS#7 Padding   │  Pad to 16-byte boundary
-└──────────┬──────────┘
-           ▼
-┌─────────────────────┐
-│    AES-256-GCM      │  Encrypt with derived encryption key
+│    AES-256-GCM      │  Encrypt with derived key; nonce = timestamp || random
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
@@ -36,7 +32,7 @@ Plaintext
 
 ## Key Derivation
 
-A single **master key** (128, 192, or 256 bits) is shared between parties. Two subkeys are derived using HKDF (RFC 5869) with HMAC-SHA256:
+A single **master key** (128, 192, or 256 bits) is shared between parties. An encryption subkey is derived using HKDF (RFC 5869) with HMAC-SHA256:
 
 ```
 HKDF-Extract:
@@ -48,14 +44,9 @@ HKDF-Expand (encryption key):
   info   = "k-sms-v2-enc"
   length = 32 bytes
   enc_key = HKDF-Expand(PRK, info, 32)
-
-HKDF-Expand (MAC key):
-  info   = "k-sms-v2-mac"
-  length = 32 bytes
-  mac_key = HKDF-Expand(PRK, info, 32)
 ```
 
-The salt and info strings are fixed protocol constants, not secrets. They ensure domain separation between the encryption and MAC keys.
+The salt and info strings are fixed protocol constants, not secrets. HKDF provides domain separation and ensures the encryption key is uniformly distributed regardless of master key quality.
 
 ## Plain Data Encoding
 
@@ -75,16 +66,13 @@ The encoder ID is stored in the MetaInfo byte (see below) so the receiver knows 
 
 ## Message Packing
 
-The encoded text bytes are packed into a payload with metadata:
+The encoded text bytes are packed into a payload with minimal metadata:
 
 ```
-┌──────────────┬─────────────────┬───────────────┬──────────┬──────────────┐
-│ encoded_text │ channel_id (4B) │ timestamp (4B)│ meta (1B)│ hmac (8B)    │
-│ (variable)   │ (optional)      │               │          │              │
-└──────────────┴─────────────────┴───────────────┴──────────┴──────────────┘
-                                                            ▲
-                                          HMAC covers ──────┘
-                                    encoded_text + channel_id + timestamp
+┌──────────────┬─────────────────┬──────────┐
+│ encoded_text │ channel_id (4B) │ meta (1B)│
+│ (variable)   │ (optional)      │          │
+└──────────────┴─────────────────┴──────────┘
 ```
 
 ### Fields
@@ -92,8 +80,6 @@ The encoded text bytes are packed into a payload with metadata:
 **encoded_text** (variable length): Message text compressed by the plain data encoder.
 
 **channel_id** (4 bytes, optional): Conversation channel identifier. Present only if the `isChannel` flag is set in MetaInfo. Little-endian uint32.
-
-**timestamp** (4 bytes): Unix timestamp in seconds, little-endian uint32. Used for replay protection.
 
 **MetaInfo** (1 byte): Bit-packed metadata byte:
 
@@ -105,42 +91,42 @@ Bits 4-6 (VVV):   Protocol version (currently 3)
 Bit 7 (C):        Channel ID present flag (0 = no, 1 = yes)
 ```
 
-**HMAC** (8 bytes): Truncated HMAC-SHA256 over `encoded_text + channel_id + timestamp`, computed with `mac_key`. Only the first 8 bytes of the full 32-byte HMAC are stored to save space in SMS.
-
-### PKCS#7 Padding
-
-After packing, the payload is padded to a multiple of 16 bytes using PKCS#7:
-
-- Pad length = `16 - (payload_length % 16)`
-- Pad bytes: each byte equals the pad length (1-16)
-- Always adds at least 1 byte of padding
-
-This hides the exact message length from traffic analysis.
+No padding, no HMAC, no timestamp in the payload. Timestamp is carried in the GCM nonce (see below). Authentication is provided by the GCM tag.
 
 ## Encryption
 
-The padded payload is encrypted using **AES-256-GCM**:
+The packed payload is encrypted using **AES-256-GCM** with a **96-bit authentication tag**:
 
 ```
-nonce = SecureRandom(12 bytes)
-ciphertext || tag = AES-256-GCM(enc_key, nonce, padded_payload)
+timestamp = current Unix time (4 bytes, little-endian)
+random    = SecureRandom(8 bytes)
+nonce     = timestamp || random     (12 bytes total)
+
+ciphertext || tag = AES-256-GCM(enc_key, nonce, payload)
+                    tag is 96 bits (12 bytes)
 ```
 
-Wire format of encrypted data:
+Wire format:
 
 ```
-┌──────────────┬──────────────────────────┐
-│ nonce (12B)  │ ciphertext + GCM tag     │
-│              │ (tag is 16 bytes)        │
-└──────────────┴──────────────────────────┘
+┌────────────────────────────┬────────────────────────────────┐
+│        nonce (12B)         │  ciphertext + GCM tag (12B)    │
+│ [timestamp 4B][random 8B] │                                │
+└────────────────────────────┴────────────────────────────────┘
 ```
 
-Properties:
-- **Nonce**: 12 bytes (96 bits), randomly generated via `SecureRandom` for each message
-- **GCM tag**: 128 bits (16 bytes), provides authenticated encryption
-- **Cipher**: `AES/GCM/NoPadding` (javax.crypto, hardware-accelerated on Android)
+### Properties
 
-GCM provides both confidentiality and integrity. Any modification to the ciphertext, nonce, or tag will cause decryption to fail.
+- **Nonce structure**: 12 bytes total — first 4 bytes are the Unix timestamp (little-endian), last 8 bytes are random via `SecureRandom`. This provides 2⁶⁴ random space per second, making nonce collision astronomically unlikely (~58 million years at 1000 messages/day).
+- **GCM tag**: 96 bits (12 bytes). NIST SP 800-38D explicitly permits 96-bit tags. Forgery probability: 2⁻⁹⁶ per attempt.
+- **Cipher**: `AES/GCM/NoPadding` (javax.crypto, hardware-accelerated on Android). GCM operates in CTR mode internally, so no block padding is needed — arbitrary-length plaintext is accepted natively.
+- **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost.
+- **No separate HMAC**: GCM is an AEAD (Authenticated Encryption with Associated Data) cipher — the GCM tag already provides both integrity and authenticity for the entire payload. A separate HMAC would be redundant.
+- **No PKCS#7 padding**: GCM/CTR is a stream cipher mode and handles arbitrary plaintext lengths. Block padding is unnecessary and would waste bytes.
+
+### Overhead
+
+Fixed overhead per message: **25 bytes** (12B nonce + 12B GCM tag + 1B MetaInfo).
 
 ## Encrypted Data Encoding (Steganography)
 
@@ -180,21 +166,73 @@ The output looks like a sequence of Russian words with natural punctuation and s
 
 ## Replay Protection
 
-Each message includes a 4-byte Unix timestamp. On decryption, the timestamp is validated:
+Replay protection uses two independent mechanisms:
+
+### 1. Timestamp validation
+
+Each message carries a 4-byte Unix timestamp embedded in the first 4 bytes of the GCM nonce. On decryption, the timestamp is extracted and validated **before** GCM decryption:
 
 - Messages older than **24 hours** are rejected
 - Messages more than **5 minutes** in the future are rejected
 
-This prevents replay attacks where an intercepted ciphertext is re-sent later.
+This provides fast rejection of old messages without any cryptographic overhead.
 
-## HMAC Verification
+### 2. Nonce replay cache
 
-Before decryption succeeds, the truncated HMAC is verified using **constant-time comparison** (`MessageDigest.isEqual()`). This prevents timing attacks that could leak information about the expected HMAC value.
+After successful GCM decryption (proving the message is authentic), the 12-byte nonce is checked against an in-memory cache of recently seen nonces. If the nonce was already seen, the message is rejected as a replay.
 
-The HMAC is computed over the plaintext payload (before encryption), providing an additional authentication layer inside the GCM ciphertext. While GCM already provides authentication, the inner HMAC:
+The cache is checked *after* GCM authentication to prevent cache poisoning — an attacker cannot force nonces into the cache by sending forged messages, since forged messages fail GCM authentication before the cache check.
 
-1. Authenticates the packed structure (text + metadata) independently
-2. Allows early rejection of corrupted data after decryption but before full parsing
+Cache properties:
+- **Size**: Up to 1000 entries (~12 KB memory)
+- **Eviction**: FIFO — oldest entries are evicted when the cache is full
+- **Persistence**: In-memory only (cleared on app restart)
+- **Thread safety**: Synchronized access
+
+## Decryption Pipeline
+
+```
+SMS text
+   │
+   ▼
+┌─────────────────────┐
+│ Encrypted Data      │  Decode from Base64/Cyrillic/Russian Words
+│ Decoder             │  (strip front-padding if needed)
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Extract nonce       │  Read first 12 bytes; extract timestamp from bytes 0-3
+│ Validate timestamp  │  Reject if outside 24h window (before GCM decryption)
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ AES-256-GCM decrypt │  Verify 96-bit tag + decrypt payload
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Check nonce cache   │  Reject if nonce was already seen (anti-replay)
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Unpack              │  Parse MetaInfo, extract channel ID, text bytes
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Plain Data Decoder  │  Decompress text bytes based on MetaInfo mode
+└──────────┬──────────┘
+           ▼
+      Plaintext
+```
+
+## smsForReset Protection
+
+The "SMS for reset" feature allows a special trigger phrase to remotely wipe all encryption keys. This is protected with hash-based comparison:
+
+1. When the user sets a trigger phrase, both the phrase (in EncryptedSharedPreferences) and its **SHA-256 hash** are stored
+2. When an incoming message is decrypted, its text is hashed with SHA-256
+3. The hash is compared against the stored hash using **constant-time comparison** (`MessageDigest.isEqual()`)
+
+This provides defense-in-depth: even if EncryptedSharedPreferences were somehow compromised, the comparison operation does not leak timing information about the phrase.
 
 ## Key Storage (Android)
 
@@ -247,20 +285,39 @@ Both parties should verify the fingerprint matches via a separate secure channel
 | Property | Mechanism |
 |---|---|
 | Confidentiality | AES-256-GCM |
-| Integrity | GCM authentication tag (128-bit) + HMAC-SHA256 (truncated 64-bit) |
-| Replay protection | 4-byte timestamp with 24-hour window |
-| Key separation | HKDF with distinct info strings |
+| Integrity & Authenticity | GCM authentication tag (96-bit) |
+| Replay protection | Timestamp in nonce (24h window) + nonce replay cache (1000 entries) |
+| Key separation | HKDF with domain-specific info string |
 | Key storage | Android Keystore (TEE) + EncryptedSharedPreferences |
-| Length hiding | PKCS#7 padding to 16-byte boundary |
 | Steganography | Base64 / Cyrillic Base64 / Russian Words encoding |
-| Timing attack resistance | Constant-time HMAC comparison |
-| Nonce reuse resistance | 12-byte random nonce per message via SecureRandom |
+| Timing attack resistance | Constant-time hash comparison for smsForReset |
+| Nonce reuse resistance | timestamp(4B) + random(8B) = 2⁶⁴ random space per second |
+
+## Wire Format Summary
+
+```
+On the wire (after steganographic encoding):
+
+┌────────────────────────────┬────────────────────────────────┐
+│        nonce (12B)         │  ciphertext + GCM tag          │
+│ [timestamp 4B][random 8B] │  (tag = 12B)                   │
+└────────────────────────────┴────────────────────────────────┘
+
+Inside ciphertext (after GCM decryption):
+
+┌──────────────┬─────────────────┬──────────┐
+│ encoded_text │ channel_id (4B) │ meta (1B)│
+│ (variable)   │ (optional)      │          │
+└──────────────┴─────────────────┴──────────┘
+
+Fixed overhead: 25 bytes (12B nonce + 12B GCM tag + 1B MetaInfo)
+```
 
 ## Limitations
 
 - **No forward secrecy**: Compromising the master key decrypts all past and future messages
 - **No key ratcheting**: The same master key is used for all messages in a conversation
-- **Truncated HMAC**: 64-bit HMAC provides 2^64 collision resistance (sufficient for SMS but below typical 128-bit threshold)
 - **Timestamp granularity**: 1-second resolution, 32-bit Unix timestamp (overflows in 2106)
 - **SMS size constraints**: Steganographic encoding expands message size; long messages may be split into multiple SMS segments by the carrier
 - **No deniability**: Both parties share the same symmetric key and can prove the other sent a message
+- **Nonce cache is in-memory**: Replay detection is lost on app restart; within the 24-hour timestamp window, a restart allows replay of previously seen messages

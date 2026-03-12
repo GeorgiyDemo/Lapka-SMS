@@ -147,6 +147,7 @@ class Preferences @Inject constructor(
     }
     val globalEncryptionKey = securePrefs.getString("globalEncryptionKey", "")
     val smsForReset = securePrefs.getString("smsForReset", "")
+    val smsForResetHash = securePrefs.getString("smsForResetHash", "")
     val deleteEncryptedAfter = rxPrefs.getInteger("deleteEncryptedAfter", 0)
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
     val legacyEncryptionEnabled = rxPrefs.getBoolean("legacyEncryptionEnabled", false)

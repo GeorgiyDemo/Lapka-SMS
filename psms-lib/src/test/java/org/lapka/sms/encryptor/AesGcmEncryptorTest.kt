@@ -36,11 +36,11 @@ class AesGcmEncryptorTest {
     }
 
     @Test
-    fun `ciphertext is nonce plus ciphertext plus tag`() {
+    fun `ciphertext is nonce plus ciphertext plus 96-bit tag`() {
         val plaintext = "test".toByteArray()
         val encrypted = encryptor.encrypt(key256, plaintext)
-        // 12 (nonce) + 4 (plaintext) + 16 (GCM tag) = 32
-        assertEquals(12 + plaintext.size + 16, encrypted.size)
+        // 12 (nonce) + 4 (plaintext) + 12 (96-bit GCM tag) = 28
+        assertEquals(12 + plaintext.size + 12, encrypted.size)
     }
 
     @Test
@@ -53,8 +53,7 @@ class AesGcmEncryptorTest {
 
     @Test(expected = InvalidDataException::class)
     fun `decrypt with wrong key throws InvalidDataException`() {
-        val plaintext = "secret".toByteArray()
-        val encrypted = encryptor.encrypt(key256, plaintext)
+        val encrypted = encryptor.encrypt(key256, "secret".toByteArray())
         val wrongKey = ByteArray(32).also { SecureRandom().nextBytes(it) }
         encryptor.decrypt(wrongKey, encrypted)
     }
@@ -63,20 +62,37 @@ class AesGcmEncryptorTest {
     fun `tampered ciphertext throws InvalidDataException`() {
         val plaintext = "secret".toByteArray()
         val encrypted = encryptor.encrypt(key256, plaintext)
-        // Flip a byte in the ciphertext portion (after nonce)
         encrypted[15] = (encrypted[15].toInt() xor 0xFF).toByte()
         encryptor.decrypt(key256, encrypted)
     }
 
     @Test(expected = InvalidDataException::class)
     fun `too short ciphertext throws InvalidDataException`() {
-        // Less than nonce (12) + GCM tag (16) = 28 bytes
-        encryptor.decrypt(key256, ByteArray(27))
+        // Less than nonce (12) + 96-bit GCM tag (12) = 24 bytes
+        encryptor.decrypt(key256, ByteArray(23))
     }
 
-    @Test(expected = InvalidKeyException::class)
-    fun `invalid key size throws InvalidKeyException`() {
-        encryptor.encrypt(ByteArray(15), "test".toByteArray())
+    @Test
+    fun `nonce contains timestamp`() {
+        val timestamp = (System.currentTimeMillis() / 1000).toInt()
+        val encrypted = encryptor.encrypt(key256, "test".toByteArray(), timestamp = timestamp)
+        val nonce = encrypted.sliceArray(0 until 12)
+        assertEquals(timestamp, AesGcmEncryptor.extractTimestampFromNonce(nonce))
+    }
+
+    @Test
+    fun `encrypt with AAD then decrypt with same AAD`() {
+        val plaintext = "test".toByteArray()
+        val aad = byteArrayOf(0x42)
+        val encrypted = encryptor.encrypt(key256, plaintext, aad)
+        val decrypted = encryptor.decrypt(key256, encrypted, aad)
+        assertArrayEquals(plaintext, decrypted)
+    }
+
+    @Test(expected = InvalidDataException::class)
+    fun `decrypt with wrong AAD throws InvalidDataException`() {
+        val encrypted = encryptor.encrypt(key256, "test".toByteArray(), byteArrayOf(0x42))
+        encryptor.decrypt(key256, encrypted, byteArrayOf(0x43))
     }
 
     @Test
@@ -85,5 +101,35 @@ class AesGcmEncryptorTest {
         val encrypted = encryptor.encrypt(key256, plaintext)
         val decrypted = encryptor.decrypt(key256, encrypted)
         assertArrayEquals(plaintext, decrypted)
+    }
+
+    @Test(expected = InvalidKeyException::class)
+    fun `invalid key size throws InvalidKeyException`() {
+        encryptor.encrypt(ByteArray(15), "test".toByteArray())
+    }
+
+    @Test
+    fun `buildNonceWithTimestamp produces 12-byte nonce`() {
+        val nonce = AesGcmEncryptor.buildNonceWithTimestamp(12345)
+        assertEquals(12, nonce.size)
+    }
+
+    @Test
+    fun `extractTimestampFromNonce roundtrip`() {
+        val ts = 1700000000
+        val nonce = AesGcmEncryptor.buildNonceWithTimestamp(ts)
+        assertEquals(ts, AesGcmEncryptor.extractTimestampFromNonce(nonce))
+    }
+
+    @Test
+    fun `buildNonceWithTimestamp different calls produce different nonces`() {
+        val ts = 12345
+        val n1 = AesGcmEncryptor.buildNonceWithTimestamp(ts)
+        val n2 = AesGcmEncryptor.buildNonceWithTimestamp(ts)
+        assertEquals(
+            AesGcmEncryptor.extractTimestampFromNonce(n1),
+            AesGcmEncryptor.extractTimestampFromNonce(n2)
+        )
+        assertFalse("Random parts should differ", n1.contentEquals(n2))
     }
 }
