@@ -66,7 +66,7 @@ class SyncRepositoryImpl @Inject constructor(
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
-            BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle)
+        BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle)
 
     override val syncedMessage: Subject<Message> = PublishSubject.create()
 
@@ -79,7 +79,8 @@ class SyncRepositoryImpl @Inject constructor(
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
 
-        val persistedData = realm.copyFromRealm(realm.where(Conversation::class.java)
+        val persistedData = realm.copyFromRealm(
+            realm.where(Conversation::class.java)
                 .beginGroup()
                 .equalTo("archived", true)
                 .or()
@@ -93,9 +94,10 @@ class SyncRepositoryImpl @Inject constructor(
                 .or()
                 .isNotEmpty("blockReason")
                 .endGroup()
-                .findAll())
-                .associateBy { conversation -> conversation.id }
-                .toMutableMap()
+                .findAll()
+        )
+            .associateBy { conversation -> conversation.id }
+            .toMutableMap()
 
         realm.delete(Contact::class.java)
         realm.delete(ContactGroup::class.java)
@@ -131,9 +133,9 @@ class SyncRepositoryImpl @Inject constructor(
         // Migrate blocked conversations from 2.7.3
         val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
         oldBlockedSenders.get()
-                .map { threadIdString -> threadIdString.toLong() }
-                .filter { threadId -> !persistedData.contains(threadId) }
-                .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
+            .map { threadIdString -> threadIdString.toLong() }
+            .filter { threadId -> !persistedData.contains(threadId) }
+            .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
 
         // Sync conversations
         conversationCursor?.use {
@@ -155,9 +157,9 @@ class SyncRepositoryImpl @Inject constructor(
                             deleteSentAfter = persistedConversation.deleteSentAfter
                         }
                         lastMessage = realm.where(Message::class.java)
-                                .sort("date", Sort.DESCENDING)
-                                .equalTo("threadId", id)
-                                .findFirst()
+                            .sort("date", Sort.DESCENDING)
+                            .equalTo("threadId", id)
+                            .findFirst()
                     }
                     realm.insertOrUpdate(conversation)
                 }
@@ -210,10 +212,10 @@ class SyncRepositoryImpl @Inject constructor(
         val existingId = Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Message::class.java)
-                    .equalTo("type", type)
-                    .equalTo("contentId", id)
-                    .findFirst()
-                    ?.id
+                .equalTo("type", type)
+                .equalTo("contentId", id)
+                .findFirst()
+                ?.id
         }
 
         // The uri might be something like content://mms/inbox/id
@@ -269,53 +271,54 @@ class SyncRepositoryImpl @Inject constructor(
     private fun getContacts(): List<Contact> {
         val defaultNumberIds = Realm.getDefaultInstance().use { realm ->
             realm.where(PhoneNumber::class.java)
-                    .equalTo("isDefault", true)
-                    .findAll()
-                    .map { number -> number.id }
+                .equalTo("isDefault", true)
+                .findAll()
+                .map { number -> number.id }
         }
 
         return cursorToContact.getContactsCursor()
-                ?.map { cursor -> cursorToContact.map(cursor) }
-                ?.groupBy { contact -> contact.lookupKey }
-                ?.map { contacts ->
-                    // Sometimes, contacts providers on the phone will create duplicate phone number entries. This
-                    // commonly happens with Whatsapp. Let's try to detect these duplicate entries and filter them out
-                    val uniqueNumbers = mutableListOf<PhoneNumber>()
-                    contacts.value
-                            .flatMap { it.numbers }
-                            .forEach { number ->
-                                number.isDefault = defaultNumberIds.any { id -> id == number.id }
-                                val duplicate = uniqueNumbers.find { other ->
-                                    phoneNumberUtils.compare(number.address, other.address)
-                                }
+            ?.map { cursor -> cursorToContact.map(cursor) }
+            ?.groupBy { contact -> contact.lookupKey }
+            ?.map { contacts ->
+                // Sometimes, contacts providers on the phone will create duplicate phone number entries. This
+                // commonly happens with Whatsapp. Let's try to detect these duplicate entries and filter them out
+                val uniqueNumbers = mutableListOf<PhoneNumber>()
+                contacts.value
+                    .flatMap { it.numbers }
+                    .forEach { number ->
+                        number.isDefault = defaultNumberIds.any { id -> id == number.id }
+                        val duplicate = uniqueNumbers.find { other ->
+                            phoneNumberUtils.compare(number.address, other.address)
+                        }
 
-                                if (duplicate == null) {
-                                    uniqueNumbers += number
-                                } else if (!duplicate.isDefault && number.isDefault) {
-                                    duplicate.isDefault = true
-                                }
-                            }
-
-                    contacts.value.first().apply {
-                        numbers.clear()
-                        numbers.addAll(uniqueNumbers)
+                        if (duplicate == null) {
+                            uniqueNumbers += number
+                        } else if (!duplicate.isDefault && number.isDefault) {
+                            duplicate.isDefault = true
+                        }
                     }
-                } ?: listOf()
+
+                contacts.value.first().apply {
+                    numbers.clear()
+                    numbers.addAll(uniqueNumbers)
+                }
+            } ?: listOf()
     }
 
     private fun getContactGroups(contacts: List<Contact>): List<ContactGroup> {
         val groupMembers = cursorToContactGroupMember.getGroupMembersCursor()
-                ?.map(cursorToContactGroupMember::map)
-                .orEmpty()
+            ?.map(cursorToContactGroupMember::map)
+            .orEmpty()
 
         val groups = cursorToContactGroup.getContactGroupsCursor()
-                ?.map(cursorToContactGroup::map)
-                .orEmpty()
+            ?.map(cursorToContactGroup::map)
+            .orEmpty()
 
         groups.forEach { group ->
-            group.contacts.addAll(groupMembers
-                    .filter { member -> member.groupId == group.id }
-                    .mapNotNull { member -> contacts.find { contact -> contact.lookupKey == member.lookupKey } })
+            group.contacts.addAll(
+                groupMembers
+                .filter { member -> member.groupId == group.id }
+                .mapNotNull { member -> contacts.find { contact -> contact.lookupKey == member.lookupKey } })
         }
 
         return groups

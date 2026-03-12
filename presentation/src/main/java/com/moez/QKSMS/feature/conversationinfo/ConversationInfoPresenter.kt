@@ -53,50 +53,51 @@ class ConversationInfoPresenter @Inject constructor(
     private val permissionManager: PermissionManager,
     private val setDeleteMessagesAfter: SetDeleteMessagesAfter,
 ) : QkPresenter<ConversationInfoView, ConversationInfoState>(
-        ConversationInfoState(threadId = threadId)
+    ConversationInfoState(threadId = threadId)
 ) {
 
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
 
     init {
         disposables += conversationRepo.getConversationAsync(threadId)
-                .asObservable()
-                .filter { conversation -> conversation.isLoaded }
-                .doOnNext { conversation ->
-                    if (!conversation.isValid) {
-                        newState { copy(hasError = true) }
-                    }
+            .asObservable()
+            .filter { conversation -> conversation.isLoaded }
+            .doOnNext { conversation ->
+                if (!conversation.isValid) {
+                    newState { copy(hasError = true) }
                 }
-                .filter { conversation -> conversation.isValid }
-                .filter { conversation -> conversation.id != 0L }
-                .subscribe(conversation::onNext)
+            }
+            .filter { conversation -> conversation.isValid }
+            .filter { conversation -> conversation.id != 0L }
+            .subscribe(conversation::onNext)
 
         disposables += markArchived
         disposables += markUnarchived
         disposables += deleteConversations
 
         disposables += conversation
-                .subscribe { conversation ->
-                    val data = mutableListOf<ConversationInfoItem>()
+            .subscribe { conversation ->
+                val data = mutableListOf<ConversationInfoItem>()
 
-                    // If some data was deleted, this isn't the place to handle it
-                    if (!conversation.isLoaded || !conversation.isValid) {
-                        return@subscribe
-                    }
-
-                    data += conversation.recipients.map(::ConversationInfoRecipient)
-                    data += ConversationInfoItem.ConversationInfoSettings(
-                            name = conversation.name,
-                            recipients = conversation.recipients,
-                            archived = conversation.archived,
-                            blocked = conversation.blocked,
-                            encryptionKeyExist = conversation.encryptionKey.isNotBlank(),
-                            deleteEncryptedAfter = conversation.deleteEncryptedAfter,
-                            deleteReceivedAfter = conversation.deleteReceivedAfter,
-                            deleteSentAfter = conversation.deleteSentAfter)
-
-                    newState { copy(data = data) }
+                // If some data was deleted, this isn't the place to handle it
+                if (!conversation.isLoaded || !conversation.isValid) {
+                    return@subscribe
                 }
+
+                data += conversation.recipients.map(::ConversationInfoRecipient)
+                data += ConversationInfoItem.ConversationInfoSettings(
+                    name = conversation.name,
+                    recipients = conversation.recipients,
+                    archived = conversation.archived,
+                    blocked = conversation.blocked,
+                    encryptionKeyExist = conversation.encryptionKey.isNotBlank(),
+                    deleteEncryptedAfter = conversation.deleteEncryptedAfter,
+                    deleteReceivedAfter = conversation.deleteReceivedAfter,
+                    deleteSentAfter = conversation.deleteSentAfter
+                )
+
+                newState { copy(data = data) }
+            }
     }
 
     override fun bindIntents(view: ConversationInfoView) {
@@ -104,123 +105,141 @@ class ConversationInfoPresenter @Inject constructor(
 
         // Add or display the contact
         view.recipientClicks()
-                .mapNotNull(conversationRepo::getRecipient)
-                .doOnNext { recipient ->
-                    recipient.contact?.lookupKey?.let(navigator::showContact)
-                            ?: navigator.addContact(recipient.address)
-                }
-                .autoDisposable(view.scope(Lifecycle.Event.ON_DESTROY)) // ... this should be the default
-                .subscribe()
+            .mapNotNull(conversationRepo::getRecipient)
+            .doOnNext { recipient ->
+                recipient.contact?.lookupKey?.let(navigator::showContact)
+                    ?: navigator.addContact(recipient.address)
+            }
+            .autoDisposable(view.scope(Lifecycle.Event.ON_DESTROY)) // ... this should be the default
+            .subscribe()
 
         // Copy phone number
         view.recipientLongClicks()
-                .mapNotNull(conversationRepo::getRecipient)
-                .map { recipient -> recipient.address }
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(view.scope())
-                .subscribe { address ->
-                    ClipboardUtils.copy(context, address)
-                    context.makeToast(R.string.info_copied_address)
-                }
+            .mapNotNull(conversationRepo::getRecipient)
+            .map { recipient -> recipient.address }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(view.scope())
+            .subscribe { address ->
+                ClipboardUtils.copy(context, address)
+                context.makeToast(R.string.info_copied_address)
+            }
 
         // Show the theme settings for the conversation
         view.themeClicks()
-                .autoDisposable(view.scope())
-                .subscribe(view::showThemePicker)
+            .autoDisposable(view.scope())
+            .subscribe(view::showThemePicker)
 
         // Show the conversation title dialog
         view.nameClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .map { conversation -> conversation.name }
-                .autoDisposable(view.scope())
-                .subscribe(view::showNameDialog)
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .map { conversation -> conversation.name }
+            .autoDisposable(view.scope())
+            .subscribe(view::showNameDialog)
 
         // Set the conversation title
         view.nameChanges()
-                .withLatestFrom(conversation) { name, conversation ->
-                    conversationRepo.setConversationName(conversation.id, name)
-                }
-                .autoDisposable(view.scope())
-                .subscribe()
+            .withLatestFrom(conversation) { name, conversation ->
+                conversationRepo.setConversationName(conversation.id, name)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // Show the notifications settings for the conversation
         view.notificationClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> navigator.showNotificationSettings(conversation.id) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> navigator.showNotificationSettings(conversation.id) }
 
         // Toggle the archived state of the conversation
         view.archiveClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation ->
-                    when (conversation.archived) {
-                        true -> markUnarchived.execute(listOf(conversation.id))
-                        false -> markArchived.execute(listOf(conversation.id))
-                    }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation ->
+                when (conversation.archived) {
+                    true -> markUnarchived.execute(listOf(conversation.id))
+                    false -> markArchived.execute(listOf(conversation.id))
                 }
+            }
 
         // Toggle the blocked state of the conversation
         view.blockClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showBlockingDialog(listOf(conversation.id), !conversation.blocked) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showBlockingDialog(listOf(conversation.id), !conversation.blocked) }
 
         // Show the delete confirmation dialog
         view.deleteClicks()
-                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
-                .autoDisposable(view.scope())
-                .subscribe { view.showDeleteDialog() }
+            .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
+            .autoDisposable(view.scope())
+            .subscribe { view.showDeleteDialog() }
 
         // Delete the conversation
         view.confirmDelete()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> deleteConversations.execute(listOf(conversation.id)) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> deleteConversations.execute(listOf(conversation.id)) }
 
         // Partisan
         view.encryptionKeyClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showEncryptionKeySettings(conversation) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showEncryptionKeySettings(conversation) }
 
         view.deleteEncryptedAfterClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showDeleteEncryptedAfterDialog(conversation) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showDeleteEncryptedAfterDialog(conversation) }
 
         view.deleteReceivedAfterClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showDeleteReceivedAfterDialog(conversation) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showDeleteReceivedAfterDialog(conversation) }
 
         view.deleteSentAfterClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showDeleteSentAfterDialog(conversation) }
+            .withLatestFrom(conversation) { _, conversation -> conversation }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showDeleteSentAfterDialog(conversation) }
 
         view.deleteEncryptedAfterSelected()
-                .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
-                .doOnNext { (conversation, duration) ->
-                    setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(conversation.id, SetDeleteMessagesAfter.MessageType.ENCRYPTED, duration))
-                }
-                .autoDisposable(view.scope())
-                .subscribe()
+            .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
+            .doOnNext { (conversation, duration) ->
+                setDeleteMessagesAfter.execute(
+                    SetDeleteMessagesAfter.Params(
+                        conversation.id,
+                        SetDeleteMessagesAfter.MessageType.ENCRYPTED,
+                        duration
+                    )
+                )
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.deleteReceivedAfterSelected()
-                .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
-                .doOnNext { (conversation, duration) ->
-                    setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(conversation.id, SetDeleteMessagesAfter.MessageType.RECEIVED, duration))
-                }
-                .autoDisposable(view.scope())
-                .subscribe()
+            .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
+            .doOnNext { (conversation, duration) ->
+                setDeleteMessagesAfter.execute(
+                    SetDeleteMessagesAfter.Params(
+                        conversation.id,
+                        SetDeleteMessagesAfter.MessageType.RECEIVED,
+                        duration
+                    )
+                )
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.deleteSentAfterSelected()
-                .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
-                .doOnNext { (conversation, duration) ->
-                    setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(conversation.id, SetDeleteMessagesAfter.MessageType.SENT, duration))
-                }
-                .autoDisposable(view.scope())
-                .subscribe()
+            .withLatestFrom(conversation) { duration, conversation -> Pair(conversation, duration) }
+            .doOnNext { (conversation, duration) ->
+                setDeleteMessagesAfter.execute(
+                    SetDeleteMessagesAfter.Params(
+                        conversation.id,
+                        SetDeleteMessagesAfter.MessageType.SENT,
+                        duration
+                    )
+                )
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
     }
 }

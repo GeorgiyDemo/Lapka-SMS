@@ -121,14 +121,17 @@ class ComposeItemAdapter @Inject constructor(
 
         holder.itemView.findViewById<TextView>(R.id.title).text = conversation.getTitle()
 
-        holder.itemView.findViewById<TextView>(R.id.subtitle).isVisible = conversation.recipients.size > 1 && conversation.name.isBlank()
-        holder.itemView.findViewById<TextView>(R.id.subtitle).text = conversation.recipients.joinToString(", ") { recipient ->
-            recipient.contact?.name ?: recipient.address
-        }
+        holder.itemView.findViewById<TextView>(R.id.subtitle).isVisible =
+            conversation.recipients.size > 1 && conversation.name.isBlank()
+        holder.itemView.findViewById<TextView>(R.id.subtitle).text =
+            conversation.recipients.joinToString(", ") { recipient ->
+                recipient.contact?.name ?: recipient.address
+            }
         holder.itemView.findViewById<QkTextView>(R.id.subtitle).collapseEnabled = conversation.recipients.size > 1
 
         holder.itemView.findViewById<RecyclerView>(R.id.numbers).isVisible = conversation.recipients.size == 1
-        (holder.itemView.findViewById<RecyclerView>(R.id.numbers).adapter as PhoneNumberAdapter).data = conversation.recipients
+        (holder.itemView.findViewById<RecyclerView>(R.id.numbers).adapter as PhoneNumberAdapter).data =
+            conversation.recipients
                 .mapNotNull { recipient -> recipient.contact }
                 .flatMap { contact -> contact.numbers }
     }
@@ -168,7 +171,8 @@ class ComposeItemAdapter @Inject constructor(
 
     private fun bindPerson(holder: QkViewHolder, contact: Contact, prev: ComposeItem?) {
         holder.itemView.findViewById<TextView>(R.id.index).isVisible = true
-        holder.itemView.findViewById<TextView>(R.id.index).text = if (contact.name.getOrNull(0)?.isLetter() == true) contact.name[0].toString() else "#"
+        holder.itemView.findViewById<TextView>(R.id.index).text =
+            if (contact.name.getOrNull(0)?.isLetter() == true) contact.name[0].toString() else "#"
         holder.itemView.findViewById<TextView>(R.id.index).isVisible = prev !is ComposeItem.Person ||
                 (contact.name[0].isLetter() && !contact.name[0].equals(prev.value.name[0], ignoreCase = true)) ||
                 (!contact.name[0].isLetter() && prev.value.name[0].isLetter())
@@ -188,13 +192,14 @@ class ComposeItemAdapter @Inject constructor(
     private fun createRecipient(contact: Contact): Recipient {
         return recipients[contact.lookupKey] ?: Recipient(
             address = contact.numbers.firstOrNull()?.address ?: "",
-            contact = contact)
+            contact = contact
+        )
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         disposables += conversationRepo.getUnmanagedRecipients()
-                .map { recipients -> recipients.associateByNotNull { recipient -> recipient.contact?.lookupKey } }
-                .subscribe { recipients -> this@ComposeItemAdapter.recipients = recipients }
+            .map { recipients -> recipients.associateByNotNull { recipient -> recipient.contact?.lookupKey } }
+            .subscribe { recipients -> this@ComposeItemAdapter.recipients = recipients }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

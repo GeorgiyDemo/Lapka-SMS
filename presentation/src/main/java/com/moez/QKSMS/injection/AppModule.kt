@@ -86,10 +86,12 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(subcomponents = [
-    ConversationInfoComponent::class,
-    KeySettingsComponent::class,
-    ThemePickerComponent::class])
+@Module(
+    subcomponents = [
+        ConversationInfoComponent::class,
+        KeySettingsComponent::class,
+        ThemePickerComponent::class]
+)
 class AppModule(private var application: Application) {
 
     @Provides
@@ -115,8 +117,8 @@ class AppModule(private var application: Application) {
     @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 
     @Provides
@@ -207,6 +209,6 @@ class AppModule(private var application: Application) {
 
     @Provides
     @Singleton
-    fun providesQRCodeWriter() : QRCodeWriter = QRCodeWriter()
+    fun providesQRCodeWriter(): QRCodeWriter = QRCodeWriter()
 
 }

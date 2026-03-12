@@ -26,7 +26,7 @@ class MarkAllSeen @Inject constructor(private val messageRepo: MessageRepository
 
     override fun buildObservable(params: Unit): Flowable<Unit> {
         return Flowable.just(Unit)
-                .doOnNext { messageRepo.markAllSeen() }
+            .doOnNext { messageRepo.markAllSeen() }
     }
 
 }

@@ -40,16 +40,15 @@ import java.io.IOException;
  * <li>Notifies the TransactionService about succesful completion.
  * </ul>
  */
-public class ReadRecTransaction extends Transaction implements Runnable{
+public class ReadRecTransaction extends Transaction implements Runnable {
     private static final boolean LOCAL_LOGV = false;
-
-    private Thread mThread;
     private final Uri mReadReportURI;
+    private Thread mThread;
 
     public ReadRecTransaction(Context context,
-            int transId,
-            TransactionSettings connectionSettings,
-            String uri) {
+                              int transId,
+                              TransactionSettings connectionSettings,
+                              String uri) {
         super(context, transId, connectionSettings);
         mReadReportURI = Uri.parse(uri);
         mId = uri;

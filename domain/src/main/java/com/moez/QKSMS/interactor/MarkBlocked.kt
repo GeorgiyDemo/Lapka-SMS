@@ -31,10 +31,10 @@ class MarkBlocked @Inject constructor(
 
     override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(params)
-                .doOnNext { (threadIds, blockingClient, blockReason) ->
-                    conversationRepo.markBlocked(threadIds, blockingClient, blockReason)
-                }
-                .flatMap { (threadIds) -> markRead.buildObservable(threadIds) }
+            .doOnNext { (threadIds, blockingClient, blockReason) ->
+                conversationRepo.markBlocked(threadIds, blockingClient, blockReason)
+            }
+            .flatMap { (threadIds) -> markRead.buildObservable(threadIds) }
     }
 
 }

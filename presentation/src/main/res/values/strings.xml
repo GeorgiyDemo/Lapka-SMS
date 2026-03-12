@@ -66,7 +66,9 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Set as default SMS app</string>
-    <string name="main_default_sms_message">Lapka SMS must be your default SMS app to send and receive messages. This is an Android requirement, not an app limitation.</string>
+    <string name="main_default_sms_message">Lapka SMS must be your default SMS app to send and receive messages. This is
+        an Android requirement, not an app limitation.
+    </string>
     <string name="main_default_sms_change">Set default</string>
     <string name="main_permission_required">Permission required</string>
     <string name="main_permission_sms">Lapka SMS needs permission to send and view SMS messages</string>
@@ -133,7 +135,7 @@
     <string name="compose_details_received">Received: %s</string>
     <string name="compose_details_delivered">Delivered: %s</string>
     <string name="compose_details_error_code">Error code: %d</string>
-<!-- Example: SIM 1 (Verizon) selected-->
+    <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
@@ -204,7 +206,8 @@
     <string name="settings_mobile_title">Mobile numbers only</string>
     <string name="settings_mobile_summary">When composing a message, only show mobile numbers</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -214,7 +217,7 @@
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
     </plurals>
-<string name="settings_sync_title">Sync messages</string>
+    <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
     <string name="settings_about_title">About Lapka SMS</string>
     <string name="settings_version">Lapka SMS %s\nBase QKSMS %s\npsms-lib %s</string>
@@ -232,11 +235,17 @@
     <string name="blocking_manager_qksms_title">Lapka SMS</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in Lapka SMS</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
     <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
-    <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
+    <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient
+        place! Community IQ™ allows you to prevent unwanted messages from community known spammers
+    </string>
     <string name="blocking_manager_sia_title" translatable="false">Should I Answer?</string>
-    <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
+    <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the
+        \"Should I Answer\" app
+    </string>
     <string name="blocking_manager_copy_title">Copy blocked numbers</string>
     <string name="blocking_manager_copy_summary">Continue to %s and copy over your existing blocked numbers</string>
 
@@ -282,11 +291,15 @@
     <string name="qksms_plus_thanks_title">Thank you for supporting Lapka SMS!</string>
     <string name="qksms_plus_thanks_summary">You now have access to all Lapka SMS features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">Lapka SMS is free application! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">Lapka SMS is free application! If you\'d like to support development, a
+        donation would be highly appreciated.
+    </string>
     <string name="qksms_plus_donate">Donate</string>
     <string name="qksms_plus_coming_soon">Coming soon</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
-    <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design palette</string>
+    <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design
+        palette
+    </string>
     <string name="qksms_plus_emoji_title">Custom auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Create custom auto-emoji shortcuts</string>
     <string name="qksms_plus_delayed_title">Delayed sending</string>
@@ -300,7 +313,9 @@
     <string name="qksms_plus_respond_title">Auto-respond</string>
     <string name="qksms_plus_respond_summary">Automatically respond to incoming messages with a preset response</string>
     <string name="qksms_plus_more_title">More</string>
-    <string name="qksms_plus_more_summary">Lapka SMS is under active development, and your support will include all future features!</string>
+    <string name="qksms_plus_more_summary">Lapka SMS is under active development, and your support will include all
+        future features!
+    </string>
 
     <string name="widget_loading">Loading…</string>
     <string name="widget_more">View more conversations</string>
@@ -318,7 +333,9 @@
     <string name="theme_apply">Apply</string>
 
     <string name="about_developer" translatable="false">GeorgiyDemo, Cpartisans, Moez Bhatti</string>
-    <string name="about_source" translatable="false">Lapka SMS — github.com/GeorgiyDemo/Lapka-SMS\nPartisan-SMS — github.com/wrwrabbit/Partisan-SMS\nQKSMS — github.com/moezbhatti/qksms</string>
+    <string name="about_source" translatable="false">Lapka SMS — github.com/GeorgiyDemo/Lapka-SMS\nPartisan-SMS —
+        github.com/wrwrabbit/Partisan-SMS\nQKSMS — github.com/moezbhatti/qksms
+    </string>
     <string name="about_changelog" translatable="false">https://github.com/GeorgiyDemo/Lapka-SMS/releases</string>
     <string name="about_contact" translatable="false"></string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
@@ -389,7 +406,8 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Okay</item>
         <item>Give me a moment</item>
         <item>On my way</item>
@@ -442,7 +460,9 @@
     <string name="settings_reset_key">Reset encryption key</string>
     <string name="settings_key_has_been_set">Key has been set</string>
     <string name="settings_bad_key">Bad key!</string>
-    <string name="settings_reset_key_confirmation_text">Are you sure you want to reset the encryption key? You won\'t be able to recover it and you won\'t be able to read messages encrypted with it.</string>
+    <string name="settings_reset_key_confirmation_text">Are you sure you want to reset the encryption key? You won\'t be
+        able to recover it and you won\'t be able to read messages encrypted with it.
+    </string>
     <string name="settings_encryption_key_title">Encryption key</string>
     <string name="settings_legacy_encryption_title">Encryption compatibility mode</string>
     <string name="settings_messages_delete">Messages deletion</string>

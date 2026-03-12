@@ -18,31 +18,31 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:orientation="horizontal">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="48dp"
+              android:orientation="horizontal">
 
     <com.moez.QKSMS.common.widget.QkTextView
-        android:id="@+id/number"
-        style="@style/TextPrimary"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingStart="24dp"
-        tools:text="(123) 456-7890" />
+            android:id="@+id/number"
+            style="@style/TextPrimary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            tools:text="(123) 456-7890"/>
 
     <ImageView
-        android:id="@+id/unblock"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/info_unblock"
-        android:padding="12dp"
-        android:src="@drawable/ic_close_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+            android:id="@+id/unblock"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/info_unblock"
+            android:padding="12dp"
+            android:src="@drawable/ic_close_black_24dp"
+            android:tint="?android:attr/textColorSecondary"/>
 
 </LinearLayout>

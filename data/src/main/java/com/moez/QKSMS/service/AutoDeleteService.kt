@@ -27,9 +27,9 @@ class AutoDeleteService : JobService() {
             Timber.i("Scheduling job")
             val serviceComponent = ComponentName(context, AutoDeleteService::class.java)
             val periodicJob = JobInfo.Builder(JobId, serviceComponent)
-                    .setPeriodic(TimeUnit.DAYS.toMillis(1))
-                    .setPersisted(true)
-                    .build()
+                .setPeriodic(TimeUnit.DAYS.toMillis(1))
+                .setPersisted(true)
+                .build()
 
             context.jobScheduler.schedule(periodicJob)
         }
@@ -40,7 +40,8 @@ class AutoDeleteService : JobService() {
         }
     }
 
-    @Inject lateinit var deleteOldMessages: DeleteOldMessages
+    @Inject
+    lateinit var deleteOldMessages: DeleteOldMessages
 
     private val disposables = CompositeDisposable()
 

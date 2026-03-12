@@ -63,7 +63,7 @@ public class GenericPdu {
      *
      * @param value the value
      * @throws InvalidHeaderValueException if the value is invalid.
-     *         RuntimeException if field's value is not Octet.
+     *                                     RuntimeException if field's value is not Octet.
      */
     public void setMessageType(int value) throws InvalidHeaderValueException {
         mPduHeaders.setOctet(value, PduHeaders.MESSAGE_TYPE);
@@ -83,7 +83,7 @@ public class GenericPdu {
      *
      * @param value the value
      * @throws InvalidHeaderValueException if the value is invalid.
-     *         RuntimeException if field's value is not Octet.
+     *                                     RuntimeException if field's value is not Octet.
      */
     public void setMmsVersion(int value) throws InvalidHeaderValueException {
         mPduHeaders.setOctet(value, PduHeaders.MMS_VERSION);
@@ -92,12 +92,12 @@ public class GenericPdu {
     /**
      * Get From value.
      * From-value = Value-length
-     *      (Address-present-token Encoded-string-value | Insert-address-token)
+     * (Address-present-token Encoded-string-value | Insert-address-token)
      *
      * @return the value
      */
     public EncodedStringValue getFrom() {
-       return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
+        return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
     }
 
     /**

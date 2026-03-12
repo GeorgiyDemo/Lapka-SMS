@@ -48,9 +48,9 @@ class ContactAddedListenerImpl @Inject constructor(
         private val subject = BehaviorSubject.createDefault<Unit>(Unit)
 
         val observable: Observable<Unit> = subject
-                .doOnSubscribe { context.contentResolver.registerContentObserver(URI, true, this) }
-                .doOnDispose { context.contentResolver.unregisterContentObserver(this) }
-                .share()
+            .doOnSubscribe { context.contentResolver.registerContentObserver(URI, true, this) }
+            .doOnDispose { context.contentResolver.unregisterContentObserver(this) }
+            .share()
 
         override fun onChange(selfChange: Boolean) {
             this.onChange(selfChange, null)

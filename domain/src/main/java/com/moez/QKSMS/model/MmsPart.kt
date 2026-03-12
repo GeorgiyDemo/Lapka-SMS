@@ -27,8 +27,10 @@ import io.realm.annotations.PrimaryKey
 
 open class MmsPart : RealmObject() {
 
-    @PrimaryKey var id: Long = 0
-    @Index var messageId: Long = 0
+    @PrimaryKey
+    var id: Long = 0
+    @Index
+    var messageId: Long = 0
     var type: String = ""
     var seq: Int = -1
     var name: String? = null

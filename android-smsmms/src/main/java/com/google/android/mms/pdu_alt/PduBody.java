@@ -35,7 +35,7 @@ public class PduBody {
         mParts = new Vector<>();
 
         mPartMapByContentId = new HashMap<>();
-        mPartMapByContentLocation  = new HashMap<>();
+        mPartMapByContentLocation = new HashMap<>();
         mPartMapByName = new HashMap<>();
         mPartMapByFileName = new HashMap<>();
     }
@@ -43,27 +43,27 @@ public class PduBody {
     private void putPartToMaps(PduPart part) {
         // Put part to mPartMapByContentId.
         byte[] contentId = part.getContentId();
-        if(null != contentId) {
+        if (null != contentId) {
             mPartMapByContentId.put(new String(contentId), part);
         }
 
         // Put part to mPartMapByContentLocation.
         byte[] contentLocation = part.getContentLocation();
-        if(null != contentLocation) {
+        if (null != contentLocation) {
             String clc = new String(contentLocation);
             mPartMapByContentLocation.put(clc, part);
         }
 
         // Put part to mPartMapByName.
         byte[] name = part.getName();
-        if(null != name) {
+        if (null != name) {
             String clc = new String(name);
             mPartMapByName.put(clc, part);
         }
 
         // Put part to mPartMapByFileName.
         byte[] fileName = part.getFilename();
-        if(null != fileName) {
+        if (null != fileName) {
             String clc = new String(fileName);
             mPartMapByFileName.put(clc, part);
         }
@@ -77,7 +77,7 @@ public class PduBody {
      * @throws NullPointerException when part is null
      */
     public boolean addPart(PduPart part) {
-        if(null == part) {
+        if (null == part) {
             throw new NullPointerException();
         }
 
@@ -89,11 +89,11 @@ public class PduBody {
      * Inserts the specified part at the specified position.
      *
      * @param index index at which the specified part is to be inserted
-     * @param part part to be inserted
+     * @param part  part to be inserted
      * @throws NullPointerException when part is null
      */
     public void addPart(int index, PduPart part) {
-        if(null == part) {
+        if (null == part) {
             throw new NullPointerException();
         }
 

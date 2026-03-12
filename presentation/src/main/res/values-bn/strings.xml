@@ -31,7 +31,8 @@
     <string name="setup_next">আগাও</string>
     <string name="menu_add_person">কাউকে যুক্ত করো</string>
     <string name="menu_call">কল করো</string>
-    <string name="menu_info">বিস্তারিত</string>    <string name="menu_share">শেয়ার</string>
+    <string name="menu_info">বিস্তারিত</string>
+    <string name="menu_share">শেয়ার</string>
     <string name="main_drawer_open_cd">ন্যাভিগেশন ড্রয়ার খুলো</string>
     <string name="main_title_selected">%d নির্বাচিত</string>
     <string name="main_menu_clear">পরিষ্কার</string>
@@ -87,7 +88,7 @@
     <string name="compose_number_picker_once">মাত্র একবার</string>
     <string name="compose_number_picker_always">সর্বদা</string>
     <string name="compose_title_selected">%d নির্বাচিত</string>
-    <string name="compose_subtitle_results">%2$d এর %1$d টি ফলাফল </string>
+    <string name="compose_subtitle_results">%2$d এর %1$d টি ফলাফল</string>
     <string name="compose_send_group_title">গ্রুপ বার্তা হিসেবে পাঠাও</string>
     <string name="compose_send_group_summary">প্রাপক এবং উত্তর সবার চোখে পড়বে</string>
     <string name="compose_messages_empty">এখানে তোমার আলাপ শুরু হয়। সুন্দর কিছু বলো!</string>
@@ -125,7 +126,9 @@
     <string name="info_unarchive">আনআর্কাইভ</string>
     <string name="info_block">ব্লক করুন</string>
     <string name="info_unblock">আনব্লক করুন</string>
-    <string name="info_delete">আলাপ মুছে ফেলো</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">উপস্থিতি</string>
+    <string name="info_delete">আলাপ মুছে ফেলো
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">উপস্থিতি</string>
     <string name="settings_category_general">সাধারণ</string>
     <string name="settings_category_qkreply">QK উত্তর</string>
     <string name="settings_theme_title">থিম</string>
@@ -176,7 +179,8 @@
     <string name="settings_mobile_title">শুধু মোবাইল নম্বর</string>
     <string name="settings_mobile_summary">বার্তা লিখার করার সময়, শুধুমাত্র মোবাইল নম্বর দেখাও</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -184,10 +188,13 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
-    <string name="settings_sync_summary">তোমার বার্তাগুলি অ্যান্ড্রয়েডের নিজস্ব এসএমএস এর ডাটাবেসের সাথে পুনরায় সিঙ্ক করো</string>
+    </plurals>
+    <string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
+    <string name="settings_sync_summary">তোমার বার্তাগুলি অ্যান্ড্রয়েডের নিজস্ব এসএমএস এর ডাটাবেসের সাথে পুনরায় সিঙ্ক
+        করো
+    </string>
     <string name="settings_about_title">QKSMS সম্পর্কে</string>
-    <string name="settings_version">সংস্করণ %s  %s %s</string>
+    <string name="settings_version">সংস্করণ %s %s %s</string>
     <string name="settings_logging_enabled">ডিবাগ লগিং চালু করা হয়ছে</string>
     <string name="settings_logging_disabled">ডিবাগ লগিং বন্ধ করা হয়ছে</string>
     <string name="settings_delay_duration_hint">দৈর্ঘ্য (সেকেন্ডে) লিখুন</string>
@@ -198,9 +205,15 @@
     <string name="blocking_manager_title">অবরুদ্ধকরণ ব্যবস্থাপক</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">QKSMS-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">তোমার কল আর বার্তা একটাই সুবিধাজনক জায়গা থেকে ফিল্টার করো বা ছাঁকো! Community IQ™ দিয়ে অবাঞ্ছিত বার্তা আটকানো যায় সমাজে পরিচিত স্প্যামারদের থেকে</string>
-    <string name="blocking_manager_sia_summary">স্বয়ংক্রিয়ভাবে \"Should I Answer\"(আমার কি উত্তর দেয়া উচিত?) অ্যাপ্লিকেশন ব্যবহার করে অযাচিত নম্বর-এর বার্তাগুলি ফিল্টার করো</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">তোমার কল আর বার্তা একটাই সুবিধাজনক জায়গা থেকে ফিল্টার করো বা
+        ছাঁকো! Community IQ™ দিয়ে অবাঞ্ছিত বার্তা আটকানো যায় সমাজে পরিচিত স্প্যামারদের থেকে
+    </string>
+    <string name="blocking_manager_sia_summary">স্বয়ংক্রিয়ভাবে \"Should I Answer\"(আমার কি উত্তর দেয়া উচিত?)
+        অ্যাপ্লিকেশন ব্যবহার করে অযাচিত নম্বর-এর বার্তাগুলি ফিল্টার করো
+    </string>
     <string name="blocking_manager_copy_title">অবরুদ্ধ নম্বরগুলো অনুলিপি করো</string>
     <string name="blocking_manager_copy_summary">%s-এ এগিয়ে যাও এবং তোমার আগের অবরোধকৃত নম্বরগুলো অনুলিপি করো</string>
     <string name="blocked_numbers_title">অবরুদ্ধ নম্বরগুলো</string>
@@ -238,11 +251,14 @@
     <string name="qksms_plus_thanks_title">QKSMS সমর্থনের জন্য আপনাকে ধন্যবাদ!</string>
     <string name="qksms_plus_thanks_summary">আপনি এখন QKSMS+-এর সব বৈশিষ্ট্যেের সুবিধা পাচ্ছেন</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">F-Droid ব্যবহারকারীরা QKSMS+ বিনামূল্যে ব্যবহার করতে পারবেন! যদি আপনি উন্নয়ন সমর্থন করতে মুক্ত মনে অনুদান করুন।</string>
+    <string name="qksms_plus_free_title">F-Droid ব্যবহারকারীরা QKSMS+ বিনামূল্যে ব্যবহার করতে পারবেন! যদি আপনি উন্নয়ন
+        সমর্থন করতে মুক্ত মনে অনুদান করুন।
+    </string>
     <string name="qksms_plus_donate">পেপাল এর মাধ্যমে দান করুন</string>
     <string name="qksms_plus_coming_soon">শীঘ্রই আসছে</string>
     <string name="qksms_plus_themes_title">প্রিমিয়াম থিম</string>
-    <string name="qksms_plus_themes_summary">Material Design প্যালেট পাওয়া যায় না এমন সুন্দর রঙয়ের থীম আনলক করুন</string>
+    <string name="qksms_plus_themes_summary">Material Design প্যালেট পাওয়া যায় না এমন সুন্দর রঙয়ের থীম আনলক করুন
+    </string>
     <string name="qksms_plus_emoji_title">কাস্টম সক্রিয়-ইমোজি</string>
     <string name="qksms_plus_emoji_summary">কাস্টম সক্রিয়-ইমোজি শর্টকাট তৈরি করুন</string>
     <string name="qksms_plus_delayed_title">বিলম্বে পাঠাও</string>
@@ -252,11 +268,15 @@
     <string name="qksms_plus_blacklist_title">উন্নীত আনব্লক করা</string>
     <string name="qksms_plus_blacklist_summary">সেই সব বার্তা ব্লক(অবরোধ) করো যা কোন শব্দ বা নমুনার সাথে মিলে</string>
     <string name="qksms_plus_forward_title">সক্রিয়ভাবে সামনে পাঠান</string>
-    <string name="qksms_plus_forward_summary">নির্দিষ্ট প্রেরকের বার্তাগুলো স্বয়ংক্রিয়ভাবে সামনে পাঠাও(ফরওয়ার্ড)</string>
+    <string name="qksms_plus_forward_summary">নির্দিষ্ট প্রেরকের বার্তাগুলো স্বয়ংক্রিয়ভাবে সামনে পাঠাও(ফরওয়ার্ড)
+    </string>
     <string name="qksms_plus_respond_title">স্বয়ংক্রিয়-উত্তর</string>
-    <string name="qksms_plus_respond_summary">আগত বার্তার জন্য স্বয়ংক্রিয়ভাবে পূর্বনির্ধারিত প্রতিক্রিয়া পাঠাও</string>
+    <string name="qksms_plus_respond_summary">আগত বার্তার জন্য স্বয়ংক্রিয়ভাবে পূর্বনির্ধারিত প্রতিক্রিয়া পাঠাও
+    </string>
     <string name="qksms_plus_more_title">আরও</string>
-    <string name="qksms_plus_more_summary">QKSMS সক্রিয় উন্নয়ন অধীনে এবং QKSMS+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
+    <string name="qksms_plus_more_summary">QKSMS সক্রিয় উন্নয়ন অধীনে এবং QKSMS+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা
+        অ্যাপেে অন্তর্ভুক্ত থাকবে!
+    </string>
     <string name="widget_loading">লোড হচ্ছে&#8230;</string>
     <string name="widget_more">আরও আলাপ দেখো</string>
     <string name="qkreply_menu_read">পড়া হয়েছে</string>
@@ -317,7 +337,8 @@
         <item>৩ সেকেন্ড</item>
         <item>৫ সেকেন্ড</item>
         <item>১০ সেকেন্ড</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>ঠিক আছে</item>
         <item>একটু অপেক্ষা করুন</item>
         <item>পথেই আছি</item>

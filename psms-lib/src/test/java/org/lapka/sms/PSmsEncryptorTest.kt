@@ -101,8 +101,8 @@ class PSmsEncryptorTest {
 
         // Modify a character in the middle of the encoded string
         val tampered = encoded.substring(0, encoded.length / 2) +
-            (if (encoded[encoded.length / 2] == 'A') 'B' else 'A') +
-            encoded.substring(encoded.length / 2 + 1)
+                (if (encoded[encoded.length / 2] == 'A') 'B' else 'A') +
+                encoded.substring(encoded.length / 2 + 1)
 
         val decryptor = PSmsEncryptor()
         decryptor.decode(tampered, key, Scheme.BASE64.ordinal)

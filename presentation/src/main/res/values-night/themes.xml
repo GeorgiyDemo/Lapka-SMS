@@ -19,7 +19,7 @@
   -->
 <resources>
 
-    <style name="AppTheme" parent="AppBaseTheme" />
+    <style name="AppTheme" parent="AppBaseTheme"/>
 
     <style name="AppBaseTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:divider">@color/separatorDark</item>

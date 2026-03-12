@@ -39,7 +39,7 @@ class BlockingRepositoryImpl @Inject constructor(
             }
 
             val maxId = realm.where(BlockedNumber::class.java)
-                    .max("id")?.toLong() ?: -1
+                .max("id")?.toLong() ?: -1
 
             realm.executeTransaction {
                 realm.insert(newAddresses.mapIndexed { index, address ->
@@ -51,22 +51,22 @@ class BlockingRepositoryImpl @Inject constructor(
 
     override fun getBlockedNumbers(): RealmResults<BlockedNumber> {
         return Realm.getDefaultInstance()
-                .where(BlockedNumber::class.java)
-                .findAllAsync()
+            .where(BlockedNumber::class.java)
+            .findAllAsync()
     }
 
     override fun getBlockedNumber(id: Long): BlockedNumber? {
         return Realm.getDefaultInstance()
-                .where(BlockedNumber::class.java)
-                .equalTo("id", id)
-                .findFirst()
+            .where(BlockedNumber::class.java)
+            .equalTo("id", id)
+            .findFirst()
     }
 
     override fun isBlocked(address: String): Boolean {
         return Realm.getDefaultInstance().use { realm ->
             realm.where(BlockedNumber::class.java)
-                    .findAll()
-                    .any { number -> phoneNumberUtils.compare(number.address, address) }
+                .findAll()
+                .any { number -> phoneNumberUtils.compare(number.address, address) }
         }
     }
 
@@ -74,9 +74,9 @@ class BlockingRepositoryImpl @Inject constructor(
         Realm.getDefaultInstance().use { realm ->
             realm.executeTransaction {
                 realm.where(BlockedNumber::class.java)
-                        .equalTo("id", id)
-                        .findAll()
-                        .deleteAllFromRealm()
+                    .equalTo("id", id)
+                    .findAll()
+                    .deleteAllFromRealm()
             }
         }
     }
@@ -84,18 +84,18 @@ class BlockingRepositoryImpl @Inject constructor(
     override fun unblockNumbers(vararg addresses: String) {
         Realm.getDefaultInstance().use { realm ->
             val ids = realm.where(BlockedNumber::class.java)
-                    .findAll()
-                    .filter { number ->
-                        addresses.any { address -> phoneNumberUtils.compare(number.address, address) }
-                    }
-                    .map { number -> number.id }
-                    .toLongArray()
+                .findAll()
+                .filter { number ->
+                    addresses.any { address -> phoneNumberUtils.compare(number.address, address) }
+                }
+                .map { number -> number.id }
+                .toLongArray()
 
             realm.executeTransaction {
                 realm.where(BlockedNumber::class.java)
-                        .anyOf("id", ids)
-                        .findAll()
-                        .deleteAllFromRealm()
+                    .anyOf("id", ids)
+                    .findAll()
+                    .deleteAllFromRealm()
             }
         }
     }

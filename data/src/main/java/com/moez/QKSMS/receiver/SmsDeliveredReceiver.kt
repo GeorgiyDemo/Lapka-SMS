@@ -29,8 +29,10 @@ import javax.inject.Inject
 
 class SmsDeliveredReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var markDelivered: MarkDelivered
-    @Inject lateinit var markDeliveryFailed: MarkDeliveryFailed
+    @Inject
+    lateinit var markDelivered: MarkDelivered
+    @Inject
+    lateinit var markDeliveryFailed: MarkDeliveryFailed
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

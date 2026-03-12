@@ -27,9 +27,9 @@ class SyncContacts @Inject constructor(private val syncManager: SyncRepository) 
 
     override fun buildObservable(params: Unit): Flowable<Long> {
         return Flowable.just(System.currentTimeMillis())
-                .doOnNext { syncManager.syncContacts() }
-                .map { startTime -> System.currentTimeMillis() - startTime }
-                .doOnNext { duration -> Timber.v("Completed sync in ${duration}ms") }
+            .doOnNext { syncManager.syncContacts() }
+            .map { startTime -> System.currentTimeMillis() - startTime }
+            .doOnNext { duration -> Timber.v("Completed sync in ${duration}ms") }
     }
 
 }

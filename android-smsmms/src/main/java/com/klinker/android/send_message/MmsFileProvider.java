@@ -67,8 +67,8 @@ public class MmsFileProvider extends ContentProvider {
         File file = new File(getContext().getCacheDir(), uri.getPath());
         int mode = (TextUtils.equals(fileMode, "r") ? ParcelFileDescriptor.MODE_READ_ONLY :
                 ParcelFileDescriptor.MODE_WRITE_ONLY
-                        |ParcelFileDescriptor.MODE_TRUNCATE
-                        |ParcelFileDescriptor.MODE_CREATE);
+                        | ParcelFileDescriptor.MODE_TRUNCATE
+                        | ParcelFileDescriptor.MODE_CREATE);
         return ParcelFileDescriptor.open(file, mode);
     }
 }

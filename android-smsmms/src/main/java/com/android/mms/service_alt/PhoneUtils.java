@@ -36,12 +36,12 @@ public class PhoneUtils {
      * original number.
      *
      * @param telephonyManager
-     * @param subId The SIM ID associated with this number
-     * @param phoneText The input phone number text
+     * @param subId            The SIM ID associated with this number
+     * @param phoneText        The input phone number text
      * @return The formatted number or the original phone number if failed to parse
      */
     public static String getNationalNumber(TelephonyManager telephonyManager, int subId,
-            String phoneText) {
+                                           String phoneText) {
         final String country = getSimOrDefaultLocaleCountry(telephonyManager, subId);
         final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         final Phonenumber.PhoneNumber parsed = getParsedNumber(phoneNumberUtil, phoneText, country);
@@ -55,7 +55,7 @@ public class PhoneUtils {
 
     // Parse the input number into internal format
     private static Phonenumber.PhoneNumber getParsedNumber(PhoneNumberUtil phoneNumberUtil,
-            String phoneText, String country) {
+                                                           String phoneText, String country) {
         try {
             final Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(phoneText, country);
             if (phoneNumberUtil.isValidNumber(phoneNumber)) {
@@ -73,7 +73,7 @@ public class PhoneUtils {
 
     // Get the country/region either from the SIM ID or from locale
     private static String getSimOrDefaultLocaleCountry(TelephonyManager telephonyManager,
-            int subId) {
+                                                       int subId) {
         String country = getSimCountry(telephonyManager, subId);
         if (TextUtils.isEmpty(country)) {
             country = Locale.getDefault().getCountry();

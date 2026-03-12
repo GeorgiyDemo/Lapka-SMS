@@ -42,11 +42,12 @@ class ChangelogDialog(activity: MainActivity) {
         val layout = LayoutInflater.from(activity).inflate(R.layout.changelog_dialog, null)
 
         dialog = MaterialAlertDialogBuilder(activity)
-                .setCancelable(true)
-                .setView(layout)
-                .create()
+            .setCancelable(true)
+            .setView(layout)
+            .create()
 
-        layout.findViewById<TextView>(R.id.version).text = activity.getString(R.string.changelog_version, BuildConfig.VERSION_NAME)
+        layout.findViewById<TextView>(R.id.version).text =
+            activity.getString(R.string.changelog_version, BuildConfig.VERSION_NAME)
         layout.findViewById<RecyclerView>(R.id.changelog).adapter = adapter
         layout.findViewById<View>(R.id.more).setOnClickListener { dialog.dismiss(); moreClicks.onNext(Unit) }
         layout.findViewById<View>(R.id.dismiss).setOnClickListener { dialog.dismiss() }

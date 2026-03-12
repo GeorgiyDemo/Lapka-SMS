@@ -26,7 +26,7 @@ class MarkSent @Inject constructor(private val messageRepo: MessageRepository) :
 
     override fun buildObservable(params: Long): Flowable<Unit> {
         return Flowable.just(Unit)
-                .doOnNext { messageRepo.markSent(params) }
+            .doOnNext { messageRepo.markSent(params) }
     }
 
 }

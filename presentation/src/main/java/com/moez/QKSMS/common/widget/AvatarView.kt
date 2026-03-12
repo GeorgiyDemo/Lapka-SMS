@@ -38,8 +38,10 @@ class AvatarView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var navigator: Navigator
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var navigator: Navigator
 
 
     private val initialView: QkTextView by lazy { findViewById(R.id.initial) }
@@ -91,12 +93,12 @@ class AvatarView @JvmOverloads constructor(
         iconView.setTint(theme.textPrimary)
 
         val initials = fullName
-                ?.substringBefore(',')
-                ?.split(" ").orEmpty()
-                .filter { name -> name.isNotEmpty() }
-                .map { name -> name[0] }
-                .filter { initial -> initial.isLetterOrDigit() }
-                .map { initial -> initial.toString() }
+            ?.substringBefore(',')
+            ?.split(" ").orEmpty()
+            .filter { name -> name.isNotEmpty() }
+            .map { name -> name[0] }
+            .filter { initial -> initial.isLetterOrDigit() }
+            .map { initial -> initial.toString() }
 
         if (initials.isNotEmpty()) {
             initialView.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
@@ -109,8 +111,8 @@ class AvatarView @JvmOverloads constructor(
         photoView.setImageDrawable(null)
         photoUri?.let { photoUri ->
             GlideApp.with(photoView)
-                    .load(photoUri)
-                    .into(photoView)
+                .load(photoUri)
+                .into(photoView)
         }
     }
 }

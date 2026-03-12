@@ -1,4 +1,3 @@
-
 package com.android.mms.transaction;
 
 import android.app.PendingIntent;
@@ -33,15 +32,41 @@ import java.util.concurrent.ConcurrentHashMap;
  * We should manage to call SMSManager.downloadMultimediaMessage().
  */
 public class DownloadManager {
-    private static DownloadManager ourInstance = new DownloadManager();
     private static final ConcurrentHashMap<String, MmsDownloadReceiver> mMap = new ConcurrentHashMap<>();
+    private static DownloadManager ourInstance = new DownloadManager();
+
+    private DownloadManager() {
+
+    }
 
     public static DownloadManager getInstance() {
         return ourInstance;
     }
 
-    private DownloadManager() {
+    public static void finishDownload(String location) {
+        if (location != null) {
+            mMap.remove(location);
+        }
+    }
 
+    private static boolean isNotificationExist(Context context, String location) {
+        String selection = Telephony.Mms.CONTENT_LOCATION + " = ?";
+        String[] selectionArgs = new String[]{location};
+        Cursor c = SqliteWrapper.query(
+                context, context.getContentResolver(),
+                Telephony.Mms.CONTENT_URI, new String[]{Telephony.Mms._ID},
+                selection, selectionArgs, null);
+        if (c != null) {
+            try {
+                if (c.getCount() > 0) {
+                    return true;
+                }
+            } finally {
+                c.close();
+            }
+        }
+
+        return false;
     }
 
     public void downloadMultimediaMessage(final Context context, final String location, Uri uri, boolean byPush, int subscriptionId) {
@@ -110,7 +135,7 @@ public class DownloadManager {
         public void onReceive(Context context, Intent intent) {
             context.unregisterReceiver(this);
 
-            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MMS DownloadReceiver");
             wakeLock.acquire(60 * 1000);
 
@@ -118,31 +143,5 @@ public class DownloadManager {
             newIntent.setAction(MmsReceivedReceiver.MMS_RECEIVED);
             BroadcastUtils.sendExplicitBroadcast(context, newIntent, MmsReceivedReceiver.MMS_RECEIVED);
         }
-    }
-
-    public static void finishDownload(String location) {
-        if (location != null) {
-            mMap.remove(location);
-        }
-    }
-
-    private static boolean isNotificationExist(Context context, String location) {
-        String selection = Telephony.Mms.CONTENT_LOCATION + " = ?";
-        String[] selectionArgs = new String[] { location };
-        Cursor c = SqliteWrapper.query(
-                context, context.getContentResolver(),
-                Telephony.Mms.CONTENT_URI, new String[] { Telephony.Mms._ID },
-                selection, selectionArgs, null);
-        if (c != null) {
-            try {
-                if (c.getCount() > 0) {
-                    return true;
-                }
-            } finally {
-                c.close();
-            }
-        }
-
-        return false;
     }
 }

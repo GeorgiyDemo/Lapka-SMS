@@ -50,9 +50,12 @@ import javax.inject.Inject
 
 class PlusActivity : QkThemedActivity(), PlusView {
 
-    @Inject lateinit var fontProvider: FontProvider
-    @Inject lateinit var upgradeButtonExperiment: UpgradeButtonExperiment
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var fontProvider: FontProvider
+    @Inject
+    lateinit var upgradeButtonExperiment: UpgradeButtonExperiment
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     // View properties
     private val upgrade: QkTextView by lazy { findViewById(R.id.upgrade) }
@@ -98,9 +101,9 @@ class PlusActivity : QkThemedActivity(), PlusView {
 
         // Make the list titles bold
         linearLayout.children
-                .mapNotNull { it as? PreferenceView }
-                .map { it.findViewById<android.widget.TextView>(R.id.titleView) }
-                .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
+            .mapNotNull { it as? PreferenceView }
+            .map { it.findViewById<android.widget.TextView>(R.id.titleView) }
+            .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
 
         val textPrimary = resolveThemeColor(android.R.attr.textColorPrimary)
         collapsingToolbar.setCollapsedTitleTextColor(textPrimary)

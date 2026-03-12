@@ -28,8 +28,10 @@ import javax.inject.Inject
 
 class SendSmsReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var messageRepo: MessageRepository
-    @Inject lateinit var retrySending: RetrySending
+    @Inject
+    lateinit var messageRepo: MessageRepository
+    @Inject
+    lateinit var retrySending: RetrySending
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

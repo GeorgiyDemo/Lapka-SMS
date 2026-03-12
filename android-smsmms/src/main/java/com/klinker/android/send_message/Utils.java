@@ -40,6 +40,18 @@ public class Utils {
      */
     public static final String GSM_CHARACTERS_REGEX = "^[A-Za-z0-9 \\r\\n@Ł$ĽčéůěňÇŘřĹĺ\u0394_\u03A6\u0393\u039B\u03A9\u03A0\u03A8\u03A3\u0398\u039EĆćßÉ!\"#$%&'()*+,\\-./:;<=>?ĄÄÖŃÜ§żäöńüŕ^{}\\\\\\[~\\]|\u20AC]*$";
     public static final int DEFAULT_SUBSCRIPTION_ID = 1;
+    private static final Pattern EMAIL_ADDRESS_PATTERN
+            = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
+    private static final Pattern NAME_ADDR_EMAIL_PATTERN =
+            Pattern.compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*");
 
     /**
      * Gets the current users phone number
@@ -52,10 +64,6 @@ public class Utils {
         mTelephonyMgr = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
         return mTelephonyMgr.getLine1Number();
-    }
-
-    public interface Task<T> {
-        T run() throws IOException;
     }
 
     public static <T> T ensureRouteToMmsNetwork(Context context, String url, String proxy, Task<T> task) throws IOException {
@@ -189,7 +197,7 @@ public class Utils {
      * Checks mobile data enabled based on telephonymanager and sim card
      *
      * @param telephonyManager the telephony manager
-     * @param subId the sim card id
+     * @param subId            the sim card id
      */
     public static boolean isDataEnabled(TelephonyManager telephonyManager, int subId) {
         try {
@@ -247,7 +255,8 @@ public class Utils {
 
     /**
      * Gets the current thread_id or creates a new one for the given recipient
-     * @param context is the context of the activity or service
+     *
+     * @param context   is the context of the activity or service
      * @param recipient is the person message is being sent to
      * @return the thread_id to use in the database
      */
@@ -260,7 +269,8 @@ public class Utils {
 
     /**
      * Gets the current thread_id or creates a new one for the given recipient
-     * @param context is the context of the activity or service
+     *
+     * @param context    is the context of the activity or service
      * @param recipients is the set of people message is being sent to
      * @return the thread_id to use in the database
      */
@@ -299,7 +309,7 @@ public class Utils {
     public static boolean doesThreadIdExist(Context context, long threadId) {
         Uri uri = Uri.parse("content://mms-sms/conversations/" + threadId + "/");
 
-        Cursor cursor = context.getContentResolver().query(uri, new String[] {"_id"}, null, null, null);
+        Cursor cursor = context.getContentResolver().query(uri, new String[]{"_id"}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             cursor.close();
             return true;
@@ -318,20 +328,6 @@ public class Utils {
         return match.matches();
     }
 
-    private static final Pattern EMAIL_ADDRESS_PATTERN
-            = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-    );
-
-    private static final Pattern NAME_ADDR_EMAIL_PATTERN =
-            Pattern.compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*");
-
     private static String extractAddrSpec(String address) {
         Matcher match = NAME_ADDR_EMAIL_PATTERN.matcher(address);
 
@@ -343,6 +339,7 @@ public class Utils {
 
     /**
      * Gets the default settings from a shared preferences file associated with your app
+     *
      * @param context is the context of the activity or service
      * @return the settings object to send with
      */
@@ -363,6 +360,7 @@ public class Utils {
 
     /**
      * Determines whether or not the app is the default SMS app on a device
+     *
      * @param context
      * @return true if app is default
      */
@@ -373,6 +371,7 @@ public class Utils {
 
     /**
      * Determins whether or not the app has enabled MMS over WiFi
+     *
      * @param context
      * @return true if enabled
      */
@@ -386,5 +385,9 @@ public class Utils {
         } else {
             return DEFAULT_SUBSCRIPTION_ID;
         }
+    }
+
+    public interface Task<T> {
+        T run() throws IOException;
     }
 }

@@ -28,18 +28,11 @@ import java.io.IOException;
  */
 public class MmsConfigXmlProcessor {
 
-    public interface MmsConfigHandler {
-        public void process(String key, String value, String type);
-    }
-
     private static final String TAG_MMS_CONFIG = "mms_config";
-
+    private final StringBuilder mLogStringBuilder = new StringBuilder();
+    private final XmlPullParser mInputParser;
     // Handler to process one mms_config key/value pair
     private MmsConfigHandler mMmsConfigHandler;
-
-    private final StringBuilder mLogStringBuilder = new StringBuilder();
-
-    private final XmlPullParser mInputParser;
 
     private MmsConfigXmlProcessor(XmlPullParser parser) {
         mInputParser = parser;
@@ -48,6 +41,22 @@ public class MmsConfigXmlProcessor {
 
     public static MmsConfigXmlProcessor get(XmlPullParser parser) {
         return new MmsConfigXmlProcessor(parser);
+    }
+
+    private static String xmlParserEventString(int event) {
+        switch (event) {
+            case XmlPullParser.START_DOCUMENT:
+                return "START_DOCUMENT";
+            case XmlPullParser.END_DOCUMENT:
+                return "END_DOCUMENT";
+            case XmlPullParser.START_TAG:
+                return "START_TAG";
+            case XmlPullParser.END_TAG:
+                return "END_TAG";
+            case XmlPullParser.TEXT:
+                return "TEXT";
+        }
+        return Integer.toString(event);
     }
 
     public MmsConfigXmlProcessor setMmsConfigHandler(MmsConfigHandler handler) {
@@ -64,7 +73,7 @@ public class MmsConfigXmlProcessor {
      * @throws IOException
      */
     private int advanceToNextEvent(int eventType) throws XmlPullParserException, IOException {
-        for (;;) {
+        for (; ; ) {
             int nextEvent = mInputParser.next();
             if (nextEvent == eventType
                     || nextEvent == XmlPullParser.END_DOCUMENT) {
@@ -97,17 +106,6 @@ public class MmsConfigXmlProcessor {
         }
     }
 
-    private static String xmlParserEventString(int event) {
-        switch (event) {
-            case XmlPullParser.START_DOCUMENT: return "START_DOCUMENT";
-            case XmlPullParser.END_DOCUMENT: return "END_DOCUMENT";
-            case XmlPullParser.START_TAG: return "START_TAG";
-            case XmlPullParser.END_TAG: return "END_TAG";
-            case XmlPullParser.TEXT: return "TEXT";
-        }
-        return Integer.toString(event);
-    }
-
     /**
      * @return The debugging information of the parser's current position
      */
@@ -123,9 +121,9 @@ public class MmsConfigXmlProcessor {
                     mLogStringBuilder.append('<').append(mInputParser.getName());
                     for (int i = 0; i < mInputParser.getAttributeCount(); i++) {
                         mLogStringBuilder.append(' ')
-                            .append(mInputParser.getAttributeName(i))
-                            .append('=')
-                            .append(mInputParser.getAttributeValue(i));
+                                .append(mInputParser.getAttributeName(i))
+                                .append('=')
+                                .append(mInputParser.getAttributeValue(i));
                     }
                     mLogStringBuilder.append("/>");
                 }
@@ -146,10 +144,10 @@ public class MmsConfigXmlProcessor {
     private void processMmsConfig()
             throws IOException, XmlPullParserException {
         // We are at the start tag
-        for (;;) {
+        for (; ; ) {
             int nextEvent;
             // Skipping spaces
-            while ((nextEvent = mInputParser.next()) == XmlPullParser.TEXT);
+            while ((nextEvent = mInputParser.next()) == XmlPullParser.TEXT) ;
             if (nextEvent == XmlPullParser.START_TAG) {
                 // Parse one mms config key/value
                 processMmsConfigKeyValue();
@@ -191,5 +189,9 @@ public class MmsConfigXmlProcessor {
         } else {
             Timber.w("MmsConfig: invalid key=" + key + " or type=" + type);
         }
+    }
+
+    public interface MmsConfigHandler {
+        public void process(String key, String value, String type);
     }
 }

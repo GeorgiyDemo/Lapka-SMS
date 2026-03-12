@@ -48,11 +48,16 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val backClicked: Subject<Unit> = PublishSubject.create()
 
-    @Inject lateinit var blockedMessagesAdapter: BlockedMessagesAdapter
-    @Inject lateinit var blockingDialog: BlockingDialog
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var context: Context
-    @Inject override lateinit var presenter: BlockedMessagesPresenter
+    @Inject
+    lateinit var blockedMessagesAdapter: BlockedMessagesAdapter
+    @Inject
+    lateinit var blockingDialog: BlockingDialog
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var context: Context
+    @Inject
+    override lateinit var presenter: BlockedMessagesPresenter
 
     private val empty: TextView get() = containerView!!.findViewById(R.id.empty)
     private val conversations: RecyclerView get() = containerView!!.findViewById(R.id.conversations)
@@ -99,10 +104,12 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
         themedActivity?.findViewById<Toolbar>(R.id.toolbar)?.menu?.findItem(R.id.block)?.isVisible = state.selected > 0
         themedActivity?.findViewById<Toolbar>(R.id.toolbar)?.menu?.findItem(R.id.delete)?.isVisible = state.selected > 0
 
-        setTitle(when (state.selected) {
-            0 -> context.getString(R.string.blocked_messages_title)
-            else -> context.getString(R.string.main_title_selected, state.selected)
-        })
+        setTitle(
+            when (state.selected) {
+                0 -> context.getString(R.string.blocked_messages_title)
+                else -> context.getString(R.string.main_title_selected, state.selected)
+            }
+        )
     }
 
     override fun clearSelection() = blockedMessagesAdapter.clearSelection()
@@ -114,11 +121,11 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     override fun showDeleteDialog(conversations: List<Long>) {
         val count = conversations.size
         MaterialAlertDialogBuilder(activity!!)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, count, count))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, count, count))
+            .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     override fun goBack() {

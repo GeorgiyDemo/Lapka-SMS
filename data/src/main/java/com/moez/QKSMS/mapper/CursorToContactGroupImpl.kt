@@ -31,8 +31,9 @@ class CursorToContactGroupImpl @Inject constructor(
     companion object {
         private val URI = ContactsContract.Groups.CONTENT_URI
         private val PROJECTION = arrayOf(
-                ContactsContract.Groups._ID,
-                ContactsContract.Groups.TITLE)
+            ContactsContract.Groups._ID,
+            ContactsContract.Groups.TITLE
+        )
         private const val SELECTION = "${ContactsContract.Groups.AUTO_ADD}=0 " +
                 "AND ${ContactsContract.Groups.DELETED}=0 " +
                 "AND ${ContactsContract.Groups.FAVORITES}=0 " +

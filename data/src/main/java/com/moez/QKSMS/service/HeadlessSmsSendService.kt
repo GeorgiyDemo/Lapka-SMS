@@ -29,8 +29,10 @@ import javax.inject.Inject
 
 class HeadlessSmsSendService : IntentService("HeadlessSmsSendService") {
 
-    @Inject lateinit var conversationRepo: ConversationRepository
-    @Inject lateinit var sendMessage: SendMessage
+    @Inject
+    lateinit var conversationRepo: ConversationRepository
+    @Inject
+    lateinit var sendMessage: SendMessage
 
     override fun onHandleIntent(intent: Intent?) {
         if (intent?.action != TelephonyManager.ACTION_RESPOND_VIA_MESSAGE) return

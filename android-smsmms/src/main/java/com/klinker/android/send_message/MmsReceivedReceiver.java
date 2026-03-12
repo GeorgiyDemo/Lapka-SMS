@@ -65,6 +65,10 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
 
     private static final ExecutorService RECEIVE_NOTIFICATION_EXECUTOR = Executors.newSingleThreadExecutor();
 
+    private static NotificationInd getNotificationInd(Context context, Intent intent) throws MmsException {
+        return (NotificationInd) PduPersister.getPduPersister(context).load((Uri) intent.getParcelableExtra(EXTRA_URI));
+    }
+
     public MmscInformation getMmscInfoForReceptionAck() {
         // Override this and provide the MMSC to send the ACK to.
         // some carriers will download duplicate MMS messages without this ACK. When using the
@@ -163,8 +167,39 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
         }
     }
 
-    private static NotificationInd getNotificationInd(Context context, Intent intent) throws MmsException {
-        return (NotificationInd) PduPersister.getPduPersister(context).load((Uri) intent.getParcelableExtra(EXTRA_URI));
+    private List<CommonAsyncTask> getNotificationTask(Context context, Intent intent, byte[] response) {
+        if (response.length == 0) {
+            Timber.v("MmsReceivedReceiver.sendNotification blank response");
+            return null;
+        }
+
+        if (getMmscInfoForReceptionAck() == null) {
+            Timber.v("No MMSC information set, so no notification tasks will be able to complete");
+            return null;
+        }
+
+        final GenericPdu pdu =
+                (new PduParser(response, new MmsConfig.Overridden(new MmsConfig(context), null).
+                        getSupportMmsContentDisposition())).parse();
+        if (pdu == null || !(pdu instanceof RetrieveConf)) {
+            Timber.e("MmsReceivedReceiver.sendNotification failed to parse pdu");
+            return null;
+        }
+
+        try {
+            final NotificationInd ind = getNotificationInd(context, intent);
+            final MmscInformation mmsc = getMmscInfoForReceptionAck();
+            final TransactionSettings transactionSettings = new TransactionSettings(mmsc.mmscUrl, mmsc.mmsProxy, mmsc.proxyPort);
+
+            final List<CommonAsyncTask> responseTasks = new ArrayList<>();
+            responseTasks.add(new AcknowledgeIndTask(context, ind, transactionSettings, (RetrieveConf) pdu));
+            responseTasks.add(new NotifyRespTask(context, ind, transactionSettings));
+
+            return responseTasks;
+        } catch (MmsException e) {
+            Timber.e(e, "error");
+            return null;
+        }
     }
 
     private static abstract class CommonAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -183,12 +218,12 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
         /**
          * A common method to send a PDU to MMSC.
          *
-         * @param pdu A byte array which contains the data of the PDU.
+         * @param pdu     A byte array which contains the data of the PDU.
          * @param mmscUrl Url of the recipient MMSC.
          * @return A byte array which contains the response data.
-         *         If an HTTP error code is returned, an IOException will be thrown.
-         * @throws java.io.IOException if any error occurred on network interface or
-         *         an HTTP error code(>=400) returned from the server.
+         * If an HTTP error code is returned, an IOException will be thrown.
+         * @throws java.io.IOException                 if any error occurred on network interface or
+         *                                             an HTTP error code(>=400) returned from the server.
          * @throws com.google.android.mms.MmsException if pdu is null.
          */
         byte[] sendPdu(byte[] pdu, String mmscUrl) throws IOException, MmsException {
@@ -200,9 +235,9 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
          *
          * @param pdu A byte array which contains the data of the PDU.
          * @return A byte array which contains the response data.
-         *         If an HTTP error code is returned, an IOException will be thrown.
-         * @throws java.io.IOException if any error occurred on network interface or
-         *         an HTTP error code(>=400) returned from the server.
+         * If an HTTP error code is returned, an IOException will be thrown.
+         * @throws java.io.IOException                 if any error occurred on network interface or
+         *                                             an HTTP error code(>=400) returned from the server.
          * @throws com.google.android.mms.MmsException if pdu is null.
          */
         byte[] sendPdu(byte[] pdu) throws IOException, MmsException {
@@ -213,17 +248,17 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
         /**
          * A common method to send a PDU to MMSC.
          *
-         * @param token The token to identify the sending progress.
-         * @param pdu A byte array which contains the data of the PDU.
+         * @param token   The token to identify the sending progress.
+         * @param pdu     A byte array which contains the data of the PDU.
          * @param mmscUrl Url of the recipient MMSC.
          * @return A byte array which contains the response data.
-         *         If an HTTP error code is returned, an IOException will be thrown.
-         * @throws java.io.IOException if any error occurred on network interface or
-         *         an HTTP error code(>=400) returned from the server.
+         * If an HTTP error code is returned, an IOException will be thrown.
+         * @throws java.io.IOException                 if any error occurred on network interface or
+         *                                             an HTTP error code(>=400) returned from the server.
          * @throws com.google.android.mms.MmsException if pdu is null.
          */
         private byte[] sendPdu(long token, byte[] pdu,
-                       String mmscUrl) throws IOException, MmsException {
+                               String mmscUrl) throws IOException, MmsException {
             if (pdu == null) {
                 throw new MmsException();
             }
@@ -267,7 +302,7 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
                         STATUS_RETRIEVED);
 
                 // Pack M-NotifyResp.ind and send it
-                if(com.android.mms.MmsConfig.getNotifyWapMMSC()) {
+                if (com.android.mms.MmsConfig.getNotifyWapMMSC()) {
                     sendPdu(new PduComposer(mContext, notifyRespInd).make(), mContentLocation);
                 } else {
                     sendPdu(new PduComposer(mContext, notifyRespInd).make());
@@ -307,7 +342,7 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
                     acknowledgeInd.setFrom(new EncodedStringValue(lineNumber));
 
                     // Pack M-Acknowledge.ind and send it
-                    if(com.android.mms.MmsConfig.getNotifyWapMMSC()) {
+                    if (com.android.mms.MmsConfig.getNotifyWapMMSC()) {
                         sendPdu(new PduComposer(mContext, acknowledgeInd).make(), mContentLocation);
                     } else {
                         sendPdu(new PduComposer(mContext, acknowledgeInd).make());
@@ -316,41 +351,6 @@ public class MmsReceivedReceiver extends BroadcastReceiver {
                     Timber.e(e, "error");
                 }
             }
-            return null;
-        }
-    }
-
-    private List<CommonAsyncTask> getNotificationTask(Context context, Intent intent, byte[] response) {
-        if (response.length == 0) {
-            Timber.v("MmsReceivedReceiver.sendNotification blank response");
-            return null;
-        }
-
-        if (getMmscInfoForReceptionAck() == null) {
-            Timber.v("No MMSC information set, so no notification tasks will be able to complete");
-            return null;
-        }
-
-        final GenericPdu pdu =
-                (new PduParser(response, new MmsConfig.Overridden(new MmsConfig(context), null).
-                        getSupportMmsContentDisposition())).parse();
-        if (pdu == null || !(pdu instanceof RetrieveConf)) {
-            Timber.e("MmsReceivedReceiver.sendNotification failed to parse pdu");
-            return null;
-        }
-
-        try {
-            final NotificationInd ind = getNotificationInd(context, intent);
-            final MmscInformation mmsc = getMmscInfoForReceptionAck();
-            final TransactionSettings transactionSettings = new TransactionSettings(mmsc.mmscUrl, mmsc.mmsProxy, mmsc.proxyPort);
-
-            final List<CommonAsyncTask> responseTasks = new ArrayList<>();
-            responseTasks.add(new AcknowledgeIndTask(context, ind, transactionSettings, (RetrieveConf) pdu));
-            responseTasks.add(new NotifyRespTask(context, ind, transactionSettings));
-
-            return responseTasks;
-        } catch (MmsException e) {
-            Timber.e(e, "error");
             return null;
         }
     }

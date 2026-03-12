@@ -34,7 +34,7 @@ public class MmsPushOutboxMessages extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Timber.v("Received the MMS_SEND_OUTBOX_MSG intent: " + intent);
         String action = intent.getAction();
-        if(action.equalsIgnoreCase(INTENT_MMS_SEND_OUTBOX_MSG)){
+        if (action.equalsIgnoreCase(INTENT_MMS_SEND_OUTBOX_MSG)) {
             Timber.d("Now waking up the MMS service");
             context.startService(new Intent(context, TransactionService.class));
         }

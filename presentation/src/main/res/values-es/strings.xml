@@ -31,7 +31,8 @@
     <string name="setup_next">Continuar</string>
     <string name="menu_add_person">Añadir persona</string>
     <string name="menu_call">Llamar</string>
-    <string name="menu_info">Detalles</string>    <string name="menu_share">Compartir</string>
+    <string name="menu_info">Detalles</string>
+    <string name="menu_share">Compartir</string>
     <string name="main_drawer_open_cd">Abrir cajón de navegación</string>
     <string name="main_title_selected">%d Seleccionados</string>
     <string name="main_menu_clear">Limpiar</string>
@@ -67,7 +68,8 @@
     <string name="drawer_settings">Ajustes</string>
     <string name="drawer_help">Ayuda &amp; comentarios</string>
     <string name="drawer_invite">Invitar amigos</string>
-    <string name="drawer_plus_banner_summary">Desbloquea nuevas e impresionantes características y apoya el desarrollo</string>
+    <string name="drawer_plus_banner_summary">Desbloquea nuevas e impresionantes características y apoya el desarrollo
+    </string>
     <string name="rate_title">¿Te diviertes con QKSMS?</string>
     <string name="rate_summary">Comparte un poco de amor y puntúanos en Google Play!</string>
     <string name="rate_okay">DE ACUERDO</string>
@@ -125,7 +127,9 @@
     <string name="info_unarchive">Desarchivar</string>
     <string name="info_block">Bloquear</string>
     <string name="info_unblock">Desbloquear</string>
-    <string name="info_delete">Borrar conversación</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Apariencia</string>
+    <string name="info_delete">Borrar conversación
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Apariencia</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_qkreply">Responder vía QKSMS</string>
     <string name="settings_theme_title">Tema</string>
@@ -176,7 +180,8 @@
     <string name="settings_mobile_title">Sólo números móviles</string>
     <string name="settings_mobile_summary">Al componer un mensaje, sólo mostrar números móviles</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -184,8 +189,10 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Sincronizar mensajes</string>
-    <string name="settings_sync_summary">Vuelve a sincronizar tus mensajes con la base de datos nativa de Android SMS</string>
+    </plurals>
+    <string name="settings_sync_title">Sincronizar mensajes</string>
+    <string name="settings_sync_summary">Vuelve a sincronizar tus mensajes con la base de datos nativa de Android SMS
+    </string>
     <string name="settings_about_title">Acerca de QKSMS</string>
     <string name="settings_version">Versión %s %s %s</string>
     <string name="settings_logging_enabled">Registro de depuración activado</string>
@@ -193,14 +200,22 @@
     <string name="settings_delay_duration_hint">Introduzca la duración (segundos)</string>
     <string name="blocking_title">Bloqueando</string>
     <string name="blocking_drop_title">Borrar mensajes</string>
-    <string name="blocking_drop_summary">Eliminar mensajes entrantes de los remitentes bloqueados en lugar de ocultarlos</string>
+    <string name="blocking_drop_summary">Eliminar mensajes entrantes de los remitentes bloqueados en lugar de
+        ocultarlos
+    </string>
     <string name="blocking_conversations">Conversaciones bloqueadas</string>
     <string name="blocking_manager_title">Gestor de bloqueo</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Función de bloqueo integrado en QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Bloquee mensajes de spam, números y llamadas desconocidas con lista negra y programación</string>
-    <string name="blocking_manager_call_control_summary">¡Filtrre automáticamente sus llamadas y mensajes en un lugar conveniente! La comunidad IQ™ te permite prevenir mensajes no deseados de spammers conocidos por la comunidad</string>
-    <string name="blocking_manager_sia_summary">Filtra automáticamente los mensajes de números no solicitados mediante la aplicación \"¿Debo responder?\"</string>
+    <string name="blocking_manager_call_blocker_summary">Bloquee mensajes de spam, números y llamadas desconocidas con
+        lista negra y programación
+    </string>
+    <string name="blocking_manager_call_control_summary">¡Filtrre automáticamente sus llamadas y mensajes en un lugar
+        conveniente! La comunidad IQ™ te permite prevenir mensajes no deseados de spammers conocidos por la comunidad
+    </string>
+    <string name="blocking_manager_sia_summary">Filtra automáticamente los mensajes de números no solicitados mediante
+        la aplicación \"¿Debo responder?\"
+    </string>
     <string name="blocking_manager_copy_title">Copiar números bloqueados</string>
     <string name="blocking_manager_copy_summary">Continúa a %s y copia sobre tus números bloqueados existentes</string>
     <string name="blocked_numbers_title">Números bloqueados</string>
@@ -238,11 +253,15 @@
     <string name="qksms_plus_thanks_title">Gracias por apoyar a QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Ahora tienes acceso a todas las funciones de QKSMS +</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ es gratis para los usuarios de F-Droid! Si desea apoyar el desarrollo, no dude en hacer una donación.</string>
+    <string name="qksms_plus_free_title">QKSMS+ es gratis para los usuarios de F-Droid! Si desea apoyar el desarrollo,
+        no dude en hacer una donación.
+    </string>
     <string name="qksms_plus_donate">Donar con PayPal</string>
     <string name="qksms_plus_coming_soon">Próximamente</string>
     <string name="qksms_plus_themes_title">Temas Premium</string>
-    <string name="qksms_plus_themes_summary">Desbloquea hermosos temas de colores que no están disponibles en la paleta Material Design</string>
+    <string name="qksms_plus_themes_summary">Desbloquea hermosos temas de colores que no están disponibles en la paleta
+        Material Design
+    </string>
     <string name="qksms_plus_emoji_title">Auto-emoji personalizado</string>
     <string name="qksms_plus_emoji_summary">Crear accesos directos personalizados de auto-emoji</string>
     <string name="qksms_plus_delayed_title">Retraso en el envío</string>
@@ -250,13 +269,19 @@
     <string name="qksms_plus_night_title">Modo nocturno automático</string>
     <string name="qksms_plus_night_summary">Activar el modo nocturno basado en la hora del día</string>
     <string name="qksms_plus_blacklist_title">Bloqueo avanzado</string>
-    <string name="qksms_plus_blacklist_summary">Bloquear los mensajes que contengan palabras clave o patrones coincidentes</string>
+    <string name="qksms_plus_blacklist_summary">Bloquear los mensajes que contengan palabras clave o patrones
+        coincidentes
+    </string>
     <string name="qksms_plus_forward_title">Reenvío automático</string>
     <string name="qksms_plus_forward_summary">Reenviar automáticamente los mensajes de determinados remitentes</string>
     <string name="qksms_plus_respond_title">Auto-responder</string>
-    <string name="qksms_plus_respond_summary">Responder automáticamente a mensajes entrantes con una respuesta preestablecida</string>
+    <string name="qksms_plus_respond_summary">Responder automáticamente a mensajes entrantes con una respuesta
+        preestablecida
+    </string>
     <string name="qksms_plus_more_title">Más</string>
-    <string name="qksms_plus_more_summary">QKSMS está bajo desarollo activo, y sus compras incluirán todas las características futuras de QKSMS+!</string>
+    <string name="qksms_plus_more_summary">QKSMS está bajo desarollo activo, y sus compras incluirán todas las
+        características futuras de QKSMS+!
+    </string>
     <string name="widget_loading">Cargando&#8230;</string>
     <string name="widget_more">Ver más conversaciones</string>
     <string name="qkreply_menu_read">Marcar como leído</string>
@@ -317,7 +342,8 @@
         <item>3 segundos</item>
         <item>5 segundos</item>
         <item>10 segundos</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Ok</item>
         <item>Dame un momento</item>
         <item>Estoy en camino</item>

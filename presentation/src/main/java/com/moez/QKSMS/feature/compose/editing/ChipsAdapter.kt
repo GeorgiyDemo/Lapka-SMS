@@ -48,7 +48,8 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
         return QkViewHolder(view).apply {
             // These theme attributes don't apply themselves on API 21
             if (Build.VERSION.SDK_INT <= 22) {
-                itemView.findViewById<LinearLayout>(R.id.content).setBackgroundTint(view.context.resolveThemeColor(R.attr.bubbleColor))
+                itemView.findViewById<LinearLayout>(R.id.content)
+                    .setBackgroundTint(view.context.resolveThemeColor(R.attr.bubbleColor))
             }
 
             view.setOnClickListener {
@@ -62,7 +63,8 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
         val recipient = getItem(position)
 
         holder.itemView.findViewById<AvatarView>(R.id.avatar).setRecipient(recipient)
-        holder.itemView.findViewById<TextView>(R.id.name).text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
+        holder.itemView.findViewById<TextView>(R.id.name).text =
+            recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }
 
     /**
@@ -75,8 +77,9 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
         val rootView = view?.rootView as ViewGroup
 
         val layoutParams = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         layoutParams.topMargin = 24.dpToPx(context)
         layoutParams.marginStart = 56.dpToPx(context)

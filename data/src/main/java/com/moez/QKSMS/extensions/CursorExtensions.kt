@@ -48,11 +48,11 @@ fun <T> Cursor.map(map: (Cursor) -> T): List<T> {
  */
 fun Cursor.asFlowable(): Flowable<Cursor> {
     return Flowable.range(0, count)
-            .map {
-                moveToPosition(it)
-                this
-            }
-            .doOnComplete { close() }
+        .map {
+            moveToPosition(it)
+            this
+        }
+        .doOnComplete { close() }
 }
 
 /**

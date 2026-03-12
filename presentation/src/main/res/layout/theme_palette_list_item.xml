@@ -18,18 +18,18 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/palette"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            android:id="@+id/palette"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/divider" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/divider"/>
 
 </LinearLayout>

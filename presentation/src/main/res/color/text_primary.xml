@@ -18,6 +18,6 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/textPrimaryDisabled" android:state_enabled="false" />
-    <item android:color="@color/textPrimary" />
+    <item android:color="@color/textPrimaryDisabled" android:state_enabled="false"/>
+    <item android:color="@color/textPrimary"/>
 </selector>

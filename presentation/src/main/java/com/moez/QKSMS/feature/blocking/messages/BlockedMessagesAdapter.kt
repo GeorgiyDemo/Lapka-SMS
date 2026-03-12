@@ -46,9 +46,12 @@ class BlockedMessagesAdapter @Inject constructor(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_list_item, parent, false)
 
         if (viewType == 0) {
-            view.findViewById<QkTextView>(R.id.title).setTypeface(view.findViewById<QkTextView>(R.id.title).typeface, Typeface.BOLD)
-            view.findViewById<QkTextView>(R.id.date).setTypeface(view.findViewById<QkTextView>(R.id.date).typeface, Typeface.BOLD)
-            view.findViewById<QkTextView>(R.id.date).setTextColor(view.context.resolveThemeColor(android.R.attr.textColorPrimary))
+            view.findViewById<QkTextView>(R.id.title)
+                .setTypeface(view.findViewById<QkTextView>(R.id.title).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.date)
+                .setTypeface(view.findViewById<QkTextView>(R.id.date).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.date)
+                .setTextColor(view.context.resolveThemeColor(android.R.attr.textColorPrimary))
         }
 
         return QkViewHolder(view).apply {
@@ -76,7 +79,8 @@ class BlockedMessagesAdapter @Inject constructor(
         holder.itemView.findViewById<GroupAvatarView>(R.id.avatars).recipients = conversation.recipients
         holder.itemView.findViewById<QkTextView>(R.id.title).collapseEnabled = conversation.recipients.size > 1
         holder.itemView.findViewById<QkTextView>(R.id.title).text = conversation.getTitle()
-        holder.itemView.findViewById<QkTextView>(R.id.date).text = dateFormatter.getConversationTimestamp(conversation.date)
+        holder.itemView.findViewById<QkTextView>(R.id.date).text =
+            dateFormatter.getConversationTimestamp(conversation.date)
 
         holder.itemView.findViewById<QkTextView>(R.id.blocker).text = when (conversation.blockingClient) {
             Preferences.BLOCKING_MANAGER_CC -> context.getString(R.string.blocking_manager_call_control_title)
@@ -85,8 +89,10 @@ class BlockedMessagesAdapter @Inject constructor(
         }
 
         holder.itemView.findViewById<QkTextView>(R.id.reason).text = conversation.blockReason
-        holder.itemView.findViewById<QkTextView>(R.id.blocker).isVisible = holder.itemView.findViewById<QkTextView>(R.id.blocker).text.isNotEmpty()
-        holder.itemView.findViewById<QkTextView>(R.id.reason).isVisible = holder.itemView.findViewById<QkTextView>(R.id.blocker).text.isNotEmpty()
+        holder.itemView.findViewById<QkTextView>(R.id.blocker).isVisible =
+            holder.itemView.findViewById<QkTextView>(R.id.blocker).text.isNotEmpty()
+        holder.itemView.findViewById<QkTextView>(R.id.reason).isVisible =
+            holder.itemView.findViewById<QkTextView>(R.id.blocker).text.isNotEmpty()
     }
 
     override fun getItemViewType(position: Int): Int {

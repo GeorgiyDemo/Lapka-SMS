@@ -26,39 +26,13 @@ import timber.log.Timber;
 public class LayoutManager {
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
-
+    private static LayoutManager sInstance;
     private final Context mContext;
     private LayoutParameters mLayoutParams;
-
-    private static LayoutManager sInstance;
 
     private LayoutManager(Context context) {
         mContext = context;
         initLayoutParameters(context.getResources().getConfiguration());
-    }
-
-    private void initLayoutParameters(Configuration configuration) {
-        mLayoutParams = getLayoutParameters(
-                configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-                ? LayoutParameters.HVGA_PORTRAIT
-                : LayoutParameters.HVGA_LANDSCAPE);
-
-        if (LOCAL_LOGV) {
-            Timber.v("LayoutParameters: " + mLayoutParams.getTypeDescription()
-                    + ": " + mLayoutParams.getWidth() + "x" + mLayoutParams.getHeight());
-        }
-    }
-
-    private LayoutParameters getLayoutParameters(int displayType) {
-        switch (displayType) {
-            case LayoutParameters.HVGA_LANDSCAPE:
-                return new HVGALayoutParameters(mContext, LayoutParameters.HVGA_LANDSCAPE);
-            case LayoutParameters.HVGA_PORTRAIT:
-                return new HVGALayoutParameters(mContext, LayoutParameters.HVGA_PORTRAIT);
-        }
-
-        throw new IllegalArgumentException(
-                "Unsupported display type: " + displayType);
     }
 
     public static void init(Context context) {
@@ -77,6 +51,30 @@ public class LayoutManager {
             throw new IllegalStateException("Uninitialized.");
         }
         return sInstance;
+    }
+
+    private void initLayoutParameters(Configuration configuration) {
+        mLayoutParams = getLayoutParameters(
+                configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+                        ? LayoutParameters.HVGA_PORTRAIT
+                        : LayoutParameters.HVGA_LANDSCAPE);
+
+        if (LOCAL_LOGV) {
+            Timber.v("LayoutParameters: " + mLayoutParams.getTypeDescription()
+                    + ": " + mLayoutParams.getWidth() + "x" + mLayoutParams.getHeight());
+        }
+    }
+
+    private LayoutParameters getLayoutParameters(int displayType) {
+        switch (displayType) {
+            case LayoutParameters.HVGA_LANDSCAPE:
+                return new HVGALayoutParameters(mContext, LayoutParameters.HVGA_LANDSCAPE);
+            case LayoutParameters.HVGA_PORTRAIT:
+                return new HVGALayoutParameters(mContext, LayoutParameters.HVGA_PORTRAIT);
+        }
+
+        throw new IllegalArgumentException(
+                "Unsupported display type: " + displayType);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {

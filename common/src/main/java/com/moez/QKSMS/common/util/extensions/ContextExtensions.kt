@@ -39,7 +39,7 @@ fun Context.getColorCompat(colorRes: Int): Int {
 fun Context.getColorStateListCompat(colorStateListRes: Int): ColorStateList {
     //return black as a default color, in case an invalid color ID was passed in
     return tryOrNull { ContextCompat.getColorStateList(this, colorStateListRes) }
-            ?: ColorStateList.valueOf(Color.BLACK)
+        ?: ColorStateList.valueOf(Color.BLACK)
 }
 
 /**

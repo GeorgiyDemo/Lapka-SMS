@@ -47,11 +47,15 @@ class ThemePickerController(
     val recipientId: Long = 0L
 ) : QkController<ThemePickerView, ThemePickerState, ThemePickerPresenter>(), ThemePickerView {
 
-    @Inject override lateinit var presenter: ThemePickerPresenter
+    @Inject
+    override lateinit var presenter: ThemePickerPresenter
 
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var themeAdapter: ThemeAdapter
-    @Inject lateinit var themePagerAdapter: ThemePagerAdapter
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var themeAdapter: ThemeAdapter
+    @Inject
+    lateinit var themePagerAdapter: ThemePagerAdapter
 
     private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
 
@@ -67,10 +71,10 @@ class ThemePickerController(
 
     init {
         appComponent
-                .themePickerBuilder()
-                .themePickerModule(ThemePickerModule(this))
-                .build()
-                .inject(this)
+            .themePickerBuilder()
+            .themePickerModule(ThemePickerModule(this))
+            .build()
+            .inject(this)
 
         layoutRes = R.layout.theme_picker_controller
     }
@@ -101,7 +105,8 @@ class ThemePickerController(
         super.onDetach(view)
 
         themedActivity?.supportActionBar?.let { toolbar ->
-            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 8.dpToPx(toolbar.themedContext).toFloat()).start()
+            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 8.dpToPx(toolbar.themedContext).toFloat())
+                .start()
         }
     }
 

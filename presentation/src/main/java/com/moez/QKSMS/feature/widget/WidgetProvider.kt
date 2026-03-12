@@ -41,8 +41,10 @@ import javax.inject.Inject
 
 class WidgetProvider : AppWidgetProvider() {
 
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var prefs: Preferences
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var prefs: Preferences
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
@@ -79,7 +81,12 @@ class WidgetProvider : AppWidgetProvider() {
     /**
      * Update widget when widget size changes
      */
-    override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
         updateWidget(context, appWidgetId, isSmallWidget(appWidgetManager, appWidgetId))
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
@@ -112,45 +119,72 @@ class WidgetProvider : AppWidgetProvider() {
         val night = prefs.night.get()
         val black = prefs.black.get()
 
-        remoteViews.setInt(R.id.background, "setColorFilter", context.getColorCompat(when {
-            night && black -> R.color.black
-            night && !black -> R.color.backgroundDark
-            else -> R.color.white
-        }))
+        remoteViews.setInt(
+            R.id.background, "setColorFilter", context.getColorCompat(
+                when {
+                    night && black -> R.color.black
+                    night && !black -> R.color.backgroundDark
+                    else -> R.color.white
+                }
+            )
+        )
 
-        remoteViews.setInt(R.id.toolbar, "setColorFilter", context.getColorCompat(when {
-            night && black -> R.color.black
-            night && !black -> R.color.backgroundDark
-            else -> R.color.backgroundLight
-        }))
+        remoteViews.setInt(
+            R.id.toolbar, "setColorFilter", context.getColorCompat(
+                when {
+                    night && black -> R.color.black
+                    night && !black -> R.color.backgroundDark
+                    else -> R.color.backgroundLight
+                }
+            )
+        )
 
-        remoteViews.setTextColor(R.id.title, context.getColorCompat(when (night) {
-            true -> R.color.textPrimaryDark
-            false -> R.color.textPrimary
-        }))
+        remoteViews.setTextColor(
+            R.id.title, context.getColorCompat(
+                when (night) {
+                    true -> R.color.textPrimaryDark
+                    false -> R.color.textPrimary
+                }
+            )
+        )
 
         remoteViews.setInt(R.id.compose, "setColorFilter", colors.theme().theme)
 
         // Set adapter for conversations
         val intent = Intent(context, WidgetService::class.java)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                .putExtra("small_widget", smallWidget)
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            .putExtra("small_widget", smallWidget)
         intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
         remoteViews.setRemoteAdapter(R.id.conversations, intent)
 
         // Main intent
         val mainIntent = Intent(context, MainActivity::class.java)
-        val mainPI = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val mainPI = PendingIntent.getActivity(
+            context,
+            0,
+            mainIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         remoteViews.setOnClickPendingIntent(R.id.title, mainPI)
 
         // Compose intent
         val composeIntent = Intent(context, ComposeActivity::class.java)
-        val composePI = PendingIntent.getActivity(context, 0, composeIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val composePI = PendingIntent.getActivity(
+            context,
+            0,
+            composeIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         remoteViews.setOnClickPendingIntent(R.id.compose, composePI)
 
         // Conversation intent
         val startActivityIntent = Intent(context, MainActivity::class.java)
-        val startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val startActivityPendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            startActivityIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
         remoteViews.setPendingIntentTemplate(R.id.conversations, startActivityPendingIntent)
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)

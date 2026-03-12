@@ -26,13 +26,12 @@ import java.io.RandomAccessFile;
 
 
 public class DrmConvertSession {
-    private DrmManagerClient mDrmClient;
-    private int mConvertSessionId;
-
     private static final int STATUS_UNKNOWN_ERROR = 491;
     private static final int STATUS_NOT_ACCEPTABLE = 406;
     private static final int STATUS_SUCCESS = 200;
     private static final int STATUS_FILE_ERROR = 492;
+    private DrmManagerClient mDrmClient;
+    private int mConvertSessionId;
 
     private DrmConvertSession(DrmManagerClient drmClient, int convertSessionId) {
         mDrmClient = drmClient;
@@ -42,7 +41,7 @@ public class DrmConvertSession {
     /**
      * Start of converting a file.
      *
-     * @param context The context of the application running the convert session.
+     * @param context  The context of the application running the convert session.
      * @param mimeType Mimetype of content that shall be converted.
      * @return A convert session or null in case an error occurs.
      */
@@ -73,15 +72,16 @@ public class DrmConvertSession {
             return new DrmConvertSession(drmClient, convertSessionId);
         }
     }
+
     /**
      * Convert a buffer of data to protected format.
      *
      * @param inBuffer Buffer filled with data to convert.
-     * @param size The number of bytes that shall be converted.
+     * @param size     The number of bytes that shall be converted.
      * @return A Buffer filled with converted data, if execution is ok, in all
-     *         other case null.
+     * other case null.
      */
-    public byte [] convert(byte[] inBuffer, int size) {
+    public byte[] convert(byte[] inBuffer, int size) {
         byte[] result = null;
         if (inBuffer != null) {
             DrmConvertedStatus convertedStatus = null;
@@ -117,10 +117,10 @@ public class DrmConvertSession {
      *
      * @param filename The filename of the converted file.
      * @return STATUS_SUCCESS if execution is ok.
-     *         STATUS_FILE_ERROR in case converted file can not
-     *         be accessed. STATUS_NOT_ACCEPTABLE if a problem
-     *         occurs when accessing drm framework.
-     *         STATUS_UNKNOWN_ERROR if a general error occurred.
+     * STATUS_FILE_ERROR in case converted file can not
+     * be accessed. STATUS_NOT_ACCEPTABLE if a problem
+     * occurs when accessing drm framework.
+     * STATUS_UNKNOWN_ERROR if a general error occurred.
      */
     public int close(String filename) {
         DrmConvertedStatus convertedStatus = null;

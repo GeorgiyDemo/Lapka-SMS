@@ -31,7 +31,8 @@ import javax.inject.Inject
 
 class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutView {
 
-    @Inject override lateinit var presenter: AboutPresenter
+    @Inject
+    override lateinit var presenter: AboutPresenter
 
     private val version: PreferenceView get() = containerView!!.findViewById(R.id.version)
     private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
@@ -53,10 +54,10 @@ class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutVi
     }
 
     override fun preferenceClicks(): Observable<PreferenceView> = (0 until preferences.childCount)
-            .map { index -> preferences.getChildAt(index) }
-            .mapNotNull { view -> view as? PreferenceView }
-            .map { preference -> preference.clicks().map { preference } }
-            .let { preferences -> Observable.merge(preferences) }
+        .map { index -> preferences.getChildAt(index) }
+        .mapNotNull { view -> view as? PreferenceView }
+        .map { preference -> preference.clicks().map { preference } }
+        .let { preferences -> Observable.merge(preferences) }
 
     override fun render(state: Unit) {
         // No special rendering required

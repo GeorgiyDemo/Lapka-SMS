@@ -16,9 +16,9 @@ class TextEncoder(
     private constructor() : this(
         listOf(PunctuationSubEncoder()),
         listOf(DateTimeSubEncoder()) +
-            WordsSubEncoderInstances.instances +
-            WordsSubEncoderInstances9.instances +
-            WordsSubEncoderInstances10.instances
+                WordsSubEncoderInstances.instances +
+                WordsSubEncoderInstances9.instances +
+                WordsSubEncoderInstances10.instances
     )
 
     companion object {

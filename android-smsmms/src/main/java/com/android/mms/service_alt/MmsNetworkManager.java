@@ -48,9 +48,10 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             httpKeepAlive ? Integer.parseInt(System.getProperty("http.maxConnections", "5")) : 0;
     private static final long httpKeepAliveDurationMs =
             Long.parseLong(System.getProperty("http.keepAliveDuration", "300000"));  // 5 minutes.
-
+    private static final InetAddress[] EMPTY_ADDRESS_ARRAY = new InetAddress[0];
     private final Context mContext;
-
+    // The SIM ID which we use to connect
+    private final int mSubId;
     // The requested MMS {@link android.net.Network} we are holding
     // We need this when we unbind from it. This is also used to indicate if the
     // MMS network is available.
@@ -62,18 +63,11 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
     private NetworkRequest mNetworkRequest;
     // The callback to register when we request MMS network
     private ConnectivityManager.NetworkCallback mNetworkCallback;
-
     private volatile ConnectivityManager mConnectivityManager;
-
     // The OkHttp's ConnectionPool used by the HTTP client associated with this network manager
     private ConnectionPool mConnectionPool;
-
     // The MMS HTTP client for this network
     private MmsHttpClient mMmsHttpClient;
-
-    // The SIM ID which we use to connect
-    private final int mSubId;
-
     private boolean permissionError = false;
 
     public MmsNetworkManager(Context context, int subId) {
@@ -240,8 +234,6 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
         mConnectionPool = null;
         mMmsHttpClient = null;
     }
-
-    private static final InetAddress[] EMPTY_ADDRESS_ARRAY = new InetAddress[0];
 
     @Override
     public InetAddress[] resolveInetAddresses(String host) throws UnknownHostException {

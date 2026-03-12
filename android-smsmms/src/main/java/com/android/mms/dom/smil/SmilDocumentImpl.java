@@ -32,15 +32,14 @@ import org.w3c.dom.smil.SMILLayoutElement;
 import org.w3c.dom.smil.TimeList;
 
 public class SmilDocumentImpl extends DocumentImpl implements SMILDocument, DocumentEvent {
+    public final static String SMIL_DOCUMENT_START_EVENT = "SmilDocumentStart";
+    public final static String SMIL_DOCUMENT_END_EVENT = "SimlDocumentEnd";
     /*
      * The sequential time container cannot be initialized here because the real container
      * is body, which hasn't been created yet. It will be initialized when the body has
      * already been created. Please see getBody().
      */
     ElementSequentialTimeContainer mSeqTimeContainer;
-
-    public final static String SMIL_DOCUMENT_START_EVENT = "SmilDocumentStart";
-    public final static String SMIL_DOCUMENT_END_EVENT = "SimlDocumentEnd";
 
     /*
      * Internal methods
@@ -73,32 +72,64 @@ public class SmilDocumentImpl extends DocumentImpl implements SMILDocument, Docu
         return mSeqTimeContainer.getBegin();
     }
 
+    public void setBegin(TimeList begin) throws DOMException {
+        mSeqTimeContainer.setBegin(begin);
+    }
+
     public float getDur() {
         return mSeqTimeContainer.getDur();
+    }
+
+    public void setDur(float dur) throws DOMException {
+        mSeqTimeContainer.setDur(dur);
     }
 
     public TimeList getEnd() {
         return mSeqTimeContainer.getEnd();
     }
 
+    public void setEnd(TimeList end) throws DOMException {
+        mSeqTimeContainer.setEnd(end);
+    }
+
     public short getFill() {
         return mSeqTimeContainer.getFill();
+    }
+
+    public void setFill(short fill) throws DOMException {
+        mSeqTimeContainer.setFill(fill);
     }
 
     public short getFillDefault() {
         return mSeqTimeContainer.getFillDefault();
     }
 
+    public void setFillDefault(short fillDefault) throws DOMException {
+        mSeqTimeContainer.setFillDefault(fillDefault);
+    }
+
     public float getRepeatCount() {
         return mSeqTimeContainer.getRepeatCount();
+    }
+
+    public void setRepeatCount(float repeatCount) throws DOMException {
+        mSeqTimeContainer.setRepeatCount(repeatCount);
     }
 
     public float getRepeatDur() {
         return mSeqTimeContainer.getRepeatDur();
     }
 
+    public void setRepeatDur(float repeatDur) throws DOMException {
+        mSeqTimeContainer.setRepeatDur(repeatDur);
+    }
+
     public short getRestart() {
         return mSeqTimeContainer.getRestart();
+    }
+
+    public void setRestart(short restart) throws DOMException {
+        mSeqTimeContainer.setRestart(restart);
     }
 
     public void pauseElement() {
@@ -111,38 +142,6 @@ public class SmilDocumentImpl extends DocumentImpl implements SMILDocument, Docu
 
     public void seekElement(float seekTo) {
         mSeqTimeContainer.seekElement(seekTo);
-    }
-
-    public void setBegin(TimeList begin) throws DOMException {
-        mSeqTimeContainer.setBegin(begin);
-    }
-
-    public void setDur(float dur) throws DOMException {
-        mSeqTimeContainer.setDur(dur);
-    }
-
-    public void setEnd(TimeList end) throws DOMException {
-        mSeqTimeContainer.setEnd(end);
-    }
-
-    public void setFill(short fill) throws DOMException {
-        mSeqTimeContainer.setFill(fill);
-    }
-
-    public void setFillDefault(short fillDefault) throws DOMException {
-        mSeqTimeContainer.setFillDefault(fillDefault);
-    }
-
-    public void setRepeatCount(float repeatCount) throws DOMException {
-        mSeqTimeContainer.setRepeatCount(repeatCount);
-    }
-
-    public void setRepeatDur(float repeatDur) throws DOMException {
-        mSeqTimeContainer.setRepeatDur(repeatDur);
-    }
-
-    public void setRestart(short restart) throws DOMException {
-        mSeqTimeContainer.setRestart(restart);
     }
 
     /*
@@ -285,7 +284,7 @@ public class SmilDocumentImpl extends DocumentImpl implements SMILDocument, Docu
             return new EventImpl();
         } else {
             throw new DOMException(DOMException.NOT_SUPPORTED_ERR,
-                       "Not supported interface");
+                    "Not supported interface");
         }
     }
 }

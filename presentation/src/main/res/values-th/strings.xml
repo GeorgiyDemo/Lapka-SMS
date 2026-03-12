@@ -31,7 +31,8 @@
     <string name="setup_next">ทำต่อ</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">โทร</string>
-    <string name="menu_info">รายละเอียด</string>    <string name="menu_share">Share</string>
+    <string name="menu_info">รายละเอียด</string>
+    <string name="menu_share">Share</string>
     <string name="main_drawer_open_cd">เปิดเมนูลัด</string>
     <string name="main_title_selected">%d ถูกเลือก</string>
     <string name="main_menu_clear">ลบออก</string>
@@ -124,7 +125,9 @@
     <string name="info_unarchive">ยกเลิกการเก็บ</string>
     <string name="info_block">ปิดกั้น</string>
     <string name="info_unblock">ยกเลิกการปิดกั้น</string>
-    <string name="info_delete">ลบการสนทนา</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
+    <string name="info_delete">ลบการสนทนา
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
     <string name="settings_category_general">ทั่วไป</string>
     <string name="settings_category_qkreply">QK ตอบกลับ</string>
     <string name="settings_theme_title">รูปแบบการแสดงผล</string>
@@ -175,14 +178,16 @@
     <string name="settings_mobile_title">Mobile numbers only</string>
     <string name="settings_mobile_summary">When composing a message, only show mobile numbers</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
     <string name="settings_auto_delete_warning_message">If you proceed, %1$d messages will be deleted now</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">ซิงค์ข้อความ</string>
+    </plurals>
+    <string name="settings_sync_title">ซิงค์ข้อความ</string>
     <string name="settings_sync_summary">ซิงค์ข้อความของคุณกับฐานข้อมูลของ Android SMS</string>
     <string name="settings_about_title">เกี่ยวกับ QKSMS</string>
     <string name="settings_version">เวอร์ชัน: %s %s %s</string>
@@ -196,9 +201,14 @@
     <string name="blocking_manager_title">Blocking Manager</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
-    <string name="blocking_manager_sia_summary">กรองข้อความจากหมายเลขที่ไม่พึงประสงค์ โดยใช้แอพควรตอบกลับหรือไม่</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient
+        place! Community IQ™ allows you to prevent unwanted messages from community known spammers
+    </string>
+    <string name="blocking_manager_sia_summary">กรองข้อความจากหมายเลขที่ไม่พึงประสงค์ โดยใช้แอพควรตอบกลับหรือไม่
+    </string>
     <string name="blocking_manager_copy_title">Copy blocked numbers</string>
     <string name="blocking_manager_copy_summary">Continue to %s and copy over your existing blocked numbers</string>
     <string name="blocked_numbers_title">Blocked numbers</string>
@@ -234,7 +244,9 @@
     <string name="qksms_plus_thanks_title">ขอบคุณสำหรับการสนับสนุน QKSMS</string>
     <string name="qksms_plus_thanks_summary">ตอนนี้คุณสามารถเข้าถึงคุณสมบัติทั้งหมดของ QKSMS+ ได้แล้ว</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ เป็นบริการฟรีสำหรับผู้ใช้งาน F-Droid หากคุณต้องการสนับสนุนการพัฒนา สามารถบริจาคได้</string>
+    <string name="qksms_plus_free_title">QKSMS+ เป็นบริการฟรีสำหรับผู้ใช้งาน F-Droid หากคุณต้องการสนับสนุนการพัฒนา
+        สามารถบริจาคได้
+    </string>
     <string name="qksms_plus_donate">บริจาคผ่าน PayPal</string>
     <string name="qksms_plus_coming_soon">เร็วๆ นี้</string>
     <string name="qksms_plus_themes_title">รูปแบบพรีเมี่ยม</string>
@@ -252,7 +264,9 @@
     <string name="qksms_plus_respond_title">ตอบกลับอัตโนมัติ</string>
     <string name="qksms_plus_respond_summary">ตอบกลับข้อความที่เข้ามาอัตโนมัติ โดยใช้ข้อความที่จัดเตรียมไว้</string>
     <string name="qksms_plus_more_title">เพิ่มเติม</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future QKSMS+ features!</string>
+    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future
+        QKSMS+ features!
+    </string>
     <string name="widget_loading">กำลังโหลด&#8230;</string>
     <string name="widget_more">ดูการสนทนาเพิ่มเติม</string>
     <string name="qkreply_menu_read">Mark read</string>
@@ -312,7 +326,8 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>ตกลง</item>
         <item>ให้เวลาฉันสักครู่</item>
         <item>ตามใจฉัน</item>

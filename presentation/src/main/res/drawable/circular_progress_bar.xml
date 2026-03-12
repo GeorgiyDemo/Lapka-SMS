@@ -18,21 +18,21 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fromDegrees="270"
-    android:toDegrees="270">
+        android:fromDegrees="270"
+        android:toDegrees="270">
 
     <shape
-        android:innerRadius="16dp"
-        android:shape="ring"
-        android:thickness="2dp"
-        android:useLevel="true">
+            android:innerRadius="16dp"
+            android:shape="ring"
+            android:thickness="2dp"
+            android:useLevel="true">
 
         <gradient
-            android:angle="0"
-            android:endColor="@color/white"
-            android:startColor="@color/white"
-            android:type="sweep"
-            android:useLevel="false" />
+                android:angle="0"
+                android:endColor="@color/white"
+                android:startColor="@color/white"
+                android:type="sweep"
+                android:useLevel="false"/>
 
     </shape>
 

@@ -38,9 +38,9 @@ class RatingManagerImpl @Inject constructor(
     private val dismissed = rxPrefs.getBoolean("dismissed", false)
 
     override val shouldShowRating = Observables.combineLatest(
-            sessions.asObservable(),
-            rated.asObservable(),
-            dismissed.asObservable()
+        sessions.asObservable(),
+        rated.asObservable(),
+        dismissed.asObservable()
     ) { sessions, rated, dismissed ->
         sessions > RATING_THRESHOLD && !rated && !dismissed
     }

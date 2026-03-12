@@ -39,7 +39,8 @@ class RadioPreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
 
-    @Inject lateinit var colors: Colors
+    @Inject
+    lateinit var colors: Colors
 
 
     val radioButton: RadioButton by lazy { findViewById(R.id.radioButton) }
@@ -86,8 +87,9 @@ class RadioPreferenceView @JvmOverloads constructor(
         setBackgroundResource(context.resolveThemeAttribute(R.attr.selectableItemBackground))
 
         val states = arrayOf(
-                intArrayOf(android.R.attr.state_checked),
-                intArrayOf(-android.R.attr.state_checked))
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked)
+        )
 
         val themeColor = when (isInEditMode) {
             true -> androidx.core.content.ContextCompat.getColor(context, R.color.tools_theme)

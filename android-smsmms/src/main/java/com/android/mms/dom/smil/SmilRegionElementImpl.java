@@ -69,6 +69,17 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
         }
     }
 
+    public void setFit(String fit) throws DOMException {
+        if (fit.equalsIgnoreCase(FILL_ATTRIBUTE)
+                || fit.equalsIgnoreCase(MEET_ATTRIBUTE)
+                || fit.equalsIgnoreCase(SCROLL_ATTRIBUTE)
+                || fit.equalsIgnoreCase(SLICE_ATTRIBUTE)) {
+            this.setAttribute(FIT_ATTRIBUTE_NAME, fit.toLowerCase());
+        } else {
+            this.setAttribute(FIT_ATTRIBUTE_NAME, HIDDEN_ATTRIBUTE);
+        }
+    }
+
     public int getLeft() {
         try {
             return parseRegionLength(getAttribute(LEFT_ATTRIBUTE_NAME), true);
@@ -88,6 +99,10 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
             }
         }
         return 0;
+    }
+
+    public void setLeft(int left) throws DOMException {
+        this.setAttribute(LEFT_ATTRIBUTE_NAME, String.valueOf(left));
     }
 
     public int getTop() {
@@ -111,31 +126,16 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
         return 0;
     }
 
+    public void setTop(int top) throws DOMException {
+        this.setAttribute(TOP_ATTRIBUTE_NAME, String.valueOf(top));
+    }
+
     public int getZIndex() {
         try {
             return Integer.parseInt(this.getAttribute(Z_INDEX_ATTRIBUTE_NAME));
         } catch (NumberFormatException e) {
             return 0;
         }
-    }
-
-    public void setFit(String fit) throws DOMException {
-        if (fit.equalsIgnoreCase(FILL_ATTRIBUTE)
-                || fit.equalsIgnoreCase(MEET_ATTRIBUTE)
-                || fit.equalsIgnoreCase(SCROLL_ATTRIBUTE)
-                || fit.equalsIgnoreCase(SLICE_ATTRIBUTE)) {
-            this.setAttribute(FIT_ATTRIBUTE_NAME, fit.toLowerCase());
-        } else {
-            this.setAttribute(FIT_ATTRIBUTE_NAME, HIDDEN_ATTRIBUTE);
-        }
-    }
-
-    public void setLeft(int left) throws DOMException {
-        this.setAttribute(LEFT_ATTRIBUTE_NAME, String.valueOf(left));
-    }
-
-    public void setTop(int top) throws DOMException {
-        this.setAttribute(TOP_ATTRIBUTE_NAME, String.valueOf(top));
     }
 
     public void setZIndex(int zIndex) throws DOMException {
@@ -150,12 +150,16 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
         return this.getAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME);
     }
 
+    public void setBackgroundColor(String backgroundColor) throws DOMException {
+        this.setAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME, backgroundColor);
+    }
+
     public int getHeight() {
         try {
             final int height = parseRegionLength(getAttribute(HEIGHT_ATTRIBUTE_NAME), false);
             return height == 0 ?
                     ((SMILDocument) getOwnerDocument()).getLayout().getRootLayout().getHeight() :
-                        height;
+                    height;
         } catch (NumberFormatException e) {
             if (LOCAL_LOGV) {
                 Timber.v("Height attribute is not set or incorrect.");
@@ -179,8 +183,16 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
         return bbh;
     }
 
+    public void setHeight(int height) throws DOMException {
+        this.setAttribute(HEIGHT_ATTRIBUTE_NAME, String.valueOf(height) + "px");
+    }
+
     public String getTitle() {
         return this.getAttribute(TITLE_ATTRIBUTE_NAME);
+    }
+
+    public void setTitle(String title) throws DOMException {
+        this.setAttribute(TITLE_ATTRIBUTE_NAME, title);
     }
 
     public int getWidth() {
@@ -188,7 +200,7 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
             final int width = parseRegionLength(getAttribute(WIDTH_ATTRIBUTE_NAME), true);
             return width == 0 ?
                     ((SMILDocument) getOwnerDocument()).getLayout().getRootLayout().getWidth() :
-                        width;
+                    width;
         } catch (NumberFormatException e) {
             if (LOCAL_LOGV) {
                 Timber.v("Width attribute is not set or incorrect.");
@@ -210,18 +222,6 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
             }
         }
         return bbw;
-    }
-
-    public void setBackgroundColor(String backgroundColor) throws DOMException {
-        this.setAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME, backgroundColor);
-    }
-
-    public void setHeight(int height) throws DOMException {
-        this.setAttribute(HEIGHT_ATTRIBUTE_NAME, String.valueOf(height) + "px");
-    }
-
-    public void setTitle(String title) throws DOMException {
-        this.setAttribute(TITLE_ATTRIBUTE_NAME, title);
     }
 
     public void setWidth(int width) throws DOMException {
@@ -251,7 +251,7 @@ public class SmilRegionElementImpl extends SmilElementImpl implements
             length = length.substring(0, length.indexOf("px"));
             return Integer.parseInt(length);
         } else if (length.endsWith("%")) {
-            double value = 0.01*Integer.parseInt(length.substring(0, length.length() - 1));
+            double value = 0.01 * Integer.parseInt(length.substring(0, length.length() - 1));
             if (horizontal) {
                 value *= ((SMILDocument) getOwnerDocument()).getLayout().getRootLayout().getWidth();
             } else {

@@ -64,11 +64,16 @@ import javax.inject.Inject
  */
 abstract class QkThemedActivity : QkActivity() {
 
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var conversationRepo: ConversationRepository
-    @Inject lateinit var messageRepo: MessageRepository
-    @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
-    @Inject lateinit var prefs: Preferences
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var conversationRepo: ConversationRepository
+    @Inject
+    lateinit var messageRepo: MessageRepository
+    @Inject
+    lateinit var phoneNumberUtils: PhoneNumberUtils
+    @Inject
+    lateinit var prefs: Preferences
 
     /**
      * In case the activity should be themed for a specific conversation, the selected conversation
@@ -81,29 +86,29 @@ abstract class QkThemedActivity : QkActivity() {
      * Set it based on the latest message in the conversation
      */
     val theme: Observable<Colors.Theme> = threadId
-            .distinctUntilChanged()
-            .switchMap { threadId ->
-                val conversation = conversationRepo.getConversation(threadId)
-                when {
-                    conversation == null -> Observable.just(Optional(null))
+        .distinctUntilChanged()
+        .switchMap { threadId ->
+            val conversation = conversationRepo.getConversation(threadId)
+            when {
+                conversation == null -> Observable.just(Optional(null))
 
-                    conversation.recipients.size == 1 -> Observable.just(Optional(conversation.recipients.first()))
+                conversation.recipients.size == 1 -> Observable.just(Optional(conversation.recipients.first()))
 
-                    else -> messageRepo.getLastIncomingMessage(conversation.id)
-                            .asObservable()
-                            .mapNotNull { messages -> messages.firstOrNull() }
-                            .distinctUntilChanged { message -> message.address }
-                            .mapNotNull { message ->
-                                conversation.recipients.find { recipient ->
-                                    phoneNumberUtils.compare(recipient.address, message.address)
-                                }
-                            }
-                            .map { recipient -> Optional(recipient) }
-                            .startWith(Optional(conversation.recipients.firstOrNull()))
-                            .distinctUntilChanged()
-                }
+                else -> messageRepo.getLastIncomingMessage(conversation.id)
+                    .asObservable()
+                    .mapNotNull { messages -> messages.firstOrNull() }
+                    .distinctUntilChanged { message -> message.address }
+                    .mapNotNull { message ->
+                        conversation.recipients.find { recipient ->
+                            phoneNumberUtils.compare(recipient.address, message.address)
+                        }
+                    }
+                    .map { recipient -> Optional(recipient) }
+                    .startWith(Optional(conversation.recipients.firstOrNull()))
+                    .distinctUntilChanged()
             }
-            .switchMap { colors.themeObservable(it.value) }
+        }
+        .switchMap { colors.themeObservable(it.value) }
 
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,12 +124,13 @@ abstract class QkThemedActivity : QkActivity() {
         window.reenterTransition = Slide(Gravity.START).apply { duration = 250 }
 
         // When certain preferences change, we need to recreate the activity
-        val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont, prefs.theme())
+        val triggers =
+            listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont, prefs.theme())
         Observable.merge(triggers.map { it.asObservable().skip(1) })
-                .debounce(400, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(scope())
-                .subscribe { recreate() }
+            .debounce(400, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(scope())
+            .subscribe { recreate() }
 
         // Set the color for the recent apps title
         val toolbarColor = resolveThemeColor(android.R.attr.windowBackground)
@@ -200,7 +206,8 @@ abstract class QkThemedActivity : QkActivity() {
 
         // Set the color for the overflow and navigation icon
         val textSecondary = resolveThemeColor(android.R.attr.textColorSecondary)
-        findViewById<Toolbar>(R.id.toolbar)?.overflowIcon = findViewById<Toolbar>(R.id.toolbar)?.overflowIcon?.apply { setTint(textSecondary) }
+        findViewById<Toolbar>(R.id.toolbar)?.overflowIcon =
+            findViewById<Toolbar>(R.id.toolbar)?.overflowIcon?.apply { setTint(textSecondary) }
 
         // Update the colours of the menu items
         Observables.combineLatest(menu, theme) { menu, theme ->

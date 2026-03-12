@@ -28,10 +28,10 @@ class RetrySending @Inject constructor(private val messageRepo: MessageRepositor
 
     override fun buildObservable(params: Long): Flowable<Message> {
         return Flowable.just(params)
-                .doOnNext(messageRepo::markSending)
-                .mapNotNull(messageRepo::getMessage)
-                .filter { message -> message.isSms() }
-                .doOnNext { message -> messageRepo.sendSms(message) }
+            .doOnNext(messageRepo::markSending)
+            .mapNotNull(messageRepo::getMessage)
+            .filter { message -> message.isSms() }
+            .doOnNext { message -> messageRepo.sendSms(message) }
     }
 
 }

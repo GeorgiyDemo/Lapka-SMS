@@ -57,13 +57,20 @@ class KeySettingsController(
         const val EncryptionKeyKey = "encryption_key"
     }
 
-    @Inject lateinit var prefs: Preferences
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var context: Context
-    @Inject lateinit var qrCodeWriter: QRCodeWriter
-    @Inject lateinit var compatibilityModeDialog: QkDialog
-    @Inject lateinit var textViewStyler: TextViewStyler
-    @Inject override lateinit var presenter: KeySettingsPresenter
+    @Inject
+    lateinit var prefs: Preferences
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var context: Context
+    @Inject
+    lateinit var qrCodeWriter: QRCodeWriter
+    @Inject
+    lateinit var compatibilityModeDialog: QkDialog
+    @Inject
+    lateinit var textViewStyler: TextViewStyler
+    @Inject
+    override lateinit var presenter: KeySettingsPresenter
 
     override val keyResetConfirmed: Subject<Unit> = PublishSubject.create()
     override val keyDisableConfirmed: Subject<Unit> = PublishSubject.create()
@@ -163,7 +170,7 @@ class KeySettingsController(
                 || state.isConversation && prefs.globalEncryptionKey.get().isNotBlank()
         if (state.isConversation) {
             val strings = context.resources.getStringArray(R.array.compatibility_mode_settings_conversation)
-            val selectedItem = when(state.legacyEncryptionEnabled) {
+            val selectedItem = when (state.legacyEncryptionEnabled) {
                 null -> 0
                 false -> 1
                 true -> 2
@@ -221,7 +228,7 @@ class KeySettingsController(
         val bitmap = Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.RGB_565)
         for (i in 0 until matrix.width)
             for (j in 0 until matrix.height) {
-                bitmap.setPixel(i,j, if(matrix[i,j]) Color.BLACK else Color.WHITE)
+                bitmap.setPixel(i, j, if (matrix[i, j]) Color.BLACK else Color.WHITE)
             }
         qrCodeImage.setImageBitmap(bitmap)
     }
@@ -238,7 +245,9 @@ class KeySettingsController(
 
     override fun onViewCreated() {
         super.onViewCreated()
-        preferences.postDelayed( { containerView?.findViewById<LinearLayout>(R.id.preferences)?.animateLayoutChanges = true }, 100)
+        preferences.postDelayed({
+            containerView?.findViewById<LinearLayout>(R.id.preferences)?.animateLayoutChanges = true
+        }, 100)
 
         keyField.addTextChangedListener(keyTextWatcher)
         copyKey.setOnClickListener { copyKey() }
@@ -276,7 +285,7 @@ class KeySettingsController(
 
     override fun copyKey() {
         keyField.apply {
-            if(copyToClipboard()) {
+            if (copyToClipboard()) {
                 selectAll()
                 Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
             }
@@ -310,17 +319,24 @@ class KeySettingsController(
         val text = context.getText(R.string.settings_bad_key)
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
+
     override fun keyChanged(): Observable<String> = keyTextWatcher.keyChanged
 
     private fun EditText.copyToClipboard(): Boolean {
         val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
         return if (text.isNotBlank() && clipboard != null) {
-            clipboard.setPrimaryClip(ClipData.newPlainText(resources.getString(R.string.conversation_encryption_key_title), text))
+            clipboard.setPrimaryClip(
+                ClipData.newPlainText(
+                    resources.getString(R.string.conversation_encryption_key_title),
+                    text
+                )
+            )
             // Auto-clear clipboard after 30 seconds for security
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                 try {
                     clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                }
             }, 30_000)
             true
         } else false

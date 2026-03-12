@@ -34,68 +34,67 @@ public class SmilParElementImpl extends SmilElementImpl implements SMILParElemen
     public final static String SMIL_SLIDE_END_EVENT = "SmilSlideEnd";
 
     ElementParallelTimeContainer mParTimeContainer =
-        new ElementParallelTimeContainerImpl(this) {
-        @Override
-        public TimeList getBegin() {
-            /*
-             * For children of a sequence, the only legal value for begin is
-             * a (single) non-negative offset value.
-             */
-            TimeList beginTimeList = super.getBegin();
-            if (beginTimeList.getLength() > 1) {
-                ArrayList<Time> singleTimeContainer = new ArrayList<Time>();
-                singleTimeContainer.add(beginTimeList.item(0));
-                beginTimeList = new TimeListImpl(singleTimeContainer);
-            }
-            return beginTimeList;
-        }
+            new ElementParallelTimeContainerImpl(this) {
+                @Override
+                public TimeList getBegin() {
+                    /*
+                     * For children of a sequence, the only legal value for begin is
+                     * a (single) non-negative offset value.
+                     */
+                    TimeList beginTimeList = super.getBegin();
+                    if (beginTimeList.getLength() > 1) {
+                        ArrayList<Time> singleTimeContainer = new ArrayList<Time>();
+                        singleTimeContainer.add(beginTimeList.item(0));
+                        beginTimeList = new TimeListImpl(singleTimeContainer);
+                    }
+                    return beginTimeList;
+                }
 
-        public NodeList getTimeChildren() {
-            return getChildNodes();
-        }
+                public NodeList getTimeChildren() {
+                    return getChildNodes();
+                }
 
-        public boolean beginElement() {
-            DocumentEvent doc = (DocumentEvent) SmilParElementImpl.this.getOwnerDocument();
-            Event startEvent = doc.createEvent("Event");
-            startEvent.initEvent(SMIL_SLIDE_START_EVENT, false, false);
-            dispatchEvent(startEvent);
-            return true;
-        }
+                public boolean beginElement() {
+                    DocumentEvent doc = (DocumentEvent) SmilParElementImpl.this.getOwnerDocument();
+                    Event startEvent = doc.createEvent("Event");
+                    startEvent.initEvent(SMIL_SLIDE_START_EVENT, false, false);
+                    dispatchEvent(startEvent);
+                    return true;
+                }
 
-        public boolean endElement() {
-            DocumentEvent doc = (DocumentEvent) SmilParElementImpl.this.getOwnerDocument();
-            Event endEvent = doc.createEvent("Event");
-            endEvent.initEvent(SMIL_SLIDE_END_EVENT, false, false);
-            dispatchEvent(endEvent);
-            return true;
-        }
+                public boolean endElement() {
+                    DocumentEvent doc = (DocumentEvent) SmilParElementImpl.this.getOwnerDocument();
+                    Event endEvent = doc.createEvent("Event");
+                    endEvent.initEvent(SMIL_SLIDE_END_EVENT, false, false);
+                    dispatchEvent(endEvent);
+                    return true;
+                }
 
-        public void pauseElement() {
-            // TODO Auto-generated method stub
+                public void pauseElement() {
+                    // TODO Auto-generated method stub
 
-        }
+                }
 
-        public void resumeElement() {
-            // TODO Auto-generated method stub
+                public void resumeElement() {
+                    // TODO Auto-generated method stub
 
-        }
+                }
 
-        public void seekElement(float seekTo) {
-            // TODO Auto-generated method stub
+                public void seekElement(float seekTo) {
+                    // TODO Auto-generated method stub
 
-        }
+                }
 
-        ElementTime getParentElementTime() {
-            return ((SmilDocumentImpl) mSmilElement.getOwnerDocument()).mSeqTimeContainer;
-        }
-    };
+                ElementTime getParentElementTime() {
+                    return ((SmilDocumentImpl) mSmilElement.getOwnerDocument()).mSeqTimeContainer;
+                }
+            };
 
     /*
      * Internal Interface
      */
 
-    SmilParElementImpl(SmilDocumentImpl owner, String tagName)
-    {
+    SmilParElementImpl(SmilDocumentImpl owner, String tagName) {
         super(owner, tagName.toUpperCase());
     }
 
@@ -115,12 +114,12 @@ public class SmilParElementImpl extends SmilElementImpl implements SMILParElemen
         return mParTimeContainer.getEndSync();
     }
 
-    public float getImplicitDuration() {
-        return mParTimeContainer.getImplicitDuration();
-    }
-
     public void setEndSync(String endSync) throws DOMException {
         mParTimeContainer.setEndSync(endSync);
+    }
+
+    public float getImplicitDuration() {
+        return mParTimeContainer.getImplicitDuration();
     }
 
     public NodeList getActiveChildrenAt(float instant) {
@@ -143,32 +142,64 @@ public class SmilParElementImpl extends SmilElementImpl implements SMILParElemen
         return mParTimeContainer.getBegin();
     }
 
+    public void setBegin(TimeList begin) throws DOMException {
+        mParTimeContainer.setBegin(begin);
+    }
+
     public float getDur() {
         return mParTimeContainer.getDur();
+    }
+
+    public void setDur(float dur) throws DOMException {
+        mParTimeContainer.setDur(dur);
     }
 
     public TimeList getEnd() {
         return mParTimeContainer.getEnd();
     }
 
+    public void setEnd(TimeList end) throws DOMException {
+        mParTimeContainer.setEnd(end);
+    }
+
     public short getFill() {
         return mParTimeContainer.getFill();
+    }
+
+    public void setFill(short fill) throws DOMException {
+        mParTimeContainer.setFill(fill);
     }
 
     public short getFillDefault() {
         return mParTimeContainer.getFillDefault();
     }
 
+    public void setFillDefault(short fillDefault) throws DOMException {
+        mParTimeContainer.setFillDefault(fillDefault);
+    }
+
     public float getRepeatCount() {
         return mParTimeContainer.getRepeatCount();
+    }
+
+    public void setRepeatCount(float repeatCount) throws DOMException {
+        mParTimeContainer.setRepeatCount(repeatCount);
     }
 
     public float getRepeatDur() {
         return mParTimeContainer.getRepeatDur();
     }
 
+    public void setRepeatDur(float repeatDur) throws DOMException {
+        mParTimeContainer.setRepeatDur(repeatDur);
+    }
+
     public short getRestart() {
         return mParTimeContainer.getRestart();
+    }
+
+    public void setRestart(short restart) throws DOMException {
+        mParTimeContainer.setRestart(restart);
     }
 
     public void pauseElement() {
@@ -181,37 +212,5 @@ public class SmilParElementImpl extends SmilElementImpl implements SMILParElemen
 
     public void seekElement(float seekTo) {
         mParTimeContainer.seekElement(seekTo);
-    }
-
-    public void setBegin(TimeList begin) throws DOMException {
-        mParTimeContainer.setBegin(begin);
-    }
-
-    public void setDur(float dur) throws DOMException {
-        mParTimeContainer.setDur(dur);
-    }
-
-    public void setEnd(TimeList end) throws DOMException {
-        mParTimeContainer.setEnd(end);
-    }
-
-    public void setFill(short fill) throws DOMException {
-        mParTimeContainer.setFill(fill);
-    }
-
-    public void setFillDefault(short fillDefault) throws DOMException {
-        mParTimeContainer.setFillDefault(fillDefault);
-    }
-
-    public void setRepeatCount(float repeatCount) throws DOMException {
-        mParTimeContainer.setRepeatCount(repeatCount);
-    }
-
-    public void setRepeatDur(float repeatDur) throws DOMException {
-        mParTimeContainer.setRepeatDur(repeatDur);
-    }
-
-    public void setRestart(short restart) throws DOMException {
-        mParTimeContainer.setRestart(restart);
     }
 }

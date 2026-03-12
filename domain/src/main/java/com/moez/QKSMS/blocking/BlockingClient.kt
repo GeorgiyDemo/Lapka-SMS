@@ -25,7 +25,7 @@ interface BlockingClient {
 
     enum class Capability {
         BLOCK_WITHOUT_PERMISSION,
-        BLOCK_WITH_PERMISSION ,
+        BLOCK_WITH_PERMISSION,
         CANT_BLOCK
     }
 

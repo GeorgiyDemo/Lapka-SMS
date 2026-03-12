@@ -35,8 +35,8 @@ class ContactsActivityModule {
     @Provides
     fun provideChips(activity: ContactsActivity): HashMap<String, String?> {
         return activity.intent.extras?.getSerializable(ContactsActivity.ChipsKey)
-                ?.let { serializable -> serializable as? HashMap<String, String?> }
-                ?: hashMapOf()
+            ?.let { serializable -> serializable as? HashMap<String, String?> }
+            ?: hashMapOf()
     }
 
     @Provides

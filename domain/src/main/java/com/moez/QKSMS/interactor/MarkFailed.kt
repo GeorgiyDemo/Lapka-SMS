@@ -32,8 +32,8 @@ class MarkFailed @Inject constructor(
 
     override fun buildObservable(params: Params): Flowable<Unit> {
         return Flowable.just(Unit)
-                .doOnNext { messageRepo.markFailed(params.id, params.resultCode) }
-                .doOnNext { notificationManager.notifyFailed(params.id) }
+            .doOnNext { messageRepo.markFailed(params.id, params.resultCode) }
+            .doOnNext { notificationManager.notifyFailed(params.id) }
     }
 
 }

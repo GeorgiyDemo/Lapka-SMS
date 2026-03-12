@@ -23,10 +23,14 @@ import timber.log.Timber;
 public class DownloadDrmHelper {
 
 
-    /** The MIME type of special DRM files */
+    /**
+     * The MIME type of special DRM files
+     */
     public static final String MIMETYPE_DRM_MESSAGE = "application/vnd.oma.drm.message";
 
-    /** The extensions of special DRM files */
+    /**
+     * The extensions of special DRM files
+     */
     public static final String EXTENSION_DRM_MESSAGE = ".dm";
 
     public static final String EXTENSION_INTERNAL_FWDL = ".fl";
@@ -83,12 +87,12 @@ public class DownloadDrmHelper {
     /**
      * Gets the original mime type of DRM protected content.
      *
-     * @param context The context
-     * @param path Path to the file
+     * @param context        The context
+     * @param path           Path to the file
      * @param containingMime The current mime type of of the file i.e. the
-     *            containing mime type
+     *                       containing mime type
      * @return The original mime type of the file if DRM protected else the
-     *         currentMime
+     * currentMime
      */
     public static String getOriginalMimeType(Context context, String path, String containingMime) {
         String result = containingMime;

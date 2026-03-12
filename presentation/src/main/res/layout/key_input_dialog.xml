@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              xmlns:tools="http://schemas.android.com/tools"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:orientation="vertical">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/btnGenerateKey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_sync_black_24dp"
-            android:contentDescription="@string/button_generate"
-            android:tint="?android:attr/textColorPrimary"/>
+                android:id="@+id/btnGenerateKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sync_black_24dp"
+                android:contentDescription="@string/button_generate"
+                android:tint="?android:attr/textColorPrimary"/>
 
         <com.moez.QKSMS.common.widget.QkEditText
-            android:id="@+id/field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:maxLength="64"
-            android:padding="24dp"
-            android:singleLine="false"
-            android:textStyle="bold"
-            app:textSize="dialog"
-            tools:hint="Enter something" />
+                android:id="@+id/field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:maxLength="64"
+                android:padding="24dp"
+                android:singleLine="false"
+                android:textStyle="bold"
+                app:textSize="dialog"
+                tools:hint="Enter something"/>
 
         <ImageButton
-            android:id="@+id/btnCopyKey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_copy_24dp"
-            android:contentDescription="@string/copy"
-            android:tint="?android:attr/textColorPrimary"/>
+                android:id="@+id/btnCopyKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_copy_24dp"
+                android:contentDescription="@string/copy"
+                android:tint="?android:attr/textColorPrimary"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.moez.QKSMS.common.widget.QkTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/key_description"
-        android:textColor="?android:attr/textColorPrimary"
-        app:textSize="dialog" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/key_description"
+            android:textColor="?android:attr/textColorPrimary"
+            app:textSize="dialog"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

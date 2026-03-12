@@ -39,11 +39,15 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
-class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState, SwipeActionsPresenter>(), SwipeActionsView {
+class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState, SwipeActionsPresenter>(),
+    SwipeActionsView {
 
-    @Inject override lateinit var presenter: SwipeActionsPresenter
-    @Inject lateinit var actionsDialog: QkDialog
-    @Inject lateinit var colors: Colors
+    @Inject
+    override lateinit var presenter: SwipeActionsPresenter
+    @Inject
+    lateinit var actionsDialog: QkDialog
+    @Inject
+    lateinit var colors: Colors
 
     /**
      * Allows us to subscribe to [actionClicks] more than once
@@ -72,14 +76,17 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
             leftIcon.setTint(theme.textPrimary)
         }
 
-        right.postDelayed({ containerView?.findViewById<ConstraintLayout>(R.id.right)?.animateLayoutChanges = true }, 100)
+        right.postDelayed(
+            { containerView?.findViewById<ConstraintLayout>(R.id.right)?.animateLayoutChanges = true },
+            100
+        )
         left.postDelayed({ containerView?.findViewById<ConstraintLayout>(R.id.left)?.animateLayoutChanges = true }, 100)
 
         Observable.merge(
-                right.clicks().map { SwipeActionsView.Action.RIGHT },
-                left.clicks().map { SwipeActionsView.Action.LEFT })
-                .autoDisposable(scope())
-                .subscribe(actionClicks)
+            right.clicks().map { SwipeActionsView.Action.RIGHT },
+            left.clicks().map { SwipeActionsView.Action.LEFT })
+            .autoDisposable(scope())
+            .subscribe(actionClicks)
     }
 
     override fun onAttach(view: View) {

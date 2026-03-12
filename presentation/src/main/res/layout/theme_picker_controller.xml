@@ -18,50 +18,50 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="?android:attr/windowBackground"
-    android:orientation="vertical">
+              android:id="@+id/contentView"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:animateLayoutChanges="true"
+              android:background="?android:attr/windowBackground"
+              android:orientation="vertical">
 
     <com.moez.QKSMS.common.widget.PagerTitleView
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="?attr/colorPrimary"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp" />
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="?attr/colorPrimary"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/systemDefault"
-        style="@style/Widget.Material3.Button.TonalButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/theme_system_default" />
+            android:id="@+id/systemDefault"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/theme_system_default"/>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/materialColors"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/materialColors"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         <include
-            android:id="@+id/hsvPicker"
-            layout="@layout/theme_picker_hsv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/hsvPicker"
+                layout="@layout/theme_picker_hsv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
     </androidx.viewpager.widget.ViewPager>
 

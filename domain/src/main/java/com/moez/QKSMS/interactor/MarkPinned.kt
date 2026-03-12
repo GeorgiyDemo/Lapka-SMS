@@ -31,9 +31,9 @@ class MarkPinned @Inject constructor(
 
     override fun buildObservable(params: List<Long>): Flowable<*> {
         return Flowable.just(params.toLongArray())
-                .doOnNext { threadIds -> conversationRepo.markPinned(*threadIds) }
-                .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge and widget
+            .doOnNext { threadIds -> conversationRepo.markPinned(*threadIds) }
+            .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge and widget
     }
 
 }

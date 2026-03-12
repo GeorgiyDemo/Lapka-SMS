@@ -31,7 +31,8 @@
     <string name="setup_next">Fortsæt</string>
     <string name="menu_add_person">Tilføj person</string>
     <string name="menu_call">Opkald</string>
-    <string name="menu_info">Oplysninger</string>    <string name="menu_share">Del</string>
+    <string name="menu_info">Oplysninger</string>
+    <string name="menu_share">Del</string>
     <string name="main_drawer_open_cd">Åbn navigeringsskuffe</string>
     <string name="main_title_selected">%d valgt</string>
     <string name="main_menu_clear">Ryd</string>
@@ -125,7 +126,9 @@
     <string name="info_unarchive">Fjern fra arkiv</string>
     <string name="info_block">Blokér</string>
     <string name="info_unblock">Afblokér</string>
-    <string name="info_delete">Slet samtale</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Udseende</string>
+    <string name="info_delete">Slet samtale
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Udseende</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_qkreply">QK-svar</string>
     <string name="settings_theme_title">Tema</string>
@@ -184,7 +187,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Efter 1 dag</item>
         <item quantity="other">Efter %d dage</item>
-    </plurals><string name="settings_sync_title">Beskedsynkronisering</string>
+    </plurals>
+    <string name="settings_sync_title">Beskedsynkronisering</string>
     <string name="settings_sync_summary">Gen-synkroniéer beskeder med den indbyggede Android SMS-database</string>
     <string name="settings_about_title">Om QKSMS</string>
     <string name="settings_version">Version %s %s %s</string>
@@ -193,14 +197,21 @@
     <string name="settings_delay_duration_hint">Angiv varighed (sekunder)</string>
     <string name="blocking_title">Blokering</string>
     <string name="blocking_drop_title">Drop beskeder</string>
-    <string name="blocking_drop_summary">Drop indgående beskeder fra blokerede afsendere i stedet for at skjule dem</string>
+    <string name="blocking_drop_summary">Drop indgående beskeder fra blokerede afsendere i stedet for at skjule dem
+    </string>
     <string name="blocking_conversations">Blokerede samtaler</string>
     <string name="blocking_manager_title">Blokeringshåndtering</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Indbygget blokeringsfunktionalitet i QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Filtrér automatisk dine opkald og beskeder på ét praktisk sted! Community IQ ™ giver dig mulighed for at forhindre uønskede beskeder fra spammere kendt af fællesskabet</string>
-    <string name="blocking_manager_sia_summary">Filtrér automatisk beskeder fra uopfordrede numre vha. \"Bør jeg besvare\"-app\'en</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Filtrér automatisk dine opkald og beskeder på ét praktisk sted!
+        Community IQ ™ giver dig mulighed for at forhindre uønskede beskeder fra spammere kendt af fællesskabet
+    </string>
+    <string name="blocking_manager_sia_summary">Filtrér automatisk beskeder fra uopfordrede numre vha. \"Bør jeg
+        besvare\"-app\'en
+    </string>
     <string name="blocking_manager_copy_title">Kopiér blokerede numre</string>
     <string name="blocking_manager_copy_summary">Fortsæt til %s og kopiér dine blokerede nummer dertil</string>
     <string name="blocked_numbers_title">Blokerede numre</string>
@@ -238,11 +249,15 @@
     <string name="qksms_plus_thanks_title">Tak for din støtte til QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Du har nu adgang til alle QKSMS+-funktioner</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brugere! Ønsker du at støtte udviklingen, er du velkommen til at donere.</string>
+    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brugere! Ønsker du at støtte udviklingen, er du
+        velkommen til at donere.
+    </string>
     <string name="qksms_plus_donate">Donér via PayPal</string>
     <string name="qksms_plus_coming_soon">Kommer snart</string>
     <string name="qksms_plus_themes_title">Premium-temaer</string>
-    <string name="qksms_plus_themes_summary">Oplås smukke temafarver, som ikke er tilgængelig på Material Design-paletten</string>
+    <string name="qksms_plus_themes_summary">Oplås smukke temafarver, som ikke er tilgængelig på Material
+        Design-paletten
+    </string>
     <string name="qksms_plus_emoji_title">Tilpasset auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Opret tilpassede auto-emoji-genveje</string>
     <string name="qksms_plus_delayed_title">Forsinket afsendelse</string>
@@ -256,7 +271,9 @@
     <string name="qksms_plus_respond_title">Autosvar</string>
     <string name="qksms_plus_respond_summary">Besvarer automatisk indgående beskeder med et foruddefineret svar</string>
     <string name="qksms_plus_more_title">Flere</string>
-    <string name="qksms_plus_more_summary">QKSMS er under aktiv udvikling, og dit køb vil omfatte alle fremtidige QKSMS+ funktioner!</string>
+    <string name="qksms_plus_more_summary">QKSMS er under aktiv udvikling, og dit køb vil omfatte alle fremtidige QKSMS+
+        funktioner!
+    </string>
     <string name="widget_loading">Indlæser&#8230;</string>
     <string name="widget_more">Se flere samtaler</string>
     <string name="qkreply_menu_read">Markér som læst</string>
@@ -317,7 +334,8 @@
         <item>3 sekunder</item>
         <item>5 sekunder</item>
         <item>10 sekunder</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>OK</item>
         <item>Lige et øjeblik</item>
         <item>Er på vej</item>

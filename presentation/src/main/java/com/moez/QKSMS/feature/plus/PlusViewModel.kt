@@ -36,40 +36,42 @@ class PlusViewModel @Inject constructor(
 
     init {
         disposables += billingManager.upgradeStatus
-                .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
+            .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
 
         disposables += billingManager.products
-                .subscribe { products ->
-                    newState {
-                        val upgrade = products.firstOrNull { it.sku == BillingManager.SKU_PLUS }
-                        val upgradeDonate = products.firstOrNull { it.sku == BillingManager.SKU_PLUS_DONATE }
-                        copy(upgradePrice = upgrade?.price ?: "", upgradeDonatePrice = upgradeDonate?.price ?: "",
-                                currency = upgrade?.priceCurrencyCode ?: upgradeDonate?.priceCurrencyCode ?: "")
-                    }
+            .subscribe { products ->
+                newState {
+                    val upgrade = products.firstOrNull { it.sku == BillingManager.SKU_PLUS }
+                    val upgradeDonate = products.firstOrNull { it.sku == BillingManager.SKU_PLUS_DONATE }
+                    copy(
+                        upgradePrice = upgrade?.price ?: "", upgradeDonatePrice = upgradeDonate?.price ?: "",
+                        currency = upgrade?.priceCurrencyCode ?: upgradeDonate?.priceCurrencyCode ?: ""
+                    )
                 }
+            }
     }
 
     override fun bindView(view: PlusView) {
         super.bindView(view)
 
         Observable.merge(
-                view.upgradeIntent.map { BillingManager.SKU_PLUS },
-                view.upgradeDonateIntent.map { BillingManager.SKU_PLUS_DONATE })
-                .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
-                .autoDisposable(view.scope())
-                .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
+            view.upgradeIntent.map { BillingManager.SKU_PLUS },
+            view.upgradeDonateIntent.map { BillingManager.SKU_PLUS_DONATE })
+            .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
+            .autoDisposable(view.scope())
+            .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
 
         view.themeClicks
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showSettings() }
+            .autoDisposable(view.scope())
+            .subscribe { navigator.showSettings() }
 
         view.delayedClicks
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showSettings() }
+            .autoDisposable(view.scope())
+            .subscribe { navigator.showSettings() }
 
         view.nightClicks
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showSettings() }
+            .autoDisposable(view.scope())
+            .subscribe { navigator.showSettings() }
     }
 
 }

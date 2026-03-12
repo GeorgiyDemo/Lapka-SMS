@@ -40,30 +40,30 @@ class CursorToMessageImpl @Inject constructor(
 
     private val uri = Uri.parse("content://mms-sms/complete-conversations")
     private val projection = arrayOf(
-            MmsSms.TYPE_DISCRIMINATOR_COLUMN,
-            MmsSms._ID,
-            Mms.DATE,
-            Mms.DATE_SENT,
-            Mms.READ,
-            Mms.THREAD_ID,
-            Mms.LOCKED,
+        MmsSms.TYPE_DISCRIMINATOR_COLUMN,
+        MmsSms._ID,
+        Mms.DATE,
+        Mms.DATE_SENT,
+        Mms.READ,
+        Mms.THREAD_ID,
+        Mms.LOCKED,
 
-            Sms.ADDRESS,
-            Sms.BODY,
-            Sms.SEEN,
-            Sms.TYPE,
-            Sms.STATUS,
-            Sms.ERROR_CODE,
+        Sms.ADDRESS,
+        Sms.BODY,
+        Sms.SEEN,
+        Sms.TYPE,
+        Sms.STATUS,
+        Sms.ERROR_CODE,
 
-            Mms.SUBJECT,
-            Mms.SUBJECT_CHARSET,
-            Mms.SEEN,
-            Mms.MESSAGE_TYPE,
-            Mms.MESSAGE_BOX,
-            Mms.DELIVERY_REPORT,
-            Mms.READ_REPORT,
-            MmsSms.PendingMessages.ERROR_TYPE,
-            Mms.STATUS
+        Mms.SUBJECT,
+        Mms.SUBJECT_CHARSET,
+        Mms.SEEN,
+        Mms.MESSAGE_TYPE,
+        Mms.MESSAGE_BOX,
+        Mms.DELIVERY_REPORT,
+        Mms.READ_REPORT,
+        MmsSms.PendingMessages.ERROR_TYPE,
+        Mms.STATUS
     )
 
     override fun map(from: Pair<Cursor, CursorToMessage.MessageColumns>): Message {
@@ -94,8 +94,8 @@ class CursorToMessageImpl @Inject constructor(
                     seen = cursor.getInt(columnsMap.smsSeen) != 0
 
                     body = columnsMap.smsBody
-                            .takeIf { column -> column != -1 } // The column may not be set
-                            ?.let { column -> cursor.getString(column) } ?: "" // cursor.getString() may return null
+                        .takeIf { column -> column != -1 } // The column may not be set
+                        ?.let { column -> cursor.getString(column) } ?: "" // cursor.getString() may return null
 
                     errorCode = cursor.getInt(columnsMap.smsErrorCode)
                     deliveryStatus = cursor.getInt(columnsMap.smsStatus)
@@ -114,7 +114,7 @@ class CursorToMessageImpl @Inject constructor(
                     messageType = cursor.getInt(columnsMap.mmsMessageType)
                     mmsStatus = cursor.getInt(columnsMap.mmsStatus)
                     subject = cursor.getString(columnsMap.mmsSubject)
-                            ?.takeIf { it.isNotBlank() } ?: ""
+                        ?.takeIf { it.isNotBlank() } ?: ""
                     textContentType = ""
                     attachmentType = Message.AttachmentType.NOT_LOADED
                 }
@@ -151,8 +151,8 @@ class CursorToMessageImpl @Inject constructor(
 
     private fun getMmsAddress(messageId: Long): String {
         val uri = Mms.CONTENT_URI.buildUpon()
-                .appendPath(messageId.toString())
-                .appendPath("addr").build()
+            .appendPath(messageId.toString())
+            .appendPath("addr").build()
 
         //TODO: Use Charset to ensure address is decoded correctly
         val projection = arrayOf(Mms.Addr.ADDRESS, Mms.Addr.CHARSET)

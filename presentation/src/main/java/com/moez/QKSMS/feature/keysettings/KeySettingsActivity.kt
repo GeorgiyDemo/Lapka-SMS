@@ -14,7 +14,7 @@ import com.moez.QKSMS.common.base.QkThemedActivity
 import dagger.android.AndroidInjection
 import android.widget.FrameLayout
 
-class KeySettingsActivity: QkThemedActivity() {
+class KeySettingsActivity : QkThemedActivity() {
 
     private lateinit var router: Router
 

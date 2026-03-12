@@ -63,9 +63,104 @@ public class PushReceiver extends BroadcastReceiver {
     static final String[] PROJECTION = new String[]{Mms.CONTENT_LOCATION, Mms.LOCKED};
 
     static final int COLUMN_CONTENT_LOCATION = 0;
-
-    private static Set<String> downloadedUrls = new HashSet<String>();
     private static final ExecutorService PUSH_RECEIVER_EXECUTOR = Executors.newSingleThreadExecutor();
+    private static Set<String> downloadedUrls = new HashSet<String>();
+
+    public static String getContentLocation(Context context, Uri uri) throws MmsException {
+        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
+                uri, PROJECTION, null, null, null);
+
+        if (cursor != null) {
+            try {
+                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
+                    String location = cursor.getString(COLUMN_CONTENT_LOCATION);
+                    cursor.close();
+                    return location;
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        throw new MmsException("Cannot get X-Mms-Content-Location from: " + uri);
+    }
+
+    private static long findThreadId(Context context, GenericPdu pdu, int type) {
+        String messageId;
+
+        if (type == MESSAGE_TYPE_DELIVERY_IND) {
+            messageId = new String(((DeliveryInd) pdu).getMessageId());
+        } else {
+            messageId = new String(((ReadOrigInd) pdu).getMessageId());
+        }
+
+        StringBuilder sb = new StringBuilder('(');
+        sb.append(Mms.MESSAGE_ID);
+        sb.append('=');
+        sb.append(DatabaseUtils.sqlEscapeString(messageId));
+        sb.append(" AND ");
+        sb.append(Mms.MESSAGE_TYPE);
+        sb.append('=');
+        sb.append(PduHeaders.MESSAGE_TYPE_SEND_REQ);
+        // TODO ContentResolver.query() appends closing ')' to the selection argument
+        // sb.append(')');
+
+        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
+                Mms.CONTENT_URI, new String[]{Mms.THREAD_ID},
+                sb.toString(), null, null);
+        if (cursor != null) {
+            try {
+                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
+                    long id = cursor.getLong(0);
+                    cursor.close();
+                    return id;
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return -1;
+    }
+
+    private static boolean isDuplicateNotification(Context context, NotificationInd nInd) {
+        byte[] rawLocation = nInd.getContentLocation();
+        if (rawLocation != null) {
+            String location = new String(rawLocation);
+            String selection = Mms.CONTENT_LOCATION + " = ?";
+            String[] selectionArgs = new String[]{location};
+            Cursor cursor = SqliteWrapper.query(
+                    context, context.getContentResolver(),
+                    Mms.CONTENT_URI, new String[]{Mms._ID},
+                    selection, selectionArgs, null);
+            if (cursor != null) {
+                try {
+                    if (cursor.getCount() > 0) {
+                        // We already received the same notification before.
+                        cursor.close();
+                        //return true;
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Timber.v(intent.getAction() + " " + intent.getType());
+        if ((intent.getAction().equals(WAP_PUSH_DELIVER_ACTION) || intent.getAction().equals(WAP_PUSH_RECEIVED_ACTION))
+                && ContentType.MMS_MESSAGE.equals(intent.getType())) {
+            Timber.v("Received PUSH Intent: " + intent);
+
+            MmsConfig.init(context);
+            new ReceivePushTask(context, goAsync()).executeOnExecutor(PUSH_RECEIVER_EXECUTOR, intent);
+
+            Timber.v(context.getPackageName() + " received and aborted");
+        }
+    }
 
     private class ReceivePushTask extends AsyncTask<Intent, Void, Void> {
         private Context mContext;
@@ -172,101 +267,5 @@ public class PushReceiver extends BroadcastReceiver {
         protected void onPostExecute(Void aVoid) {
             pendingResult.finish();
         }
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Timber.v(intent.getAction() + " " + intent.getType());
-        if ((intent.getAction().equals(WAP_PUSH_DELIVER_ACTION) || intent.getAction().equals(WAP_PUSH_RECEIVED_ACTION))
-                && ContentType.MMS_MESSAGE.equals(intent.getType())) {
-            Timber.v("Received PUSH Intent: " + intent);
-
-            MmsConfig.init(context);
-            new ReceivePushTask(context, goAsync()).executeOnExecutor(PUSH_RECEIVER_EXECUTOR, intent);
-
-            Timber.v(context.getPackageName() + " received and aborted");
-        }
-    }
-
-    public static String getContentLocation(Context context, Uri uri) throws MmsException {
-        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-                uri, PROJECTION, null, null, null);
-
-        if (cursor != null) {
-            try {
-                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
-                    String location = cursor.getString(COLUMN_CONTENT_LOCATION);
-                    cursor.close();
-                    return location;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        throw new MmsException("Cannot get X-Mms-Content-Location from: " + uri);
-    }
-
-    private static long findThreadId(Context context, GenericPdu pdu, int type) {
-        String messageId;
-
-        if (type == MESSAGE_TYPE_DELIVERY_IND) {
-            messageId = new String(((DeliveryInd) pdu).getMessageId());
-        } else {
-            messageId = new String(((ReadOrigInd) pdu).getMessageId());
-        }
-
-        StringBuilder sb = new StringBuilder('(');
-        sb.append(Mms.MESSAGE_ID);
-        sb.append('=');
-        sb.append(DatabaseUtils.sqlEscapeString(messageId));
-        sb.append(" AND ");
-        sb.append(Mms.MESSAGE_TYPE);
-        sb.append('=');
-        sb.append(PduHeaders.MESSAGE_TYPE_SEND_REQ);
-        // TODO ContentResolver.query() appends closing ')' to the selection argument
-        // sb.append(')');
-
-        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-                Mms.CONTENT_URI, new String[]{Mms.THREAD_ID},
-                sb.toString(), null, null);
-        if (cursor != null) {
-            try {
-                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
-                    long id = cursor.getLong(0);
-                    cursor.close();
-                    return id;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return -1;
-    }
-
-    private static boolean isDuplicateNotification(Context context, NotificationInd nInd) {
-        byte[] rawLocation = nInd.getContentLocation();
-        if (rawLocation != null) {
-            String location = new String(rawLocation);
-            String selection = Mms.CONTENT_LOCATION + " = ?";
-            String[] selectionArgs = new String[]{location};
-            Cursor cursor = SqliteWrapper.query(
-                    context, context.getContentResolver(),
-                    Mms.CONTENT_URI, new String[]{Mms._ID},
-                    selection, selectionArgs, null);
-            if (cursor != null) {
-                try {
-                    if (cursor.getCount() > 0) {
-                        // We already received the same notification before.
-                        cursor.close();
-                        //return true;
-                    }
-                } finally {
-                    cursor.close();
-                }
-            }
-        }
-        return false;
     }
 }

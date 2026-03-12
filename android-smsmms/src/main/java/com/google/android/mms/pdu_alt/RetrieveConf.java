@@ -48,7 +48,7 @@ public class RetrieveConf extends MultimediaMessagePdu {
      * Constructor with given headers and body
      *
      * @param headers Headers for this PDU.
-     * @param body Body of this PDu.
+     * @param body    Body of this PDu.
      */
     RetrieveConf(PduHeaders headers, PduBody body) {
         super(headers, body);
@@ -114,12 +114,12 @@ public class RetrieveConf extends MultimediaMessagePdu {
     /**
      * Get From value.
      * From-value = Value-length
-     *      (Address-present-token Encoded-string-value | Insert-address-token)
+     * (Address-present-token Encoded-string-value | Insert-address-token)
      *
      * @return the value
      */
     public EncodedStringValue getFrom() {
-       return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
+        return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
     }
 
     /**

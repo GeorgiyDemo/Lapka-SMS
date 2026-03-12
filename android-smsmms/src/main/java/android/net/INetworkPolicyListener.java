@@ -8,10 +8,19 @@ package android.net;
  * {@hide}
  */
 public interface INetworkPolicyListener extends android.os.IInterface {
+    public void onUidRulesChanged(int uid, int uidRules) throws android.os.RemoteException;
+
+    public void onMeteredIfacesChanged(java.lang.String[] meteredIfaces) throws android.os.RemoteException;
+
+    public void onRestrictBackgroundChanged(boolean restrictBackground) throws android.os.RemoteException;
+
     /**
      * Local-side IPC implementation stub class.
      */
     public static abstract class Stub extends android.os.Binder implements android.net.INetworkPolicyListener {
+        static final int TRANSACTION_onUidRulesChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_onMeteredIfacesChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_onRestrictBackgroundChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
         private static final java.lang.String DESCRIPTOR = "android.net.INetworkPolicyListener";
 
         /**
@@ -124,15 +133,5 @@ public interface INetworkPolicyListener extends android.os.IInterface {
                 }
             }
         }
-
-        static final int TRANSACTION_onUidRulesChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-        static final int TRANSACTION_onMeteredIfacesChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
-        static final int TRANSACTION_onRestrictBackgroundChanged = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     }
-
-    public void onUidRulesChanged(int uid, int uidRules) throws android.os.RemoteException;
-
-    public void onMeteredIfacesChanged(java.lang.String[] meteredIfaces) throws android.os.RemoteException;
-
-    public void onRestrictBackgroundChanged(boolean restrictBackground) throws android.os.RemoteException;
 }

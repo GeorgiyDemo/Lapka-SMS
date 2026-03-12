@@ -33,10 +33,10 @@ import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public abstract class NodeImpl implements Node, EventTarget {
-    private Node mParentNode;
     private final Vector<Node> mChildNodes = new Vector<Node>();
-    DocumentImpl mOwnerDocument;
     private final EventTarget mEventTarget = new EventTargetImpl(this);
+    DocumentImpl mOwnerDocument;
+    private Node mParentNode;
 
     /*
      * Internal methods
@@ -51,7 +51,7 @@ public abstract class NodeImpl implements Node, EventTarget {
      */
 
     public Node appendChild(Node newChild) throws DOMException {
-        ((NodeImpl)newChild).setParentNode(this);
+        ((NodeImpl) newChild).setParentNode(this);
         mChildNodes.remove(newChild);
         mChildNodes.add(newChild);
         return newChild;
@@ -75,8 +75,7 @@ public abstract class NodeImpl implements Node, EventTarget {
         Node firstChild = null;
         try {
             firstChild = mChildNodes.firstElement();
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             // Ignore and return null
         }
         return firstChild;
@@ -86,8 +85,7 @@ public abstract class NodeImpl implements Node, EventTarget {
         Node lastChild = null;
         try {
             lastChild = mChildNodes.lastElement();
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             // Ignore and return null
         }
         return lastChild;
@@ -105,7 +103,7 @@ public abstract class NodeImpl implements Node, EventTarget {
 
     public Node getNextSibling() {
         if ((mParentNode != null) && (this != mParentNode.getLastChild())) {
-            Vector<Node> siblings = ((NodeImpl)mParentNode).mChildNodes;
+            Vector<Node> siblings = ((NodeImpl) mParentNode).mChildNodes;
             int indexOfThis = siblings.indexOf(this);
             return siblings.elementAt(indexOfThis + 1);
         }
@@ -121,6 +119,10 @@ public abstract class NodeImpl implements Node, EventTarget {
         return null;
     }
 
+    public void setNodeValue(String nodeValue) throws DOMException {
+        // Default behaviour. Override if required.
+    }
+
     public Document getOwnerDocument() {
         return mOwnerDocument;
     }
@@ -129,14 +131,22 @@ public abstract class NodeImpl implements Node, EventTarget {
         return mParentNode;
     }
 
+    private void setParentNode(Node parentNode) {
+        mParentNode = parentNode;
+    }
+
     public String getPrefix() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    public void setPrefix(String prefix) throws DOMException {
+        // TODO Auto-generated method stub
+    }
+
     public Node getPreviousSibling() {
         if ((mParentNode != null) && (this != mParentNode.getFirstChild())) {
-            Vector<Node> siblings = ((NodeImpl)mParentNode).mChildNodes;
+            Vector<Node> siblings = ((NodeImpl) mParentNode).mChildNodes;
             int indexOfThis = siblings.indexOf(this);
             return siblings.elementAt(indexOfThis - 1);
         }
@@ -169,7 +179,7 @@ public abstract class NodeImpl implements Node, EventTarget {
     public Node removeChild(Node oldChild) throws DOMException {
         if (mChildNodes.contains(oldChild)) {
             mChildNodes.remove(oldChild);
-            ((NodeImpl)oldChild).setParentNode(null);
+            ((NodeImpl) oldChild).setParentNode(null);
         } else {
             throw new DOMException(DOMException.NOT_FOUND_ERR, "Child does not exist");
         }
@@ -185,24 +195,12 @@ public abstract class NodeImpl implements Node, EventTarget {
                 // Ignore exception
             }
             mChildNodes.setElementAt(newChild, mChildNodes.indexOf(oldChild));
-            ((NodeImpl)newChild).setParentNode(this);
-            ((NodeImpl)oldChild).setParentNode(null);
+            ((NodeImpl) newChild).setParentNode(this);
+            ((NodeImpl) oldChild).setParentNode(null);
         } else {
             throw new DOMException(DOMException.NOT_FOUND_ERR, "Old child does not exist");
         }
         return oldChild;
-    }
-
-    public void setNodeValue(String nodeValue) throws DOMException {
-        // Default behaviour. Override if required.
-    }
-
-    public void setPrefix(String prefix) throws DOMException {
-        // TODO Auto-generated method stub
-    }
-
-    private void setParentNode(Node parentNode) {
-        mParentNode = parentNode;
     }
 
     /*
@@ -262,7 +260,7 @@ public abstract class NodeImpl implements Node, EventTarget {
     }
 
     public Object setUserData(String key, Object data,
-            UserDataHandler handler) {
+                              UserDataHandler handler) {
         throw new DOMException(DOMException.NOT_SUPPORTED_ERR, null);
     }
 

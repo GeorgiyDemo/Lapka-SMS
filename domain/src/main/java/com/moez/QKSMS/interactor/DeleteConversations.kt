@@ -31,9 +31,9 @@ class DeleteConversations @Inject constructor(
 
     override fun buildObservable(params: List<Long>): Flowable<*> {
         return Flowable.just(params.toLongArray())
-                .doOnNext { threadIds -> conversationRepo.deleteConversations(*threadIds) }
-                .doOnNext { threadIds -> threadIds.forEach(notificationManager::update) }
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
+            .doOnNext { threadIds -> conversationRepo.deleteConversations(*threadIds) }
+            .doOnNext { threadIds -> threadIds.forEach(notificationManager::update) }
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
     }
 
 }

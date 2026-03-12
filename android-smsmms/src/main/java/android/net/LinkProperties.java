@@ -51,26 +51,53 @@ import java.util.Collections;
  */
 public class LinkProperties implements Parcelable {
 
+    /**
+     * Implement the Parcelable interface.
+     *
+     * @hide
+     */
+    public static final Creator<LinkProperties> CREATOR =
+            new Creator<LinkProperties>() {
+                public LinkProperties createFromParcel(Parcel in) {
+                    LinkProperties netProp = new LinkProperties();
+                    String iface = in.readString();
+                    if (iface != null) {
+                        try {
+                            netProp.setInterfaceName(iface);
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    }
+                    int addressCount = in.readInt();
+                    for (int i = 0; i < addressCount; i++) {
+                        netProp.addLinkAddress((LinkAddress) in.readParcelable(null));
+                    }
+                    addressCount = in.readInt();
+                    for (int i = 0; i < addressCount; i++) {
+                        try {
+                            netProp.addDns(InetAddress.getByAddress(in.createByteArray()));
+                        } catch (UnknownHostException e) {
+                        }
+                    }
+                    addressCount = in.readInt();
+                    for (int i = 0; i < addressCount; i++) {
+                        netProp.addRoute((RouteInfo) in.readParcelable(null));
+                    }
+                    if (in.readByte() == 1) {
+                        netProp.setHttpProxy((ProxyProperties) in.readParcelable(null));
+                    }
+                    return netProp;
+                }
+
+                public LinkProperties[] newArray(int size) {
+                    return new LinkProperties[size];
+                }
+            };
     String mIfaceName;
     private Collection<LinkAddress> mLinkAddresses = new ArrayList<LinkAddress>();
     private Collection<InetAddress> mDnses = new ArrayList<InetAddress>();
     private Collection<RouteInfo> mRoutes = new ArrayList<RouteInfo>();
     private ProxyProperties mHttpProxy;
-
-    public static class CompareResult<T> {
-        public Collection<T> removed = new ArrayList<T>();
-        public Collection<T> added = new ArrayList<T>();
-
-        @Override
-        public String toString() {
-            String retVal = "removed=[";
-            for (T addr : removed) retVal += addr.toString() + ",";
-            retVal += "] added=[";
-            for (T addr : added) retVal += addr.toString() + ",";
-            retVal += "]";
-            return retVal;
-        }
-    }
 
     public LinkProperties() {
         clear();
@@ -88,12 +115,12 @@ public class LinkProperties implements Parcelable {
         }
     }
 
-    public void setInterfaceName(String iface) {
-        mIfaceName = iface;
-    }
-
     public String getInterfaceName() {
         return mIfaceName;
+    }
+
+    public void setInterfaceName(String iface) {
+        mIfaceName = iface;
     }
 
     public Collection<InetAddress> getAddresses() {
@@ -128,12 +155,12 @@ public class LinkProperties implements Parcelable {
         return Collections.unmodifiableCollection(mRoutes);
     }
 
-    public void setHttpProxy(ProxyProperties proxy) {
-        mHttpProxy = proxy;
-    }
-
     public ProxyProperties getHttpProxy() {
         return mHttpProxy;
+    }
+
+    public void setHttpProxy(ProxyProperties proxy) {
+        mHttpProxy = proxy;
     }
 
     public void clear() {
@@ -396,46 +423,18 @@ public class LinkProperties implements Parcelable {
         }
     }
 
-    /**
-     * Implement the Parcelable interface.
-     *
-     * @hide
-     */
-    public static final Creator<LinkProperties> CREATOR =
-            new Creator<LinkProperties>() {
-                public LinkProperties createFromParcel(Parcel in) {
-                    LinkProperties netProp = new LinkProperties();
-                    String iface = in.readString();
-                    if (iface != null) {
-                        try {
-                            netProp.setInterfaceName(iface);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    int addressCount = in.readInt();
-                    for (int i = 0; i < addressCount; i++) {
-                        netProp.addLinkAddress((LinkAddress) in.readParcelable(null));
-                    }
-                    addressCount = in.readInt();
-                    for (int i = 0; i < addressCount; i++) {
-                        try {
-                            netProp.addDns(InetAddress.getByAddress(in.createByteArray()));
-                        } catch (UnknownHostException e) {
-                        }
-                    }
-                    addressCount = in.readInt();
-                    for (int i = 0; i < addressCount; i++) {
-                        netProp.addRoute((RouteInfo) in.readParcelable(null));
-                    }
-                    if (in.readByte() == 1) {
-                        netProp.setHttpProxy((ProxyProperties) in.readParcelable(null));
-                    }
-                    return netProp;
-                }
+    public static class CompareResult<T> {
+        public Collection<T> removed = new ArrayList<T>();
+        public Collection<T> added = new ArrayList<T>();
 
-                public LinkProperties[] newArray(int size) {
-                    return new LinkProperties[size];
-                }
-            };
+        @Override
+        public String toString() {
+            String retVal = "removed=[";
+            for (T addr : removed) retVal += addr.toString() + ",";
+            retVal += "] added=[";
+            for (T addr : added) retVal += addr.toString() + ",";
+            retVal += "]";
+            return retVal;
+        }
+    }
 }

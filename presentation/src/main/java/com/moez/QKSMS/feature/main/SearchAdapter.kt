@@ -62,14 +62,20 @@ class SearchAdapter @Inject constructor(
         val previous = data.getOrNull(position - 1)
         val result = getItem(position)
 
-        holder.itemView.findViewById<Group>(R.id.resultsHeader).setVisible(result.messages > 0 && previous?.messages == 0)
+        holder.itemView.findViewById<Group>(R.id.resultsHeader)
+            .setVisible(result.messages > 0 && previous?.messages == 0)
 
         val query = result.query
         val title = SpannableString(result.conversation.getTitle())
         var index = title.removeAccents().indexOf(query, ignoreCase = true)
 
         while (index >= 0) {
-            title.setSpan(BackgroundColorSpan(highlightColor), index, index + query.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            title.setSpan(
+                BackgroundColorSpan(highlightColor),
+                index,
+                index + query.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             index = title.indexOf(query, index + query.length, true)
         }
         holder.itemView.findViewById<TextView>(R.id.title).text = title
@@ -79,7 +85,8 @@ class SearchAdapter @Inject constructor(
         when (result.messages == 0) {
             true -> {
                 holder.itemView.findViewById<TextView>(R.id.date).setVisible(true)
-                holder.itemView.findViewById<TextView>(R.id.date).text = dateFormatter.getConversationTimestamp(result.conversation.date)
+                holder.itemView.findViewById<TextView>(R.id.date).text =
+                    dateFormatter.getConversationTimestamp(result.conversation.date)
                 holder.itemView.findViewById<TextView>(R.id.snippet).text = when (result.conversation.me) {
                     true -> context.getString(R.string.main_sender_you, result.conversation.snippet)
                     false -> result.conversation.snippet
@@ -88,7 +95,8 @@ class SearchAdapter @Inject constructor(
 
             false -> {
                 holder.itemView.findViewById<TextView>(R.id.date).setVisible(false)
-                holder.itemView.findViewById<TextView>(R.id.snippet).text = context.getString(R.string.main_message_results, result.messages)
+                holder.itemView.findViewById<TextView>(R.id.snippet).text =
+                    context.getString(R.string.main_message_results, result.messages)
             }
         }
     }

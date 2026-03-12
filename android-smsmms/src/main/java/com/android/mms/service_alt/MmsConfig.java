@@ -35,21 +35,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class manages a cached copy of current MMS configuration key values
- *
+ * <p>
  * The steps to add a key
  * 1. Add a String constant for the key
  * 2. Add a default value for the key by putting a typed value to DEFAULTS
- *    (null means String type only)
+ * (null means String type only)
  * 3. Add a getter for the key
  * 4. Add key/value for relevant mms_config.xml of a specific carrier (mcc/mnc)
  */
 public class MmsConfig {
-
-    private static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
-
-    private static final int MAX_IMAGE_HEIGHT = 480;
-    private static final int MAX_IMAGE_WIDTH = 640;
-    private static final int MAX_TEXT_LENGTH = 2000;
 
     /*
      * MmsConfig keys. These have to stay in sync with the MMS_CONFIG_* values defined in
@@ -125,14 +119,12 @@ public class MmsConfig {
     public static final String CONFIG_EMAIL_GATEWAY_NUMBER = "emailGatewayNumber";
     // String to append to the NAI header, e.g. ":pcs"
     public static final String CONFIG_NAI_SUFFIX = "naiSuffix";
-
     /*
      * Key types
      */
     public static final String KEY_TYPE_INT = "int";
     public static final String KEY_TYPE_BOOL = "bool";
     public static final String KEY_TYPE_STRING = "string";
-
     /*
      * Macro names
      */
@@ -142,10 +134,14 @@ public class MmsConfig {
     public static final String MACRO_LINE1NOCOUNTRYCODE = "LINE1NOCOUNTRYCODE";
     // NAI (Network Access Identifier), used by Sprint for authentication
     public static final String MACRO_NAI = "NAI";
-
+    private static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
+    private static final int MAX_IMAGE_HEIGHT = 480;
+    private static final int MAX_IMAGE_WIDTH = 640;
+    private static final int MAX_TEXT_LENGTH = 2000;
     // Default values. This is read-only. Don't write into it.
     // This provides the info on valid keys, their types and default values
     private static final Map<String, Object> DEFAULTS = new ConcurrentHashMap<String, Object>();
+
     static {
         DEFAULTS.put(CONFIG_ENABLED_MMS, Boolean.valueOf(true));
         DEFAULTS.put(CONFIG_ENABLED_TRANS_ID, Boolean.valueOf(false));
@@ -181,14 +177,18 @@ public class MmsConfig {
     }
 
     private final int mSubId;
+    // The current values
+    private final Map<String, Object> mKeyValues = new ConcurrentHashMap<String, Object>();
+    private String mUserAgent = null;
+    private String mUaProfUrl = null;
 
     /**
      * This class manages a cached copy of current MMS configuration key values for a particular
      * subscription id. (See the {@link SubscriptionManager}).
      *
      * @param context Context of the particular subscription to load. The context's mcc/mnc
-     * should be set to that of the subscription id
-     * @param subId Subscription id of the mcc/mnc in the context
+     *                should be set to that of the subscription id
+     * @param subId   Subscription id of the mcc/mnc in the context
      */
     public MmsConfig(Context context, int subId) {
         mSubId = subId;
@@ -208,7 +208,7 @@ public class MmsConfig {
      * subscription id. (See the {@link SubscriptionManager}).
      *
      * @param context Context of the particular subscription to load. The context's mcc/mnc
-     * should be set to that of the subscription id\
+     *                should be set to that of the subscription id\
      */
     public MmsConfig(Context context) {
         mSubId = -1;
@@ -221,15 +221,6 @@ public class MmsConfig {
         // Load mms_config.xml resource overlays
         loadFromResources(context);
         Timber.v("MmsConfig: all settings -- " + mKeyValues);
-    }
-
-    /**
-     * Return the subscription ID associated with this MmsConfig
-     *
-     * @return subId the subId associated with this MmsConfig
-     */
-    public int getSubId() {
-        return mSubId;
     }
 
     /**
@@ -257,7 +248,7 @@ public class MmsConfig {
     /**
      * Check a key and its type match the predefined keys and corresponding types
      *
-     * @param key The key of the config
+     * @param key   The key of the config
      * @param value The value of the config
      * @return True if key and type both matches and false otherwise
      */
@@ -270,16 +261,19 @@ public class MmsConfig {
         return false;
     }
 
-    private String mUserAgent = null;
-    private String mUaProfUrl = null;
-
-    // The current values
-    private final Map<String, Object> mKeyValues = new ConcurrentHashMap<String, Object>();
+    /**
+     * Return the subscription ID associated with this MmsConfig
+     *
+     * @return subId the subId associated with this MmsConfig
+     */
+    public int getSubId() {
+        return mSubId;
+    }
 
     /**
      * Get a config value by its type
      *
-     * @param key The key of the config
+     * @param key  The key of the config
      * @param type The type of the config value
      * @return The expected typed value or null if no match
      */
@@ -293,17 +287,17 @@ public class MmsConfig {
     public Bundle getCarrierConfigValues() {
         final Bundle bundle = new Bundle();
         final Iterator<Map.Entry<String, Object>> iter = mKeyValues.entrySet().iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             final Map.Entry<String, Object> entry = iter.next();
             final String key = entry.getKey();
             final Object val = entry.getValue();
-            Class<?> valueType =  val != null ? val.getClass() : String.class;
+            Class<?> valueType = val != null ? val.getClass() : String.class;
             if (valueType == Integer.class) {
-                bundle.putInt(key, (Integer)val);
+                bundle.putInt(key, (Integer) val);
             } else if (valueType == Boolean.class) {
-                bundle.putBoolean(key, (Boolean)val);
+                bundle.putBoolean(key, (Boolean) val);
             } else if (valueType == String.class) {
-                bundle.putString(key, (String)val);
+                bundle.putString(key, (String) val);
             }
         }
         return bundle;
@@ -323,7 +317,7 @@ public class MmsConfig {
                 mKeyValues.put(key, Integer.parseInt(value));
             } else if (KEY_TYPE_BOOL.equals(type)) {
                 mKeyValues.put(key, Boolean.parseBoolean(value));
-            } else if (KEY_TYPE_STRING.equals(type)){
+            } else if (KEY_TYPE_STRING.equals(type)) {
                 mKeyValues.put(key, value);
             }
         } catch (NumberFormatException e) {
@@ -373,6 +367,34 @@ public class MmsConfig {
         public Overridden(MmsConfig base, Bundle overrides) {
             mBase = base;
             mOverrides = overrides;
+        }
+
+        /**
+         * @return the phone number
+         */
+        private static String getLine1(Context context, int subId) {
+            final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
+                    Context.TELEPHONY_SERVICE);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                return telephonyManager.getLine1Number();
+            } else {
+                try {
+                    Method method = telephonyManager.getClass().getMethod("getLine1NumberForSubscriber", int.class);
+                    return (String) method.invoke(telephonyManager, subId);
+                } catch (Exception e) {
+                    return telephonyManager.getLine1Number();
+                }
+            }
+        }
+
+        private static String getLine1NoCountryCode(Context context, int subId) {
+            final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
+                    Context.TELEPHONY_SERVICE);
+            return PhoneUtils.getNationalNumber(
+                    telephonyManager,
+                    subId,
+                    getLine1(context, subId));
         }
 
         private int getInt(String key) {
@@ -542,34 +564,6 @@ public class MmsConfig {
                 return getNai(context, mBase.getSubId());
             }
             return null;
-        }
-
-        /**
-         * @return the phone number
-         */
-        private static String getLine1(Context context, int subId) {
-            final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
-                    Context.TELEPHONY_SERVICE);
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                return telephonyManager.getLine1Number();
-            } else {
-                try {
-                    Method method = telephonyManager.getClass().getMethod("getLine1NumberForSubscriber", int.class);
-                    return (String) method.invoke(telephonyManager, subId);
-                } catch (Exception e) {
-                    return telephonyManager.getLine1Number();
-                }
-            }
-        }
-
-        private static String getLine1NoCountryCode(Context context, int subId) {
-            final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
-                    Context.TELEPHONY_SERVICE);
-            return PhoneUtils.getNationalNumber(
-                    telephonyManager,
-                    subId,
-                    getLine1(context, subId));
         }
 
         /**

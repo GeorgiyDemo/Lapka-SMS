@@ -59,10 +59,12 @@ class NightModeManager @Inject constructor(
                 // If the last nightStart was more recent than the last nightEnd, then it's night time
                 val night = nightStartTime > nightEndTime
                 prefs.night.set(night)
-                AppCompatDelegate.setDefaultNightMode(when (night) {
-                    true -> AppCompatDelegate.MODE_NIGHT_YES
-                    false -> AppCompatDelegate.MODE_NIGHT_NO
-                })
+                AppCompatDelegate.setDefaultNightMode(
+                    when (night) {
+                        true -> AppCompatDelegate.MODE_NIGHT_YES
+                        false -> AppCompatDelegate.MODE_NIGHT_NO
+                    }
+                )
                 widgetManager.updateTheme()
             }
         }
@@ -74,12 +76,14 @@ class NightModeManager @Inject constructor(
         // If it's not on auto mode, set the appropriate night mode
         if (mode != Preferences.NIGHT_MODE_AUTO) {
             prefs.night.set(mode == Preferences.NIGHT_MODE_ON)
-            AppCompatDelegate.setDefaultNightMode(when (mode) {
-                Preferences.NIGHT_MODE_OFF -> AppCompatDelegate.MODE_NIGHT_NO
-                Preferences.NIGHT_MODE_ON -> AppCompatDelegate.MODE_NIGHT_YES
-                Preferences.NIGHT_MODE_SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                else -> AppCompatDelegate.MODE_NIGHT_NO
-            })
+            AppCompatDelegate.setDefaultNightMode(
+                when (mode) {
+                    Preferences.NIGHT_MODE_OFF -> AppCompatDelegate.MODE_NIGHT_NO
+                    Preferences.NIGHT_MODE_ON -> AppCompatDelegate.MODE_NIGHT_YES
+                    Preferences.NIGHT_MODE_SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    else -> AppCompatDelegate.MODE_NIGHT_NO
+                }
+            )
             widgetManager.updateTheme()
         }
 
@@ -111,16 +115,16 @@ class NightModeManager @Inject constructor(
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (prefs.nightMode.get() == Preferences.NIGHT_MODE_AUTO) {
             alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    dayCalendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
-                    dayIntent
+                AlarmManager.RTC_WAKEUP,
+                dayCalendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                dayIntent
             )
             alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    nightCalendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
-                    nightIntent
+                AlarmManager.RTC_WAKEUP,
+                nightCalendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                nightIntent
             )
         } else {
             alarmManager.cancel(dayIntent)

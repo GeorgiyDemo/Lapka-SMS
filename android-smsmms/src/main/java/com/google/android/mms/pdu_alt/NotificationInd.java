@@ -29,7 +29,7 @@ public class NotificationInd extends GenericPdu {
      * by the Pdu Parser.
      *
      * @throws InvalidHeaderValueException if error occurs.
-     *         RuntimeException if an undeclared error occurs.
+     *                                     RuntimeException if an undeclared error occurs.
      */
     public NotificationInd() throws InvalidHeaderValueException {
         super();
@@ -59,7 +59,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws InvalidHeaderValueException if the value is invalid.
-     *         RuntimeException if an undeclared error occurs.
+     *                                     RuntimeException if an undeclared error occurs.
      */
     public void setContentClass(int value) throws InvalidHeaderValueException {
         mPduHeaders.setOctet(value, PduHeaders.CONTENT_CLASS);
@@ -81,7 +81,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws NullPointerException if the value is null.
-     *         RuntimeException if an undeclared error occurs.
+     *                              RuntimeException if an undeclared error occurs.
      */
     public void setContentLocation(byte[] value) {
         mPduHeaders.setTextString(value, PduHeaders.CONTENT_LOCATION);
@@ -89,9 +89,9 @@ public class NotificationInd extends GenericPdu {
 
     /**
      * Get X-Mms-Expiry value.
-     *
+     * <p>
      * Expiry-value = Value-length
-     *      (Absolute-token Date-value | Relative-token Delta-seconds-value)
+     * (Absolute-token Date-value | Relative-token Delta-seconds-value)
      *
      * @return the value
      */
@@ -112,12 +112,12 @@ public class NotificationInd extends GenericPdu {
     /**
      * Get From value.
      * From-value = Value-length
-     *      (Address-present-token Encoded-string-value | Insert-address-token)
+     * (Address-present-token Encoded-string-value | Insert-address-token)
      *
      * @return the value
      */
     public EncodedStringValue getFrom() {
-       return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
+        return mPduHeaders.getEncodedStringValue(PduHeaders.FROM);
     }
 
     /**
@@ -125,7 +125,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws NullPointerException if the value is null.
-     *         RuntimeException if an undeclared error occurs.
+     *                              RuntimeException if an undeclared error occurs.
      */
     public void setFrom(EncodedStringValue value) {
         mPduHeaders.setEncodedStringValue(value, PduHeaders.FROM);
@@ -147,7 +147,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws NullPointerException if the value is null.
-     *         RuntimeException if an undeclared error occurs.
+     *                              RuntimeException if an undeclared error occurs.
      */
     public void setMessageClass(byte[] value) {
         mPduHeaders.setTextString(value, PduHeaders.MESSAGE_CLASS);
@@ -187,7 +187,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws NullPointerException if the value is null.
-     *         RuntimeException if an undeclared error occurs.
+     *                              RuntimeException if an undeclared error occurs.
      */
     public void setSubject(EncodedStringValue value) {
         mPduHeaders.setEncodedStringValue(value, PduHeaders.SUBJECT);
@@ -207,7 +207,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws NullPointerException if the value is null.
-     *         RuntimeException if an undeclared error occurs.
+     *                              RuntimeException if an undeclared error occurs.
      */
     public void setTransactionId(byte[] value) {
         mPduHeaders.setTextString(value, PduHeaders.TRANSACTION_ID);
@@ -227,7 +227,7 @@ public class NotificationInd extends GenericPdu {
      *
      * @param value the value
      * @throws InvalidHeaderValueException if the value is invalid.
-     *         RuntimeException if an undeclared error occurs.
+     *                                     RuntimeException if an undeclared error occurs.
      */
     public void setDeliveryReport(int value) throws InvalidHeaderValueException {
         mPduHeaders.setOctet(value, PduHeaders.DELIVERY_REPORT);

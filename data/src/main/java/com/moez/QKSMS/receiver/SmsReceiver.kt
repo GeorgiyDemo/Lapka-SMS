@@ -29,7 +29,8 @@ import javax.inject.Inject
 
 class SmsReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var receiveMessage: ReceiveSms
+    @Inject
+    lateinit var receiveMessage: ReceiveSms
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

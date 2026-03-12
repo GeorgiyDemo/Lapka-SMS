@@ -97,15 +97,18 @@ class Preferences @Inject constructor(
     val canUseSubId = rxPrefs.getBoolean("canUseSubId", true)
     val version = rxPrefs.getInteger("version", context.versionCode)
     val changelogVersion = rxPrefs.getInteger("changelogVersion", context.versionCode)
+
     @Deprecated("This should only be accessed when migrating to @blockingManager")
     val sia = rxPrefs.getBoolean("sia", false)
 
     // User configurable
     val sendAsGroup = rxPrefs.getBoolean("sendAsGroup", true)
-    val nightMode = rxPrefs.getInteger("nightMode", when (Build.VERSION.SDK_INT >= 29) {
-        true -> NIGHT_MODE_SYSTEM
-        false -> NIGHT_MODE_OFF
-    })
+    val nightMode = rxPrefs.getInteger(
+        "nightMode", when (Build.VERSION.SDK_INT >= 29) {
+            true -> NIGHT_MODE_SYSTEM
+            false -> NIGHT_MODE_OFF
+        }
+    )
     val nightStart = rxPrefs.getString("nightStart", "18:00")
     val nightEnd = rxPrefs.getString("nightEnd", "6:00")
     val black = rxPrefs.getBoolean("black", false)
@@ -129,6 +132,7 @@ class Preferences @Inject constructor(
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val autoDelete = rxPrefs.getInteger("autoDelete", 0)
     val logging = rxPrefs.getBoolean("logging", false)
+
     // partisan
     private val securePrefs: RxSharedPreferences = run {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
@@ -165,12 +169,14 @@ class Preferences @Inject constructor(
         // Migrate from old night mode preference to new one, now that we support android Q night mode
         val nightModeSummary = rxPrefs.getInteger("nightModeSummary")
         if (nightModeSummary.isSet) {
-            nightMode.set(when (nightModeSummary.get()) {
-                0 -> NIGHT_MODE_OFF
-                1 -> NIGHT_MODE_ON
-                2 -> NIGHT_MODE_AUTO
-                else -> NIGHT_MODE_OFF
-            })
+            nightMode.set(
+                when (nightModeSummary.get()) {
+                    0 -> NIGHT_MODE_OFF
+                    1 -> NIGHT_MODE_ON
+                    2 -> NIGHT_MODE_AUTO
+                    else -> NIGHT_MODE_OFF
+                }
+            )
             nightModeSummary.delete()
         }
     }

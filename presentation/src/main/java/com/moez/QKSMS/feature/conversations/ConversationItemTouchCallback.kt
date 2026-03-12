@@ -64,22 +64,25 @@ class ConversationItemTouchCallback @Inject constructor(
 
     init {
         disposables += colors.themeObservable()
-                .doOnNext { theme -> backgroundPaint.color = theme.theme }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            .doOnNext { theme -> backgroundPaint.color = theme.theme }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
 
         disposables += Observables
-                .combineLatest(prefs.swipeRight.asObservable(), prefs.swipeLeft.asObservable(), colors.themeObservable()
-                ) { right, left, theme ->
-                    rightAction = right
-                    swipeRightIcon = iconForAction(right, theme.textPrimary)
-                    leftAction = left
-                    swipeLeftIcon = iconForAction(left, theme.textPrimary)
-                    setDefaultSwipeDirs((if (right == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.RIGHT)
-                            or (if (left == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.LEFT))
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            .combineLatest(
+                prefs.swipeRight.asObservable(), prefs.swipeLeft.asObservable(), colors.themeObservable()
+            ) { right, left, theme ->
+                rightAction = right
+                swipeRightIcon = iconForAction(right, theme.textPrimary)
+                leftAction = left
+                swipeLeftIcon = iconForAction(left, theme.textPrimary)
+                setDefaultSwipeDirs(
+                    (if (right == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.RIGHT)
+                            or (if (left == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.LEFT)
+                )
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     override fun onMove(
@@ -103,8 +106,10 @@ class ConversationItemTouchCallback @Inject constructor(
             val itemView = viewHolder.itemView
 
             if (dX > 0) {
-                c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(),
-                        dX, itemView.bottom.toFloat(), backgroundPaint)
+                c.drawRect(
+                    itemView.left.toFloat(), itemView.top.toFloat(),
+                    dX, itemView.bottom.toFloat(), backgroundPaint
+                )
 
                 swipeRightIcon?.let { icon ->
                     val availablePx = dX.toInt() - iconLength
@@ -116,16 +121,20 @@ class ConversationItemTouchCallback @Inject constructor(
                     }
                 }
             } else if (dX < 0) {
-                c.drawRect(itemView.right.toFloat() + dX, itemView.top.toFloat(),
-                        itemView.right.toFloat(), itemView.bottom.toFloat(), backgroundPaint)
+                c.drawRect(
+                    itemView.right.toFloat() + dX, itemView.top.toFloat(),
+                    itemView.right.toFloat(), itemView.bottom.toFloat(), backgroundPaint
+                )
 
                 swipeLeftIcon?.let { icon ->
                     val availablePx = -dX.toInt() - iconLength
                     if (availablePx > 0) {
                         val src = Rect(max(0, icon.width - availablePx), 0, icon.width, icon.height)
                         val dstTop = itemView.top + (itemView.bottom - itemView.top - icon.height) / 2
-                        val dst = Rect(itemView.right - iconLength - src.width(), dstTop,
-                                itemView.right - iconLength, dstTop + src.height())
+                        val dst = Rect(
+                            itemView.right - iconLength - src.width(), dstTop,
+                            itemView.right - iconLength, dstTop + src.height()
+                        )
                         c.drawBitmap(icon, src, dst, null)
                     }
                 }
@@ -157,8 +166,8 @@ class ConversationItemTouchCallback @Inject constructor(
         }
 
         return res?.let(context.resources::getDrawable)
-                ?.apply { setTint(tint) }
-                ?.toBitmap(iconLength, iconLength)
+            ?.apply { setTint(tint) }
+            ?.toBitmap(iconLength, iconLength)
     }
 
 }

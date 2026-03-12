@@ -39,6 +39,12 @@ android {
         minSdkVersion 23
         targetSdkVersion 34
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -70,6 +76,11 @@ dependencies {
     implementation "com.ionspin.kotlin:bignum:0.3.1"
     implementation "com.soywiz.korlibs.krypto:krypto:2.1.1"
     implementation project(":common")
+
+    // testing
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.robolectric:robolectric:4.11.1"
 }
 
 repositories {

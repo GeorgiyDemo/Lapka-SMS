@@ -33,9 +33,9 @@ class SyncMessage @Inject constructor(
 
     override fun buildObservable(params: Uri): Flowable<*> {
         return Flowable.just(params)
-                .mapNotNull { uri -> syncManager.syncMessage(uri) }
-                .doOnNext { message -> conversationRepo.updateConversations(message.threadId) }
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
+            .mapNotNull { uri -> syncManager.syncMessage(uri) }
+            .doOnNext { message -> conversationRepo.updateConversations(message.threadId) }
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
     }
 
 }

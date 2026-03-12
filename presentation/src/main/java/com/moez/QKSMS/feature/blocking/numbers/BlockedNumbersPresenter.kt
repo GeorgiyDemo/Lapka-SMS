@@ -32,33 +32,33 @@ class BlockedNumbersPresenter @Inject constructor(
     private val conversationRepo: ConversationRepository,
     private val markUnblocked: MarkUnblocked
 ) : QkPresenter<BlockedNumbersView, BlockedNumbersState>(
-        BlockedNumbersState(numbers = blockingRepo.getBlockedNumbers())
+    BlockedNumbersState(numbers = blockingRepo.getBlockedNumbers())
 ) {
 
     override fun bindIntents(view: BlockedNumbersView) {
         super.bindIntents(view)
 
         view.unblockAddress()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .doOnNext { id ->
-                    blockingRepo.getBlockedNumber(id)?.address
-                            ?.let(conversationRepo::getThreadId)
-                            ?.let { threadId -> markUnblocked.execute(listOf(threadId)) }
-                }
-                .doOnNext(blockingRepo::unblockNumber)
-                .autoDisposable(view.scope())
-                .subscribe()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .doOnNext { id ->
+                blockingRepo.getBlockedNumber(id)?.address
+                    ?.let(conversationRepo::getThreadId)
+                    ?.let { threadId -> markUnblocked.execute(listOf(threadId)) }
+            }
+            .doOnNext(blockingRepo::unblockNumber)
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.addAddress()
-                .autoDisposable(view.scope())
-                .subscribe { view.showAddDialog() }
+            .autoDisposable(view.scope())
+            .subscribe { view.showAddDialog() }
 
         view.saveAddress()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .autoDisposable(view.scope())
-                .subscribe { address -> blockingRepo.blockNumber(address) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .autoDisposable(view.scope())
+            .subscribe { address -> blockingRepo.blockNumber(address) }
     }
 
 }

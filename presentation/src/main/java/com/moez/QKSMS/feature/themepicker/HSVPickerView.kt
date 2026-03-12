@@ -47,7 +47,7 @@ class HSVPickerView @JvmOverloads constructor(
     val selectedColor: Subject<Int> = BehaviorSubject.create()
 
     private val hues = arrayOf(0xFFFF0000, 0xFFFFFF00, 0xFF00FF00, 0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000)
-            .map { it.toInt() }.toIntArray()
+        .map { it.toInt() }.toIntArray()
 
     private var min: Float = 0f
     private var max = 0f

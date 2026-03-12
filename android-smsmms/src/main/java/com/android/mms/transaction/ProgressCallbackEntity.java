@@ -26,13 +26,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ProgressCallbackEntity extends ByteArrayEntity {
-    private static final int DEFAULT_PIECE_SIZE = 4096;
-
     public static final String PROGRESS_STATUS_ACTION = "com.android.mms.PROGRESS_STATUS";
-    public static final int PROGRESS_START    = -1;
-    public static final int PROGRESS_ABORT    = -2;
+    public static final int PROGRESS_START = -1;
+    public static final int PROGRESS_ABORT = -2;
     public static final int PROGRESS_COMPLETE = 100;
-
+    private static final int DEFAULT_PIECE_SIZE = 4096;
     private final Context mContext;
     private final byte[] mContent;
     private final long mToken;

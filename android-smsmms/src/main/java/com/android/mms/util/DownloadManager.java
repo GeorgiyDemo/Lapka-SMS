@@ -37,25 +37,21 @@ import com.klinker.android.send_message.R;
 import timber.log.Timber;
 
 public class DownloadManager {
-    private static final boolean LOCAL_LOGV = false;
-
-    public static final int DEFERRED_MASK           = 0x04;
-
-    public static final int STATE_UNKNOWN           = 0x00;
-    public static final int STATE_UNSTARTED         = 0x80;
-    public static final int STATE_DOWNLOADING       = 0x81;
+    public static final int DEFERRED_MASK = 0x04;
+    public static final int STATE_UNKNOWN = 0x00;
+    public static final int STATE_UNSTARTED = 0x80;
+    public static final int STATE_DOWNLOADING = 0x81;
     public static final int STATE_TRANSIENT_FAILURE = 0x82;
     public static final int STATE_PERMANENT_FAILURE = 0x87;
-    public static final int STATE_PRE_DOWNLOADING   = 0x88;
+    public static final int STATE_PRE_DOWNLOADING = 0x88;
     // TransactionService will skip downloading Mms if auto-download is off
-    public static final int STATE_SKIP_RETRYING     = 0x89;
-
+    public static final int STATE_SKIP_RETRYING = 0x89;
+    private static final boolean LOCAL_LOGV = false;
+    private static DownloadManager sInstance;
     private final Context mContext;
     private final Handler mHandler;
     private final SharedPreferences mPreferences;
     private boolean mAutoDownload;
-
-    private static DownloadManager sInstance;
 
     private DownloadManager(Context context) {
         mContext = context;
@@ -66,10 +62,6 @@ public class DownloadManager {
         if (LOCAL_LOGV) {
             Timber.v("mAutoDownload ------> " + mAutoDownload);
         }
-    }
-
-    public boolean isAuto() {
-        return mAutoDownload;
     }
 
     public static void init(Context context) {
@@ -125,6 +117,10 @@ public class DownloadManager {
         return "true".equals(roaming);
     }
 
+    public boolean isAuto() {
+        return mAutoDownload;
+    }
+
     public void markState(final Uri uri, int state) {
         // Notify user if the message has expired.
         try {
@@ -141,7 +137,7 @@ public class DownloadManager {
                 SqliteWrapper.delete(mContext, mContext.getContentResolver(), uri, null, null);
                 return;
             }
-        } catch(MmsException e) {
+        } catch (MmsException e) {
             Timber.e(e, e.getMessage());
             return;
         }
@@ -167,7 +163,7 @@ public class DownloadManager {
         ContentValues values = new ContentValues(1);
         values.put(Mms.STATUS, state);
         SqliteWrapper.update(mContext, mContext.getContentResolver(),
-                    uri, values, null, null);
+                uri, values, null, null);
     }
 
     public void showErrorCodeToast(int errorStr) {
@@ -198,7 +194,7 @@ public class DownloadManager {
 
     public int getState(Uri uri) {
         Cursor cursor = SqliteWrapper.query(mContext, mContext.getContentResolver(),
-                            uri, new String[] {Mms.STATUS}, null, null, null);
+                uri, new String[]{Mms.STATUS}, null, null, null);
 
         if (cursor != null) {
             try {

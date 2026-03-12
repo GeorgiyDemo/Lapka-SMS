@@ -48,8 +48,10 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
     override val blockedMessagesIntent by lazy { blockedMessages.clicks() }
     override val dropClickedIntent by lazy { drop.clicks() }
 
-    @Inject lateinit var colors: Colors
-    @Inject override lateinit var presenter: BlockingPresenter
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    override lateinit var presenter: BlockingPresenter
 
     init {
         appComponent.inject(this)
@@ -76,21 +78,27 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
     }
 
     override fun openBlockedNumbers() {
-        router.pushController(RouterTransaction.with(BlockedNumbersController())
+        router.pushController(
+            RouterTransaction.with(BlockedNumbersController())
                 .pushChangeHandler(QkChangeHandler())
-                .popChangeHandler(QkChangeHandler()))
+                .popChangeHandler(QkChangeHandler())
+        )
     }
 
     override fun openBlockedMessages() {
-        router.pushController(RouterTransaction.with(BlockedMessagesController())
+        router.pushController(
+            RouterTransaction.with(BlockedMessagesController())
                 .pushChangeHandler(QkChangeHandler())
-                .popChangeHandler(QkChangeHandler()))
+                .popChangeHandler(QkChangeHandler())
+        )
     }
 
     override fun openBlockingManager() {
-        router.pushController(RouterTransaction.with(BlockingManagerController())
+        router.pushController(
+            RouterTransaction.with(BlockingManagerController())
                 .pushChangeHandler(QkChangeHandler())
-                .popChangeHandler(QkChangeHandler()))
+                .popChangeHandler(QkChangeHandler())
+        )
     }
 
 }

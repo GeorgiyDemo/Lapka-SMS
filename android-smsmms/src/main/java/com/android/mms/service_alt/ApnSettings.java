@@ -36,15 +36,6 @@ import java.net.URISyntaxException;
  */
 public class ApnSettings {
 
-    // MMSC URL
-    private final String mServiceCenter;
-    // MMSC proxy address
-    private final String mProxyAddress;
-    // MMSC proxy port
-    private final int mProxyPort;
-    // Debug text for this APN: a concatenation of interesting columns of this APN
-    private final String mDebugText;
-
     private static final String[] APN_PROJECTION = {
             Telephony.Carriers.TYPE,
             Telephony.Carriers.MMSC,
@@ -64,24 +55,39 @@ public class ApnSettings {
             Telephony.Carriers.USER,
             Telephony.Carriers.PASSWORD,
     };
-    private static final int COLUMN_TYPE         = 0;
-    private static final int COLUMN_MMSC         = 1;
-    private static final int COLUMN_MMSPROXY     = 2;
-    private static final int COLUMN_MMSPORT      = 3;
-    private static final int COLUMN_NAME         = 4;
-    private static final int COLUMN_APN          = 5;
-    private static final int COLUMN_BEARER       = 6;
-    private static final int COLUMN_PROTOCOL     = 7;
+    private static final int COLUMN_TYPE = 0;
+    private static final int COLUMN_MMSC = 1;
+    private static final int COLUMN_MMSPROXY = 2;
+    private static final int COLUMN_MMSPORT = 3;
+    private static final int COLUMN_NAME = 4;
+    private static final int COLUMN_APN = 5;
+    private static final int COLUMN_BEARER = 6;
+    private static final int COLUMN_PROTOCOL = 7;
     private static final int COLUMN_ROAMING_PROTOCOL = 8;
-    private static final int COLUMN_AUTH_TYPE    = 9;
-    private static final int COLUMN_MVNO_TYPE    = 10;
+    private static final int COLUMN_AUTH_TYPE = 9;
+    private static final int COLUMN_MVNO_TYPE = 10;
     private static final int COLUMN_MVNO_MATCH_DATA = 11;
-    private static final int COLUMN_PROXY        = 12;
-    private static final int COLUMN_PORT         = 13;
-    private static final int COLUMN_SERVER       = 14;
-    private static final int COLUMN_USER         = 15;
-    private static final int COLUMN_PASSWORD     = 16;
+    private static final int COLUMN_PROXY = 12;
+    private static final int COLUMN_PORT = 13;
+    private static final int COLUMN_SERVER = 14;
+    private static final int COLUMN_USER = 15;
+    private static final int COLUMN_PASSWORD = 16;
+    // MMSC URL
+    private final String mServiceCenter;
+    // MMSC proxy address
+    private final String mProxyAddress;
+    // MMSC proxy port
+    private final int mProxyPort;
+    // Debug text for this APN: a concatenation of interesting columns of this APN
+    private final String mDebugText;
 
+
+    public ApnSettings(String mmscUrl, String proxyAddr, int proxyPort, String debugText) {
+        mServiceCenter = mmscUrl;
+        mProxyAddress = proxyAddr;
+        mProxyPort = proxyPort;
+        mDebugText = debugText;
+    }
 
     /**
      * Load APN settings from system
@@ -108,7 +114,7 @@ public class ApnSettings {
         if (!TextUtils.isEmpty(apnName)) {
             //selection += " AND " + Telephony.Carriers.APN + "=?";
             selection = Telephony.Carriers.APN + "=?";
-            selectionArgs = new String[]{ apnName };
+            selectionArgs = new String[]{apnName};
         }
         Cursor cursor = null;
         try {
@@ -189,29 +195,6 @@ public class ApnSettings {
         return value != null ? value.trim() : null;
     }
 
-    public ApnSettings(String mmscUrl, String proxyAddr, int proxyPort, String debugText) {
-        mServiceCenter = mmscUrl;
-        mProxyAddress = proxyAddr;
-        mProxyPort = proxyPort;
-        mDebugText = debugText;
-   }
-
-    public String getMmscUrl() {
-        return mServiceCenter;
-    }
-
-    public String getProxyAddress() {
-        return mProxyAddress;
-    }
-
-    public int getProxyPort() {
-        return mProxyPort;
-    }
-
-    public boolean isProxySet() {
-        return !TextUtils.isEmpty(mProxyAddress);
-    }
-
     private static boolean isValidApnType(String types, String requestType) {
         // If APN type is unspecified, assume APN_TYPE_ALL.
         if (TextUtils.isEmpty(types)) {
@@ -232,6 +215,22 @@ public class ApnSettings {
         } else {
             return Integer.parseInt(port);
         }
+    }
+
+    public String getMmscUrl() {
+        return mServiceCenter;
+    }
+
+    public String getProxyAddress() {
+        return mProxyAddress;
+    }
+
+    public int getProxyPort() {
+        return mProxyPort;
+    }
+
+    public boolean isProxySet() {
+        return !TextUtils.isEmpty(mProxyAddress);
     }
 
     public String toString() {

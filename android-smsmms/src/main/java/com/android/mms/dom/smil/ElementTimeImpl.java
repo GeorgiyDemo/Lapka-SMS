@@ -31,9 +31,9 @@ public abstract class ElementTimeImpl implements ElementTime {
     private static final String FILL_FREEZE_ATTRIBUTE = "freeze";
     private static final String FILL_HOLD_ATTRIBUTE = "hold";
     private static final String FILL_TRANSITION_ATTRIBUTE = "transition";
-    private static final String FILL_AUTO_ATTRIBUTE   = "auto";
-    private static final String FILL_ATTRIBUTE_NAME   = "fill";
-    private static final String FILLDEFAULT_ATTRIBUTE_NAME   = "fillDefault";
+    private static final String FILL_AUTO_ATTRIBUTE = "auto";
+    private static final String FILL_ATTRIBUTE_NAME = "fill";
+    private static final String FILLDEFAULT_ATTRIBUTE_NAME = "fillDefault";
 
     final SMILElement mSmilElement;
 
@@ -56,6 +56,7 @@ public abstract class ElementTimeImpl implements ElementTime {
 
     /**
      * To get the parent node on the ElementTime tree. It is in opposition to getTimeChildren.
+     *
      * @return the parent ElementTime. Returns <code>null</code> if there is no parent.
      */
     abstract ElementTime getParentElementTime();
@@ -102,6 +103,11 @@ public abstract class ElementTimeImpl implements ElementTime {
         return new TimeListImpl(beginTimeList);
     }
 
+    public void setBegin(TimeList begin) throws DOMException {
+        // TODO Implement this
+        mSmilElement.setAttribute("begin", "indefinite");
+    }
+
     public float getDur() {
         float dur = 0;
         try {
@@ -114,6 +120,12 @@ public abstract class ElementTimeImpl implements ElementTime {
         }
 
         return dur;
+    }
+
+    public void setDur(float dur) throws DOMException {
+        // In SMIL 3.0, the dur could be a timecount-value which may contain fractions.
+        // However, in MMS 1.3, the dur SHALL be expressed in integer milliseconds.
+        mSmilElement.setAttribute("dur", Integer.toString((int) (dur * 1000)) + "ms");
     }
 
     public TimeList getEnd() {
@@ -154,6 +166,11 @@ public abstract class ElementTimeImpl implements ElementTime {
         }
 
         return new TimeListImpl(endTimeList);
+    }
+
+    public void setEnd(TimeList end) throws DOMException {
+        // TODO Implement this
+        mSmilElement.setAttribute("end", "indefinite");
     }
 
     private boolean beginAndEndAreZero() {
@@ -212,6 +229,14 @@ public abstract class ElementTimeImpl implements ElementTime {
         }
     }
 
+    public void setFill(short fill) throws DOMException {
+        if (fill == FILL_FREEZE) {
+            mSmilElement.setAttribute(FILL_ATTRIBUTE_NAME, FILL_FREEZE_ATTRIBUTE);
+        } else {
+            mSmilElement.setAttribute(FILL_ATTRIBUTE_NAME, FILL_REMOVE_ATTRIBUTE); // default
+        }
+    }
+
     public short getFillDefault() {
         String fillDefault = mSmilElement.getAttribute(FILLDEFAULT_ATTRIBUTE_NAME);
         if (fillDefault.equalsIgnoreCase(FILL_REMOVE_ATTRIBUTE)) {
@@ -246,6 +271,14 @@ public abstract class ElementTimeImpl implements ElementTime {
         }
     }
 
+    public void setFillDefault(short fillDefault) throws DOMException {
+        if (fillDefault == FILL_FREEZE) {
+            mSmilElement.setAttribute(FILLDEFAULT_ATTRIBUTE_NAME, FILL_FREEZE_ATTRIBUTE);
+        } else {
+            mSmilElement.setAttribute(FILLDEFAULT_ATTRIBUTE_NAME, FILL_REMOVE_ATTRIBUTE);
+        }
+    }
+
     public float getRepeatCount() {
         String repeatCount = mSmilElement.getAttribute("repeatCount");
         try {
@@ -260,10 +293,18 @@ public abstract class ElementTimeImpl implements ElementTime {
         }
     }
 
+    public void setRepeatCount(float repeatCount) throws DOMException {
+        String repeatCountString = "indefinite";
+        if (repeatCount > 0) {
+            repeatCountString = Float.toString(repeatCount);
+        }
+        mSmilElement.setAttribute("repeatCount", repeatCountString);
+    }
+
     public float getRepeatDur() {
         try {
             float repeatDur =
-                TimeImpl.parseClockValue(mSmilElement.getAttribute("repeatDur"));
+                    TimeImpl.parseClockValue(mSmilElement.getAttribute("repeatDur"));
             if (repeatDur > 0) {
                 return repeatDur;
             } else {
@@ -272,6 +313,14 @@ public abstract class ElementTimeImpl implements ElementTime {
         } catch (IllegalArgumentException e) {
             return 0; // default
         }
+    }
+
+    public void setRepeatDur(float repeatDur) throws DOMException {
+        String repeatDurString = "indefinite";
+        if (repeatDur > 0) {
+            repeatDurString = Float.toString(repeatDur) + "ms";
+        }
+        mSmilElement.setAttribute("repeatDur", repeatDurString);
     }
 
     public short getRestart() {
@@ -283,54 +332,6 @@ public abstract class ElementTimeImpl implements ElementTime {
         } else {
             return RESTART_ALWAYS; // default
         }
-    }
-
-    public void setBegin(TimeList begin) throws DOMException {
-        // TODO Implement this
-        mSmilElement.setAttribute("begin", "indefinite");
-    }
-
-    public void setDur(float dur) throws DOMException {
-        // In SMIL 3.0, the dur could be a timecount-value which may contain fractions.
-        // However, in MMS 1.3, the dur SHALL be expressed in integer milliseconds.
-        mSmilElement.setAttribute("dur", Integer.toString((int)(dur * 1000)) + "ms");
-    }
-
-    public void setEnd(TimeList end) throws DOMException {
-        // TODO Implement this
-        mSmilElement.setAttribute("end", "indefinite");
-    }
-
-    public void setFill(short fill) throws DOMException {
-        if (fill == FILL_FREEZE) {
-            mSmilElement.setAttribute(FILL_ATTRIBUTE_NAME, FILL_FREEZE_ATTRIBUTE);
-        } else {
-            mSmilElement.setAttribute(FILL_ATTRIBUTE_NAME, FILL_REMOVE_ATTRIBUTE); // default
-        }
-    }
-
-    public void setFillDefault(short fillDefault) throws DOMException {
-        if (fillDefault == FILL_FREEZE) {
-            mSmilElement.setAttribute(FILLDEFAULT_ATTRIBUTE_NAME, FILL_FREEZE_ATTRIBUTE);
-        } else {
-            mSmilElement.setAttribute(FILLDEFAULT_ATTRIBUTE_NAME, FILL_REMOVE_ATTRIBUTE);
-        }
-    }
-
-    public void setRepeatCount(float repeatCount) throws DOMException {
-        String repeatCountString = "indefinite";
-        if (repeatCount > 0) {
-            repeatCountString = Float.toString(repeatCount);
-        }
-        mSmilElement.setAttribute("repeatCount", repeatCountString);
-    }
-
-    public void setRepeatDur(float repeatDur) throws DOMException {
-        String repeatDurString = "indefinite";
-        if (repeatDur > 0) {
-            repeatDurString = Float.toString(repeatDur) + "ms";
-        }
-        mSmilElement.setAttribute("repeatDur", repeatDurString);
     }
 
     public void setRestart(short restart) throws DOMException {

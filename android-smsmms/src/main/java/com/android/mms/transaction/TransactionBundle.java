@@ -30,30 +30,7 @@ public class TransactionBundle {
      * TYPE_SEND_TRANSACTION, and TYPE_READREC_TRANSACTION.
      */
     public static final String TRANSACTION_TYPE = "type";
-
-    /**
-     * Key of the push-data.
-     * Used when TRANSACTION_TYPE is TYPE_PUSH_TRANSACTION.
-     */
-    private static final String PUSH_DATA = "mms-push-data";
-
     public static final String LOLLIPOP_RECEIVING = "receive_with_new_method";
-
-    /**
-     * Key of the MMSC server URL.
-     */
-    private static final String MMSC_URL = "mmsc-url";
-
-    /**
-     * Key of the HTTP Proxy address.
-     */
-    private static final String PROXY_ADDRESS = "proxy-address";
-
-    /**
-     * Key of the HTTP Proxy port.
-     */
-    private static final String PROXY_PORT = "proxy-port";
-
     /**
      * Key of the URI.
      * Indicates the URL of the M-Retrieve.conf in TYPE_RETRIEVE_TRANSACTION, or the
@@ -61,7 +38,23 @@ public class TransactionBundle {
      * TYPE_READREC_TRANSACTION, respectively.
      */
     public static final String URI = "uri";
-
+    /**
+     * Key of the push-data.
+     * Used when TRANSACTION_TYPE is TYPE_PUSH_TRANSACTION.
+     */
+    private static final String PUSH_DATA = "mms-push-data";
+    /**
+     * Key of the MMSC server URL.
+     */
+    private static final String MMSC_URL = "mmsc-url";
+    /**
+     * Key of the HTTP Proxy address.
+     */
+    private static final String PROXY_ADDRESS = "proxy-address";
+    /**
+     * Key of the HTTP Proxy port.
+     */
+    private static final String PROXY_PORT = "proxy-port";
     /**
      * This is the real Bundle to be sent to the TransactionService upon calling
      * startService.
@@ -83,10 +76,10 @@ public class TransactionBundle {
      * TYPE_RETRIEVE_TRANSACTION, TYPE_SEND_TRANSACTION, and TYPE_READREC_TRANSACTION.
      *
      * @param transactionType
-     * @param uri The relevant URI for this transaction. Indicates the URL of the
-     * M-Retrieve.conf in TYPE_RETRIEVE_TRANSACTION, or the Uri of the
-     * M-Send.req/M-Read-Rec.ind in TYPE_SEND_TRANSACTION and
-     * TYPE_READREC_TRANSACTION, respectively.
+     * @param uri             The relevant URI for this transaction. Indicates the URL of the
+     *                        M-Retrieve.conf in TYPE_RETRIEVE_TRANSACTION, or the Uri of the
+     *                        M-Send.req/M-Read-Rec.ind in TYPE_SEND_TRANSACTION and
+     *                        TYPE_READREC_TRANSACTION, respectively.
      */
     public TransactionBundle(int transactionType, String uri) {
         this(transactionType);
@@ -103,8 +96,8 @@ public class TransactionBundle {
     }
 
     public void setConnectionSettings(String mmscUrl,
-            String proxyAddress,
-            int proxyPort) {
+                                      String proxyAddress,
+                                      int proxyPort) {
         mBundle.putString(MMSC_URL, mmscUrl);
         mBundle.putString(PROXY_ADDRESS, proxyAddress);
         mBundle.putInt(PROXY_PORT, proxyPort);
@@ -148,9 +141,9 @@ public class TransactionBundle {
     @Override
     public String toString() {
         return "transactionType: " + getTransactionType() +
-            " uri: " + getUri() +
-            " mmscUrl: " + getMmscUrl() +
-            " proxyAddress: " + getProxyAddress() +
-            " proxyPort: " + getProxyPort();
+                " uri: " + getUri() +
+                " mmscUrl: " + getMmscUrl() +
+                " proxyAddress: " + getProxyAddress() +
+                " proxyPort: " + getProxyPort();
     }
 }

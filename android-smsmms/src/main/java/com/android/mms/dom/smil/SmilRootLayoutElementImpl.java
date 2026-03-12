@@ -36,22 +36,13 @@ public class SmilRootLayoutElementImpl extends SmilElementImpl implements
         return this.getAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME);
     }
 
+    public void setBackgroundColor(String backgroundColor) throws DOMException {
+        this.setAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME, backgroundColor);
+    }
+
     public int getHeight() {
         String heightString = this.getAttribute(HEIGHT_ATTRIBUTE_NAME);
         return parseAbsoluteLength(heightString);
-    }
-
-    public String getTitle() {
-        return this.getAttribute(TITLE_ATTRIBUTE_NAME);
-    }
-
-    public int getWidth() {
-        String widthString = this.getAttribute(WIDTH_ATTRIBUTE_NAME);
-        return parseAbsoluteLength(widthString);
-    }
-
-    public void setBackgroundColor(String backgroundColor) throws DOMException {
-        this.setAttribute(BACKGROUND_COLOR_ATTRIBUTE_NAME, backgroundColor);
     }
 
     public void setHeight(int height) throws DOMException {
@@ -59,8 +50,17 @@ public class SmilRootLayoutElementImpl extends SmilElementImpl implements
 
     }
 
+    public String getTitle() {
+        return this.getAttribute(TITLE_ATTRIBUTE_NAME);
+    }
+
     public void setTitle(String title) throws DOMException {
         this.setAttribute(TITLE_ATTRIBUTE_NAME, title);
+    }
+
+    public int getWidth() {
+        String widthString = this.getAttribute(WIDTH_ATTRIBUTE_NAME);
+        return parseAbsoluteLength(widthString);
     }
 
     public void setWidth(int width) throws DOMException {

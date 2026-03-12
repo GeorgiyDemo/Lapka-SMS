@@ -27,7 +27,8 @@ import javax.inject.Inject
 
 class DeleteMessagesReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var deleteMessages: DeleteMessages
+    @Inject
+    lateinit var deleteMessages: DeleteMessages
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

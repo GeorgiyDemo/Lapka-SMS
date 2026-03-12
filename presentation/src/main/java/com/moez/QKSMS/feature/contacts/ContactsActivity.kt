@@ -56,9 +56,12 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         const val ChipsKey = "chips"
     }
 
-    @Inject lateinit var contactsAdapter: ComposeItemAdapter
-    @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
-    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var contactsAdapter: ComposeItemAdapter
+    @Inject
+    lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     // View properties
     private val search: QkEditText by lazy { findViewById(R.id.search) }

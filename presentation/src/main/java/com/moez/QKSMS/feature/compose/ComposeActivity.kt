@@ -75,27 +75,36 @@ import javax.inject.Inject
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
-    @Inject lateinit var chipsAdapter: ChipsAdapter
-    @Inject lateinit var dateFormatter: DateFormatter
-    @Inject lateinit var messageAdapter: MessagesAdapter
-    @Inject lateinit var navigator: Navigator
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var chipsAdapter: ChipsAdapter
+    @Inject
+    lateinit var dateFormatter: DateFormatter
+    @Inject
+    lateinit var messageAdapter: MessagesAdapter
+    @Inject
+    lateinit var navigator: Navigator
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val selectContactLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        chipsSelectedIntent.onNext(result.data?.getSerializableExtra(ContactsActivity.ChipsKey)
-            ?.let { serializable -> serializable as? HashMap<String, String?> }
-            ?: hashMapOf())
-    }
+    private val selectContactLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            chipsSelectedIntent.onNext(
+                result.data?.getSerializableExtra(ContactsActivity.ChipsKey)
+                ?.let { serializable -> serializable as? HashMap<String, String?> }
+                ?: hashMapOf())
+        }
 
-    private val encryptionKeyLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
-                encryptionKeySetIntent.onNext(Unit)
+    private val encryptionKeyLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
+                    encryptionKeySetIntent.onNext(Unit)
+                }
             }
         }
-    }
 
-    private val smsPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+    private val smsPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
 
     private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
@@ -203,8 +212,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         }
 
         toolbarSubtitle.setVisible(state.query.isNotEmpty())
-        toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
-            state.searchResults)
+        toolbarSubtitle.text = getString(
+            R.string.compose_subtitle_results, state.searchSelectionPosition,
+            state.searchResults
+        )
 
         searchInput.setVisible(state.searching)
         toolbarTitle.setVisible(!state.editingMode && !state.searching)
@@ -225,9 +236,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
-        toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
-        toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
+        toolbar.menu.findItem(R.id.previous)?.isVisible =
+            state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
+        toolbar.menu.findItem(R.id.next)?.isVisible =
+            state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
+        toolbar.menu.findItem(R.id.clear)?.isVisible =
+            state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
         toolbar.menu.findItem(R.id.encrypted)?.isVisible = state.encryptionEnabled
         toolbar.menu.findItem(R.id.raw)?.isVisible = !state.encryptionEnabled
 
@@ -275,9 +289,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun requestSmsPermission() {
-        smsPermissionLauncher.launch(arrayOf(
-            Manifest.permission.READ_SMS,
-            Manifest.permission.SEND_SMS))
+        smsPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.READ_SMS,
+                Manifest.permission.SEND_SMS
+            )
+        )
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {

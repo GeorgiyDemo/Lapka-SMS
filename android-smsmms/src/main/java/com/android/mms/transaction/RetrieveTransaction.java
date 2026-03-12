@@ -55,23 +55,20 @@ import timber.log.Timber;
  * </ul>
  */
 public class RetrieveTransaction extends Transaction implements Runnable {
+    static final String[] PROJECTION = new String[]{
+            Mms.CONTENT_LOCATION,
+            Mms.LOCKED
+    };
+    // The indexes of the columns which must be consistent with above PROJECTION.
+    static final int COLUMN_CONTENT_LOCATION = 0;
+    static final int COLUMN_LOCKED = 1;
     private static final boolean LOCAL_LOGV = false;
-
     private final Uri mUri;
     private final String mContentLocation;
     private boolean mLocked;
 
-    static final String[] PROJECTION = new String[] {
-        Mms.CONTENT_LOCATION,
-        Mms.LOCKED
-    };
-
-    // The indexes of the columns which must be consistent with above PROJECTION.
-    static final int COLUMN_CONTENT_LOCATION      = 0;
-    static final int COLUMN_LOCKED                = 1;
-
     public RetrieveTransaction(Context context, int serviceId,
-            TransactionSettings connectionSettings, String uri)
+                               TransactionSettings connectionSettings, String uri)
             throws MmsException {
         super(context, serviceId, connectionSettings);
 
@@ -90,131 +87,18 @@ public class RetrieveTransaction extends Transaction implements Runnable {
         attach(RetryScheduler.getInstance(context));
     }
 
-    public String getContentLocation(Context context, Uri uri)
-            throws MmsException {
-        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-                            uri, PROJECTION, null, null, null);
-        mLocked = false;
-
-        if (cursor != null) {
-            try {
-                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
-                    // Get the locked flag from the M-Notification.ind so it can be transferred
-                    // to the real message after the download.
-                    mLocked = cursor.getInt(COLUMN_LOCKED) == 1;
-                    String location = cursor.getString(COLUMN_CONTENT_LOCATION);
-                    cursor.close();
-                    return location;
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        throw new MmsException("Cannot get X-Mms-Content-Location from: " + uri);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.android.mms.transaction.Transaction#process()
-     */
-    @Override
-    public void process() {
-        new Thread(this, "RetrieveTransaction").start();
-    }
-
-    public void run() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            DownloadRequest request = new DownloadRequest(mContentLocation, mUri, null, null, null);
-//            MmsNetworkManager manager = new MmsNetworkManager(mContext);
-//            request.execute(mContext, manager);
-//        } else {
-            try {
-                // Change the downloading state of the M-Notification.ind.
-                DownloadManager.init(mContext.getApplicationContext());
-                DownloadManager.getInstance().markState(
-                        mUri, DownloadManager.STATE_DOWNLOADING);
-
-                // Send GET request to MMSC and retrieve the response data.
-                byte[] resp = getPdu(mContentLocation);
-
-                // Parse M-Retrieve.conf
-                RetrieveConf retrieveConf = (RetrieveConf) new PduParser(resp).parse();
-                if (null == retrieveConf) {
-                    throw new MmsException("Invalid M-Retrieve.conf PDU.");
-                }
-
-                Uri msgUri = null;
-                if (isDuplicateMessage(mContext, retrieveConf)) {
-                    // Mark this transaction as failed to prevent duplicate
-                    // notification to user.
-                    mTransactionState.setState(TransactionState.FAILED);
-                    mTransactionState.setContentUri(mUri);
-                } else {
-                    // Store M-Retrieve.conf into Inbox
-                    PduPersister persister = PduPersister.getPduPersister(mContext);
-                    msgUri = persister.persist(retrieveConf, Inbox.CONTENT_URI,
-                            PduPersister.DUMMY_THREAD_ID, true, true, null);
-
-                    // Use local time instead of PDU time
-                    ContentValues values = new ContentValues(3);
-                    values.put(Mms.DATE, System.currentTimeMillis() / 1000L);
-                    try {
-                        values.put(Mms.DATE_SENT, retrieveConf.getDate());
-                    } catch (Exception ignored) {
-                    }
-                    values.put(Mms.MESSAGE_SIZE, resp.length);
-                    SqliteWrapper.update(mContext, mContext.getContentResolver(),
-                            msgUri, values, null, null);
-
-                    // The M-Retrieve.conf has been successfully downloaded.
-                    mTransactionState.setState(TransactionState.SUCCESS);
-                    mTransactionState.setContentUri(msgUri);
-                    // Remember the location the message was downloaded from.
-                    // Since it's not critical, it won't fail the transaction.
-                    // Copy over the locked flag from the M-Notification.ind in case
-                    // the user locked the message before activating the download.
-                    updateContentLocation(mContext, msgUri, mContentLocation, mLocked);
-                }
-
-                // Delete the corresponding M-Notification.ind.
-                SqliteWrapper.delete(mContext, mContext.getContentResolver(),
-                        mUri, null, null);
-
-                // Send ACK to the Proxy-Relay to indicate we have fetched the
-                // MM successfully.
-                // Don't mark the transaction as failed if we failed to send it.
-                sendAcknowledgeInd(retrieveConf);
-            } catch (Throwable t) {
-                Timber.e(t, "error");
-                if ("HTTP error: Not Found".equals(t.getMessage())) {
-                    // Delete the expired M-Notification.ind.
-                    SqliteWrapper.delete(mContext, mContext.getContentResolver(),
-                            mUri, null, null);
-                }
-            } finally {
-                if (mTransactionState.getState() != TransactionState.SUCCESS) {
-                    mTransactionState.setState(TransactionState.FAILED);
-                    mTransactionState.setContentUri(mUri);
-                    Timber.e("Retrieval failed.");
-                }
-                notifyObservers();
-            }
-//        }
-    }
-
     private static boolean isDuplicateMessage(Context context, RetrieveConf rc) {
         byte[] rawMessageId = rc.getMessageId();
         if (rawMessageId != null) {
             String messageId = new String(rawMessageId);
             String selection = "(" + Mms.MESSAGE_ID + " = ? AND "
-                                   + Mms.MESSAGE_TYPE + " = ?)";
-            String[] selectionArgs = new String[] { messageId,
-                    String.valueOf(PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF) };
+                    + Mms.MESSAGE_TYPE + " = ?)";
+            String[] selectionArgs = new String[]{messageId,
+                    String.valueOf(PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF)};
 
             Cursor cursor = SqliteWrapper.query(
                     context, context.getContentResolver(),
-                    Mms.CONTENT_URI, new String[] { Mms._ID, Mms.SUBJECT, Mms.SUBJECT_CHARSET },
+                    Mms.CONTENT_URI, new String[]{Mms._ID, Mms.SUBJECT, Mms.SUBJECT_CHARSET},
                     selection, selectionArgs, null);
 
             if (cursor != null) {
@@ -277,6 +161,129 @@ public class RetrieveTransaction extends Transaction implements Runnable {
         return false;
     }
 
+    private static void updateContentLocation(Context context, Uri uri,
+                                              String contentLocation,
+                                              boolean locked) {
+        ContentValues values = new ContentValues(2);
+        values.put(Mms.CONTENT_LOCATION, contentLocation);
+        values.put(Mms.LOCKED, locked);     // preserve the state of the M-Notification.ind lock.
+        SqliteWrapper.update(context, context.getContentResolver(),
+                uri, values, null, null);
+    }
+
+    public String getContentLocation(Context context, Uri uri)
+            throws MmsException {
+        Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
+                uri, PROJECTION, null, null, null);
+        mLocked = false;
+
+        if (cursor != null) {
+            try {
+                if ((cursor.getCount() == 1) && cursor.moveToFirst()) {
+                    // Get the locked flag from the M-Notification.ind so it can be transferred
+                    // to the real message after the download.
+                    mLocked = cursor.getInt(COLUMN_LOCKED) == 1;
+                    String location = cursor.getString(COLUMN_CONTENT_LOCATION);
+                    cursor.close();
+                    return location;
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        throw new MmsException("Cannot get X-Mms-Content-Location from: " + uri);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see com.android.mms.transaction.Transaction#process()
+     */
+    @Override
+    public void process() {
+        new Thread(this, "RetrieveTransaction").start();
+    }
+
+    public void run() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            DownloadRequest request = new DownloadRequest(mContentLocation, mUri, null, null, null);
+//            MmsNetworkManager manager = new MmsNetworkManager(mContext);
+//            request.execute(mContext, manager);
+//        } else {
+        try {
+            // Change the downloading state of the M-Notification.ind.
+            DownloadManager.init(mContext.getApplicationContext());
+            DownloadManager.getInstance().markState(
+                    mUri, DownloadManager.STATE_DOWNLOADING);
+
+            // Send GET request to MMSC and retrieve the response data.
+            byte[] resp = getPdu(mContentLocation);
+
+            // Parse M-Retrieve.conf
+            RetrieveConf retrieveConf = (RetrieveConf) new PduParser(resp).parse();
+            if (null == retrieveConf) {
+                throw new MmsException("Invalid M-Retrieve.conf PDU.");
+            }
+
+            Uri msgUri = null;
+            if (isDuplicateMessage(mContext, retrieveConf)) {
+                // Mark this transaction as failed to prevent duplicate
+                // notification to user.
+                mTransactionState.setState(TransactionState.FAILED);
+                mTransactionState.setContentUri(mUri);
+            } else {
+                // Store M-Retrieve.conf into Inbox
+                PduPersister persister = PduPersister.getPduPersister(mContext);
+                msgUri = persister.persist(retrieveConf, Inbox.CONTENT_URI,
+                        PduPersister.DUMMY_THREAD_ID, true, true, null);
+
+                // Use local time instead of PDU time
+                ContentValues values = new ContentValues(3);
+                values.put(Mms.DATE, System.currentTimeMillis() / 1000L);
+                try {
+                    values.put(Mms.DATE_SENT, retrieveConf.getDate());
+                } catch (Exception ignored) {
+                }
+                values.put(Mms.MESSAGE_SIZE, resp.length);
+                SqliteWrapper.update(mContext, mContext.getContentResolver(),
+                        msgUri, values, null, null);
+
+                // The M-Retrieve.conf has been successfully downloaded.
+                mTransactionState.setState(TransactionState.SUCCESS);
+                mTransactionState.setContentUri(msgUri);
+                // Remember the location the message was downloaded from.
+                // Since it's not critical, it won't fail the transaction.
+                // Copy over the locked flag from the M-Notification.ind in case
+                // the user locked the message before activating the download.
+                updateContentLocation(mContext, msgUri, mContentLocation, mLocked);
+            }
+
+            // Delete the corresponding M-Notification.ind.
+            SqliteWrapper.delete(mContext, mContext.getContentResolver(),
+                    mUri, null, null);
+
+            // Send ACK to the Proxy-Relay to indicate we have fetched the
+            // MM successfully.
+            // Don't mark the transaction as failed if we failed to send it.
+            sendAcknowledgeInd(retrieveConf);
+        } catch (Throwable t) {
+            Timber.e(t, "error");
+            if ("HTTP error: Not Found".equals(t.getMessage())) {
+                // Delete the expired M-Notification.ind.
+                SqliteWrapper.delete(mContext, mContext.getContentResolver(),
+                        mUri, null, null);
+            }
+        } finally {
+            if (mTransactionState.getState() != TransactionState.SUCCESS) {
+                mTransactionState.setState(TransactionState.FAILED);
+                mTransactionState.setContentUri(mUri);
+                Timber.e("Retrieval failed.");
+            }
+            notifyObservers();
+        }
+//        }
+    }
+
     private void sendAcknowledgeInd(RetrieveConf rc) throws MmsException, IOException {
         // Send M-Acknowledge.ind to MMSC if required.
         // If the Transaction-ID isn't set in the M-Retrieve.conf, it means
@@ -292,22 +299,12 @@ public class RetrieveTransaction extends Transaction implements Runnable {
             acknowledgeInd.setFrom(new EncodedStringValue(lineNumber));
 
             // Pack M-Acknowledge.ind and send it
-            if(MmsConfig.getNotifyWapMMSC()) {
+            if (MmsConfig.getNotifyWapMMSC()) {
                 sendPdu(new PduComposer(mContext, acknowledgeInd).make(), mContentLocation);
             } else {
                 sendPdu(new PduComposer(mContext, acknowledgeInd).make());
             }
         }
-    }
-
-    private static void updateContentLocation(Context context, Uri uri,
-                                              String contentLocation,
-                                              boolean locked) {
-        ContentValues values = new ContentValues(2);
-        values.put(Mms.CONTENT_LOCATION, contentLocation);
-        values.put(Mms.LOCKED, locked);     // preserve the state of the M-Notification.ind lock.
-        SqliteWrapper.update(context, context.getContentResolver(),
-                             uri, values, null, null);
     }
 
     @Override

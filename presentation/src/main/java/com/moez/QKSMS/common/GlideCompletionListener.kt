@@ -30,7 +30,13 @@ class GlideCompletionListener<T>(private val listener: () -> Unit) : RequestList
         return false
     }
 
-    override fun onResourceReady(resource: T & Any, model: Any, target: Target<T>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+    override fun onResourceReady(
+        resource: T & Any,
+        model: Any,
+        target: Target<T>,
+        dataSource: DataSource,
+        isFirstResource: Boolean
+    ): Boolean {
         listener()
         return false
     }

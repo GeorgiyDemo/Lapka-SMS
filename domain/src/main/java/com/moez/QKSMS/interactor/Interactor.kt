@@ -34,10 +34,10 @@ abstract class Interactor<in Params> : Disposable {
 
     fun execute(params: Params, onComplete: () -> Unit = {}) {
         disposables += buildObservable(params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete(onComplete)
-                .subscribe({}, Timber::w)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnComplete(onComplete)
+            .subscribe({}, Timber::w)
     }
 
     override fun dispose() {

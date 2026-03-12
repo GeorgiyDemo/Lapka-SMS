@@ -1,4 +1,3 @@
-
 package com.android.mms.service_alt;
 
 import android.content.Context;
@@ -13,6 +12,14 @@ class SubscriptionIdChecker {
 
     private static SubscriptionIdChecker sInstance;
     private boolean mCanUseSubscriptionId = false;
+
+    static synchronized SubscriptionIdChecker getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new SubscriptionIdChecker();
+            sInstance.check(context);
+        }
+        return sInstance;
+    }
 
     // I met a device which does not have Telephony.Mms.SUBSCRIPTION_ID event if it's API Level is 22.
     private void check(Context context) {
@@ -33,14 +40,6 @@ class SubscriptionIdChecker {
                 }
             }
         }
-    }
-
-    static synchronized SubscriptionIdChecker getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = new SubscriptionIdChecker();
-            sInstance.check(context);
-        }
-        return sInstance;
     }
 
     boolean canUseSubscriptionId() {

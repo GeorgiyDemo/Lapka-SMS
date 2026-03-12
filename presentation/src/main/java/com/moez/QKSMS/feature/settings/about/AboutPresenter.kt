@@ -33,16 +33,16 @@ class AboutPresenter @Inject constructor(
         super.bindIntents(view)
 
         view.preferenceClicks()
-                .autoDisposable(view.scope())
-                .subscribe { preference ->
-                    when (preference.id) {
-                        R.id.source -> navigator.showSourceCode()
+            .autoDisposable(view.scope())
+            .subscribe { preference ->
+                when (preference.id) {
+                    R.id.source -> navigator.showSourceCode()
 
-                        R.id.changelog -> navigator.showChangelog()
+                    R.id.changelog -> navigator.showChangelog()
 
-                        R.id.license -> navigator.showLicense()
-                    }
+                    R.id.license -> navigator.showLicense()
                 }
+            }
     }
 
 }

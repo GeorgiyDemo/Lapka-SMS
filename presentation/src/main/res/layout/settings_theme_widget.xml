@@ -18,18 +18,18 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:paddingStart="8dp"
+             android:paddingEnd="8dp">
 
     <View
-        android:id="@+id/themePreview"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:background="@drawable/circle"
-        tools:backgroundTint="@color/tools_theme" />
+            android:id="@+id/themePreview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle"
+            tools:backgroundTint="@color/tools_theme"/>
 
 </FrameLayout>

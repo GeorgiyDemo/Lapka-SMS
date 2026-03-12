@@ -51,10 +51,12 @@ class ShouldIAnswerBlockingClient @Inject constructor(
         const val GET_NUMBER_RATING = 1
     }
 
-    override fun isAvailable(): Boolean = listOf("org.mistergroup.shouldianswer",
-            "org.mistergroup.shouldianswerpersonal",
-            "org.mistergroup.muzutozvednout")
-            .any(context::isInstalled)
+    override fun isAvailable(): Boolean = listOf(
+        "org.mistergroup.shouldianswer",
+        "org.mistergroup.shouldianswerpersonal",
+        "org.mistergroup.muzutozvednout"
+    )
+        .any(context::isInstalled)
 
     override fun getClientCapability() = BlockingClient.Capability.CANT_BLOCK
 
@@ -62,12 +64,12 @@ class ShouldIAnswerBlockingClient @Inject constructor(
 
     override fun isBlacklisted(address: String): Single<BlockingClient.Action> {
         return Binder(context, address).isBlocked()
-                .map { blocked ->
-                    when (blocked) {
-                        true -> BlockingClient.Action.Block()
-                        false -> BlockingClient.Action.DoNothing
-                    }
+            .map { blocked ->
+                when (blocked) {
+                    true -> BlockingClient.Action.Block()
+                    false -> BlockingClient.Action.DoNothing
                 }
+            }
     }
 
     override fun block(addresses: List<String>): Completable = Completable.fromCallable { openSettings() }
@@ -77,8 +79,8 @@ class ShouldIAnswerBlockingClient @Inject constructor(
     override fun openSettings() {
         val pm = context.packageManager
         val intent = pm.getLaunchIntentForPackage("org.mistergroup.shouldianswer")
-                ?: pm.getLaunchIntentForPackage("org.mistergroup.shouldianswerpersonal")
-                ?: pm.getLaunchIntentForPackage("org.mistergroup.muzutozvednout")
+            ?: pm.getLaunchIntentForPackage("org.mistergroup.shouldianswerpersonal")
+            ?: pm.getLaunchIntentForPackage("org.mistergroup.muzutozvednout")
 
         intent?.run(context::startActivity)
     }
@@ -94,8 +96,10 @@ class ShouldIAnswerBlockingClient @Inject constructor(
 
         private fun getAppEnabled(packageName: String): Boolean {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.packageManager.getApplicationInfo(packageName,
-                    PackageManager.ApplicationInfoFlags.of(0)).enabled
+                context.packageManager.getApplicationInfo(
+                    packageName,
+                    PackageManager.ApplicationInfoFlags.of(0)
+                ).enabled
             } else {
                 @Suppress("DEPRECATION")
                 context.packageManager.getApplicationInfo(packageName, 0).enabled
@@ -111,7 +115,7 @@ class ShouldIAnswerBlockingClient @Inject constructor(
             } ?: tryOrNull(false) {
                 getAppEnabled("org.mistergroup.shouldianswerpersonal")
                 Intent("org.mistergroup.shouldianswerpersonal.PublicService")
-                        .setPackage("org.mistergroup.shouldianswerpersonal")
+                    .setPackage("org.mistergroup.shouldianswerpersonal")
             } ?: tryOrNull(false) {
                 getAppEnabled("org.mistergroup.muzutozvednout")
                 Intent("org.mistergroup.muzutozvednout.PublicService").setPackage("org.mistergroup.muzutozvednout")
@@ -153,7 +157,8 @@ class ShouldIAnswerBlockingClient @Inject constructor(
         }
     }
 
-    private class IncomingHandler(private val callback: (response: Response) -> Unit) : Handler(Looper.getMainLooper()) {
+    private class IncomingHandler(private val callback: (response: Response) -> Unit) :
+        Handler(Looper.getMainLooper()) {
         class Response(bundle: Bundle) {
             val rating: Int = bundle.getInt("rating")
             val wantBlock = bundle.getInt("wantBlock") == 1

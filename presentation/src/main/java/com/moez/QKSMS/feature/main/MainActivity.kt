@@ -81,14 +81,22 @@ import javax.inject.Inject
 
 class MainActivity : QkThemedActivity(), MainView {
 
-    @Inject lateinit var blockingDialog: BlockingDialog
-    @Inject lateinit var disposables: CompositeDisposable
-    @Inject lateinit var navigator: Navigator
-    @Inject lateinit var conversationsAdapter: ConversationsAdapter
-    @Inject lateinit var drawerBadgesExperiment: DrawerBadgesExperiment
-    @Inject lateinit var searchAdapter: SearchAdapter
-    @Inject lateinit var itemTouchCallback: ConversationItemTouchCallback
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var blockingDialog: BlockingDialog
+    @Inject
+    lateinit var disposables: CompositeDisposable
+    @Inject
+    lateinit var navigator: Navigator
+    @Inject
+    lateinit var conversationsAdapter: ConversationsAdapter
+    @Inject
+    lateinit var drawerBadgesExperiment: DrawerBadgesExperiment
+    @Inject
+    lateinit var searchAdapter: SearchAdapter
+    @Inject
+    lateinit var itemTouchCallback: ConversationItemTouchCallback
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val drawerLayout: DrawerLayout by lazy { findViewById(R.id.drawerLayout) }
     private val toolbar: androidx.appcompat.widget.Toolbar by lazy { findViewById(R.id.toolbar) }
@@ -124,12 +132,13 @@ class MainActivity : QkThemedActivity(), MainView {
     override val composeIntent by lazy { compose.clicks() }
     override val drawerOpenIntent: Observable<Boolean> by lazy {
         drawerLayout
-                .drawerOpen(Gravity.START)
-                .doOnNext { dismissKeyboard() }
+            .drawerOpen(Gravity.START)
+            .doOnNext { dismissKeyboard() }
     }
     override val homeIntent: Subject<Unit> = PublishSubject.create()
     override val navigationIntent: Observable<NavItem> by lazy {
-        Observable.merge(listOf(
+        Observable.merge(
+            listOf(
                 backPressedSubject,
                 inbox.clicks().map { NavItem.INBOX },
                 archived.clicks().map { NavItem.ARCHIVED },
@@ -137,7 +146,8 @@ class MainActivity : QkThemedActivity(), MainView {
                 settings.clicks().map { NavItem.SETTINGS },
                 plus.clicks().map { NavItem.PLUS },
                 help.clicks().map { NavItem.HELP },
-                invite.clicks().map { NavItem.INVITE }))
+                invite.clicks().map { NavItem.INVITE })
+        )
     }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val plusBannerIntent by lazy { plusBanner.clicks() }
@@ -163,7 +173,8 @@ class MainActivity : QkThemedActivity(), MainView {
     private val snackbarButton: TextView? get() = findViewById(R.id.snackbarButton)
     private val backPressedSubject: Subject<NavItem> = PublishSubject.create()
 
-    private val permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+    private val permissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
     private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,8 +189,8 @@ class MainActivity : QkThemedActivity(), MainView {
 
         (snackbar as? ViewStub)?.setOnInflateListener { _, _ ->
             snackbarButton?.clicks()
-                    ?.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
-                    ?.subscribe(snackbarButtonIntent)
+                ?.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+                ?.subscribe(snackbarButtonIntent)
         }
 
         (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
@@ -219,34 +230,35 @@ class MainActivity : QkThemedActivity(), MainView {
 
         // Set the theme color tint to the recyclerView, progressbar, and FAB
         theme
-                .autoDisposable(scope())
-                .subscribe { theme ->
-                    // Set the color for the drawer icons
-                    val states = arrayOf(
-                            intArrayOf(android.R.attr.state_activated),
-                            intArrayOf(-android.R.attr.state_activated))
+            .autoDisposable(scope())
+            .subscribe { theme ->
+                // Set the color for the drawer icons
+                val states = arrayOf(
+                    intArrayOf(android.R.attr.state_activated),
+                    intArrayOf(-android.R.attr.state_activated)
+                )
 
-                    resolveThemeColor(android.R.attr.textColorSecondary)
-                            .let { textSecondary -> ColorStateList(states, intArrayOf(theme.theme, textSecondary)) }
-                            .let { tintList ->
-                                inboxIcon.imageTintList = tintList
-                                archivedIcon.imageTintList = tintList
-                            }
+                resolveThemeColor(android.R.attr.textColorSecondary)
+                    .let { textSecondary -> ColorStateList(states, intArrayOf(theme.theme, textSecondary)) }
+                    .let { tintList ->
+                        inboxIcon.imageTintList = tintList
+                        archivedIcon.imageTintList = tintList
+                    }
 
-                    // Miscellaneous views
-                                syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
-                    syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
-                    plusIcon.setTint(theme.theme)
-                    rateIcon.setTint(theme.theme)
-                    swipeRefresh.setColorSchemeColors(theme.theme)
-                    compose.backgroundTintList = ColorStateList.valueOf(theme.theme)
+                // Miscellaneous views
+                syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
+                syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
+                plusIcon.setTint(theme.theme)
+                rateIcon.setTint(theme.theme)
+                swipeRefresh.setColorSchemeColors(theme.theme)
+                compose.backgroundTintList = ColorStateList.valueOf(theme.theme)
 
-                    // Set the FAB compose icon color
-                    compose.imageTintList = ColorStateList.valueOf(theme.textPrimary)
+                // Set the FAB compose icon color
+                compose.imageTintList = ColorStateList.valueOf(theme.textPrimary)
 
-                    // Tint empty state icon
-                    emptyIcon.setColorFilter(theme.theme)
-                }
+                // Tint empty state icon
+                emptyIcon.setColorFilter(theme.theme)
+            }
 
         // These theme attributes don't apply themselves on API 21
         if (Build.VERSION.SDK_INT <= 22) {
@@ -429,10 +441,13 @@ class MainActivity : QkThemedActivity(), MainView {
     }
 
     override fun requestPermissions() {
-        permissionsLauncher.launch(arrayOf(
+        permissionsLauncher.launch(
+            arrayOf(
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
-                Manifest.permission.READ_CONTACTS))
+                Manifest.permission.READ_CONTACTS
+            )
+        )
     }
 
     override fun clearSearch() {
@@ -455,11 +470,11 @@ class MainActivity : QkThemedActivity(), MainView {
     override fun showDeleteDialog(conversations: List<Long>) {
         val count = conversations.size
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources.getQuantityString(R.plurals.dialog_delete_message, count, count))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources.getQuantityString(R.plurals.dialog_delete_message, count, count))
+            .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) {

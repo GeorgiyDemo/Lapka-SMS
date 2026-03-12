@@ -18,18 +18,18 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loading"
-    android:layout_width="match_parent"
-    android:layout_height="64sp">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/loading"
+             android:layout_width="match_parent"
+             android:layout_height="64sp">
 
     <TextView
-        android:id="@+id/loadingText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textSize="14sp"
-        tools:text="Loading..." />
+            android:id="@+id/loadingText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            tools:text="Loading..."/>
 
 </FrameLayout>

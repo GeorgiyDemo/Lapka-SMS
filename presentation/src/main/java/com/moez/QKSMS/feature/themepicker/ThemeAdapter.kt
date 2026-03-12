@@ -85,29 +85,29 @@ class ThemeAdapter @Inject constructor(
         paletteView.setPadding(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
 
         (palette.subList(0, 5) + palette.subList(5, 10).reversed())
-                .mapIndexed { index, color ->
-                    LayoutInflater.from(context).inflate(R.layout.theme_list_item, paletteView, false).apply {
+            .mapIndexed { index, color ->
+                LayoutInflater.from(context).inflate(R.layout.theme_list_item, paletteView, false).apply {
 
-                        // Send clicks to the selected subject
-                        setOnClickListener { colorSelected.onNext(color) }
+                    // Send clicks to the selected subject
+                    setOnClickListener { colorSelected.onNext(color) }
 
-                        // Apply the color to the view
-                        findViewById<View>(R.id.theme).setBackgroundTint(color)
+                    // Apply the color to the view
+                    findViewById<View>(R.id.theme).setBackgroundTint(color)
 
-                        // Control the check visibility and tint
-                        findViewById<ImageView>(R.id.check).setVisible(color == selectedColor)
-                        findViewById<ImageView>(R.id.check).setTint(iconTint)
+                    // Control the check visibility and tint
+                    findViewById<ImageView>(R.id.check).setVisible(color == selectedColor)
+                    findViewById<ImageView>(R.id.check).setTint(iconTint)
 
-                        // Update the size so that the spacing is perfectly even
-                        layoutParams = (layoutParams as FlexboxLayout.LayoutParams).apply {
-                            height = size
-                            width = size
-                            isWrapBefore = index % 5 == 0
-                            setMargins(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
-                        }
+                    // Update the size so that the spacing is perfectly even
+                    layoutParams = (layoutParams as FlexboxLayout.LayoutParams).apply {
+                        height = size
+                        width = size
+                        isWrapBefore = index % 5 == 0
+                        setMargins(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
                     }
                 }
-                .forEach { view -> paletteView.addView(view) }
+            }
+            .forEach { view -> paletteView.addView(view) }
     }
 
 }

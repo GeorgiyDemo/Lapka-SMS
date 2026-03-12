@@ -39,20 +39,10 @@ import java.util.Map;
 public class MmsConfigManager {
 
     private static volatile MmsConfigManager sInstance = new MmsConfigManager();
-
-    public static MmsConfigManager getInstance() {
-        return sInstance;
-    }
-
     // Map the various subIds to their corresponding MmsConfigs.
     private final Map<Integer, MmsConfig> mSubIdConfigMap;
     private Context mContext;
     private SubscriptionManager mSubscriptionManager;
-
-    private MmsConfigManager() {
-        mSubIdConfigMap = new ArrayMap<Integer, MmsConfig>();
-    }
-
     /**
      * This receiver listens for changes made to SubInfoRecords and for a broadcast telling us
      * the TelephonyManager has loaded the information needed in order to get the mcc/mnc's for
@@ -69,6 +59,13 @@ public class MmsConfigManager {
         }
     };
 
+    private MmsConfigManager() {
+        mSubIdConfigMap = new ArrayMap<Integer, MmsConfig>();
+    }
+
+    public static MmsConfigManager getInstance() {
+        return sInstance;
+    }
 
     public void init(final Context context) {
         mContext = context;
@@ -132,13 +129,13 @@ public class MmsConfigManager {
      *
      * @param subId Subscription id of the desired MmsConfig
      * @return MmsConfig for the particular subscription id. This function can return null if
-     *         the MmsConfig cannot be found or if this function is called before the
-     *         TelephonyManager has setup the SIMs or if loadInBackground is still spawning a
-     *         thread after a recent LISTEN_SUBSCRIPTION_INFO_LIST_CHANGED event.
+     * the MmsConfig cannot be found or if this function is called before the
+     * TelephonyManager has setup the SIMs or if loadInBackground is still spawning a
+     * thread after a recent LISTEN_SUBSCRIPTION_INFO_LIST_CHANGED event.
      */
     public MmsConfig getMmsConfigBySubId(int subId) {
         MmsConfig mmsConfig;
-        synchronized(mSubIdConfigMap) {
+        synchronized (mSubIdConfigMap) {
             mmsConfig = mSubIdConfigMap.get(subId);
         }
         Timber.i("getMmsConfigBySubId -- for sub: " + subId + " mmsConfig: " + mmsConfig);

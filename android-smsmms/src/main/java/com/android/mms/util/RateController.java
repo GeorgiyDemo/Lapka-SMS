@@ -28,21 +28,17 @@ import android.provider.Telephony.Mms.Rate;
 import timber.log.Timber;
 
 public class RateController {
-    private static final boolean LOCAL_LOGV = false;
-
-    private static final int RATE_LIMIT = 100;
-    private static final long ONE_HOUR = 1000 * 60 * 60;
-
-    private static final int NO_ANSWER  = 0;
-    private static final int ANSWER_YES = 1;
-    private static final int ANSWER_NO  = 2;
-
     public static final int ANSWER_TIMEOUT = 20000;
     public static final String RATE_LIMIT_SURPASSED_ACTION =
-        "com.android.mms.RATE_LIMIT_SURPASSED";
+            "com.android.mms.RATE_LIMIT_SURPASSED";
     public static final String RATE_LIMIT_CONFIRMED_ACTION =
-        "com.android.mms.RATE_LIMIT_CONFIRMED";
-
+            "com.android.mms.RATE_LIMIT_CONFIRMED";
+    private static final boolean LOCAL_LOGV = false;
+    private static final int RATE_LIMIT = 100;
+    private static final long ONE_HOUR = 1000 * 60 * 60;
+    private static final int NO_ANSWER = 0;
+    private static final int ANSWER_YES = 1;
+    private static final int ANSWER_NO = 2;
     private static RateController sInstance;
     private static boolean sMutexLock;
 
@@ -59,7 +55,7 @@ public class RateController {
             if (RATE_LIMIT_CONFIRMED_ACTION.equals(intent.getAction())) {
                 synchronized (this) {
                     mAnswer = intent.getBooleanExtra("answer", false)
-                                            ? ANSWER_YES : ANSWER_NO;
+                            ? ANSWER_YES : ANSWER_NO;
                     notifyAll();
                 }
             }
@@ -93,13 +89,13 @@ public class RateController {
         ContentValues values = new ContentValues(1);
         values.put(Rate.SENT_TIME, System.currentTimeMillis());
         SqliteWrapper.insert(mContext, mContext.getContentResolver(),
-                             Rate.CONTENT_URI, values);
+                Rate.CONTENT_URI, values);
     }
 
     public final boolean isLimitSurpassed() {
         long oneHourAgo = System.currentTimeMillis() - ONE_HOUR;
         Cursor c = SqliteWrapper.query(mContext, mContext.getContentResolver(),
-                Rate.CONTENT_URI, new String[] { "COUNT(*) AS rate" },
+                Rate.CONTENT_URI, new String[]{"COUNT(*) AS rate"},
                 Rate.SENT_TIME + ">" + oneHourAgo, null, null);
         if (c != null) {
             try {
@@ -120,7 +116,7 @@ public class RateController {
             try {
                 wait();
             } catch (InterruptedException e) {
-                 // Ignore it.
+                // Ignore it.
             }
         }
         sMutexLock = true;
@@ -157,7 +153,7 @@ public class RateController {
                 }
                 wait(1000L);
             } catch (InterruptedException e) {
-                 // Ignore it.
+                // Ignore it.
             }
         }
         return mAnswer;

@@ -42,9 +42,12 @@ import javax.inject.Inject
 class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbersState, BlockedNumbersPresenter>(),
     BlockedNumbersView {
 
-    @Inject override lateinit var presenter: BlockedNumbersPresenter
-    @Inject lateinit var colors: Colors
-    @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
+    @Inject
+    override lateinit var presenter: BlockedNumbersPresenter
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    lateinit var phoneNumberUtils: PhoneNumberUtils
 
     private val adapter = BlockedNumbersAdapter()
     private val saveAddressSubject: Subject<String> = PublishSubject.create()
@@ -87,12 +90,12 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
         val input = layout.findViewById<EditText>(R.id.input)
         val textWatcher = BlockedNumberTextWatcher(input, phoneNumberUtils)
         val dialog = MaterialAlertDialogBuilder(activity!!)
-                .setView(layout)
-                .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
-                    saveAddressSubject.onNext(input.text.toString())
-                }
-                .setNegativeButton(R.string.button_cancel) { _, _ -> }
-                .setOnDismissListener { textWatcher.dispose() }
+            .setView(layout)
+            .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
+                saveAddressSubject.onNext(input.text.toString())
+            }
+            .setNegativeButton(R.string.button_cancel) { _, _ -> }
+            .setOnDismissListener { textWatcher.dispose() }
         dialog.show()
     }
 

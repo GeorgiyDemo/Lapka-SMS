@@ -26,12 +26,10 @@ import timber.log.Timber;
 import java.io.IOException;
 
 public class MmsConfig {
-    private static final boolean DEBUG = true;
-    private static final boolean LOCAL_LOGV = false;
-
     public static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
     public static final String DEFAULT_USER_AGENT = "Android-Mms/2.0";
-
+    private static final boolean DEBUG = true;
+    private static final boolean LOCAL_LOGV = false;
     private static final int MAX_IMAGE_HEIGHT = 480;
     private static final int MAX_IMAGE_WIDTH = 640;
     private static final int MAX_TEXT_LENGTH = 2000;
@@ -55,7 +53,7 @@ public class MmsConfig {
     private static int mDefaultMMSMessagesPerThread = 1000;     // default value
     private static int mMinMessageCountPerThread = 2;           // default value
     private static int mMaxMessageCountPerThread = 5000;        // default value
-    private static int mHttpSocketTimeout = 60*1000;            // default to 1 min
+    private static int mHttpSocketTimeout = 60 * 1000;            // default to 1 min
     private static int mMinimumSlideElementDuration = 7;        // default to 7 sec
     private static boolean mNotifyWapMMSC = false;
     private static boolean mAllowAttachAudio = true;
@@ -66,7 +64,7 @@ public class MmsConfig {
     // than a single segment (i.e. 140 chars), then the message will turn into and be sent
     // as an mms message. This feature exists for carriers that don't support multi-part sms's.
     private static boolean mEnableMultipartSMS = true;
-    
+
     // By default, the radio splits multipart sms, not the application. If the carrier or radio
     // does not support this, and the recipient gets garbled text, set this to true. If this is
     // true and mEnableMultipartSMS is false, the mSmsToMmsTextThreshold will be observed,
@@ -96,7 +94,7 @@ public class MmsConfig {
     private static int mAliasRuleMaxChars = 48;
 
     private static int mMaxSubjectLength = 40;  // maximum number of characters allowed for mms
-                                                // subject
+    // subject
 
     // If mEnableGroupMms is true, a message with multiple recipients, regardless of contents,
     // will be sent as a single MMS message with multiple "TO" fields set for each recipient.
@@ -121,7 +119,7 @@ public class MmsConfig {
         if (LOCAL_LOGV) {
             Timber.v("MmsConfig.getMaxMessageSize(): " + mMaxMessageSize);
         }
-       return mMaxMessageSize;
+        return mMaxMessageSize;
     }
 
     /**
@@ -137,12 +135,24 @@ public class MmsConfig {
         return mUserAgent;
     }
 
+    public static void setUserAgent(String userAgent) {
+        MmsConfig.mUserAgent = userAgent;
+    }
+
     public static String getUaProfTagName() {
         return mUaProfTagName;
     }
 
+    public static void setUaProfTagName(String tagName) {
+        MmsConfig.mUaProfTagName = tagName;
+    }
+
     public static String getUaProfUrl() {
         return mUaProfUrl;
+    }
+
+    public static void setUaProfUrl(String url) {
+        MmsConfig.mUaProfUrl = url;
     }
 
     public static String getHttpParams() {
@@ -161,11 +171,10 @@ public class MmsConfig {
         return mNotifyWapMMSC;
     }
 
-    public static final void beginDocument(XmlPullParser parser, String firstElementName) throws XmlPullParserException, IOException
-    {
+    public static final void beginDocument(XmlPullParser parser, String firstElementName) throws XmlPullParserException, IOException {
         int type;
-        while ((type=parser.next()) != parser.START_TAG
-                   && type != parser.END_DOCUMENT) {
+        while ((type = parser.next()) != parser.START_TAG
+                && type != parser.END_DOCUMENT) {
             ;
         }
 
@@ -179,11 +188,10 @@ public class MmsConfig {
         }
     }
 
-    public static final void nextElement(XmlPullParser parser) throws XmlPullParserException, IOException
-    {
+    public static final void nextElement(XmlPullParser parser) throws XmlPullParserException, IOException {
         int type;
-        while ((type=parser.next()) != parser.START_TAG
-                   && type != parser.END_DOCUMENT) {
+        while ((type = parser.next()) != parser.START_TAG
+                && type != parser.END_DOCUMENT) {
             ;
         }
     }
@@ -313,22 +321,10 @@ public class MmsConfig {
 
         if (errorStr != null) {
             String err =
-                String.format("MmsConfig.loadMmsSettings mms_config.xml missing %s setting",
-                        errorStr);
+                    String.format("MmsConfig.loadMmsSettings mms_config.xml missing %s setting",
+                            errorStr);
             Timber.e(err);
         }
-    }
-
-    public static void setUserAgent(String userAgent) {
-        MmsConfig.mUserAgent = userAgent;
-    }
-
-    public static void setUaProfUrl(String url) {
-        MmsConfig.mUaProfUrl = url;
-    }
-
-    public static void setUaProfTagName(String tagName) {
-        MmsConfig.mUaProfTagName = tagName;
     }
 
 }

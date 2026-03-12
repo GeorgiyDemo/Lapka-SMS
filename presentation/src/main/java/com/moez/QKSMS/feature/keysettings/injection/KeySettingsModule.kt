@@ -7,7 +7,7 @@ import dagger.Provides
 import javax.inject.Named
 
 @Module
-class KeySettingsModule(private val controller: KeySettingsController)  {
+class KeySettingsModule(private val controller: KeySettingsController) {
 
     @Provides
     @ControllerScope

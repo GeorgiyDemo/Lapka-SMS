@@ -63,7 +63,8 @@ class PhoneNumberPickerAdapter @Inject constructor(
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val phoneNumber = getItem(position)
 
-        holder.itemView.findViewById<RadioPreferenceView>(R.id.number).radioButton.isChecked = phoneNumber.id == selectedItem
+        holder.itemView.findViewById<RadioPreferenceView>(R.id.number).radioButton.isChecked =
+            phoneNumber.id == selectedItem
         holder.itemView.findViewById<RadioPreferenceView>(R.id.number).titleView.text = phoneNumber.address
         holder.itemView.findViewById<RadioPreferenceView>(R.id.number).summaryView.text = when (phoneNumber.isDefault) {
             true -> context.getString(R.string.compose_number_picker_default, phoneNumber.type)

@@ -42,12 +42,12 @@ class ComposeActivityModule {
     @Named("addresses")
     fun provideAddresses(activity: ComposeActivity): List<String> {
         return activity.intent
-                ?.decodedDataString()
-                ?.substringAfter(':') // Remove scheme
-                ?.substringBefore("?") // Remove query
-                ?.split(",", ";")
-                ?.filter { number -> number.isNotEmpty() }
-                ?: listOf()
+            ?.decodedDataString()
+            ?.substringAfter(':') // Remove scheme
+            ?.substringBefore("?") // Remove query
+            ?.split(",", ";")
+            ?.filter { number -> number.isNotEmpty() }
+            ?: listOf()
     }
 
     @Provides
@@ -59,12 +59,12 @@ class ComposeActivityModule {
         }
 
         return subject + (activity.intent.extras?.getString(Intent.EXTRA_TEXT)
-                ?: activity.intent.extras?.getString("sms_body")
-                ?: activity.intent?.decodedDataString()
-                        ?.substringAfter('?') // Query string
-                        ?.takeIf { it.startsWith("body") }
-                        ?.substringAfter('=')
-                ?: "")
+            ?: activity.intent.extras?.getString("sms_body")
+            ?: activity.intent?.decodedDataString()
+                ?.substringAfter('?') // Query string
+                ?.takeIf { it.startsWith("body") }
+                ?.substringAfter('=')
+            ?: "")
     }
 
     @Provides

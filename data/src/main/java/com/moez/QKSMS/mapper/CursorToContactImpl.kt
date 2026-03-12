@@ -34,16 +34,16 @@ class CursorToContactImpl @Inject constructor(
     companion object {
         val URI = Phone.CONTENT_URI
         val PROJECTION = arrayOf(
-                Phone._ID,
-                Phone.LOOKUP_KEY,
-                Phone.ACCOUNT_TYPE_AND_DATA_SET,
-                Phone.NUMBER,
-                Phone.TYPE,
-                Phone.LABEL,
-                Phone.DISPLAY_NAME,
-                Phone.PHOTO_URI,
-                Phone.STARRED,
-                Phone.CONTACT_LAST_UPDATED_TIMESTAMP
+            Phone._ID,
+            Phone.LOOKUP_KEY,
+            Phone.ACCOUNT_TYPE_AND_DATA_SET,
+            Phone.NUMBER,
+            Phone.TYPE,
+            Phone.LABEL,
+            Phone.DISPLAY_NAME,
+            Phone.PHOTO_URI,
+            Phone.STARRED,
+            Phone.CONTACT_LAST_UPDATED_TIMESTAMP
         )
 
         const val COLUMN_ID = 0
@@ -62,13 +62,17 @@ class CursorToContactImpl @Inject constructor(
         lookupKey = from.getString(COLUMN_LOOKUP_KEY)
         name = from.getString(COLUMN_DISPLAY_NAME) ?: ""
         photoUri = from.getString(COLUMN_PHOTO_URI)
-        numbers.add(PhoneNumber(
+        numbers.add(
+            PhoneNumber(
                 id = from.getLong(COLUMN_ID),
                 accountType = from.getString(COLUMN_ACCOUNT_TYPE),
                 address = from.getString(COLUMN_NUMBER) ?: "",
-                type = Phone.getTypeLabel(context.resources, from.getInt(COLUMN_TYPE),
-                        from.getString(COLUMN_LABEL)).toString()
-        ))
+                type = Phone.getTypeLabel(
+                    context.resources, from.getInt(COLUMN_TYPE),
+                    from.getString(COLUMN_LABEL)
+                ).toString()
+            )
+        )
         starred = from.getInt(COLUMN_STARRED) != 0
         lastUpdate = from.getLong(CONTACT_LAST_UPDATED)
     }

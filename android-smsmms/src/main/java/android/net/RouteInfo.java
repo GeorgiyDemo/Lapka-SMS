@@ -32,16 +32,53 @@ import java.util.Collection;
  * @hide
  */
 public class RouteInfo implements Parcelable {
+    public static final Creator<RouteInfo> CREATOR =
+            new Creator<RouteInfo>() {
+                public RouteInfo createFromParcel(Parcel in) {
+                    InetAddress destAddr = null;
+                    int prefix = 0;
+                    InetAddress gateway = null;
+
+                    if (in.readByte() == 1) {
+                        byte[] addr = in.createByteArray();
+                        prefix = in.readInt();
+
+                        try {
+                            destAddr = InetAddress.getByAddress(addr);
+                        } catch (UnknownHostException e) {
+                        }
+                    }
+
+                    if (in.readByte() == 1) {
+                        byte[] addr = in.createByteArray();
+
+                        try {
+                            gateway = InetAddress.getByAddress(addr);
+                        } catch (UnknownHostException e) {
+                        }
+                    }
+
+                    LinkAddress dest = null;
+
+                    if (destAddr != null) {
+                        dest = new LinkAddress(destAddr, prefix);
+                    }
+
+                    return new RouteInfo(dest, gateway);
+                }
+
+                public RouteInfo[] newArray(int size) {
+                    return new RouteInfo[size];
+                }
+            };
     /**
      * The IP destination address for this route.
      */
     private final LinkAddress mDestination;
-
     /**
      * The gateway address for this route.
      */
     private final InetAddress mGateway;
-
     private final boolean mIsDefault;
     private final boolean mIsHost;
 
@@ -110,6 +147,32 @@ public class RouteInfo implements Parcelable {
         }
     }
 
+    /**
+     * Find the route from a Collection of routes that best matches a given address.
+     * May return null if no routes are applicable.
+     *
+     * @param routes a Collection of RouteInfos to chose from
+     * @param dest   the InetAddress your trying to get to
+     * @return the RouteInfo from the Collection that best fits the given address
+     */
+    public static RouteInfo selectBestRoute(Collection<RouteInfo> routes, InetAddress dest) {
+        if ((routes == null) || (dest == null)) return null;
+
+        RouteInfo bestRoute = null;
+        // pick a longest prefix match under same address type
+        for (RouteInfo route : routes) {
+            if (NetworkUtilsHelper.addressTypeMatches(route.mDestination.getAddress(), dest)) {
+                if ((bestRoute != null) &&
+                        (bestRoute.mDestination.getNetworkPrefixLength() >=
+                                route.mDestination.getNetworkPrefixLength())) {
+                    continue;
+                }
+                if (route.matches(dest)) bestRoute = route;
+            }
+        }
+        return bestRoute;
+    }
+
     private boolean isHost() {
         try {
             return (mGateway.equals(Inet4Address.getLocalHost()) || mGateway.equals(Inet6Address.getLocalHost()));
@@ -130,7 +193,6 @@ public class RouteInfo implements Parcelable {
         }
         return val;
     }
-
 
     public LinkAddress getDestination() {
         return mDestination;
@@ -203,46 +265,6 @@ public class RouteInfo implements Parcelable {
                 + (mIsDefault ? 3 : 7);
     }
 
-    public static final Creator<RouteInfo> CREATOR =
-            new Creator<RouteInfo>() {
-                public RouteInfo createFromParcel(Parcel in) {
-                    InetAddress destAddr = null;
-                    int prefix = 0;
-                    InetAddress gateway = null;
-
-                    if (in.readByte() == 1) {
-                        byte[] addr = in.createByteArray();
-                        prefix = in.readInt();
-
-                        try {
-                            destAddr = InetAddress.getByAddress(addr);
-                        } catch (UnknownHostException e) {
-                        }
-                    }
-
-                    if (in.readByte() == 1) {
-                        byte[] addr = in.createByteArray();
-
-                        try {
-                            gateway = InetAddress.getByAddress(addr);
-                        } catch (UnknownHostException e) {
-                        }
-                    }
-
-                    LinkAddress dest = null;
-
-                    if (destAddr != null) {
-                        dest = new LinkAddress(destAddr, prefix);
-                    }
-
-                    return new RouteInfo(dest, gateway);
-                }
-
-                public RouteInfo[] newArray(int size) {
-                    return new RouteInfo[size];
-                }
-            };
-
     private boolean matches(InetAddress destination) {
         if (destination == null) return false;
 
@@ -255,31 +277,5 @@ public class RouteInfo implements Parcelable {
                 mDestination.getNetworkPrefixLength());
 
         return mDestination.getAddress().equals(dstNet);
-    }
-
-    /**
-     * Find the route from a Collection of routes that best matches a given address.
-     * May return null if no routes are applicable.
-     *
-     * @param routes a Collection of RouteInfos to chose from
-     * @param dest   the InetAddress your trying to get to
-     * @return the RouteInfo from the Collection that best fits the given address
-     */
-    public static RouteInfo selectBestRoute(Collection<RouteInfo> routes, InetAddress dest) {
-        if ((routes == null) || (dest == null)) return null;
-
-        RouteInfo bestRoute = null;
-        // pick a longest prefix match under same address type
-        for (RouteInfo route : routes) {
-            if (NetworkUtilsHelper.addressTypeMatches(route.mDestination.getAddress(), dest)) {
-                if ((bestRoute != null) &&
-                        (bestRoute.mDestination.getNetworkPrefixLength() >=
-                                route.mDestination.getNetworkPrefixLength())) {
-                    continue;
-                }
-                if (route.matches(dest)) bestRoute = route;
-            }
-        }
-        return bestRoute;
     }
 }

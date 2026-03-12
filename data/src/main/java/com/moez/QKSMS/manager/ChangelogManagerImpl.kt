@@ -46,17 +46,17 @@ class ChangelogManagerImpl @Inject constructor(
 
         return withContext(Dispatchers.IO) {
             val changelogs = context.assets.open("changelog.json").bufferedReader().use { it.readText() }
-                    .let(adapter::fromJson)
-                    .orEmpty()
-                    .sortedBy { changelog -> changelog.versionCode }
-                    .filter { changelog ->
-                        changelog.versionCode in prefs.changelogVersion.get().inc()..context.versionCode
-                    }
+                .let(adapter::fromJson)
+                .orEmpty()
+                .sortedBy { changelog -> changelog.versionCode }
+                .filter { changelog ->
+                    changelog.versionCode in prefs.changelogVersion.get().inc()..context.versionCode
+                }
 
             ChangelogManager.CumulativeChangelog(
-                    added = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.added.orEmpty()},
-                    improved = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.improved.orEmpty()},
-                    fixed = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.fixed.orEmpty()})
+                added = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.added.orEmpty() },
+                improved = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.improved.orEmpty() },
+                fixed = changelogs.fold(listOf()) { acc, changelog -> acc + changelog.fixed.orEmpty() })
         }
     }
 

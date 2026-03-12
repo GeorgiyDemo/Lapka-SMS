@@ -69,15 +69,18 @@ class ConversationsAdapter @Inject constructor(
         if (viewType == 1) {
             val textColorPrimary = parent.context.resolveThemeColor(android.R.attr.textColorPrimary)
 
-            view.findViewById<QkTextView>(R.id.title).setTypeface(view.findViewById<QkTextView>(R.id.title).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.title)
+                .setTypeface(view.findViewById<QkTextView>(R.id.title).typeface, Typeface.BOLD)
 
-            view.findViewById<QkTextView>(R.id.snippet).setTypeface(view.findViewById<QkTextView>(R.id.snippet).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.snippet)
+                .setTypeface(view.findViewById<QkTextView>(R.id.snippet).typeface, Typeface.BOLD)
             view.findViewById<QkTextView>(R.id.snippet).setTextColor(textColorPrimary)
             view.findViewById<QkTextView>(R.id.snippet).maxLines = 5
 
             view.findViewById<ImageView>(R.id.unread).isVisible = true
 
-            view.findViewById<QkTextView>(R.id.date).setTypeface(view.findViewById<QkTextView>(R.id.date).typeface, Typeface.BOLD)
+            view.findViewById<QkTextView>(R.id.date)
+                .setTypeface(view.findViewById<QkTextView>(R.id.date).typeface, Typeface.BOLD)
             view.findViewById<QkTextView>(R.id.date).setTextColor(textColorPrimary)
         }
 
@@ -121,13 +124,20 @@ class ConversationsAdapter @Inject constructor(
                 color(theme) { append(" " + context.getString(R.string.main_draft)) }
             }
         }
-        holder.itemView.findViewById<QkTextView>(R.id.date).text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
+        holder.itemView.findViewById<QkTextView>(R.id.date).text =
+            conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
         val snippetMessage = try {
             if (conversation.encryptionKey.isNotEmpty()) {
-                KSmsEncryptorFactory.create().tryDecode(conversation.snippet.toString(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+                KSmsEncryptorFactory.create().tryDecode(
+                    conversation.snippet.toString(),
+                    Base64.decode(conversation.encryptionKey, Base64.DEFAULT)
+                )
             } else if (prefs.globalEncryptionKey.get().isNotEmpty()) {
-                KSmsEncryptorFactory.create().tryDecode(conversation.snippet.toString(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))
+                KSmsEncryptorFactory.create().tryDecode(
+                    conversation.snippet.toString(),
+                    Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)
+                )
             } else {
                 PSmsMessage(conversation.snippet ?: "")
             }

@@ -31,7 +31,8 @@
     <string name="setup_next">Fortsett</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Ring</string>
-    <string name="menu_info">Detaljer</string>    <string name="menu_share">Share</string>
+    <string name="menu_info">Detaljer</string>
+    <string name="menu_share">Share</string>
     <string name="main_drawer_open_cd">Åpne navigasjonsskuff</string>
     <string name="main_title_selected">%d valgt</string>
     <string name="main_menu_clear">Tøm</string>
@@ -125,7 +126,9 @@
     <string name="info_unarchive">Fjern fra arkiv</string>
     <string name="info_block">Blokker</string>
     <string name="info_unblock">Ta bort blokkering</string>
-    <string name="info_delete">Slett samtale</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Utseende</string>
+    <string name="info_delete">Slett samtale
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_qkreply">Raskt svar</string>
     <string name="settings_theme_title">Drakt</string>
@@ -151,7 +154,8 @@
     <string name="settings_qkreply_title">Raskt svar</string>
     <string name="settings_qkreply_summary">Sprettopp-vindu ved nye meldinger</string>
     <string name="settings_qkreply_tap_dismiss_title">Trykk for å forkaste</string>
-    <string name="settings_qkreply_tap_dismiss_summary">Trykk hvor som helst utenfor sprettopp-vinduet for å lukke det</string>
+    <string name="settings_qkreply_tap_dismiss_summary">Trykk hvor som helst utenfor sprettopp-vinduet for å lukke det
+    </string>
     <string name="settings_delayed_title">Forsinket sending</string>
     <string name="settings_swipe_actions">Sveipe-handlinger</string>
     <string name="settings_swipe_actions_summary">Still inn sveipe-handlinger for samtaler</string>
@@ -176,7 +180,8 @@
     <string name="settings_mobile_title">Kun mobilnummre</string>
     <string name="settings_mobile_summary">Vis kun mobilnummre når du skriver ny melding</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -184,7 +189,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Synkroniser meldinger</string>
+    </plurals>
+    <string name="settings_sync_title">Synkroniser meldinger</string>
     <string name="settings_sync_summary">Resynkroniser meldinger med Androids interne meldingslager</string>
     <string name="settings_about_title">Om QKSMS</string>
     <string name="settings_version">Versjon %s %s %s</string>
@@ -198,9 +204,15 @@
     <string name="blocking_manager_title">Blokkeringer</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Filtrer anrop og meldinger automatisk. Fellesskapets intelligens™ hjelper med å forhindre uønskede henvendelser fra plageånder</string>
-    <string name="blocking_manager_sia_summary">Filtrer meldinger fra ukjente numre automatisk med \"Skal jeg svare\"-appen</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Filtrer anrop og meldinger automatisk. Fellesskapets
+        intelligens™ hjelper med å forhindre uønskede henvendelser fra plageånder
+    </string>
+    <string name="blocking_manager_sia_summary">Filtrer meldinger fra ukjente numre automatisk med \"Skal jeg
+        svare\"-appen
+    </string>
     <string name="blocking_manager_copy_title">Kopier blokkerte numre</string>
     <string name="blocking_manager_copy_summary">Fortsett med %s og kopier eksisterende blokkerte numre</string>
     <string name="blocked_numbers_title">Blokkerte numre</string>
@@ -238,11 +250,15 @@
     <string name="qksms_plus_thanks_title">Takk for at du støtter QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Du har nå tilgang til alle funksjoner i QKSMS+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brukere. Om du ønsker å støtte utviklingen, kan du gjerne donere.</string>
+    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brukere. Om du ønsker å støtte utviklingen, kan du
+        gjerne donere.
+    </string>
     <string name="qksms_plus_donate">Donér med PayPal</string>
     <string name="qksms_plus_coming_soon">Kommer snart</string>
     <string name="qksms_plus_themes_title">Premium drakter</string>
-    <string name="qksms_plus_themes_summary">Aktiver vakre draktfarger som ikke er tilgjengelig i Material-design-paletten</string>
+    <string name="qksms_plus_themes_summary">Aktiver vakre draktfarger som ikke er tilgjengelig i
+        Material-design-paletten
+    </string>
     <string name="qksms_plus_emoji_title">Egne auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Lag egne auto-emoji snarveier</string>
     <string name="qksms_plus_delayed_title">Forsinket sending</string>
@@ -254,9 +270,12 @@
     <string name="qksms_plus_forward_title">Auto-videresend</string>
     <string name="qksms_plus_forward_summary">Videresend meldinger fra gitte avsendere automatisk</string>
     <string name="qksms_plus_respond_title">Auto-svar</string>
-    <string name="qksms_plus_respond_summary">Svar på innkommende meldinger automatisk med et forhåndsdefinert svar</string>
+    <string name="qksms_plus_respond_summary">Svar på innkommende meldinger automatisk med et forhåndsdefinert svar
+    </string>
     <string name="qksms_plus_more_title">Mer</string>
-    <string name="qksms_plus_more_summary">QKSMS er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QKSMS+ funksjoner!</string>
+    <string name="qksms_plus_more_summary">QKSMS er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QKSMS+
+        funksjoner!
+    </string>
     <string name="widget_loading">Laster inn &#8230;</string>
     <string name="widget_more">Last inn flere samtaler</string>
     <string name="qkreply_menu_read">Mark read</string>
@@ -317,7 +336,8 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Ok</item>
         <item>Vent litt</item>
         <item>Er på vei</item>

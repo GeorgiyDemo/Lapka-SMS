@@ -27,8 +27,8 @@ internal object AppComponentManager {
 
     fun init(application: QKApplication) {
         appComponent = DaggerAppComponent.builder()
-                .appModule(AppModule(application))
-                .build()
+            .appModule(AppModule(application))
+            .build()
     }
 
 }

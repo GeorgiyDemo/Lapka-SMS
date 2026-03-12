@@ -48,12 +48,12 @@ class QkDialog @Inject constructor(private val context: Context, val adapter: Me
         recyclerView.setPadding(top = 8.dpToPx(context), bottom = 8.dpToPx(context))
 
         val dialog = MaterialAlertDialogBuilder(activity)
-                .setTitle(title)
-                .setView(recyclerView)
-                .create()
+            .setTitle(title)
+            .setView(recyclerView)
+            .create()
 
         val clicks = adapter.menuItemClicks
-                .subscribe { dialog.dismiss() }
+            .subscribe { dialog.dismiss() }
 
         dialog.setOnDismissListener {
             clicks.dispose()

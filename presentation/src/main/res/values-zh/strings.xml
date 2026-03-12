@@ -31,7 +31,8 @@
     <string name="setup_next">繼續</string>
     <string name="menu_add_person">增加傳送人</string>
     <string name="menu_call">致電</string>
-    <string name="menu_info">詳細資訊</string>    <string name="menu_share">分享</string>
+    <string name="menu_info">詳細資訊</string>
+    <string name="menu_share">分享</string>
     <string name="main_drawer_open_cd">打開導航抽屜</string>
     <string name="main_title_selected">已選擇%d項</string>
     <string name="main_menu_clear">清除</string>
@@ -124,7 +125,9 @@
     <string name="info_unarchive">取消存檔</string>
     <string name="info_block">攔截</string>
     <string name="info_unblock">取消攔截</string>
-    <string name="info_delete">刪除對話</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">外觀</string>
+    <string name="info_delete">刪除對話
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">外觀</string>
     <string name="settings_category_general">通用</string>
     <string name="settings_category_qkreply">快速答覆</string>
     <string name="settings_theme_title">主題</string>
@@ -175,14 +178,16 @@
     <string name="settings_mobile_title">僅限手機號碼</string>
     <string name="settings_mobile_summary">撰寫訊息時，只顯示手機號碼</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
     <string name="settings_auto_delete_warning_message">If you proceed, %1$d messages will be deleted now</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">同步消息</string>
+    </plurals>
+    <string name="settings_sync_title">同步消息</string>
     <string name="settings_sync_summary">重新與安卓原生訊息數據庫進行同步</string>
     <string name="settings_about_title">關於QKSMS</string>
     <string name="settings_version">版本 %s %s %s</string>
@@ -196,8 +201,12 @@
     <string name="blocking_manager_title">封鎖管理器</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">QKSMS內建封鎖功能</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！群眾智慧Community IQ™能讓你遠離不想要的垃圾簡訊</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！群眾智慧Community
+        IQ™能讓你遠離不想要的垃圾簡訊
+    </string>
     <string name="blocking_manager_sia_summary">使用\"Should I Answer\"應用過濾未知號碼的消息</string>
     <string name="blocking_manager_copy_title">複製封鎖號碼</string>
     <string name="blocking_manager_copy_summary">正在複製你現有的封鎖號碼%s</string>
@@ -312,7 +321,8 @@
         <item>3 秒</item>
         <item>5 秒</item>
         <item>10 秒</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>好的</item>
         <item>請稍等片刻</item>
         <item>馬上就到</item>

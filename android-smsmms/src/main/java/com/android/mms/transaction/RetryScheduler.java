@@ -40,7 +40,7 @@ import timber.log.Timber;
 
 public class RetryScheduler implements Observer {
     private static final boolean LOCAL_LOGV = false;
-
+    private static RetryScheduler sInstance;
     private final Context mContext;
     private final ContentResolver mContentResolver;
 
@@ -49,12 +49,37 @@ public class RetryScheduler implements Observer {
         mContentResolver = context.getContentResolver();
     }
 
-    private static RetryScheduler sInstance;
     public static RetryScheduler getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new RetryScheduler(context);
         }
         return sInstance;
+    }
+
+    public static void setRetryAlarm(Context context) {
+        Cursor cursor = PduPersister.getPduPersister(context).getPendingMessages(
+                Long.MAX_VALUE);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    // The result of getPendingMessages() is order by due time.
+                    long retryAt = cursor.getLong(cursor.getColumnIndexOrThrow(
+                            PendingMessages.DUE_TIME));
+
+                    Intent service = new Intent(TransactionService.ACTION_ONALARM,
+                            null, context, TransactionService.class);
+                    PendingIntent operation = PendingIntent.getService(
+                            context, 0, service, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+                    AlarmManager am = (AlarmManager) context.getSystemService(
+                            Context.ALARM_SERVICE);
+                    am.set(AlarmManager.RTC, retryAt, operation);
+
+                    Timber.v("Next retry is scheduled at" + (retryAt - System.currentTimeMillis()) + "ms from now");
+                }
+            } finally {
+                cursor.close();
+            }
+        }
     }
 
     private boolean isConnected() {
@@ -168,7 +193,7 @@ public class RetryScheduler implements Observer {
                         long retryAt = current + scheme.getWaitingInterval();
 
                         Timber.v("scheduleRetry: retry for " + uri + " is scheduled at "
-                            + (retryAt - System.currentTimeMillis()) + "ms from now");
+                                + (retryAt - System.currentTimeMillis()) + "ms from now");
 
                         values.put(PendingMessages.DUE_TIME, retryAt);
 
@@ -182,7 +207,7 @@ public class RetryScheduler implements Observer {
                         errorType = MmsSms.ERR_TYPE_GENERIC_PERMANENT;
                         if (isRetryDownloading) {
                             Cursor c = SqliteWrapper.query(mContext, mContext.getContentResolver(), uri,
-                                    new String[] { Mms.THREAD_ID }, null, null, null);
+                                    new String[]{Mms.THREAD_ID}, null, null, null);
 
                             long threadId = -1;
                             if (c != null) {
@@ -213,9 +238,9 @@ public class RetryScheduler implements Observer {
                         }
                     }
 
-                    values.put(PendingMessages.ERROR_TYPE,  errorType);
+                    values.put(PendingMessages.ERROR_TYPE, errorType);
                     values.put(PendingMessages.RETRY_INDEX, retryIndex);
-                    values.put(PendingMessages.LAST_TRY,    current);
+                    values.put(PendingMessages.LAST_TRY, current);
 
                     int columnIndex = cursor.getColumnIndexOrThrow(
                             PendingMessages._ID);
@@ -285,7 +310,7 @@ public class RetryScheduler implements Observer {
         try {
             if (cursor.moveToFirst()) {
                 retrieveStatus = cursor.getInt(cursor.getColumnIndexOrThrow(
-                            Mms.RESPONSE_STATUS));
+                        Mms.RESPONSE_STATUS));
             }
         } finally {
             cursor.close();
@@ -294,31 +319,5 @@ public class RetryScheduler implements Observer {
             Timber.v("Retrieve status is: " + retrieveStatus);
         }
         return retrieveStatus;
-    }
-
-    public static void setRetryAlarm(Context context) {
-        Cursor cursor = PduPersister.getPduPersister(context).getPendingMessages(
-                Long.MAX_VALUE);
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    // The result of getPendingMessages() is order by due time.
-                    long retryAt = cursor.getLong(cursor.getColumnIndexOrThrow(
-                            PendingMessages.DUE_TIME));
-
-                    Intent service = new Intent(TransactionService.ACTION_ONALARM,
-                                        null, context, TransactionService.class);
-                    PendingIntent operation = PendingIntent.getService(
-                            context, 0, service, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-                    AlarmManager am = (AlarmManager) context.getSystemService(
-                            Context.ALARM_SERVICE);
-                    am.set(AlarmManager.RTC, retryAt, operation);
-
-                    Timber.v("Next retry is scheduled at" + (retryAt - System.currentTimeMillis()) + "ms from now");
-                }
-            } finally {
-                cursor.close();
-            }
-        }
     }
 }

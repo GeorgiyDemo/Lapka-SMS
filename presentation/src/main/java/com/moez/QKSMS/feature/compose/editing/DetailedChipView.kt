@@ -36,7 +36,8 @@ import com.google.android.material.card.MaterialCardView
 
 class DetailedChipView(context: Context) : RelativeLayout(context) {
 
-    @Inject lateinit var colors: Colors
+    @Inject
+    lateinit var colors: Colors
 
 
     private val avatarView: AvatarView by lazy { findViewById(R.id.avatar) }

@@ -48,9 +48,12 @@ import javax.inject.Inject
 
 class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
 
-    @Inject lateinit var previewModeDialog: QkDialog
-    @Inject lateinit var actionsDialog: QkDialog
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var previewModeDialog: QkDialog
+    @Inject
+    lateinit var actionsDialog: QkDialog
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     // View properties
     private val preferences: LinearLayout by lazy { findViewById(R.id.preferences) }
@@ -75,12 +78,13 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
     override val ringtoneSelectedIntent: Subject<String> = PublishSubject.create()
     override val actionsSelectedIntent by lazy { actionsDialog.adapter.menuItemClicks }
 
-    private val ringtoneLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri: Uri? = result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            ringtoneSelectedIntent.onNext(uri?.toString() ?: "")
+    private val ringtoneLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val uri: Uri? = result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                ringtoneSelectedIntent.onNext(uri?.toString() ?: "")
+            }
         }
-    }
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
@@ -109,12 +113,12 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
 
         // Listen to clicks for all of the preferences
         (0 until preferences.childCount)
-                .map { index -> preferences.getChildAt(index) }
-                .mapNotNull { view -> view as? PreferenceView }
-                .map { preference -> preference.clicks().map { preference } }
-                .let { Observable.merge(it) }
-                .autoDisposable(scope())
-                .subscribe(preferenceClickIntent)
+            .map { index -> preferences.getChildAt(index) }
+            .mapNotNull { view -> view as? PreferenceView }
+            .map { preference -> preference.clicks().map { preference } }
+            .let { Observable.merge(it) }
+            .autoDisposable(scope())
+            .subscribe(preferenceClickIntent)
     }
 
     override fun render(state: NotificationPrefsState) {

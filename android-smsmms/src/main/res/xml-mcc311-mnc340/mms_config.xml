@@ -77,7 +77,7 @@
     <!-- Maximum length in chars of mms subject field -->
     <int name="maxSubjectLength">80</int>
 
-     <!-- Reference for additional http parameters used in MMS http request.
-          Parameters are seperated by '|'. Optional.  -->
-     <string name="httpParams">X-MDN: ##LINE1##</string>
+    <!-- Reference for additional http parameters used in MMS http request.
+         Parameters are seperated by '|'. Optional.  -->
+    <string name="httpParams">X-MDN: ##LINE1##</string>
 </mms_config>

@@ -31,7 +31,8 @@
     <string name="setup_next">Tiếp tục</string>
     <string name="menu_add_person">Thêm người</string>
     <string name="menu_call">Cuộc gọi</string>
-    <string name="menu_info">Chi tiết</string>    <string name="menu_share">Chia sẻ</string>
+    <string name="menu_info">Chi tiết</string>
+    <string name="menu_share">Chia sẻ</string>
     <string name="main_drawer_open_cd">Mở menu điều hướng</string>
     <string name="main_title_selected">%d đã chọn</string>
     <string name="main_menu_clear">Dọn sạch</string>
@@ -89,7 +90,8 @@
     <string name="compose_subtitle_results">%1$d trên %2$d kết quả</string>
     <string name="compose_send_group_title">Gửi theo nhóm tin nhắn</string>
     <string name="compose_send_group_summary">Người nhận và các câu trả lời sẽ được hiển thị với mọi người</string>
-    <string name="compose_messages_empty">Đây là sự khởi đầu của một cuộc trò chuyện. Hãy nói điều gì đó tốt đẹp nhé!</string>
+    <string name="compose_messages_empty">Đây là sự khởi đầu của một cuộc trò chuyện. Hãy nói điều gì đó tốt đẹp nhé!
+    </string>
     <string name="compose_vcard_label">Thẻ danh thiếp</string>
     <string name="compose_hint">Viết tin nhắn&#8230;</string>
     <string name="compose_menu_copy">Sao chép văn bản</string>
@@ -124,7 +126,9 @@
     <string name="info_unarchive">Hủy lưu trữ</string>
     <string name="info_block">Chặn liên hệ</string>
     <string name="info_unblock">Bỏ chặn liên hệ</string>
-    <string name="info_delete">Xóa cuộc trò chuyện</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Giao diện</string>
+    <string name="info_delete">Xóa cuộc trò chuyện
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Giao diện</string>
     <string name="settings_category_general">Chung</string>
     <string name="settings_category_qkreply">Trả lời nhanh</string>
     <string name="settings_theme_title">Chủ đề</string>
@@ -175,14 +179,16 @@
     <string name="settings_mobile_title">Lọc số di động</string>
     <string name="settings_mobile_summary">Khi soạn tin mới, chỉ hiển thị liên hệ có số di động</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
     <string name="settings_auto_delete_warning_message">If you proceed, %1$d messages will be deleted now</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Đồng bộ tin nhắn</string>
+    </plurals>
+    <string name="settings_sync_title">Đồng bộ tin nhắn</string>
     <string name="settings_sync_summary">Đồng bộ lại tin nhắn với thiết bị</string>
     <string name="settings_about_title">Thông tin QKSMS</string>
     <string name="settings_version">Phiên bản: %s %s %s</string>
@@ -191,14 +197,21 @@
     <string name="settings_delay_duration_hint">Nhập khoảng thời gian (giây)</string>
     <string name="blocking_title">Đang chặn</string>
     <string name="blocking_drop_title">Loại bỏ tin nhắn</string>
-    <string name="blocking_drop_summary">Loại bỏ các tin nhắn được gửi tới từ người gửi đã chặn thay vì ẩn chúng</string>
+    <string name="blocking_drop_summary">Loại bỏ các tin nhắn được gửi tới từ người gửi đã chặn thay vì ẩn chúng
+    </string>
     <string name="blocking_conversations">Các cuộc trò chuyện đã chặn</string>
     <string name="blocking_manager_title">Quản lý danh sách chặn</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Chức năng chặn tích hợp sẵn trong QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Tự động lọc các cuộc gọi và tin nhắn của bạn ở một nơi thuận tiện! Cộng đồng IQ™ cho phép bạn ngăn chặn các tin nhắn từ những kẻ gửi tin rác được đóng góp bởi cộng đồng</string>
-    <string name="blocking_manager_sia_summary">Tự động lọc tin nhắn từ số điện thoại không mong muốn bằng cách sử dụng ứng dụng \"Should I Answer\"</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Tự động lọc các cuộc gọi và tin nhắn của bạn ở một nơi thuận
+        tiện! Cộng đồng IQ™ cho phép bạn ngăn chặn các tin nhắn từ những kẻ gửi tin rác được đóng góp bởi cộng đồng
+    </string>
+    <string name="blocking_manager_sia_summary">Tự động lọc tin nhắn từ số điện thoại không mong muốn bằng cách sử dụng
+        ứng dụng \"Should I Answer\"
+    </string>
     <string name="blocking_manager_copy_title">Sao chép số đã chặn</string>
     <string name="blocking_manager_copy_summary">Tiếp tục %s sao chép vào các số đã chặn hiện có của bạn</string>
     <string name="blocked_numbers_title">Các số đã chặn</string>
@@ -234,7 +247,9 @@
     <string name="qksms_plus_thanks_title">Cảm ơn bạn đã ủng hộ QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Bây giờ bạn có thể sử dụng tất cả các chức năng của QKSMS+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ miễn phí cho người sử dụng F-Droid! Bạn có thể trả phí nếu muốn hỗ trợ phát triển.</string>
+    <string name="qksms_plus_free_title">QKSMS+ miễn phí cho người sử dụng F-Droid! Bạn có thể trả phí nếu muốn hỗ trợ
+        phát triển.
+    </string>
     <string name="qksms_plus_donate">Tài trợ bằng PayPal</string>
     <string name="qksms_plus_coming_soon">Sắp có</string>
     <string name="qksms_plus_themes_title">Chủ đề đặc biệt</string>
@@ -252,7 +267,9 @@
     <string name="qksms_plus_respond_title">Tự động trả lời</string>
     <string name="qksms_plus_respond_summary">Tự động trả lời các tin nhắn với nội dung cài sẵn</string>
     <string name="qksms_plus_more_title">Nhiều tính năng khác</string>
-    <string name="qksms_plus_more_summary">QKSMS đang trong giai đoạn phát triển, và việc thanh toán của bạn sẽ bao gồm tất cả tính năng QKSMS+ tương lai!</string>
+    <string name="qksms_plus_more_summary">QKSMS đang trong giai đoạn phát triển, và việc thanh toán của bạn sẽ bao gồm
+        tất cả tính năng QKSMS+ tương lai!
+    </string>
     <string name="widget_loading">Đang tải&#8230;</string>
     <string name="widget_more">Xem thêm các cuộc trò chuyện</string>
     <string name="qkreply_menu_read">Đánh dấu đã đọc</string>
@@ -312,7 +329,8 @@
         <item>3 giây</item>
         <item>5 giây</item>
         <item>10 giây</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Ok</item>
         <item>Chờ một lát</item>
         <item>Tôi đang đến đây</item>

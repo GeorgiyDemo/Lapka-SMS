@@ -32,6 +32,19 @@ import java.util.Collection;
 public class NetworkUtilsHelper {
 
     /**
+     * Setting bit 0 indicates reseting of IPv4 addresses required
+     */
+    public static final int RESET_IPV4_ADDRESSES = 0x01;
+    /**
+     * Setting bit 1 indicates reseting of IPv4 addresses required
+     */
+    public static final int RESET_IPV6_ADDRESSES = 0x02;
+    /**
+     * Reset all addresses
+     */
+    public static final int RESET_ALL_ADDRESSES = RESET_IPV4_ADDRESSES | RESET_IPV6_ADDRESSES;
+
+    /**
      * Bring the named network interface up.
      */
     public native static int enableInterface(String interfaceName);
@@ -40,21 +53,6 @@ public class NetworkUtilsHelper {
      * Bring the named network interface down.
      */
     public native static int disableInterface(String interfaceName);
-
-    /**
-     * Setting bit 0 indicates reseting of IPv4 addresses required
-     */
-    public static final int RESET_IPV4_ADDRESSES = 0x01;
-
-    /**
-     * Setting bit 1 indicates reseting of IPv4 addresses required
-     */
-    public static final int RESET_IPV6_ADDRESSES = 0x02;
-
-    /**
-     * Reset all addresses
-     */
-    public static final int RESET_ALL_ADDRESSES = RESET_IPV4_ADDRESSES | RESET_IPV6_ADDRESSES;
 
     /**
      * Reset IPv6 or IPv4 sockets that are connected via the named interface.

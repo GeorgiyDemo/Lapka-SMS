@@ -36,8 +36,8 @@ class CallControlBlockingClient @Inject constructor(
 ) : BlockingClient {
 
     private val projection: Array<String> = arrayOf(
-            //CallControl.Lookup.DISPLAY_NAME, // This has a performance impact on the lookup, and we don't need it
-            CallControl.Lookup.BLOCK_REASON
+        //CallControl.Lookup.DISPLAY_NAME, // This has a performance impact on the lookup, and we don't need it
+        CallControl.Lookup.BLOCK_REASON
     )
 
     class LookupResult(cursor: Cursor) {
@@ -54,9 +54,9 @@ class CallControlBlockingClient @Inject constructor(
         val uri = Uri.withAppendedPath(CallControl.LOOKUP_TEXT_URI, address)
         return@fromCallable try {
             val blockReason = context.contentResolver.query(uri, projection, null, null, null) // Query URI
-                    ?.use { cursor -> cursor.map(::LookupResult) } // Map to Result object
-                    ?.find { result -> result.blockReason != null } // Check if any are blocked
-                    ?.blockReason // If none are blocked or we errored at some point, return false
+                ?.use { cursor -> cursor.map(::LookupResult) } // Map to Result object
+                ?.find { result -> result.blockReason != null } // Check if any are blocked
+                ?.blockReason // If none are blocked or we errored at some point, return false
 
             when (blockReason) {
                 null -> BlockingClient.Action.Unblock

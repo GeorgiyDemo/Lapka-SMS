@@ -38,9 +38,10 @@ class CursorToRecipientImpl @Inject constructor(
     }
 
     override fun map(from: Cursor) = Recipient(
-            id = from.getLong(COLUMN_ID),
-            address = from.getString(COLUMN_ADDRESS),
-            lastUpdate = System.currentTimeMillis())
+        id = from.getLong(COLUMN_ID),
+        address = from.getString(COLUMN_ADDRESS),
+        lastUpdate = System.currentTimeMillis()
+    )
 
     override fun getRecipientCursor(): Cursor? {
         return when (permissionManager.hasReadSms()) {

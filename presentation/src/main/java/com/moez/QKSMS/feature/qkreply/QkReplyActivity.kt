@@ -48,8 +48,10 @@ import javax.inject.Inject
 
 class QkReplyActivity : QkThemedActivity(), QkReplyView {
 
-    @Inject lateinit var adapter: MessagesAdapter
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var adapter: MessagesAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     // View properties
     private val message: QkEditText by lazy { findViewById(R.id.message) }

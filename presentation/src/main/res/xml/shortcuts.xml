@@ -20,19 +20,19 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
     <shortcut
-        android:enabled="true"
-        android:icon="@mipmap/ic_shortcut_compose"
-        android:shortcutDisabledMessage="@string/shortcut_compose_disabled_message"
-        android:shortcutId="compose"
-        android:shortcutLongLabel="@string/shortcut_compose_long_label"
-        android:shortcutShortLabel="@string/shortcut_compose_short_label">
+            android:enabled="true"
+            android:icon="@mipmap/ic_shortcut_compose"
+            android:shortcutDisabledMessage="@string/shortcut_compose_disabled_message"
+            android:shortcutId="compose"
+            android:shortcutLongLabel="@string/shortcut_compose_long_label"
+            android:shortcutShortLabel="@string/shortcut_compose_short_label">
 
         <intent
-            android:action="org.cpartisans.psms.START"
-            android:targetClass="com.moez.QKSMS.feature.compose.ComposeActivity"
-            android:targetPackage="org.cpartisans.psms" />
+                android:action="org.cpartisans.psms.START"
+                android:targetClass="com.moez.QKSMS.feature.compose.ComposeActivity"
+                android:targetPackage="org.cpartisans.psms"/>
 
-        <categories android:name="android.shortcut.conversation" />
+        <categories android:name="android.shortcut.conversation"/>
 
     </shortcut>
 

@@ -84,9 +84,9 @@ class PSmsEncryptor(
 
     private fun byteArrayToInt(data: ByteArray): Int {
         return (data[3].toInt() shl 24) or
-            ((data[2].toInt() and 0xFF) shl 16) or
-            ((data[1].toInt() and 0xFF) shl 8) or
-            (data[0].toInt() and 0xFF)
+                ((data[2].toInt() and 0xFF) shl 16) or
+                ((data[1].toInt() and 0xFF) shl 8) or
+                (data[0].toInt() and 0xFF)
     }
 
     private fun pack(data: ByteArray, macKey: ByteArray, channelId: Int?): ByteArray {
@@ -188,7 +188,8 @@ class PSmsEncryptor(
             try {
                 decode(str, key, scheme.ordinal)
                 return true
-            } catch (_: InvalidDataException) { }
+            } catch (_: InvalidDataException) {
+            }
         }
         return false
     }
@@ -197,7 +198,8 @@ class PSmsEncryptor(
         for (scheme in Scheme.values()) {
             try {
                 return decode(str, key, scheme.ordinal)
-            } catch (_: InvalidDataException) { }
+            } catch (_: InvalidDataException) {
+            }
         }
         return Message(str)
     }

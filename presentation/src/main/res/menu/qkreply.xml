@@ -18,37 +18,37 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/read"
-        android:icon="@drawable/ic_check_white_24dp"
-        android:title="@string/qkreply_menu_read"
-        app:showAsAction="ifRoom" />
+            android:id="@+id/read"
+            android:icon="@drawable/ic_check_white_24dp"
+            android:title="@string/qkreply_menu_read"
+            app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/expand"
-        android:icon="@drawable/ic_unfold_more_black_24dp"
-        android:title="@string/qkreply_menu_expand"
-        app:showAsAction="ifRoom" />
+            android:id="@+id/expand"
+            android:icon="@drawable/ic_unfold_more_black_24dp"
+            android:title="@string/qkreply_menu_expand"
+            app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/collapse"
-        android:icon="@drawable/ic_unfold_less_black_24dp"
-        android:title="@string/qkreply_menu_collapse"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
+            android:id="@+id/collapse"
+            android:icon="@drawable/ic_unfold_less_black_24dp"
+            android:title="@string/qkreply_menu_collapse"
+            android:visible="false"
+            app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/call"
-        android:title="@string/qkreply_menu_call" />
+            android:id="@+id/call"
+            android:title="@string/qkreply_menu_call"/>
 
     <item
-        android:id="@+id/delete"
-        android:title="@string/qkreply_menu_delete" />
+            android:id="@+id/delete"
+            android:title="@string/qkreply_menu_delete"/>
 
     <item
-        android:id="@+id/view"
-        android:title="@string/qkreply_menu_view" />
+            android:id="@+id/view"
+            android:title="@string/qkreply_menu_view"/>
 
 </menu>

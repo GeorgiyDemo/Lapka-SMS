@@ -27,7 +27,8 @@ import javax.inject.Inject
 
 class MarkReadReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var markRead: MarkRead
+    @Inject
+    lateinit var markRead: MarkRead
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

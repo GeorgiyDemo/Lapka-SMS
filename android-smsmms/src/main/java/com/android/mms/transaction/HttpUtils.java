@@ -44,12 +44,10 @@ import java.util.Locale;
 
 public class HttpUtils {
 
-    private static final boolean DEBUG = false;
-    private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
-
     public static final int HTTP_POST_METHOD = 1;
     public static final int HTTP_GET_METHOD = 2;
-
+    private static final boolean DEBUG = false;
+    private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
     private static final int MMS_READ_BUFFER = 4096;
 
     // This is the value to use for the "Accept-Language" header.
@@ -57,17 +55,16 @@ public class HttpUtils {
     // setting, this should no longer be static.  We should call
     // getHttpAcceptLanguage instead.
     private static final String HDR_VALUE_ACCEPT_LANGUAGE;
+    // Definition for necessary HTTP headers.
+    private static final String HDR_KEY_ACCEPT = "Accept";
+    private static final String HDR_KEY_ACCEPT_LANGUAGE = "Accept-Language";
+    private static final String HDR_VALUE_ACCEPT =
+            "*/*, application/vnd.wap.mms-message, application/vnd.wap.sic";
+    private static final String ACCEPT_LANG_FOR_US_LOCALE = "en-US";
 
     static {
         HDR_VALUE_ACCEPT_LANGUAGE = getCurrentAcceptLanguage(Locale.getDefault());
     }
-
-    // Definition for necessary HTTP headers.
-    private static final String HDR_KEY_ACCEPT = "Accept";
-    private static final String HDR_KEY_ACCEPT_LANGUAGE = "Accept-Language";
-
-    private static final String HDR_VALUE_ACCEPT =
-        "*/*, application/vnd.wap.mms-message, application/vnd.wap.sic";
 
     private HttpUtils() {
         // To forbidden instantiate this class.
@@ -76,19 +73,19 @@ public class HttpUtils {
     /**
      * A helper method to send or retrieve data through HTTP protocol.
      *
-     * @param token The token to identify the sending progress.
-     * @param url The URL used in a GET request. Null when the method is
-     *         HTTP_POST_METHOD.
-     * @param pdu The data to be POST. Null when the method is HTTP_GET_METHOD.
+     * @param token  The token to identify the sending progress.
+     * @param url    The URL used in a GET request. Null when the method is
+     *               HTTP_POST_METHOD.
+     * @param pdu    The data to be POST. Null when the method is HTTP_GET_METHOD.
      * @param method HTTP_POST_METHOD or HTTP_GET_METHOD.
      * @return A byte array which contains the response data.
-     *         If an HTTP error code is returned, an IOException will be thrown.
+     * If an HTTP error code is returned, an IOException will be thrown.
      * @throws java.io.IOException if any error occurred on network interface or
-     *         an HTTP error code(&gt;=400) returned from the server.
+     *                             an HTTP error code(&gt;=400) returned from the server.
      */
     public static byte[] httpConnection(Context context, long token,
-            String url, byte[] pdu, int method, boolean isProxySet,
-            String proxyHost, int proxyPort) throws IOException {
+                                        String url, byte[] pdu, int method, boolean isProxySet,
+                                        String proxyHost, int proxyPort) throws IOException {
         if (url == null) {
             throw new IllegalArgumentException("URL must not be null.");
         }
@@ -115,10 +112,10 @@ public class HttpUtils {
 
             client = createHttpClient(context);
             HttpRequest req = null;
-            switch(method) {
+            switch (method) {
                 case HTTP_POST_METHOD:
                     ProgressCallbackEntity entity = new ProgressCallbackEntity(
-                                                        context, token, pdu);
+                            context, token, pdu);
                     // Set request content type.
                     entity.setContentType("application/vnd.wap.mms-message");
 
@@ -163,7 +160,7 @@ public class HttpUtils {
             String extraHttpParams = MmsConfig.getHttpParams();
 
             if (extraHttpParams != null) {
-                String line1Number = ((TelephonyManager)context
+                String line1Number = ((TelephonyManager) context
                         .getSystemService(Context.TELEPHONY_SERVICE))
                         .getLine1Number();
                 String line1Key = MmsConfig.getHttpParamsLine1Key();
@@ -266,8 +263,7 @@ public class HttpUtils {
             handleHttpConnectionException(e, url);
         } catch (Exception e) {
             handleHttpConnectionException(e, url);
-        }
-        finally {
+        } finally {
             if (client != null) {
                 client.close();
             }
@@ -298,12 +294,11 @@ public class HttpUtils {
         return client;
     }
 
-    private static final String ACCEPT_LANG_FOR_US_LOCALE = "en-US";
-
     /**
      * Return the Accept-Language header.  Use the current locale plus
      * US if we are in a different locale than US.
      * This code copied from the browser's WebSettings.java
+     *
      * @return Current AcceptLanguage String.
      */
     public static String getCurrentAcceptLanguage(Locale locale) {

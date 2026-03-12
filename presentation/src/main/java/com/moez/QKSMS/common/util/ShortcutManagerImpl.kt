@@ -52,21 +52,24 @@ class ShortcutManagerImpl @Inject constructor(
             if (shortcutManager.isRateLimitingActive) return
 
             shortcutManager.dynamicShortcuts = conversationRepo.getTopConversations()
-                    .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
-                    .map { conversation -> createShortcutForConversation(conversation, shortcutManager) }
+                .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
+                .map { conversation -> createShortcutForConversation(conversation, shortcutManager) }
         }
     }
 
     @TargetApi(25)
-    private fun createShortcutForConversation(conversation: Conversation, shortcutManager: ShortcutManager): ShortcutInfo {
+    private fun createShortcutForConversation(
+        conversation: Conversation,
+        shortcutManager: ShortcutManager
+    ): ShortcutInfo {
         val icon = when {
             conversation.recipients.size == 1 -> {
                 val address = conversation.recipients.first()!!.address
                 val request = GlideApp.with(context)
-                        .asBitmap()
-                        .circleCrop()
-                        .load("tel:$address")
-                        .submit(shortcutManager.iconMaxWidth, shortcutManager.iconMaxHeight)
+                    .asBitmap()
+                    .circleCrop()
+                    .load("tel:$address")
+                    .submit(shortcutManager.iconMaxWidth, shortcutManager.iconMaxHeight)
                 val bitmap = tryOrNull(false) { request.get() }
 
                 if (bitmap != null) Icon.createWithBitmap(bitmap)
@@ -77,15 +80,15 @@ class ShortcutManagerImpl @Inject constructor(
         }
 
         val intent = Intent(context, ComposeActivity::class.java)
-                .setAction(Intent.ACTION_VIEW)
-                .putExtra("threadId", conversation.id)
+            .setAction(Intent.ACTION_VIEW)
+            .putExtra("threadId", conversation.id)
 
         return ShortcutInfo.Builder(context, "${conversation.id}")
-                .setShortLabel(conversation.getTitle())
-                .setLongLabel(conversation.getTitle())
-                .setIcon(icon)
-                .setIntent(intent)
-                .build()
+            .setShortLabel(conversation.getTitle())
+            .setLongLabel(conversation.getTitle())
+            .setIcon(icon)
+            .setIntent(intent)
+            .build()
     }
 
 }

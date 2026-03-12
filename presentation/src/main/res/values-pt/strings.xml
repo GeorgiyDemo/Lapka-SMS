@@ -31,7 +31,8 @@
     <string name="setup_next">Continuar</string>
     <string name="menu_add_person">Adicionar pessoa</string>
     <string name="menu_call">Ligar</string>
-    <string name="menu_info">Detalhes</string>    <string name="menu_share">Partilhar</string>
+    <string name="menu_info">Detalhes</string>
+    <string name="menu_share">Partilhar</string>
     <string name="main_drawer_open_cd">Abrir menu de navegação</string>
     <string name="main_title_selected">%d selecionada(s)</string>
     <string name="main_menu_clear">Limpar</string>
@@ -125,7 +126,9 @@
     <string name="info_unarchive">Retirar do arquivo</string>
     <string name="info_block">Bloquear</string>
     <string name="info_unblock">Desbloquear</string>
-    <string name="info_delete">Apagar conversa</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Aparência</string>
+    <string name="info_delete">Apagar conversa
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Aparência</string>
     <string name="settings_category_general">Geral</string>
     <string name="settings_category_qkreply">QK Reply</string>
     <string name="settings_theme_title">Tema</string>
@@ -176,7 +179,9 @@
     <string name="settings_mobile_title">Apenas números de telemóvel</string>
     <string name="settings_mobile_summary">Ao escrever uma mensagem, mostrar apenas os números móveis</string>
     <string name="settings_auto_delete">Apagar mensagens antigas automaticamente</string>
-    <string name="settings_auto_delete_dialog_message">As mensagens serão eliminadas após o número de dias especificado</string>
+    <string name="settings_auto_delete_dialog_message">As mensagens serão eliminadas após o número de dias
+        especificado
+    </string>
     <string name="settings_auto_delete_dialog_hint">Número de dias</string>
     <string name="settings_auto_delete_never">Nunca</string>
     <string name="settings_auto_delete_warning">Apagar mensagens antigas automaticamente?</string>
@@ -184,7 +189,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Após 1 dia</item>
         <item quantity="other">Após %d dias</item>
-    </plurals><string name="settings_sync_title">Sincronizar mensagens</string>
+    </plurals>
+    <string name="settings_sync_title">Sincronizar mensagens</string>
     <string name="settings_sync_summary">Sincronizar as mensagens com a base de dados nativa do Android</string>
     <string name="settings_about_title">Acerca do QKSMS</string>
     <string name="settings_version">Versão %s %s %s</string>
@@ -193,14 +199,23 @@
     <string name="settings_delay_duration_hint">Digite a duração (segundos)</string>
     <string name="blocking_title">Bloqueio</string>
     <string name="blocking_drop_title">Descartar mensagens</string>
-    <string name="blocking_drop_summary">As mensagens enviadas pelos remetentes bloqueados serão descartadas e não ocultadas</string>
+    <string name="blocking_drop_summary">As mensagens enviadas pelos remetentes bloqueados serão descartadas e não
+        ocultadas
+    </string>
     <string name="blocking_conversations">Conversas bloqueadas</string>
     <string name="blocking_manager_title">Gestor de bloqueios</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Funcionalidade de bloqueio, nativa no QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Filtrar automaticamente as chamadas e as mensagens com a aplicação Community IQ™, com a qual pode descartar as mensagens que forem enviadas pelo \'spammers\' reconhecidos na comunidade</string>
-    <string name="blocking_manager_sia_summary">Filtrar automaticamente as mensagens de números utilizando a aplicação \"Should I Answer\"</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Filtrar automaticamente as chamadas e as mensagens com a
+        aplicação Community IQ™, com a qual pode descartar as mensagens que forem enviadas pelo \'spammers\'
+        reconhecidos na comunidade
+    </string>
+    <string name="blocking_manager_sia_summary">Filtrar automaticamente as mensagens de números utilizando a aplicação
+        \"Should I Answer\"
+    </string>
     <string name="blocking_manager_copy_title">Copiar números bloqueados</string>
     <string name="blocking_manager_copy_summary">Continuar para %s e substituir os números bloqueados</string>
     <string name="blocked_numbers_title">Números bloqueados</string>
@@ -238,11 +253,14 @@
     <string name="qksms_plus_thanks_title">Obrigado por apoiar o QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Agora, tem acesso a todas as funções do QKSMS+</string>
     <string name="qksms_plus_error">Ocorreu um erro. Por favor tente novamente.</string>
-    <string name="qksms_plus_free_title">O QKSMS+ é gratuito para os utilizadores F-Droid! Se quiser ajudar no desenvolvimento, pode efetuar um donativo.</string>
+    <string name="qksms_plus_free_title">O QKSMS+ é gratuito para os utilizadores F-Droid! Se quiser ajudar no
+        desenvolvimento, pode efetuar um donativo.
+    </string>
     <string name="qksms_plus_donate">Donativos por PayPal</string>
     <string name="qksms_plus_coming_soon">Brevemente</string>
     <string name="qksms_plus_themes_title">Temas premium</string>
-    <string name="qksms_plus_themes_summary">Desbloquear diversos temas não disponíveis na paleta Material Design</string>
+    <string name="qksms_plus_themes_summary">Desbloquear diversos temas não disponíveis na paleta Material Design
+    </string>
     <string name="qksms_plus_emoji_title">Emoji personalizado</string>
     <string name="qksms_plus_emoji_summary">Criar atalhos personalizados para os emoji</string>
     <string name="qksms_plus_delayed_title">Atraso de envio</string>
@@ -256,7 +274,9 @@
     <string name="qksms_plus_respond_title">Resposta automática</string>
     <string name="qksms_plus_respond_summary">Enviar automaticamente um resposta tendo por base os modelos</string>
     <string name="qksms_plus_more_title">Mais</string>
-    <string name="qksms_plus_more_summary">Esta aplicação está a ser desenvolvida e a sua compra disponibiliza todas as futuras funcionalidades do QKSMS+!</string>
+    <string name="qksms_plus_more_summary">Esta aplicação está a ser desenvolvida e a sua compra disponibiliza todas as
+        futuras funcionalidades do QKSMS+!
+    </string>
     <string name="widget_loading">A carregar&#8230;</string>
     <string name="widget_more">Ver mais conversas</string>
     <string name="qkreply_menu_read">Marcar como lida</string>
@@ -317,7 +337,8 @@
         <item>3 segundos</item>
         <item>5 segundos</item>
         <item>10 segundos</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Ok</item>
         <item>Espera um pouco</item>
         <item>Estou a caminho</item>

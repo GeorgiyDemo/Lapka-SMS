@@ -51,9 +51,9 @@ class CallBlockerBlockingClient @Inject constructor(
         val uri = Uri.parse("content://com.cuiet.blockCalls.ContProvBlockCalls/lookup/is.blocked.lookup")
         return@fromCallable try {
             val blockReason = context.contentResolver.query(uri, arrayOf("result"), reason, arrayOf(address), null)
-                    ?.use { cursor -> cursor.map(::LookupResult) }
-                    ?.find { result -> result.blockReason != null }
-                    ?.blockReason
+                ?.use { cursor -> cursor.map(::LookupResult) }
+                ?.find { result -> result.blockReason != null }
+                ?.blockReason
 
             when (blockReason) {
                 "true" -> BlockingClient.Action.Block()

@@ -7,7 +7,7 @@
                   android:authorities="${applicationId}.MmsFileProvider"
                   android:enabled="true"
                   android:grantUriPermissions="true"
-                  android:exported="false" />
+                  android:exported="false"/>
 
     </application>
 </manifest>

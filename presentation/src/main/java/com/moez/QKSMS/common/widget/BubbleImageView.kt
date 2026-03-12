@@ -26,7 +26,8 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import com.moez.QKSMS.common.util.extensions.dpToPx
 
-class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ImageView(context, attrs) {
+class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    ImageView(context, attrs) {
 
     enum class Style(val topLeft: Boolean, val topRight: Boolean, val bottomRight: Boolean, val bottomLeft: Boolean) {
 

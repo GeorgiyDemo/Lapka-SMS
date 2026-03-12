@@ -83,7 +83,14 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
      *
      * @param threadId is the thread id of who to send the message to (can also be set to Transaction.NO_THREAD_ID)
      */
-    fun sendNewMessage(subId: Int, threadId: Long, addresses: List<String>, parts: List<MMSPart>, subject: String?, existingUri: Uri?) {
+    fun sendNewMessage(
+        subId: Int,
+        threadId: Long,
+        addresses: List<String>,
+        parts: List<MMSPart>,
+        subject: String?,
+        existingUri: Uri?
+    ) {
         RateController.init(context)
         DownloadManager.init(context)
 
@@ -94,14 +101,20 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
 
             val sendReq = buildPdu(context, addresses, subject, parts)
             val persister = PduPersister.getPduPersister(context)
-            val messageUri = existingUri ?: persister.persist(sendReq, Uri.parse("content://mms/outbox"), threadId, true, true, null)
+            val messageUri =
+                existingUri ?: persister.persist(sendReq, Uri.parse("content://mms/outbox"), threadId, true, true, null)
 
             val sentIntent = Intent(MMS_SENT)
             BroadcastUtils.addClassName(context, sentIntent, MMS_SENT)
 
             sentIntent.putExtra(EXTRA_CONTENT_URI, messageUri.toString())
             sentIntent.putExtra(EXTRA_FILE_PATH, sendFile.path)
-            val sentPI = PendingIntent.getBroadcast(context, 0, sentIntent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE)
+            val sentPI = PendingIntent.getBroadcast(
+                context,
+                0,
+                sentIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
 
             val updatedIntent = Intent(MMS_UPDATED).putExtra("uri", messageUri.toString())
             BroadcastUtils.addClassName(context, updatedIntent, MMS_UPDATED)
@@ -111,10 +124,10 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
                 FileOutputStream(sendFile).use { writer ->
                     writer.write(PduComposer(context, sendReq).make())
                     Uri.Builder()
-                            .authority(context.packageName + ".MmsFileProvider")
-                            .path(fileName)
-                            .scheme(ContentResolver.SCHEME_CONTENT)
-                            .build()
+                        .authority(context.packageName + ".MmsFileProvider")
+                        .path(fileName)
+                        .scheme(ContentResolver.SCHEME_CONTENT)
+                        .build()
                 }
             } catch (e: IOException) {
                 Timber.e(e, "Error writing send file")
@@ -122,15 +135,17 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
             }
 
             val configOverrides = bundleOf(
-                    Pair(SmsManager.MMS_CONFIG_GROUP_MMS_ENABLED, true),
-                    Pair(SmsManager.MMS_CONFIG_MAX_MESSAGE_SIZE, MmsConfig.getMaxMessageSize()))
+                Pair(SmsManager.MMS_CONFIG_GROUP_MMS_ENABLED, true),
+                Pair(SmsManager.MMS_CONFIG_MAX_MESSAGE_SIZE, MmsConfig.getMaxMessageSize())
+            )
 
             MmsConfig.getHttpParams()
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, it) }
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, it) }
 
             if (contentUri != null) {
-                SmsManagerFactory.createSmsManager(subId).sendMultimediaMessage(context, contentUri, null, configOverrides, sentPI)
+                SmsManagerFactory.createSmsManager(subId)
+                    .sendMultimediaMessage(context, contentUri, null, configOverrides, sentPI)
             } else {
                 Timber.e("Error writing sending Mms")
                 try {
@@ -149,7 +164,8 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
     private fun buildPdu(context: Context, recipients: List<String>, subject: String?, parts: List<MMSPart>): SendReq {
         val req = SendReq()
 
-        Utils.getMyPhoneNumber(context)?.takeIf(String::isNotEmpty)?.let(::EncodedStringValue)?.let(req::setFrom) // From
+        Utils.getMyPhoneNumber(context)?.takeIf(String::isNotEmpty)?.let(::EncodedStringValue)
+            ?.let(req::setFrom) // From
         recipients.map(::EncodedStringValue).forEach(req::addTo) // To
         subject?.takeIf(String::isNotEmpty)?.let(::EncodedStringValue)?.let(req::setSubject) // Subject
 
@@ -165,8 +181,8 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
             contentLocation = "smil.xml".toByteArray()
             contentType = ContentType.APP_SMIL.toByteArray()
             data = ByteArrayOutputStream()
-                    .apply { SmilXmlSerializer.serialize(SmilHelper.createSmilDocument(req.body), this) }
-                    .toByteArray()
+                .apply { SmilXmlSerializer.serialize(SmilHelper.createSmilDocument(req.body), this) }
+                .toByteArray()
         })
 
         req.messageSize = parts.mapNotNull { it.data?.size }.sum().toLong()

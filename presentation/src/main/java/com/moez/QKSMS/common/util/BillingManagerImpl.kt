@@ -27,7 +27,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BillingManagerImpl @Inject constructor(
-): BillingManager {
+) : BillingManager {
 
     override val products: Observable<List<BillingManager.Product>> = BehaviorSubject.createDefault(listOf())
     override val upgradeStatus: Observable<Boolean> = BehaviorSubject.createDefault(true)

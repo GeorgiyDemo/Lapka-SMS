@@ -31,7 +31,8 @@
     <string name="setup_next">Kontynuuj</string>
     <string name="menu_add_person">Dodaj osobę</string>
     <string name="menu_call">Zadzwoń</string>
-    <string name="menu_info">Szczegóły</string>    <string name="menu_share">Udostepnij</string>
+    <string name="menu_info">Szczegóły</string>
+    <string name="menu_share">Udostepnij</string>
     <string name="main_drawer_open_cd">Otwórz panel nawigacyjny</string>
     <string name="main_title_selected">%d wybrano</string>
     <string name="main_menu_clear">Wyczyść</string>
@@ -127,7 +128,9 @@
     <string name="info_unarchive">Usuń z archiwum</string>
     <string name="info_block">Zablokuj</string>
     <string name="info_unblock">Odblokuj</string>
-    <string name="info_delete">Usuń rozmowę</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Wygląd</string>
+    <string name="info_delete">Usuń rozmowę
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Wygląd</string>
     <string name="settings_category_general">Ogólne</string>
     <string name="settings_category_qkreply">QK Reply</string>
     <string name="settings_theme_title">Motyw</string>
@@ -182,13 +185,16 @@
     <string name="settings_auto_delete_dialog_hint">Liczba dni</string>
     <string name="settings_auto_delete_never">Nigdy</string>
     <string name="settings_auto_delete_warning">Usunąć automatycznie stare wiadomości?</string>
-    <string name="settings_auto_delete_warning_message">Jeśli przejdziesz dalej, %1$d wiadomość(-ci) zostanie usuniętych</string>
+    <string name="settings_auto_delete_warning_message">Jeśli przejdziesz dalej, %1$d wiadomość(-ci) zostanie
+        usuniętych
+    </string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Po 1 dniu</item>
         <item quantity="few">Po %d dniach</item>
         <item quantity="many">Po %d dniach</item>
         <item quantity="other">Po %d dniach</item>
-    </plurals><string name="settings_sync_title">Synchronizuj wiadomości</string>
+    </plurals>
+    <string name="settings_sync_title">Synchronizuj wiadomości</string>
     <string name="settings_sync_summary">Zsynchronizuj wiadomości z systemową bazą danych</string>
     <string name="settings_about_title">O aplikacji</string>
     <string name="settings_version">Wersja %s %s %s</string>
@@ -197,14 +203,21 @@
     <string name="settings_delay_duration_hint">Wprowadź czas (w sekundach)</string>
     <string name="blocking_title">Blokowanie</string>
     <string name="blocking_drop_title">Odrzuć wiadomości</string>
-    <string name="blocking_drop_summary">Odrzuć przychodzące wiadomości od zablokowanych nadawców zamiast ich ukrywać</string>
+    <string name="blocking_drop_summary">Odrzuć przychodzące wiadomości od zablokowanych nadawców zamiast ich ukrywać
+    </string>
     <string name="blocking_conversations">Zablokowane rozmowy</string>
     <string name="blocking_manager_title">Menadżer Blokowania</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Wbudowana funkcja blokowania w QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Blokuj spam, numery i połączenia od nieznajomych za pomocą czarnej listy i harmonogramu.</string>
-    <string name="blocking_manager_call_control_summary">Automatycznie filtruj twoje rozmowy i wiadomości tekstowe w jednym wygodnym miejscu! Community IQ™ pozwala zapobiegać niechcianym wiadomościom od znanych spamerów</string>
-    <string name="blocking_manager_sia_summary">Automatycznie filtruj wiadomości od niechcianych numerów za pomocą aplikacji \"Should I Answer?\"</string>
+    <string name="blocking_manager_call_blocker_summary">Blokuj spam, numery i połączenia od nieznajomych za pomocą
+        czarnej listy i harmonogramu.
+    </string>
+    <string name="blocking_manager_call_control_summary">Automatycznie filtruj twoje rozmowy i wiadomości tekstowe w
+        jednym wygodnym miejscu! Community IQ™ pozwala zapobiegać niechcianym wiadomościom od znanych spamerów
+    </string>
+    <string name="blocking_manager_sia_summary">Automatycznie filtruj wiadomości od niechcianych numerów za pomocą
+        aplikacji \"Should I Answer?\"
+    </string>
     <string name="blocking_manager_copy_title">Skopiuj zablokowane numery</string>
     <string name="blocking_manager_copy_summary">Kontynuuj do %s i skopiuj twoje obecnie blokowane numery</string>
     <string name="blocked_numbers_title">Zablokowane numery</string>
@@ -246,11 +259,15 @@
     <string name="qksms_plus_thanks_title">Dziękujemy za wsparcie aplikacji QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Masz teraz dostęp do wszystkich funkcji QKSMS+</string>
     <string name="qksms_plus_error">Wystąpił błąd. Spróbuj ponownie.</string>
-    <string name="qksms_plus_free_title">Aplikacja QKSMS+ jest bezpłatna dla użytkowników F-Droid! Jeśli chcesz wesprzeć jej rozwój, rzuć pieniążka.</string>
+    <string name="qksms_plus_free_title">Aplikacja QKSMS+ jest bezpłatna dla użytkowników F-Droid! Jeśli chcesz wesprzeć
+        jej rozwój, rzuć pieniążka.
+    </string>
     <string name="qksms_plus_donate">Wsparcie za pośrednictwem serwisu PayPal</string>
     <string name="qksms_plus_coming_soon">Już wkrótce</string>
     <string name="qksms_plus_themes_title">Motywy premium</string>
-    <string name="qksms_plus_themes_summary">Odblokuj piękne kolory motywów, które nie są dostępne w palecie Material Design</string>
+    <string name="qksms_plus_themes_summary">Odblokuj piękne kolory motywów, które nie są dostępne w palecie Material
+        Design
+    </string>
     <string name="qksms_plus_emoji_title">Własne automatyczne emoji</string>
     <string name="qksms_plus_emoji_summary">Twórz niestandardowe skróty do automatycznych emoji</string>
     <string name="qksms_plus_delayed_title">Opóźnione wysyłanie</string>
@@ -258,13 +275,19 @@
     <string name="qksms_plus_night_title">Automatyczny tryb nocny</string>
     <string name="qksms_plus_night_summary">Włączaj tryb nocny w oparciu o porę dnia.</string>
     <string name="qksms_plus_blacklist_title">Zaawansowane blokowanie</string>
-    <string name="qksms_plus_blacklist_summary">Blokuj wiadomości, które zawierają słowa kluczowe lub dopasowane wzorce.</string>
+    <string name="qksms_plus_blacklist_summary">Blokuj wiadomości, które zawierają słowa kluczowe lub dopasowane
+        wzorce.
+    </string>
     <string name="qksms_plus_forward_title">Automatyczne przekazywanie</string>
     <string name="qksms_plus_forward_summary">Automatyczne przekazuj wiadomości od określonych nadawców.</string>
     <string name="qksms_plus_respond_title">Automatyczne odpowiedzi</string>
-    <string name="qksms_plus_respond_summary">Automatyczne odpowiadaj na przychodzące wiadomości korzystając z gotowych odpowiedzi.</string>
+    <string name="qksms_plus_respond_summary">Automatyczne odpowiadaj na przychodzące wiadomości korzystając z gotowych
+        odpowiedzi.
+    </string>
     <string name="qksms_plus_more_title">Więcej</string>
-    <string name="qksms_plus_more_summary">QKSMS jest aktywnie rozwijany, twój zakup będzie zawierać wszelkie przyszłe fukcje QKSMS+</string>
+    <string name="qksms_plus_more_summary">QKSMS jest aktywnie rozwijany, twój zakup będzie zawierać wszelkie przyszłe
+        fukcje QKSMS+
+    </string>
     <string name="widget_loading">Ładowanie&#8230;</string>
     <string name="widget_more">Zobacz więcej konwersacji</string>
     <string name="qkreply_menu_read">Oznacz jako przeczytane</string>
@@ -327,7 +350,8 @@
         <item>3 sekundy</item>
         <item>5 sekund</item>
         <item>10 sekund</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>OK</item>
         <item>Daj mi chwilę</item>
         <item>Jestem w drodze</item>

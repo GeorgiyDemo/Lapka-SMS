@@ -31,7 +31,8 @@
     <string name="setup_next">Jatka</string>
     <string name="menu_add_person">Lisää henkilö</string>
     <string name="menu_call">Soita</string>
-    <string name="menu_info">Lisätiedot</string>    <string name="menu_share">Jaa</string>
+    <string name="menu_info">Lisätiedot</string>
+    <string name="menu_share">Jaa</string>
     <string name="main_drawer_open_cd">Avaa navigointilaatikko</string>
     <string name="main_title_selected">%d valittu</string>
     <string name="main_menu_clear">Tyhjennä</string>
@@ -57,7 +58,8 @@
     <string name="main_default_sms_message">Tee QKSMS:stä oletusviestintäsovelluksesi</string>
     <string name="main_default_sms_change">Muuta</string>
     <string name="main_permission_required">Käyttöoikeus tarvitaan</string>
-    <string name="main_permission_sms">QKSMS tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
+    <string name="main_permission_sms">QKSMS tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen
+    </string>
     <string name="main_permission_contacts">QKSMS tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
     <string name="main_permission_allow">Salli</string>
     <string name="drawer_inbox">Saapuneet</string>
@@ -125,7 +127,9 @@
     <string name="info_unarchive">Poista arkistosta</string>
     <string name="info_block">Estä</string>
     <string name="info_unblock">Salli</string>
-    <string name="info_delete">Poista keskustelu</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Ulkonäkö</string>
+    <string name="info_delete">Poista keskustelu
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Ulkonäkö</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_qkreply">QK-vastaus</string>
     <string name="settings_theme_title">Teema</string>
@@ -176,7 +180,8 @@
     <string name="settings_mobile_title">Vain matkapuhelinnumerot</string>
     <string name="settings_mobile_summary">Ehdota vain matkapuhelinnumeroita viestejä kirjoittaessasi</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -184,7 +189,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Synkronoi viestit</string>
+    </plurals>
+    <string name="settings_sync_title">Synkronoi viestit</string>
     <string name="settings_sync_summary">Synkronoi viestisi uudelleen Androidin oman SMS-tietokannan kanssa</string>
     <string name="settings_about_title">Tietoja QKSMS:tä</string>
     <string name="settings_version">Versio %s %s %s</string>
@@ -193,14 +199,22 @@
     <string name="settings_delay_duration_hint">Syötä kesto (sekuntia)</string>
     <string name="blocking_title">Esto</string>
     <string name="blocking_drop_title">Pudota viestit</string>
-    <string name="blocking_drop_summary">Pudottaa estettyjen yhteystietojen lähettämät viestit, niiden piilottamisen sijasta</string>
+    <string name="blocking_drop_summary">Pudottaa estettyjen yhteystietojen lähettämät viestit, niiden piilottamisen
+        sijasta
+    </string>
     <string name="blocking_conversations">Estetyt keskustelut</string>
     <string name="blocking_manager_title">Estojen hallinta</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">QKSMS:ään sisäänrakennettu esto-toiminto</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Suodata puhelusi ja soittosi automaattisesti, yhdessä kätevässä paikassa! Community IQ™ antaa sinun estää haluamattomia viestejä, yhteisölle tutuilta roskapostin lähettäjiltä</string>
-    <string name="blocking_manager_sia_summary">Suodata haluamattomien numeroin lähettämät viestit automaattisesti, \"Should I Answer\" -sovellusta käyttämällä</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Suodata puhelusi ja soittosi automaattisesti, yhdessä kätevässä
+        paikassa! Community IQ™ antaa sinun estää haluamattomia viestejä, yhteisölle tutuilta roskapostin lähettäjiltä
+    </string>
+    <string name="blocking_manager_sia_summary">Suodata haluamattomien numeroin lähettämät viestit automaattisesti,
+        \"Should I Answer\" -sovellusta käyttämällä
+    </string>
     <string name="blocking_manager_copy_title">Kopioi estetyt numerot</string>
     <string name="blocking_manager_copy_summary">Jatka, ja kopioi jo estämäsi numerot, sovellukseen %s</string>
     <string name="blocked_numbers_title">Estetyt numerot</string>
@@ -238,11 +252,15 @@
     <string name="qksms_plus_thanks_title">Kiitos, kun tuit QKSMS:ää!</string>
     <string name="qksms_plus_thanks_summary">Olet nyt oikeutettu käyttämään kaikkia QKSMS+ -ominaisuuksia</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ on ilmainen F-Droidin käyttäjille! Jos haluaisit tukea kehitystyötä tulevaisuudessa, arvostaisimme lahjoitustasi todella paljon.</string>
+    <string name="qksms_plus_free_title">QKSMS+ on ilmainen F-Droidin käyttäjille! Jos haluaisit tukea kehitystyötä
+        tulevaisuudessa, arvostaisimme lahjoitustasi todella paljon.
+    </string>
     <string name="qksms_plus_donate">Lahjoita PayPalilla</string>
     <string name="qksms_plus_coming_soon">Tulossa pian</string>
     <string name="qksms_plus_themes_title">Premium-teemat</string>
-    <string name="qksms_plus_themes_summary">Avaa upeat teemavärit, joita ei ole saatavilla Material Design -väripaletissa</string>
+    <string name="qksms_plus_themes_summary">Avaa upeat teemavärit, joita ei ole saatavilla Material Design
+        -väripaletissa
+    </string>
     <string name="qksms_plus_emoji_title">Mukautettu auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Luo mukautettuja auto-emoji -pikakuvakkeita</string>
     <string name="qksms_plus_delayed_title">Lykätty lähetys</string>
@@ -252,11 +270,15 @@
     <string name="qksms_plus_blacklist_title">Edistynyt estäminen</string>
     <string name="qksms_plus_blacklist_summary">Estä avainsanoja tai vastaavuuksia sisältävät viestit</string>
     <string name="qksms_plus_forward_title">Automaattinen välitys</string>
-    <string name="qksms_plus_forward_summary">Edelleenlähetä tiettyjen lähettäjien viestit automaattisesti </string>
+    <string name="qksms_plus_forward_summary">Edelleenlähetä tiettyjen lähettäjien viestit automaattisesti</string>
     <string name="qksms_plus_respond_title">Automaattinen vastaus</string>
-    <string name="qksms_plus_respond_summary">Vastaa saapuviin viesteihin automaattisesti, etukäteen luoduilla vastauksilla</string>
+    <string name="qksms_plus_respond_summary">Vastaa saapuviin viesteihin automaattisesti, etukäteen luoduilla
+        vastauksilla
+    </string>
     <string name="qksms_plus_more_title">Lisää</string>
-    <string name="qksms_plus_more_summary">QKSMS:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QKSMS+ -ominaisuudet!</string>
+    <string name="qksms_plus_more_summary">QKSMS:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QKSMS+
+        -ominaisuudet!
+    </string>
     <string name="widget_loading">Ladataan&#8230;</string>
     <string name="widget_more">Näytä lisää keskusteluja</string>
     <string name="qkreply_menu_read">Merkitse luetuksi</string>
@@ -317,7 +339,8 @@
         <item>3 sekuntia</item>
         <item>5 sekuntia</item>
         <item>10 sekuntia</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Okei</item>
         <item>Anna minulle hetki</item>
         <item>Olen matkalla</item>

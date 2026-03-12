@@ -45,7 +45,8 @@ import javax.inject.Inject
  */
 class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : EditText(context, attrs) {
 
-    @Inject lateinit var textViewStyler: TextViewStyler
+    @Inject
+    lateinit var textViewStyler: TextViewStyler
 
     val backspaces: Subject<Unit> = PublishSubject.create()
     val inputContentSelected: Subject<InputContentInfoCompat> = PublishSubject.create()
@@ -80,11 +81,14 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
 
         if (supportsInputContent) {
-            EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf(
+            EditorInfoCompat.setContentMimeTypes(
+                editorInfo, arrayOf(
                     "image/jpeg",
                     "image/jpg",
                     "image/png",
-                    "image/gif"))
+                    "image/gif"
+                )
+            )
         }
 
         val callback = InputConnectionCompat.OnCommitContentListener { inputContentInfo, flags, opts ->

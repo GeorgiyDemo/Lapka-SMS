@@ -45,38 +45,39 @@ class BlockingDialog @Inject constructor(
     private val markUnblocked: MarkUnblocked
 ) {
 
-    fun show(activity: AppCompatActivity, conversationIds: List<Long>, block: Boolean) = activity.lifecycleScope.launch {
-        val addresses = conversationIds.toLongArray()
+    fun show(activity: AppCompatActivity, conversationIds: List<Long>, block: Boolean) =
+        activity.lifecycleScope.launch {
+            val addresses = conversationIds.toLongArray()
                 .let { conversationRepo.getConversations(*it) }
                 .flatMap { conversation -> conversation.recipients }
                 .map { it.address }
                 .distinct()
 
-        if (addresses.isEmpty()) {
-            return@launch
-        }
+            if (addresses.isEmpty()) {
+                return@launch
+            }
 
-        if (blockingManager.getClientCapability() == BlockingClient.Capability.BLOCK_WITHOUT_PERMISSION) {
-            // If we can block/unblock in the external manager, then just fire that off and exit
-            if (block) {
-                markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
+            if (blockingManager.getClientCapability() == BlockingClient.Capability.BLOCK_WITHOUT_PERMISSION) {
+                // If we can block/unblock in the external manager, then just fire that off and exit
+                if (block) {
+                    markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
+                    blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
+                } else {
+                    markUnblocked.execute(conversationIds)
+                    blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
+                }
+            } else if (block == allBlocked(addresses)) {
+                // If all of the addresses are already in their correct state in the blocking manager, just marked the
+                // conversations blocked and exit
+                when (block) {
+                    true -> markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
+                    false -> markUnblocked.execute(conversationIds)
+                }
             } else {
-                markUnblocked.execute(conversationIds)
-                blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
+                // Otherwise, show the UI that lets the users know they need to mark the number as blocked in the client
+                showDialog(activity, conversationIds, addresses, block)
             }
-        } else if (block == allBlocked(addresses)) {
-            // If all of the addresses are already in their correct state in the blocking manager, just marked the
-            // conversations blocked and exit
-            when (block) {
-                true -> markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                false -> markUnblocked.execute(conversationIds)
-            }
-        } else {
-            // Otherwise, show the UI that lets the users know they need to mark the number as blocked in the client
-            showDialog(activity, conversationIds, addresses, block)
         }
-    }
 
     private fun allBlocked(addresses: List<String>): Boolean = addresses.all { address ->
         blockingManager.isBlacklisted(address).blockingGet() is BlockingClient.Action.Block
@@ -93,35 +94,39 @@ class BlockingDialog @Inject constructor(
             false -> R.plurals.blocking_unblock_external
         }
 
-        val manager = context.getString(when (prefs.blockingManager.get()) {
-            Preferences.BLOCKING_MANAGER_CB -> R.string.blocking_manager_call_blocker_title
-            Preferences.BLOCKING_MANAGER_CC -> R.string.blocking_manager_call_control_title
-            Preferences.BLOCKING_MANAGER_SIA -> R.string.blocking_manager_sia_title
-            else -> R.string.blocking_manager_qksms_title
-        })
+        val manager = context.getString(
+            when (prefs.blockingManager.get()) {
+                Preferences.BLOCKING_MANAGER_CB -> R.string.blocking_manager_call_blocker_title
+                Preferences.BLOCKING_MANAGER_CC -> R.string.blocking_manager_call_control_title
+                Preferences.BLOCKING_MANAGER_SIA -> R.string.blocking_manager_sia_title
+                else -> R.string.blocking_manager_qksms_title
+            }
+        )
 
         val message = context.resources.getQuantityString(res, addresses.size, manager)
 
         // Otherwise, show a dialog asking the user if they want to be directed to the external
         // blocking manager
         MaterialAlertDialogBuilder(activity)
-                .setTitle(when (block) {
+            .setTitle(
+                when (block) {
                     true -> R.string.blocking_block_title
                     false -> R.string.blocking_unblock_title
-                })
-                .setMessage(message)
-                .setPositiveButton(R.string.button_continue) { _, _ ->
-                    if (block) {
-                        markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                        blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
-                    } else {
-                        markUnblocked.execute(conversationIds)
-                        blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
-                    }
                 }
-                .setNegativeButton(R.string.button_cancel) { _, _ -> }
-                .create()
-                .show()
+            )
+            .setMessage(message)
+            .setPositiveButton(R.string.button_continue) { _, _ ->
+                if (block) {
+                    markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
+                    blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
+                } else {
+                    markUnblocked.execute(conversationIds)
+                    blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
+                }
+            }
+            .setNegativeButton(R.string.button_cancel) { _, _ -> }
+            .create()
+            .show()
     }
 
 }

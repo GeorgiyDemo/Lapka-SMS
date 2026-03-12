@@ -36,8 +36,8 @@ class TightTextView @JvmOverloads constructor(
         }
 
         val maxLineWidth = (0 until layout.lineCount)
-                .map(layout::getLineWidth)
-                .maxOrNull() ?: 0f
+            .map(layout::getLineWidth)
+            .maxOrNull() ?: 0f
 
         val width = Math.ceil(maxLineWidth.toDouble()).toInt() + compoundPaddingLeft + compoundPaddingRight
         if (width < measuredWidth) {

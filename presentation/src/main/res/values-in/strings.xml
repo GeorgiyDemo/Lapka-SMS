@@ -31,7 +31,8 @@
     <string name="setup_next">Lanjut</string>
     <string name="menu_add_person">Tambah kontak</string>
     <string name="menu_call">Panggil</string>
-    <string name="menu_info">Detail</string>    <string name="menu_share">Berbagi</string>
+    <string name="menu_info">Detail</string>
+    <string name="menu_share">Berbagi</string>
     <string name="main_drawer_open_cd">Buka laci navigasi</string>
     <string name="main_title_selected">%d dipilih</string>
     <string name="main_menu_clear">Bersihkan</string>
@@ -124,7 +125,9 @@
     <string name="info_unarchive">Batalkan arsip</string>
     <string name="info_block">Blokir</string>
     <string name="info_unblock">Buka blokir</string>
-    <string name="info_delete">Hapus percakapan</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Tampilan</string>
+    <string name="info_delete">Hapus percakapan
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Tampilan</string>
     <string name="settings_category_general">Umum</string>
     <string name="settings_category_qkreply">Balasan cepat</string>
     <string name="settings_theme_title">Tema</string>
@@ -182,8 +185,10 @@
     <string name="settings_auto_delete_warning_message">Jika anda lanjutkan, %1$d pesan akan dihapus sekarang</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">Setelah %d hari</item>
-    </plurals><string name="settings_sync_title">Sinkronisasi pesan</string>
-    <string name="settings_sync_summary">Sinkronisasi ulang pesan anda dengan basis data aplikasi SMS Android bawaan</string>
+    </plurals>
+    <string name="settings_sync_title">Sinkronisasi pesan</string>
+    <string name="settings_sync_summary">Sinkronisasi ulang pesan anda dengan basis data aplikasi SMS Android bawaan
+    </string>
     <string name="settings_about_title">Tentang QKSMS</string>
     <string name="settings_version">Versi %s %s %s</string>
     <string name="settings_logging_enabled">Log awakutu diaktifkan</string>
@@ -196,9 +201,15 @@
     <string name="blocking_manager_title">Pengelola Pemblokiran</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Fitur pemblokiran pesan di dalam QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Otomatis menyaring panggilan dan pesan di dalam satu tempat! Community IQ™ memungkinkan anda memblokir pesan yang tidak diinginkan dari daftar spammer</string>
-    <string name="blocking_manager_sia_summary">Secara otomatis menyaring pesan dari nomor yang tidak diinginkan menggunakan aplikasi \"Should I Answer\"</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Otomatis menyaring panggilan dan pesan di dalam satu tempat!
+        Community IQ™ memungkinkan anda memblokir pesan yang tidak diinginkan dari daftar spammer
+    </string>
+    <string name="blocking_manager_sia_summary">Secara otomatis menyaring pesan dari nomor yang tidak diinginkan
+        menggunakan aplikasi \"Should I Answer\"
+    </string>
     <string name="blocking_manager_copy_title">Salin nomor yang diblokir</string>
     <string name="blocking_manager_copy_summary">Lanjutkan ke %s dan salin semua nomor yang diblokir</string>
     <string name="blocked_numbers_title">Nomor yang diblokir</string>
@@ -234,11 +245,15 @@
     <string name="qksms_plus_thanks_title">Terima kasih telah mendukung QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Anda sekarang bisa mengakses semua fitur QKSMS+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ selalu gratis untuk pengguna F-Droid! Jika anda ingin mendukung pengembangan, jangan ragu untuk donasi.</string>
+    <string name="qksms_plus_free_title">QKSMS+ selalu gratis untuk pengguna F-Droid! Jika anda ingin mendukung
+        pengembangan, jangan ragu untuk donasi.
+    </string>
     <string name="qksms_plus_donate">Donasi via PayPal</string>
     <string name="qksms_plus_coming_soon">Segera hadir</string>
     <string name="qksms_plus_themes_title">Tema premium</string>
-    <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design palette</string>
+    <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design
+        palette
+    </string>
     <string name="qksms_plus_emoji_title">Emoji otomatis khusus</string>
     <string name="qksms_plus_emoji_summary">Buat pintasan emoji otomatis khusus</string>
     <string name="qksms_plus_delayed_title">Pengiriman tertunda</string>
@@ -246,13 +261,16 @@
     <string name="qksms_plus_night_title">Mode malam otomatis</string>
     <string name="qksms_plus_night_summary">Aktifkan mode malam berdasarkan waktu</string>
     <string name="qksms_plus_blacklist_title">Pemblokiran lanjutan</string>
-    <string name="qksms_plus_blacklist_summary">Memblokir pesan yang mengandung kata tertentu atau sesuai dengan pola</string>
+    <string name="qksms_plus_blacklist_summary">Memblokir pesan yang mengandung kata tertentu atau sesuai dengan pola
+    </string>
     <string name="qksms_plus_forward_title">Penerusan otomatis</string>
     <string name="qksms_plus_forward_summary">Secara otomatis meneruskan pesan dari pengirim tertentu</string>
     <string name="qksms_plus_respond_title">Balasan otomatis</string>
     <string name="qksms_plus_respond_summary">Secara otomatis membalas pesan masuk dengan pesan balasan khusus</string>
     <string name="qksms_plus_more_title">Lainnya</string>
-    <string name="qksms_plus_more_summary">QKSMS sedang dalam pengembangan aktif, dan pembelian anda juga mencakup semua fitur QKSMS+ yang akan datang!</string>
+    <string name="qksms_plus_more_summary">QKSMS sedang dalam pengembangan aktif, dan pembelian anda juga mencakup semua
+        fitur QKSMS+ yang akan datang!
+    </string>
     <string name="widget_loading">Memuat&#8230;</string>
     <string name="widget_more">Lihat percakapan lainnya</string>
     <string name="qkreply_menu_read">Tandai dibaca</string>
@@ -312,7 +330,8 @@
         <item>3 detik</item>
         <item>5 detik</item>
         <item>10 detik</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Oke</item>
         <item>Beri saya waktu sebentar</item>
         <item>Sedang dalam perjalanan</item>

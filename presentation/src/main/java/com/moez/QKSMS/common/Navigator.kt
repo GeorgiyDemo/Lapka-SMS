@@ -111,8 +111,8 @@ class Navigator @Inject constructor(
 
     fun showConversation(threadId: Long, query: String? = null) {
         val intent = Intent(context, ComposeActivity::class.java)
-                .putExtra("threadId", threadId)
-                .putExtra("query", query)
+            .putExtra("threadId", threadId)
+            .putExtra("query", query)
         startActivity(intent)
     }
 
@@ -138,7 +138,8 @@ class Navigator @Inject constructor(
     }
 
     fun showLicense() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeorgiyDemo/Lapka-SMS/blob/master/LICENSE"))
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/GeorgiyDemo/Lapka-SMS/blob/master/LICENSE"))
         startActivityExternal(intent)
     }
 
@@ -155,9 +156,11 @@ class Navigator @Inject constructor(
 
     fun showRating() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.moez.QKSMS"))
-                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
+            .addFlags(
+                Intent.FLAG_ACTIVITY_NO_HISTORY
                         or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-                        or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                        or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            )
 
         try {
             startActivityExternal(intent)
@@ -196,15 +199,15 @@ class Navigator @Inject constructor(
 
     fun addContact(address: String) {
         val intent = Intent(Intent.ACTION_INSERT)
-                .setType(ContactsContract.Contacts.CONTENT_TYPE)
-                .putExtra(ContactsContract.Intents.Insert.PHONE, address)
+            .setType(ContactsContract.Contacts.CONTENT_TYPE)
+            .putExtra(ContactsContract.Intents.Insert.PHONE, address)
 
         startActivityExternal(intent)
     }
 
     fun showContact(lookupKey: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-                .setData(Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey))
+            .setData(Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey))
 
         startActivityExternal(intent)
     }
@@ -213,8 +216,8 @@ class Navigator @Inject constructor(
         val data = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.split(".").last())
         val intent = Intent(Intent.ACTION_VIEW)
-                .setDataAndType(data, type)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            .setDataAndType(data, type)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         startActivityExternal(intent)
     }
@@ -223,9 +226,9 @@ class Navigator @Inject constructor(
         val data = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.split(".").last())
         val intent = Intent(Intent.ACTION_SEND)
-                .setType(type)
-                .putExtra(Intent.EXTRA_STREAM, data)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            .setType(type)
+            .putExtra(Intent.EXTRA_STREAM, data)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         startActivityExternal(intent)
     }
@@ -244,8 +247,8 @@ class Navigator @Inject constructor(
 
             val channelId = notificationManager.buildNotificationChannelId(threadId)
             val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                .putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             startActivity(intent)
         }
     }

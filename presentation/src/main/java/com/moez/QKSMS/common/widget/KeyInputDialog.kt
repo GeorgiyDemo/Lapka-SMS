@@ -51,7 +51,8 @@ class KeyInputDialog(private val context: Activity, private val hint: String, pr
                 Handler(Looper.getMainLooper()).postDelayed({
                     try {
                         clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 }, 30_000)
             }
         }

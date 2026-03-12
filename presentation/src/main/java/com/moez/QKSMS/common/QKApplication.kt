@@ -53,16 +53,25 @@ class QKApplication : Application(), HasAndroidInjector {
      * Inject these so that they are forced to initialize
      */
     @Suppress("unused")
-    @Inject lateinit var analyticsManager: AnalyticsManager
-    @Suppress("unused")
-    @Inject lateinit var qkMigration: QkMigration
+    @Inject
+    lateinit var analyticsManager: AnalyticsManager
 
-    @Inject lateinit var billingManager: BillingManager
-    @Inject lateinit var androidInjector: DispatchingAndroidInjector<Any>
-    @Inject lateinit var fileLoggingTree: FileLoggingTree
-    @Inject lateinit var nightModeManager: NightModeManager
-    @Inject lateinit var realmMigration: QkRealmMigration
-    @Inject lateinit var referralManager: ReferralManager
+    @Suppress("unused")
+    @Inject
+    lateinit var qkMigration: QkMigration
+
+    @Inject
+    lateinit var billingManager: BillingManager
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject
+    lateinit var fileLoggingTree: FileLoggingTree
+    @Inject
+    lateinit var nightModeManager: NightModeManager
+    @Inject
+    lateinit var realmMigration: QkRealmMigration
+    @Inject
+    lateinit var referralManager: ReferralManager
 
     override fun onCreate() {
         super.onCreate()
@@ -73,9 +82,9 @@ class QKApplication : Application(), HasAndroidInjector {
         Realm.init(this)
         val realmKey = com.moez.QKSMS.common.util.RealmKeyProvider.getOrCreateRealmKey(this)
         val realmConfigBuilder = RealmConfiguration.Builder()
-                .compactOnLaunch()
-                .migration(realmMigration)
-                .schemaVersion(QkRealmMigration.SchemaVersion)
+            .compactOnLaunch()
+            .migration(realmMigration)
+            .schemaVersion(QkRealmMigration.SchemaVersion)
 
         if (realmKey != null) {
             // Migrate from unencrypted to encrypted Realm if needed
@@ -89,18 +98,18 @@ class QKApplication : Application(), HasAndroidInjector {
                 Timber.w(e, "Migrating Realm to encrypted storage")
                 try {
                     val unencryptedConfig = RealmConfiguration.Builder()
-                            .compactOnLaunch()
-                            .migration(realmMigration)
-                            .schemaVersion(QkRealmMigration.SchemaVersion)
-                            .build()
+                        .compactOnLaunch()
+                        .migration(realmMigration)
+                        .schemaVersion(QkRealmMigration.SchemaVersion)
+                        .build()
                     val unencryptedRealm = Realm.getInstance(unencryptedConfig)
                     val encryptedConfig = RealmConfiguration.Builder()
-                            .name("lapka_encrypted.realm")
-                            .compactOnLaunch()
-                            .migration(realmMigration)
-                            .schemaVersion(QkRealmMigration.SchemaVersion)
-                            .encryptionKey(realmKey)
-                            .build()
+                        .name("lapka_encrypted.realm")
+                        .compactOnLaunch()
+                        .migration(realmMigration)
+                        .schemaVersion(QkRealmMigration.SchemaVersion)
+                        .encryptionKey(realmKey)
+                        .build()
                     val encryptedFile = java.io.File(encryptedConfig.path)
                     unencryptedRealm.writeEncryptedCopyTo(encryptedFile, realmKey)
                     unencryptedRealm.close()
@@ -126,18 +135,19 @@ class QKApplication : Application(), HasAndroidInjector {
         nightModeManager.updateCurrentTheme()
 
         val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs)
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            "Noto Color Emoji Compat",
+            R.array.com_google_android_gms_fonts_certs
+        )
 
         EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 
         RxDogTag.builder()
-                .configureWith(AutoDisposeConfigurer::configure)
-                .install()
+            .configureWith(AutoDisposeConfigurer::configure)
+            .install()
     }
 
     override fun androidInjector(): AndroidInjector<Any> {

@@ -31,10 +31,33 @@ import java.net.UnknownHostException;
  */
 public class LinkAddress implements Parcelable {
     /**
+     * Implement the Parcelable interface.
+     *
+     * @hide
+     */
+    public static final Creator<LinkAddress> CREATOR =
+            new Creator<LinkAddress>() {
+                public LinkAddress createFromParcel(Parcel in) {
+                    InetAddress address = null;
+                    int prefixLength = 0;
+                    if (in.readByte() == 1) {
+                        try {
+                            address = InetAddress.getByAddress(in.createByteArray());
+                            prefixLength = in.readInt();
+                        } catch (UnknownHostException e) {
+                        }
+                    }
+                    return new LinkAddress(address, prefixLength);
+                }
+
+                public LinkAddress[] newArray(int size) {
+                    return new LinkAddress[size];
+                }
+            };
+    /**
      * IPv4 or IPv6 address.
      */
     private final InetAddress address;
-
     /**
      * Network prefix length
      */
@@ -124,29 +147,4 @@ public class LinkAddress implements Parcelable {
             dest.writeByte((byte) 0);
         }
     }
-
-    /**
-     * Implement the Parcelable interface.
-     *
-     * @hide
-     */
-    public static final Creator<LinkAddress> CREATOR =
-            new Creator<LinkAddress>() {
-                public LinkAddress createFromParcel(Parcel in) {
-                    InetAddress address = null;
-                    int prefixLength = 0;
-                    if (in.readByte() == 1) {
-                        try {
-                            address = InetAddress.getByAddress(in.createByteArray());
-                            prefixLength = in.readInt();
-                        } catch (UnknownHostException e) {
-                        }
-                    }
-                    return new LinkAddress(address, prefixLength);
-                }
-
-                public LinkAddress[] newArray(int size) {
-                    return new LinkAddress[size];
-                }
-            };
 }

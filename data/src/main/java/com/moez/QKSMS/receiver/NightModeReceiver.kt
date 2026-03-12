@@ -27,7 +27,8 @@ import javax.inject.Inject
 
 class NightModeReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var nightModeManager: NightModeManager
+    @Inject
+    lateinit var nightModeManager: NightModeManager
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)

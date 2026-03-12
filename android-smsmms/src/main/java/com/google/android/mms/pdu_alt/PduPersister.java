@@ -65,12 +65,7 @@ import java.util.Set;
  * This class is the high-level manager of PDU storage.
  */
 public class PduPersister {
-    private static final boolean LOCAL_LOGV = false;
-
     public static final long DUMMY_THREAD_ID = Long.MAX_VALUE;
-    private static final int DEFAULT_SUBSCRIPTION = 0;
-    private static final int MAX_TEXT_BODY_SIZE = 300 * 1024;
-
     /**
      * The uri of temporary drm objects.
      */
@@ -88,17 +83,16 @@ public class PduPersister {
      * Indicate that we have successfully processed a MM.
      */
     public static final int PROC_STATUS_COMPLETED = 3;
-
-    private static PduPersister sPersister;
+    private static final boolean LOCAL_LOGV = false;
+    private static final int DEFAULT_SUBSCRIPTION = 0;
+    private static final int MAX_TEXT_BODY_SIZE = 300 * 1024;
     private static final PduCache PDU_CACHE_INSTANCE;
-
     private static final int[] ADDRESS_FIELDS = new int[]{
             PduHeaders.BCC,
             PduHeaders.CC,
             PduHeaders.FROM,
             PduHeaders.TO
     };
-
     private static final String[] PDU_PROJECTION = new String[]{
             Mms._ID,
             Mms.MESSAGE_BOX,
@@ -128,7 +122,6 @@ public class PduPersister {
             Mms.SUBJECT_CHARSET,
             Mms.RETRIEVE_TEXT_CHARSET,
     };
-
     private static final int PDU_COLUMN_ID = 0;
     private static final int PDU_COLUMN_MESSAGE_BOX = 1;
     private static final int PDU_COLUMN_THREAD_ID = 2;
@@ -156,7 +149,6 @@ public class PduPersister {
     private static final int PDU_COLUMN_MESSAGE_SIZE = 24;
     private static final int PDU_COLUMN_SUBJECT_CHARSET = 25;
     private static final int PDU_COLUMN_RETRIEVE_TEXT_CHARSET = 26;
-
     private static final String[] PART_PROJECTION = new String[]{
             Part._ID,
             Part.CHARSET,
@@ -168,7 +160,6 @@ public class PduPersister {
             Part.NAME,
             Part.TEXT
     };
-
     private static final int PART_COLUMN_ID = 0;
     private static final int PART_COLUMN_CHARSET = 1;
     private static final int PART_COLUMN_CONTENT_DISPOSITION = 2;
@@ -178,7 +169,6 @@ public class PduPersister {
     private static final int PART_COLUMN_FILENAME = 6;
     private static final int PART_COLUMN_NAME = 7;
     private static final int PART_COLUMN_TEXT = 8;
-
     private static final HashMap<Uri, Integer> MESSAGE_BOX_MAP;
     // These map are used for convenience in persist() and load().
     private static final HashMap<Integer, Integer> CHARSET_COLUMN_INDEX_MAP;
@@ -191,6 +181,7 @@ public class PduPersister {
     private static final HashMap<Integer, String> TEXT_STRING_COLUMN_NAME_MAP;
     private static final HashMap<Integer, String> OCTET_COLUMN_NAME_MAP;
     private static final HashMap<Integer, String> LONG_COLUMN_NAME_MAP;
+    private static PduPersister sPersister;
 
     static {
         MESSAGE_BOX_MAP = new HashMap<Uri, Integer>();
@@ -299,6 +290,110 @@ public class PduPersister {
         }
 
         return sPersister;
+    }
+
+    private static String getPartContentType(PduPart part) {
+        return part.getContentType() == null ? null : toIsoString(part.getContentType());
+    }
+
+    private static String cutString(String src, int expectSize) {
+        if (src.length() == 0) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder(expectSize);
+        final int length = src.length();
+        for (int i = 0, size = 0; i < length; i = Character.offsetByCodePoints(src, i, 1)) {
+            int codePoint = Character.codePointAt(src, i);
+            if (Character.charCount(codePoint) == 1) {
+                size += 1;
+                if (size > expectSize) {
+                    break;
+                }
+                builder.append((char) codePoint);
+            } else {
+                char[] chars = Character.toChars(codePoint);
+                size += chars.length;
+                if (size > expectSize) {
+                    break;
+                }
+                builder.append(chars);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * This method expects uri in the following format
+     * content://media/<table_name>/<row_index> (or)
+     * file://sdcard/test.mp4
+     * http://test.com/test.mp4
+     * <p>
+     * Here <table_name> shall be "video" or "audio" or "images"
+     * <row_index> the index of the content in given table
+     */
+    static public String convertUriToPath(Context context, Uri uri) {
+        String path = null;
+        if (null != uri) {
+            String scheme = uri.getScheme();
+            if (null == scheme || scheme.equals("") ||
+                    scheme.equals(ContentResolver.SCHEME_FILE)) {
+                path = uri.getPath();
+
+            } else if (scheme.equals("http")) {
+                path = uri.toString();
+
+            } else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
+                String[] projection = new String[]{MediaStore.MediaColumns.DATA};
+                Cursor cursor = null;
+                try {
+                    cursor = context.getContentResolver().query(uri, projection, null,
+                            null, null);
+                    if (null == cursor || 0 == cursor.getCount() || !cursor.moveToFirst()) {
+                        throw new IllegalArgumentException("Given Uri could not be found" +
+                                " in media store");
+                    }
+                    int pathIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                    path = cursor.getString(pathIndex);
+                } catch (SQLiteException e) {
+                    throw new IllegalArgumentException("Given Uri is not formatted in a way " +
+                            "so that it can be found in media store.");
+                } finally {
+                    if (null != cursor) {
+                        cursor.close();
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("Given Uri scheme is not supported");
+            }
+        }
+        return path;
+    }
+
+    /**
+     * Wrap a byte[] into a String.
+     */
+    public static String toIsoString(byte[] bytes) {
+        try {
+            return new String(bytes, CharacterSets.MIMENAME_ISO_8859_1);
+        } catch (UnsupportedEncodingException e) {
+            // Impossible to reach here!
+            Timber.e(e, "ISO_8859_1 must be supported!");
+            return "";
+        }
+    }
+
+    /**
+     * Unpack a given String into a byte[].
+     */
+    public static byte[] getBytes(String data) {
+        try {
+            return data.getBytes(CharacterSets.MIMENAME_ISO_8859_1);
+        } catch (UnsupportedEncodingException e) {
+            // Impossible to reach here!
+            Timber.e(e, "ISO_8859_1 must be supported!");
+            return new byte[0];
+        }
     }
 
     private void setEncodedStringValueToHeaders(
@@ -694,10 +789,6 @@ public class PduPersister {
         }
     }
 
-    private static String getPartContentType(PduPart part) {
-        return part.getContentType() == null ? null : toIsoString(part.getContentType());
-    }
-
     public Uri persistPart(PduPart part, long msgId, HashMap<Uri, InputStream> preOpenedFiles)
             throws MmsException {
         Uri uri = Uri.parse("content://mms/" + msgId + "/part");
@@ -762,33 +853,6 @@ public class PduPersister {
         part.setDataUri(res);
 
         return res;
-    }
-
-    private static String cutString(String src, int expectSize) {
-        if (src.length() == 0) {
-            return "";
-        }
-
-        StringBuilder builder = new StringBuilder(expectSize);
-        final int length = src.length();
-        for (int i = 0, size = 0; i < length; i = Character.offsetByCodePoints(src, i, 1)) {
-            int codePoint = Character.codePointAt(src, i);
-            if (Character.charCount(codePoint) == 1) {
-                size += 1;
-                if (size > expectSize) {
-                    break;
-                }
-                builder.append((char) codePoint);
-            } else {
-                char[] chars = Character.toChars(codePoint);
-                size += chars.length;
-                if (size > expectSize) {
-                    break;
-                }
-                builder.append(chars);
-            }
-        }
-        return builder.toString();
     }
 
     /**
@@ -951,53 +1015,6 @@ public class PduPersister {
                         values, null, null);
             }
         }
-    }
-
-    /**
-     * This method expects uri in the following format
-     * content://media/<table_name>/<row_index> (or)
-     * file://sdcard/test.mp4
-     * http://test.com/test.mp4
-     * <p>
-     * Here <table_name> shall be "video" or "audio" or "images"
-     * <row_index> the index of the content in given table
-     */
-    static public String convertUriToPath(Context context, Uri uri) {
-        String path = null;
-        if (null != uri) {
-            String scheme = uri.getScheme();
-            if (null == scheme || scheme.equals("") ||
-                    scheme.equals(ContentResolver.SCHEME_FILE)) {
-                path = uri.getPath();
-
-            } else if (scheme.equals("http")) {
-                path = uri.toString();
-
-            } else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
-                String[] projection = new String[]{MediaStore.MediaColumns.DATA};
-                Cursor cursor = null;
-                try {
-                    cursor = context.getContentResolver().query(uri, projection, null,
-                            null, null);
-                    if (null == cursor || 0 == cursor.getCount() || !cursor.moveToFirst()) {
-                        throw new IllegalArgumentException("Given Uri could not be found" +
-                                " in media store");
-                    }
-                    int pathIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-                    path = cursor.getString(pathIndex);
-                } catch (SQLiteException e) {
-                    throw new IllegalArgumentException("Given Uri is not formatted in a way " +
-                            "so that it can be found in media store.");
-                } finally {
-                    if (null != cursor) {
-                        cursor.close();
-                    }
-                }
-            } else {
-                throw new IllegalArgumentException("Given Uri scheme is not supported");
-            }
-        }
-        return path;
     }
 
     private void updateAddress(
@@ -1540,32 +1557,6 @@ public class PduPersister {
         values.put(Mms.MESSAGE_BOX, msgBox);
         SqliteWrapper.update(mContext, mContentResolver, from, values, null, null);
         return ContentUris.withAppendedId(to, msgId);
-    }
-
-    /**
-     * Wrap a byte[] into a String.
-     */
-    public static String toIsoString(byte[] bytes) {
-        try {
-            return new String(bytes, CharacterSets.MIMENAME_ISO_8859_1);
-        } catch (UnsupportedEncodingException e) {
-            // Impossible to reach here!
-            Timber.e(e, "ISO_8859_1 must be supported!");
-            return "";
-        }
-    }
-
-    /**
-     * Unpack a given String into a byte[].
-     */
-    public static byte[] getBytes(String data) {
-        try {
-            return data.getBytes(CharacterSets.MIMENAME_ISO_8859_1);
-        } catch (UnsupportedEncodingException e) {
-            // Impossible to reach here!
-            Timber.e(e, "ISO_8859_1 must be supported!");
-            return new byte[0];
-        }
     }
 
     /**

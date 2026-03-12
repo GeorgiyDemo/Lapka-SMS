@@ -72,71 +72,71 @@ class MessageRepositoryImpl @Inject constructor(
 
     init {
         syncRepository.syncedMessage
-                .doOnNext { message -> if (message.isMe()) checkSentMessage(message) else checkReceivedMessage(message) }
-                .subscribe()
+            .doOnNext { message -> if (message.isMe()) checkSentMessage(message) else checkReceivedMessage(message) }
+            .subscribe()
     }
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
         return Realm.getDefaultInstance()
-                .where(Message::class.java)
-                .equalTo("threadId", threadId)
-                .let {
-                    when (query.isEmpty()) {
-                        true -> it
-                        false -> it
-                                .beginGroup()
-                                .contains("body", query, Case.INSENSITIVE)
-                                .or()
-                                .contains("parts.text", query, Case.INSENSITIVE)
-                                .endGroup()
-                    }
+            .where(Message::class.java)
+            .equalTo("threadId", threadId)
+            .let {
+                when (query.isEmpty()) {
+                    true -> it
+                    false -> it
+                        .beginGroup()
+                        .contains("body", query, Case.INSENSITIVE)
+                        .or()
+                        .contains("parts.text", query, Case.INSENSITIVE)
+                        .endGroup()
                 }
-                .sort("date")
-                .findAllAsync()
+            }
+            .sort("date")
+            .findAllAsync()
     }
 
     override fun getMessage(id: Long): Message? {
         return Realm.getDefaultInstance()
-                .also { realm -> realm.refresh() }
-                .where(Message::class.java)
-                .equalTo("id", id)
-                .findFirst()
+            .also { realm -> realm.refresh() }
+            .where(Message::class.java)
+            .equalTo("id", id)
+            .findFirst()
     }
 
     override fun getMessageForPart(id: Long): Message? {
         return Realm.getDefaultInstance()
-                .where(Message::class.java)
-                .equalTo("parts.id", id)
-                .findFirst()
+            .where(Message::class.java)
+            .equalTo("parts.id", id)
+            .findFirst()
     }
 
     override fun getLastIncomingMessage(threadId: Long): RealmResults<Message> {
         return Realm.getDefaultInstance()
-                .where(Message::class.java)
-                .equalTo("threadId", threadId)
-                .beginGroup()
-                .beginGroup()
-                .equalTo("type", "sms")
-                .`in`("boxId", arrayOf(Sms.MESSAGE_TYPE_INBOX, Sms.MESSAGE_TYPE_ALL))
-                .endGroup()
-                .or()
-                .beginGroup()
-                .equalTo("type", "mms")
-                .`in`("boxId", arrayOf(Mms.MESSAGE_BOX_INBOX, Mms.MESSAGE_BOX_ALL))
-                .endGroup()
-                .endGroup()
-                .sort("date", Sort.DESCENDING)
-                .findAll()
+            .where(Message::class.java)
+            .equalTo("threadId", threadId)
+            .beginGroup()
+            .beginGroup()
+            .equalTo("type", "sms")
+            .`in`("boxId", arrayOf(Sms.MESSAGE_TYPE_INBOX, Sms.MESSAGE_TYPE_ALL))
+            .endGroup()
+            .or()
+            .beginGroup()
+            .equalTo("type", "mms")
+            .`in`("boxId", arrayOf(Mms.MESSAGE_BOX_INBOX, Mms.MESSAGE_BOX_ALL))
+            .endGroup()
+            .endGroup()
+            .sort("date", Sort.DESCENDING)
+            .findAll()
     }
 
     override fun getUnreadCount(): Long {
         return Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Conversation::class.java)
-                    .equalTo("archived", false)
-                    .equalTo("blocked", false)
-                    .equalTo("lastMessage.read", false)
-                    .count()
+                .equalTo("archived", false)
+                .equalTo("blocked", false)
+                .equalTo("lastMessage.read", false)
+                .count()
         }
     }
 
@@ -146,22 +146,22 @@ class MessageRepositoryImpl @Inject constructor(
      */
     override fun getUnreadUnseenMessages(threadId: Long): RealmResults<Message> {
         return Realm.getDefaultInstance()
-                .also { it.refresh() }
-                .where(Message::class.java)
-                .equalTo("seen", false)
-                .equalTo("read", false)
-                .equalTo("threadId", threadId)
-                .sort("date")
-                .findAll()
+            .also { it.refresh() }
+            .where(Message::class.java)
+            .equalTo("seen", false)
+            .equalTo("read", false)
+            .equalTo("threadId", threadId)
+            .sort("date")
+            .findAll()
     }
 
     override fun getUnreadMessages(threadId: Long): RealmResults<Message> {
         return Realm.getDefaultInstance()
-                .where(Message::class.java)
-                .equalTo("read", false)
-                .equalTo("threadId", threadId)
-                .sort("date")
-                .findAll()
+            .where(Message::class.java)
+            .equalTo("read", false)
+            .equalTo("threadId", threadId)
+            .sort("date")
+            .findAll()
     }
 
     override fun markAllSeen() {
@@ -174,9 +174,9 @@ class MessageRepositoryImpl @Inject constructor(
     override fun markSeen(threadId: Long) {
         val realm = Realm.getDefaultInstance()
         val messages = realm.where(Message::class.java)
-                .equalTo("threadId", threadId)
-                .equalTo("seen", false)
-                .findAll()
+            .equalTo("threadId", threadId)
+            .equalTo("seen", false)
+            .findAll()
 
         realm.executeTransaction {
             messages.forEach { message ->
@@ -189,13 +189,13 @@ class MessageRepositoryImpl @Inject constructor(
     override fun markRead(vararg threadIds: Long) {
         Realm.getDefaultInstance()?.use { realm ->
             val messages = realm.where(Message::class.java)
-                    .anyOf("threadId", threadIds)
-                    .beginGroup()
-                    .equalTo("read", false)
-                    .or()
-                    .equalTo("seen", false)
-                    .endGroup()
-                    .findAll()
+                .anyOf("threadId", threadIds)
+                .beginGroup()
+                .equalTo("read", false)
+                .or()
+                .equalTo("seen", false)
+                .endGroup()
+                .findAll()
 
             realm.executeTransaction {
                 messages.forEach { message ->
@@ -222,9 +222,9 @@ class MessageRepositoryImpl @Inject constructor(
     override fun markUnread(vararg threadIds: Long) {
         Realm.getDefaultInstance()?.use { realm ->
             val conversations = realm.where(Conversation::class.java)
-                    .anyOf("id", threadIds)
-                    .equalTo("lastMessage.read", true)
-                    .findAll()
+                .anyOf("id", threadIds)
+                .equalTo("lastMessage.read", true)
+                .findAll()
 
             realm.executeTransaction {
                 conversations.forEach { conversation ->
@@ -239,8 +239,8 @@ class MessageRepositoryImpl @Inject constructor(
             realm.refresh()
 
             val messages = realm.where(Message::class.java)
-                    .equalTo("id", message.id)
-                    .findAll()
+                .equalTo("id", message.id)
+                .findAll()
             val uris = messages.map { it.getUri() }
             uris.forEach { uri -> context.contentResolver.delete(uri, null, null) }
         }
@@ -256,7 +256,7 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     private fun deleteMessageAfterIdToMillis(id: Int): Long {
-        val seconds = when(id) {
+        val seconds = when (id) {
             1 -> 5
             2 -> 15
             3 -> 30
@@ -311,33 +311,43 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun sendSms(message: Message) {
         val smsManager = message.subId.takeIf { it != -1 }
-                ?.let { subId -> @Suppress("DEPRECATION") SmsManager.getSmsManagerForSubscriptionId(subId) }
-                ?: SmsManager.getDefault()
+            ?.let { subId -> @Suppress("DEPRECATION") SmsManager.getSmsManagerForSubscriptionId(subId) }
+            ?: SmsManager.getDefault()
 
         val parts = smsManager
-                .divideMessage(if (prefs.unicode.get()) stripAccents(message.body) else message.body)
-                ?: arrayListOf()
+            .divideMessage(if (prefs.unicode.get()) stripAccents(message.body) else message.body)
+            ?: arrayListOf()
 
         val sentIntents = parts.map {
             val intent = Intent(context, SmsSentReceiver::class.java).putExtra("id", message.id)
-            PendingIntent.getBroadcast(context, message.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getBroadcast(
+                context,
+                message.id.toInt(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
         }
 
         val deliveredIntents = parts.map {
             val intent = Intent(context, SmsDeliveredReceiver::class.java).putExtra("id", message.id)
             val pendingIntent = PendingIntent
-                    .getBroadcast(context, message.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                .getBroadcast(
+                    context,
+                    message.id.toInt(),
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
             if (prefs.delivery.get()) pendingIntent else null
         }
 
         try {
             @Suppress("DEPRECATION")
             smsManager.sendMultipartTextMessage(
-                    message.address,
-                    null,
-                    parts,
-                    java.util.ArrayList(sentIntents),
-                    java.util.ArrayList(deliveredIntents)
+                message.address,
+                null,
+                parts,
+                java.util.ArrayList(sentIntents),
+                java.util.ArrayList(deliveredIntents)
             )
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Message body lengths: ${parts.map { part -> part?.length }}")
@@ -352,14 +362,24 @@ class MessageRepositoryImpl @Inject constructor(
 
     private fun getIntentForDelayedSms(id: Long): PendingIntent {
         val intent = Intent(context, SendSmsReceiver::class.java).putExtra("id", id)
-        return PendingIntent.getBroadcast(context, id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntent.getBroadcast(
+            context,
+            id.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     private fun getIntentForMessageDeletion(threadId: Long, id: Long): PendingIntent {
         val intent = Intent(context, DeleteMessagesReceiver::class.java)
         intent.putExtra("threadId", threadId)
         intent.putExtra("messageIds", longArrayOf(id))
-        return PendingIntent.getBroadcast(context, id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntent.getBroadcast(
+            context,
+            id.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     override fun insertSentSms(subId: Int, threadId: Long, address: String, body: String, date: Long): Message {
@@ -384,13 +404,13 @@ class MessageRepositoryImpl @Inject constructor(
 
         // Insert the message to the native content provider
         val values = contentValuesOf(
-                Sms.ADDRESS to address,
-                Sms.BODY to body,
-                Sms.DATE to System.currentTimeMillis(),
-                Sms.READ to true,
-                Sms.SEEN to true,
-                Sms.TYPE to Sms.MESSAGE_TYPE_OUTBOX,
-                Sms.THREAD_ID to threadId
+            Sms.ADDRESS to address,
+            Sms.BODY to body,
+            Sms.DATE to System.currentTimeMillis(),
+            Sms.READ to true,
+            Sms.SEEN to true,
+            Sms.TYPE to Sms.MESSAGE_TYPE_OUTBOX,
+            Sms.THREAD_ID to threadId
         )
 
         if (prefs.canUseSubId.get()) {
@@ -423,13 +443,21 @@ class MessageRepositoryImpl @Inject constructor(
 
     private fun checkSentMessage(message: Message) {
         val conversation = conversationRepository.getConversation(message.threadId)
-        if (conversation != null && (isMessageEncrypted(message, conversation.encryptionKey) && conversation.deleteEncryptedAfter > 0 || conversation.deleteSentAfter > 0)) {
+        if (conversation != null && (isMessageEncrypted(
+                message,
+                conversation.encryptionKey
+            ) && conversation.deleteEncryptedAfter > 0 || conversation.deleteSentAfter > 0)
+        ) {
             var minTimeoutId = conversation.deleteSentAfter
             if (minTimeoutId == 0 || conversation.encryptionKey.isNotEmpty() && conversation.deleteEncryptedAfter > 0 && conversation.deleteEncryptedAfter < minTimeoutId) {
                 minTimeoutId = conversation.deleteEncryptedAfter
             }
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(minTimeoutId))
-        } else if (isMessageEncrypted(message, prefs.globalEncryptionKey.get()) && prefs.deleteEncryptedAfter.get() > 0) {
+        } else if (isMessageEncrypted(
+                message,
+                prefs.globalEncryptionKey.get()
+            ) && prefs.deleteEncryptedAfter.get() > 0
+        ) {
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(prefs.deleteEncryptedAfter.get()))
         }
     }
@@ -438,7 +466,8 @@ class MessageRepositoryImpl @Inject constructor(
         if (encryptionKey.isEmpty()) {
             return false
         }
-        return KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(encryptionKey, Base64.DEFAULT))
+        return KSmsEncryptorFactory.create()
+            .isEncrypted(message.getText(), Base64.decode(encryptionKey, Base64.DEFAULT))
     }
 
     override fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long): Message {
@@ -463,9 +492,9 @@ class MessageRepositoryImpl @Inject constructor(
 
         // Insert the message to the native content provider
         val values = contentValuesOf(
-                Sms.ADDRESS to address,
-                Sms.BODY to body,
-                Sms.DATE_SENT to sentTime
+            Sms.ADDRESS to address,
+            Sms.BODY to body,
+            Sms.DATE_SENT to sentTime
         )
 
         if (prefs.canUseSubId.get()) {
@@ -487,12 +516,15 @@ class MessageRepositoryImpl @Inject constructor(
     private fun checkReceivedMessage(message: Message) {
         val conversation = conversationRepository.getConversation(message.threadId)
         val isEncryptedByConversationKey = conversation != null && conversation.encryptionKey.isNotEmpty()
-                && KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+                && KSmsEncryptorFactory.create()
+            .isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
 
         val messageText = if (conversation?.encryptionKey?.isNotEmpty() == true) {
-            KSmsEncryptorFactory.create().tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
+            KSmsEncryptorFactory.create()
+                .tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
         } else if (prefs.globalEncryptionKey.get().isNotEmpty()) {
-            KSmsEncryptorFactory.create().tryDecode(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)).text
+            KSmsEncryptorFactory.create()
+                .tryDecode(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)).text
         } else {
             message.getText()
         }
@@ -506,7 +538,9 @@ class MessageRepositoryImpl @Inject constructor(
             }
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(minTimeoutId))
         } else if (prefs.globalEncryptionKey.get().isNotEmpty() && prefs.deleteEncryptedAfter.get() > 0
-                && KSmsEncryptorFactory.create().isEncrypted(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))) {
+            && KSmsEncryptorFactory.create()
+                .isEncrypted(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))
+        ) {
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(prefs.deleteEncryptedAfter.get()))
         }
     }
@@ -631,8 +665,8 @@ class MessageRepositoryImpl @Inject constructor(
             realm.refresh()
 
             val messages = realm.where(Message::class.java)
-                    .anyOf("id", messageIds)
-                    .findAll()
+                .anyOf("id", messageIds)
+                .findAll()
 
             val uris = messages.map { it.getUri() }
 
@@ -645,18 +679,18 @@ class MessageRepositoryImpl @Inject constructor(
     override fun getOldMessageCounts(maxAgeDays: Int): Map<Long, Int> {
         return Realm.getDefaultInstance().use { realm ->
             realm.where(Message::class.java)
-                    .lessThan("date", now() - TimeUnit.DAYS.toMillis(maxAgeDays.toLong()))
-                    .findAll()
-                    .groupingBy { message -> message.threadId }
-                    .eachCount()
+                .lessThan("date", now() - TimeUnit.DAYS.toMillis(maxAgeDays.toLong()))
+                .findAll()
+                .groupingBy { message -> message.threadId }
+                .eachCount()
         }
     }
 
     override fun deleteOldMessages(maxAgeDays: Int) {
         return Realm.getDefaultInstance().use { realm ->
             val messages = realm.where(Message::class.java)
-                    .lessThan("date", now() - TimeUnit.DAYS.toMillis(maxAgeDays.toLong()))
-                    .findAll()
+                .lessThan("date", now() - TimeUnit.DAYS.toMillis(maxAgeDays.toLong()))
+                .findAll()
 
             val uris = messages.map { it.getUri() }
 

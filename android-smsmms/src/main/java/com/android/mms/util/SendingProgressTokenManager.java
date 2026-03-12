@@ -21,10 +21,9 @@ import timber.log.Timber;
 import java.util.HashMap;
 
 public class SendingProgressTokenManager {
+    public static final long NO_TOKEN = -1L;
     private static final boolean LOCAL_LOGV = false;
     private static final HashMap<Object, Long> TOKEN_POOL;
-
-    public static final long NO_TOKEN = -1L;
 
     static {
         TOKEN_POOL = new HashMap<Object, Long>();

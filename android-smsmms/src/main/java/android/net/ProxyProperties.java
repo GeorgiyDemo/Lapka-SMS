@@ -31,6 +31,31 @@ import java.net.InetSocketAddress;
  */
 public class ProxyProperties implements Parcelable {
 
+    /**
+     * Implement the Parcelable interface.
+     *
+     * @hide
+     */
+    public static final Creator<ProxyProperties> CREATOR =
+            new Creator<ProxyProperties>() {
+                public ProxyProperties createFromParcel(Parcel in) {
+                    String host = null;
+                    int port = 0;
+                    if (in.readByte() == 1) {
+                        host = in.readString();
+                        port = in.readInt();
+                    }
+                    String exclList = in.readString();
+                    //String[] parsedExclList = in.readStringArray();
+                    ProxyProperties proxyProperties =
+                            new ProxyProperties(host, port, exclList, null);
+                    return proxyProperties;
+                }
+
+                public ProxyProperties[] newArray(int size) {
+                    return new ProxyProperties[size];
+                }
+            };
     private String mHost;
     private int mPort;
     private String mExclusionList;
@@ -193,30 +218,4 @@ public class ProxyProperties implements Parcelable {
         dest.writeString(mExclusionList);
         dest.writeStringArray(mParsedExclusionList);
     }
-
-    /**
-     * Implement the Parcelable interface.
-     *
-     * @hide
-     */
-    public static final Creator<ProxyProperties> CREATOR =
-            new Creator<ProxyProperties>() {
-                public ProxyProperties createFromParcel(Parcel in) {
-                    String host = null;
-                    int port = 0;
-                    if (in.readByte() == 1) {
-                        host = in.readString();
-                        port = in.readInt();
-                    }
-                    String exclList = in.readString();
-                    //String[] parsedExclList = in.readStringArray();
-                    ProxyProperties proxyProperties =
-                            new ProxyProperties(host, port, exclList, null);
-                    return proxyProperties;
-                }
-
-                public ProxyProperties[] newArray(int size) {
-                    return new ProxyProperties[size];
-                }
-            };
 }

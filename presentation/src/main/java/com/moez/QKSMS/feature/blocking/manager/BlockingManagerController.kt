@@ -21,8 +21,10 @@ import javax.inject.Inject
 class BlockingManagerController : QkController<BlockingManagerView, BlockingManagerState, BlockingManagerPresenter>(),
     BlockingManagerView {
 
-    @Inject lateinit var colors: Colors
-    @Inject override lateinit var presenter: BlockingManagerPresenter
+    @Inject
+    lateinit var colors: Colors
+    @Inject
+    override lateinit var presenter: BlockingManagerPresenter
 
     private val activityResumedSubject: PublishSubject<Unit> = PublishSubject.create()
 
@@ -44,8 +46,9 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
         showBackButton(true)
 
         val states = arrayOf(
-                intArrayOf(android.R.attr.state_activated),
-                intArrayOf(-android.R.attr.state_activated))
+            intArrayOf(android.R.attr.state_activated),
+            intArrayOf(-android.R.attr.state_activated)
+        )
 
         val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
         val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
@@ -94,12 +97,12 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
 
     override fun showCopyDialog(manager: String): Single<Boolean> = Single.create { emitter ->
         MaterialAlertDialogBuilder(activity!!)
-                .setTitle(R.string.blocking_manager_copy_title)
-                .setMessage(resources?.getString(R.string.blocking_manager_copy_summary, manager))
-                .setPositiveButton(R.string.button_continue) { _, _ -> emitter.onSuccess(true) }
-                .setNegativeButton(R.string.button_cancel) { _, _ -> emitter.onSuccess(false) }
-                .setCancelable(false)
-                .show()
+            .setTitle(R.string.blocking_manager_copy_title)
+            .setMessage(resources?.getString(R.string.blocking_manager_copy_summary, manager))
+            .setPositiveButton(R.string.button_continue) { _, _ -> emitter.onSuccess(true) }
+            .setNegativeButton(R.string.button_cancel) { _, _ -> emitter.onSuccess(false) }
+            .setCancelable(false)
+            .show()
     }
 
 }

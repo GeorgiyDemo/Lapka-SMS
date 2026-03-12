@@ -60,9 +60,9 @@ class QkMigration @Inject constructor(
 
         // Migrate blocked conversations into QK blocking client
         val addresses = conversationRepo.getBlockedConversations()
-                .flatMap { conversation -> conversation.recipients }
-                .map { recipient -> recipient.address }
-                .distinct()
+            .flatMap { conversation -> conversation.recipients }
+            .map { recipient -> recipient.address }
+            .distinct()
 
         qksmsBlockingClient.block(addresses).blockingAwait()
     }

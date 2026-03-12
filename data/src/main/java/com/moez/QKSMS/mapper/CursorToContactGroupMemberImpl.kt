@@ -30,12 +30,14 @@ class CursorToContactGroupMemberImpl @Inject constructor(
     companion object {
         private val URI = ContactsContract.Data.CONTENT_URI
         private val PROJECTION = arrayOf(
-                ContactsContract.Data.LOOKUP_KEY,
-                ContactsContract.Data.DATA1)
+            ContactsContract.Data.LOOKUP_KEY,
+            ContactsContract.Data.DATA1
+        )
 
         private const val SELECTION = "${ContactsContract.Data.MIMETYPE}=?"
         private val SELECTION_ARGS = arrayOf(
-                ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE)
+            ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE
+        )
 
         private const val LOOKUP_KEY = 0
         private const val GROUP_ID = 1

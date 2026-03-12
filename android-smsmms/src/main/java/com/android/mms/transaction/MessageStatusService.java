@@ -34,7 +34,7 @@ import timber.log.Timber;
  * received.
  */
 public class MessageStatusService extends IntentService {
-    private static final String[] ID_PROJECTION = new String[] { Sms._ID };
+    private static final String[] ID_PROJECTION = new String[]{Sms._ID};
     private static final Uri STATUS_URI = Uri.parse("content://sms/status");
 
     public MessageStatusService() {
@@ -64,7 +64,7 @@ public class MessageStatusService extends IntentService {
     }
 
     private SmsMessage updateMessageStatus(Context context, Uri messageUri, byte[] pdu,
-            String format) {
+                                           String format) {
         SmsMessage message = SmsMessage.createFromPdu(pdu);
         if (message == null) {
             return null;
@@ -72,7 +72,7 @@ public class MessageStatusService extends IntentService {
         // Create a "status/#" URL and use it to update the
         // message's status in the database.
         Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-                            messageUri, ID_PROJECTION, null, null, null);
+                messageUri, ID_PROJECTION, null, null, null);
         if (cursor == null) {
             return null;
         }
@@ -92,7 +92,7 @@ public class MessageStatusService extends IntentService {
                 contentValues.put(Sms.STATUS, status);
                 contentValues.put(Inbox.DATE_SENT, System.currentTimeMillis());
                 SqliteWrapper.update(context, context.getContentResolver(),
-                                    updateUri, contentValues, null, null);
+                        updateUri, contentValues, null, null);
             } else {
                 error("Can't find message for status update: " + messageUri);
             }

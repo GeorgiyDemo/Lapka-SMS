@@ -31,8 +31,10 @@ import javax.inject.Inject
 
 class DefaultSmsChangedReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var prefs: Preferences
-    @Inject lateinit var syncMessages: SyncMessages
+    @Inject
+    lateinit var prefs: Preferences
+    @Inject
+    lateinit var syncMessages: SyncMessages
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onReceive(context: Context, intent: Intent) {

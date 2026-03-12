@@ -48,7 +48,7 @@ class KeySettingsPresenter @Inject constructor(
         } else if (threadId == -1L) {
             conversation.onNext(Optional(null))
             newState {
-                val state = copy (
+                val state = copy(
                     key = prefs.globalEncryptionKey.get(),
                     keyEnabled = prefs.globalEncryptionKey.get().isNotEmpty(),
                     keySettingsIsShown = false,
@@ -71,7 +71,7 @@ class KeySettingsPresenter @Inject constructor(
                     if (!initialized) {
                         conversation.onNext(Optional(conv))
                         newState {
-                            val state = copy (
+                            val state = copy(
                                 key = conv.encryptionKey,
                                 keyEnabled = conv.encryptionKey.isNotEmpty(),
                                 keySettingsIsShown = false,
@@ -127,23 +127,28 @@ class KeySettingsPresenter @Inject constructor(
 
                         }
                     }
+
                     R.id.scanQr -> {
                         view.scanQrCode()
                     }
+
                     R.id.generateKey -> {
                         newState {
                             copy(key = generateKey(), keyValid = true)
                         }
                     }
+
                     R.id.resetKey -> {
                         view.showResetKeyDialog(false)
                     }
+
                     R.id.legacyEncryption -> {
                         newState {
                             val wasEnabled = legacyEncryptionEnabled ?: false
                             copy(legacyEncryptionEnabled = !wasEnabled)
                         }
                     }
+
                     R.id.legacyEncryptionConversation -> {
                         view.showCompatibilityModeDialog()
                     }
@@ -182,7 +187,7 @@ class KeySettingsPresenter @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { modeIndex ->
                 newState {
-                    val mode = when(modeIndex) {
+                    val mode = when (modeIndex) {
                         0 -> null
                         1 -> false
                         2 -> true
@@ -194,7 +199,7 @@ class KeySettingsPresenter @Inject constructor(
 
         view.optionsItemIntent
             .withLatestFrom(state, conversation) { itemId, lastState, conv ->
-                when(itemId) {
+                when (itemId) {
                     R.id.confirm -> {
                         if (lastState.allowSave) {
                             if (lastState != initialState) {
@@ -299,16 +304,41 @@ class KeySettingsPresenter @Inject constructor(
         }
         if (lastState.isConversation) {
             val threadId = lastState.threadId
-            setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(threadId, SetDeleteMessagesAfter.MessageType.ENCRYPTED, lastState.deleteEncryptedAfter))
-            setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(threadId, SetDeleteMessagesAfter.MessageType.RECEIVED, lastState.deleteReceivedAfter))
-            setDeleteMessagesAfter.execute(SetDeleteMessagesAfter.Params(threadId, SetDeleteMessagesAfter.MessageType.SENT, lastState.deleteSentAfter))
-            setLegacyEncryptionEnabled.execute(SetLegacyEncryptionEnabled.Params(threadId, lastState.legacyEncryptionEnabled))
+            setDeleteMessagesAfter.execute(
+                SetDeleteMessagesAfter.Params(
+                    threadId,
+                    SetDeleteMessagesAfter.MessageType.ENCRYPTED,
+                    lastState.deleteEncryptedAfter
+                )
+            )
+            setDeleteMessagesAfter.execute(
+                SetDeleteMessagesAfter.Params(
+                    threadId,
+                    SetDeleteMessagesAfter.MessageType.RECEIVED,
+                    lastState.deleteReceivedAfter
+                )
+            )
+            setDeleteMessagesAfter.execute(
+                SetDeleteMessagesAfter.Params(
+                    threadId,
+                    SetDeleteMessagesAfter.MessageType.SENT,
+                    lastState.deleteSentAfter
+                )
+            )
+            setLegacyEncryptionEnabled.execute(
+                SetLegacyEncryptionEnabled.Params(
+                    threadId,
+                    lastState.legacyEncryptionEnabled
+                )
+            )
             setEncryptionKey.execute(SetEncryptionKey.Params(threadId, lastState.key))
             val schemeId = lastState.encodingScheme
                 .takeIf { it != GLOBAL_SCHEME_INDEX }
                 ?: Conversation.SCHEME_NOT_DEF
             setEncodingScheme.execute(SetEncodingScheme.Params(threadId, schemeId))
-            if (conversation?.encryptionEnabled == true && lastState.key.isBlank() && prefs.globalEncryptionKey.get().isBlank()) {
+            if (conversation?.encryptionEnabled == true && lastState.key.isBlank() && prefs.globalEncryptionKey.get()
+                    .isBlank()
+            ) {
                 setEncryptionEnabled.execute(SetEncryptionEnabled.Params(threadId, null))
             } else if (conversation?.encryptionEnabled == null && lastState.key.isNotBlank()) {
                 setEncryptionEnabled.execute(SetEncryptionEnabled.Params(threadId, true))

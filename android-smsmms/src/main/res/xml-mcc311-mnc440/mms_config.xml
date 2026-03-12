@@ -85,5 +85,5 @@
 
     <!-- Reference for additional http parameters used in MMS http request.
          Parameters are seperated by '|'. Optional.  -->
-     <string name="httpParams">X-MDN: ##LINE1##</string>
+    <string name="httpParams">X-MDN: ##LINE1##</string>
 </mms_config>

@@ -31,7 +31,8 @@
     <string name="setup_next">Pokračovať</string>
     <string name="menu_add_person">Pridať osobu</string>
     <string name="menu_call">Volať</string>
-    <string name="menu_info">Podrobnosti</string>    <string name="menu_share">Zdielať</string>
+    <string name="menu_info">Podrobnosti</string>
+    <string name="menu_share">Zdielať</string>
     <string name="main_drawer_open_cd">Otvoriť navigačné menu</string>
     <string name="main_title_selected">%d vybraných</string>
     <string name="main_menu_clear">Vymazať</string>
@@ -127,7 +128,9 @@
     <string name="info_unarchive">Zrušiť archiváciu</string>
     <string name="info_block">Blokovať</string>
     <string name="info_unblock">Odblokovať</string>
-    <string name="info_delete">Odstrániť konverzáciu</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Vzhľad</string>
+    <string name="info_delete">Odstrániť konverzáciu
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Vzhľad</string>
     <string name="settings_category_general">Všeobecné</string>
     <string name="settings_category_qkreply">Rýchla odpoveď</string>
     <string name="settings_theme_title">Motív</string>
@@ -178,7 +181,8 @@
     <string name="settings_mobile_title">Iba telefónne čísla</string>
     <string name="settings_mobile_summary">Pri písaní správ, zobraziť iba telefónne čísla</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -188,7 +192,8 @@
         <item quantity="few">After %d days</item>
         <item quantity="many">After %d days</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Synchronizovať správy</string>
+    </plurals>
+    <string name="settings_sync_title">Synchronizovať správy</string>
     <string name="settings_sync_summary">Opätovne synchronizovať vaše správy s natívnou SMS databázou</string>
     <string name="settings_about_title">O aplikácii QKSMS</string>
     <string name="settings_version">Verzia %s %s %s</string>
@@ -197,14 +202,22 @@
     <string name="settings_delay_duration_hint">Zadajte trvanie v sekundách</string>
     <string name="blocking_title">Blokovanie</string>
     <string name="blocking_drop_title">Zahodiť správy</string>
-    <string name="blocking_drop_summary">Zahodiť prichádzajúce správy od blokovaných odosielateľov namiesto ich skrytia.</string>
+    <string name="blocking_drop_summary">Zahodiť prichádzajúce správy od blokovaných odosielateľov namiesto ich
+        skrytia.
+    </string>
     <string name="blocking_conversations">Blokované konverzácie</string>
     <string name="blocking_manager_title">Správca blokovaní</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Vstavané blokovanie v QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Automaticky filtrujte svoje hovory a správy na jednom mieste! Community IQ™ vám poskytuje ochranu pred spamom od komunitou označených spammerov.</string>
-    <string name="blocking_manager_sia_summary">Automaticky filtrovať správy od nevyžiadaných čísiel pomocou aplikácie \"Should I Answer?\"</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Automaticky filtrujte svoje hovory a správy na jednom mieste!
+        Community IQ™ vám poskytuje ochranu pred spamom od komunitou označených spammerov.
+    </string>
+    <string name="blocking_manager_sia_summary">Automaticky filtrovať správy od nevyžiadaných čísiel pomocou aplikácie
+        \"Should I Answer?\"
+    </string>
     <string name="blocking_manager_copy_title">Kopírovať blokované čísla</string>
     <string name="blocking_manager_copy_summary">Pokračovať do %s a skopírovať existujúce zablokované čísla</string>
     <string name="blocked_numbers_title">Blokované čísla</string>
@@ -243,14 +256,18 @@
     <string name="qksms_plus_upgrade">Doživotná aktivácia za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Odomknúť + darovať za %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Ďakujeme, že ste podporili  QKSMS!</string>
+    <string name="qksms_plus_thanks_title">Ďakujeme, že ste podporili QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Odteraz máte prístup ku všetkým QKSMS+ funkciám</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ je zdarma pre používateľov F-Droid! Ak si prajete podporiť vývoj, neváhajte prispieť.</string>
+    <string name="qksms_plus_free_title">QKSMS+ je zdarma pre používateľov F-Droid! Ak si prajete podporiť vývoj,
+        neváhajte prispieť.
+    </string>
     <string name="qksms_plus_donate">Prispieť cez PayPal</string>
     <string name="qksms_plus_coming_soon">Už čoskoro</string>
     <string name="qksms_plus_themes_title">Prémiové témy</string>
-    <string name="qksms_plus_themes_summary">Odomknúť nádherné farebné témy, ktoré nie sú dostupné v Material Design palete </string>
+    <string name="qksms_plus_themes_summary">Odomknúť nádherné farebné témy, ktoré nie sú dostupné v Material Design
+        palete
+    </string>
     <string name="qksms_plus_emoji_title">Vlastné automatické emoji</string>
     <string name="qksms_plus_emoji_summary">Vytvorte si skratku pre vlastné automatické emoji</string>
     <string name="qksms_plus_delayed_title">Oneskorené odoslanie</string>
@@ -258,13 +275,17 @@
     <string name="qksms_plus_night_title">Automatický nočný režim</string>
     <string name="qksms_plus_night_summary">Zapnutie nočného režimu podľa dennej doby</string>
     <string name="qksms_plus_blacklist_title">Rozšírené blokovanie</string>
-    <string name="qksms_plus_blacklist_summary">Blokujte správy, ktoré obsahujú kľúčové slová, alebo odpovedajú vzoru</string>
+    <string name="qksms_plus_blacklist_summary">Blokujte správy, ktoré obsahujú kľúčové slová, alebo odpovedajú vzoru
+    </string>
     <string name="qksms_plus_forward_title">Automatické preposlanie</string>
     <string name="qksms_plus_forward_summary">Automaticky preposlať správy od určitých odosielateľov</string>
     <string name="qksms_plus_respond_title">Automatická odpoveď</string>
-    <string name="qksms_plus_respond_summary">Automaticky odpovedať na príchodzie správy s prednastavenou odpoveďou</string>
+    <string name="qksms_plus_respond_summary">Automaticky odpovedať na príchodzie správy s prednastavenou odpoveďou
+    </string>
     <string name="qksms_plus_more_title">Viac</string>
-    <string name="qksms_plus_more_summary">QKSMS je v aktívnom vývoji a váš nákup bude obsahovať aj všetky budúce QKSMS+ funkcie!</string>
+    <string name="qksms_plus_more_summary">QKSMS je v aktívnom vývoji a váš nákup bude obsahovať aj všetky budúce QKSMS+
+        funkcie!
+    </string>
     <string name="widget_loading">Načítavanie&#8230;</string>
     <string name="widget_more">Zobraziť viacej konverácií</string>
     <string name="qkreply_menu_read">Označiť ako prečítané</string>
@@ -327,7 +348,8 @@
         <item>3 sekundy</item>
         <item>5 sekúnd</item>
         <item>10 sekúnd</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>V poriadku</item>
         <item>Ešte chvíľku</item>
         <item>Som na ceste</item>

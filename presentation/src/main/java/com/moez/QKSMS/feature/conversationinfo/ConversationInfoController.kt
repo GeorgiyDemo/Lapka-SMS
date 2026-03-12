@@ -48,11 +48,16 @@ class ConversationInfoController(
     val threadId: Long = 0
 ) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
 
-    @Inject lateinit var context: Context
-    @Inject override lateinit var presenter: ConversationInfoPresenter
-    @Inject lateinit var blockingDialog: BlockingDialog
-    @Inject lateinit var navigator: Navigator
-    @Inject lateinit var adapter: ConversationInfoAdapter
+    @Inject
+    lateinit var context: Context
+    @Inject
+    override lateinit var presenter: ConversationInfoPresenter
+    @Inject
+    lateinit var blockingDialog: BlockingDialog
+    @Inject
+    lateinit var navigator: Navigator
+    @Inject
+    lateinit var adapter: ConversationInfoAdapter
 
     private val recyclerView: RecyclerView get() = containerView!!.findViewById(R.id.recyclerView)
 
@@ -65,10 +70,10 @@ class ConversationInfoController(
 
     init {
         appComponent
-                .conversationInfoBuilder()
-                .conversationInfoModule(ConversationInfoModule(this))
-                .build()
-                .inject(this)
+            .conversationInfoBuilder()
+            .conversationInfoModule(ConversationInfoModule(this))
+            .build()
+            .inject(this)
 
         layoutRes = R.layout.conversation_info_controller
     }
@@ -87,8 +92,8 @@ class ConversationInfoController(
         adapter.deleteReceivedAfterDialog.adapter.setData(R.array.delete_message_after_labels)
 
         themedActivity?.theme
-                ?.autoDisposable(scope())
-                ?.subscribe { recyclerView.scrapViews() }
+            ?.autoDisposable(scope())
+            ?.subscribe { recyclerView.scrapViews() }
     }
 
     override fun onAttach(view: View) {
@@ -119,18 +124,24 @@ class ConversationInfoController(
     override fun confirmDelete(): Observable<*> = confirmDeleteSubject
     override fun encryptionKeyClicks(): Observable<*> = adapter.encryptionKeyClicks
     override fun deleteEncryptedAfterClicks(): Observable<*> = adapter.deleteEncryptedAfterClicks
-    override fun deleteReceivedAfterClicks(): Observable<*>  = adapter.deleteReceivedAfterClicks
+    override fun deleteReceivedAfterClicks(): Observable<*> = adapter.deleteReceivedAfterClicks
     override fun deleteSentAfterClicks(): Observable<*> = adapter.deleteSentAfterClicks
-    override fun deleteEncryptedAfterSelected(): Observable<Int> = adapter.deleteEncryptedAfterDialog.adapter.menuItemClicks
-    override fun deleteReceivedAfterSelected(): Observable<Int> = adapter.deleteReceivedAfterDialog.adapter.menuItemClicks
+    override fun deleteEncryptedAfterSelected(): Observable<Int> =
+        adapter.deleteEncryptedAfterDialog.adapter.menuItemClicks
+
+    override fun deleteReceivedAfterSelected(): Observable<Int> =
+        adapter.deleteReceivedAfterDialog.adapter.menuItemClicks
+
     override fun deleteSentAfterSelected(): Observable<Int> = adapter.deleteSentAfterDialog.adapter.menuItemClicks
 
     override fun showNameDialog(name: String) = nameDialog.setText(name).show()
 
     override fun showThemePicker(recipientId: Long) {
-        router.pushController(RouterTransaction.with(ThemePickerController(recipientId))
+        router.pushController(
+            RouterTransaction.with(ThemePickerController(recipientId))
                 .pushChangeHandler(QkChangeHandler())
-                .popChangeHandler(QkChangeHandler()))
+                .popChangeHandler(QkChangeHandler())
+        )
     }
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
@@ -144,18 +155,22 @@ class ConversationInfoController(
 
     override fun showDeleteDialog() {
         MaterialAlertDialogBuilder(activity!!)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, 1))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteSubject.onNext(Unit) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, 1))
+            .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteSubject.onNext(Unit) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     override fun showEncryptionKeySettings(conversation: Conversation) {
         navigator.showConversationKeySettings(conversation.id)
     }
 
-    override fun showDeleteEncryptedAfterDialog(conversation: Conversation) = adapter.deleteEncryptedAfterDialog.show(activity!!)
-    override fun showDeleteReceivedAfterDialog(conversation: Conversation) = adapter.deleteReceivedAfterDialog.show(activity!!)
+    override fun showDeleteEncryptedAfterDialog(conversation: Conversation) =
+        adapter.deleteEncryptedAfterDialog.show(activity!!)
+
+    override fun showDeleteReceivedAfterDialog(conversation: Conversation) =
+        adapter.deleteReceivedAfterDialog.show(activity!!)
+
     override fun showDeleteSentAfterDialog(conversation: Conversation) = adapter.deleteSentAfterDialog.show(activity!!)
 }

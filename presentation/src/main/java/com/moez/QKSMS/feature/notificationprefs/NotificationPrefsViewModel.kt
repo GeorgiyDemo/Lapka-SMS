@@ -52,100 +52,100 @@ class NotificationPrefsViewModel @Inject constructor(
 
     init {
         disposables += Flowable.just(threadId)
-                .mapNotNull { threadId -> conversationRepo.getConversation(threadId) }
-                .map { conversation -> conversation.getTitle() }
-                .subscribeOn(Schedulers.io())
-                .subscribe { title -> newState { copy(conversationTitle = title) } }
+            .mapNotNull { threadId -> conversationRepo.getConversation(threadId) }
+            .map { conversation -> conversation.getTitle() }
+            .subscribeOn(Schedulers.io())
+            .subscribe { title -> newState { copy(conversationTitle = title) } }
 
         disposables += notifications.asObservable()
-                .subscribe { enabled -> newState { copy(notificationsEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(notificationsEnabled = enabled) } }
 
         val previewLabels = context.resources.getStringArray(R.array.notification_preview_options)
         disposables += previews.asObservable()
-                .subscribe { previewId ->
-                    newState { copy(previewSummary = previewLabels[previewId], previewId = previewId) }
-                }
+            .subscribe { previewId ->
+                newState { copy(previewSummary = previewLabels[previewId], previewId = previewId) }
+            }
 
         val actionLabels = context.resources.getStringArray(R.array.notification_actions)
         disposables += prefs.notifAction1.asObservable()
-                .subscribe { previewId -> newState { copy(action1Summary = actionLabels[previewId]) } }
+            .subscribe { previewId -> newState { copy(action1Summary = actionLabels[previewId]) } }
 
         disposables += prefs.notifAction2.asObservable()
-                .subscribe { previewId -> newState { copy(action2Summary = actionLabels[previewId]) } }
+            .subscribe { previewId -> newState { copy(action2Summary = actionLabels[previewId]) } }
 
         disposables += prefs.notifAction3.asObservable()
-                .subscribe { previewId -> newState { copy(action3Summary = actionLabels[previewId]) } }
+            .subscribe { previewId -> newState { copy(action3Summary = actionLabels[previewId]) } }
 
         disposables += wake.asObservable()
-                .subscribe { enabled -> newState { copy(wakeEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(wakeEnabled = enabled) } }
 
         disposables += vibration.asObservable()
-                .subscribe { enabled -> newState { copy(vibrationEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(vibrationEnabled = enabled) } }
 
         disposables += ringtone.asObservable()
-                .map { uriString ->
-                    uriString.takeIf { it.isNotEmpty() }
-                            ?.let(Uri::parse)
-                            ?.let { uri -> RingtoneManager.getRingtone(context, uri) }?.getTitle(context)
-                            ?: context.getString(R.string.settings_ringtone_none)
-                }
-                .subscribe { title -> newState { copy(ringtoneName = title) } }
+            .map { uriString ->
+                uriString.takeIf { it.isNotEmpty() }
+                    ?.let(Uri::parse)
+                    ?.let { uri -> RingtoneManager.getRingtone(context, uri) }?.getTitle(context)
+                    ?: context.getString(R.string.settings_ringtone_none)
+            }
+            .subscribe { title -> newState { copy(ringtoneName = title) } }
 
         disposables += prefs.qkreply.asObservable()
-                .subscribe { enabled -> newState { copy(qkReplyEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(qkReplyEnabled = enabled) } }
 
         disposables += prefs.qkreplyTapDismiss.asObservable()
-                .subscribe { enabled -> newState { copy(qkReplyTapDismiss = enabled) } }
+            .subscribe { enabled -> newState { copy(qkReplyTapDismiss = enabled) } }
     }
 
     override fun bindView(view: NotificationPrefsView) {
         super.bindView(view)
 
         view.preferenceClickIntent
-                .autoDisposable(view.scope())
-                .subscribe {
-                    when (it.id) {
-                        R.id.notificationsO -> navigator.showNotificationChannel(threadId)
+            .autoDisposable(view.scope())
+            .subscribe {
+                when (it.id) {
+                    R.id.notificationsO -> navigator.showNotificationChannel(threadId)
 
-                        R.id.notifications -> notifications.set(!notifications.get())
+                    R.id.notifications -> notifications.set(!notifications.get())
 
-                        R.id.previews -> view.showPreviewModeDialog()
+                    R.id.previews -> view.showPreviewModeDialog()
 
-                        R.id.wake -> wake.set(!wake.get())
+                    R.id.wake -> wake.set(!wake.get())
 
-                        R.id.vibration -> vibration.set(!vibration.get())
+                    R.id.vibration -> vibration.set(!vibration.get())
 
-                        R.id.ringtone -> view.showRingtonePicker(ringtone.get().takeIf { it.isNotEmpty() }?.let(Uri::parse))
+                    R.id.ringtone -> view.showRingtonePicker(ringtone.get().takeIf { it.isNotEmpty() }?.let(Uri::parse))
 
-                        R.id.action1 -> view.showActionDialog(prefs.notifAction1.get())
+                    R.id.action1 -> view.showActionDialog(prefs.notifAction1.get())
 
-                        R.id.action2 -> view.showActionDialog(prefs.notifAction2.get())
+                    R.id.action2 -> view.showActionDialog(prefs.notifAction2.get())
 
-                        R.id.action3 -> view.showActionDialog(prefs.notifAction3.get())
+                    R.id.action3 -> view.showActionDialog(prefs.notifAction3.get())
 
-                        R.id.qkreply -> prefs.qkreply.set(!prefs.qkreply.get())
+                    R.id.qkreply -> prefs.qkreply.set(!prefs.qkreply.get())
 
-                        R.id.qkreplyTapDismiss -> prefs.qkreplyTapDismiss.set(!prefs.qkreplyTapDismiss.get())
-                    }
+                    R.id.qkreplyTapDismiss -> prefs.qkreplyTapDismiss.set(!prefs.qkreplyTapDismiss.get())
                 }
+            }
 
         view.previewModeSelectedIntent
-                .autoDisposable(view.scope())
-                .subscribe { previews.set(it) }
+            .autoDisposable(view.scope())
+            .subscribe { previews.set(it) }
 
         view.ringtoneSelectedIntent
-                .autoDisposable(view.scope())
-                .subscribe { ringtone -> this.ringtone.set(ringtone) }
+            .autoDisposable(view.scope())
+            .subscribe { ringtone -> this.ringtone.set(ringtone) }
 
         view.actionsSelectedIntent
-                .withLatestFrom(view.preferenceClickIntent) { action, preference ->
-                    when (preference.id) {
-                        R.id.action1 -> prefs.notifAction1.set(action)
-                        R.id.action2 -> prefs.notifAction2.set(action)
-                        R.id.action3 -> prefs.notifAction3.set(action)
-                    }
+            .withLatestFrom(view.preferenceClickIntent) { action, preference ->
+                when (preference.id) {
+                    R.id.action1 -> prefs.notifAction1.set(action)
+                    R.id.action2 -> prefs.notifAction2.set(action)
+                    R.id.action3 -> prefs.notifAction3.set(action)
                 }
-                .autoDisposable(view.scope())
-                .subscribe()
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
     }
 }

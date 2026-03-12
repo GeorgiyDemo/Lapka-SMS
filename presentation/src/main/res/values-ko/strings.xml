@@ -31,7 +31,8 @@
     <string name="setup_next">계속</string>
     <string name="menu_add_person">대화 상대 추가하기</string>
     <string name="menu_call">전화</string>
-    <string name="menu_info">자세히</string>    <string name="menu_share">공유</string>
+    <string name="menu_info">자세히</string>
+    <string name="menu_share">공유</string>
     <string name="main_drawer_open_cd">메뉴 열기</string>
     <string name="main_title_selected">%d 개가 선택됨</string>
     <string name="main_menu_clear">삭제하기</string>
@@ -124,7 +125,9 @@
     <string name="info_unarchive">보관 해제</string>
     <string name="info_block">차단</string>
     <string name="info_unblock">차단 해제</string>
-    <string name="info_delete">대화 삭제</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">디자인</string>
+    <string name="info_delete">대화 삭제
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">디자인</string>
     <string name="settings_category_general">일반 설정</string>
     <string name="settings_category_qkreply">빠른 응답</string>
     <string name="settings_theme_title">테마</string>
@@ -182,7 +185,8 @@
     <string name="settings_auto_delete_warning_message">이대로 진행하면, %1$d 개의 메시지가 지금 삭제됩니다</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 일 후</item>
-    </plurals><string name="settings_sync_title">메시지 동기화하기</string>
+    </plurals>
+    <string name="settings_sync_title">메시지 동기화하기</string>
     <string name="settings_sync_summary">기본 안드로이드 SMS 데이터베이스에 다시 동기화하기</string>
     <string name="settings_about_title">QKSMS에 대해...</string>
     <string name="settings_version">버전 정보 %s %s %s</string>
@@ -196,8 +200,12 @@
     <string name="blocking_manager_title">차단 메니저</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">빌트인 차단기능이 있는 기본 필터.</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">자동으오 전화와 메시지를 한 곳에서 필터링하세요! Community IQ™는 커뮤니티 기반으로 원하지 않는 스팸 메시지를 차단해줍니다.</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">자동으오 전화와 메시지를 한 곳에서 필터링하세요! Community IQ™는 커뮤니티 기반으로 원하지 않는 스팸
+        메시지를 차단해줍니다.
+    </string>
     <string name="blocking_manager_sia_summary">Should I Answer 앱을 이용해 필요없는 번호에서 보낸 메시지를 자동으로 필터링하기</string>
     <string name="blocking_manager_copy_title">차단된 번호 복사하기</string>
     <string name="blocking_manager_copy_summary">%s로 계속하고 이미 차단된 번호를 복사합니다.</string>
@@ -288,7 +296,8 @@
     <plurals name="notification_new_messages">
         <item quantity="other">새로운 메세지
 
-%s 개의 새로운 메시지</item>
+            %s 개의 새로운 메시지
+        </item>
     </plurals>
     <string name="notification_message_failed_title">메시지 전송 실패</string>
     <string name="notification_message_failed_text">%s 에게 보낼 메시지 전송이 실패했습니다</string>
@@ -314,7 +323,8 @@
         <item>3초</item>
         <item>5초</item>
         <item>10초</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>확인</item>
         <item>잠시만 기다려주세요.</item>
         <item>가고 있어요</item>

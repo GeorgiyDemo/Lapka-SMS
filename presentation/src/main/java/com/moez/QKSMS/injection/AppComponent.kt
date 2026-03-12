@@ -49,12 +49,14 @@ import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    AndroidSupportInjectionModule::class,
-    AppModule::class,
-    ActivityBuilderModule::class,
-    BroadcastReceiverBuilderModule::class,
-    ServiceBuilderModule::class])
+@Component(
+    modules = [
+        AndroidSupportInjectionModule::class,
+        AppModule::class,
+        ActivityBuilderModule::class,
+        BroadcastReceiverBuilderModule::class,
+        ServiceBuilderModule::class]
+)
 interface AppComponent {
 
     fun conversationInfoBuilder(): ConversationInfoComponent.Builder

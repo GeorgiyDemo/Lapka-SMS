@@ -31,7 +31,8 @@
     <string name="setup_next">Tovább</string>
     <string name="menu_add_person">Személy hozzáadása</string>
     <string name="menu_call">Hívás</string>
-    <string name="menu_info">Részletek</string>    <string name="menu_share">Megosztás</string>
+    <string name="menu_info">Részletek</string>
+    <string name="menu_share">Megosztás</string>
     <string name="main_drawer_open_cd">Navigációs kiválasztása</string>
     <string name="main_title_selected">%d kijelölve</string>
     <string name="main_menu_clear">Törlés</string>
@@ -57,7 +58,8 @@
     <string name="main_default_sms_message">A QKSMS beállítása alapértelmezett SMS alkalmazásként</string>
     <string name="main_default_sms_change">Módosít</string>
     <string name="main_permission_required">Engedély szükséges</string>
-    <string name="main_permission_sms">A QKSMS-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
+    <string name="main_permission_sms">A QKSMS-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére
+    </string>
     <string name="main_permission_contacts">A QKSMS-nek engedélyt kell kapnia a telefonkönyv megtekintésére</string>
     <string name="main_permission_allow">Engedélyez</string>
     <string name="drawer_inbox">Bejövő üzenetek</string>
@@ -125,7 +127,9 @@
     <string name="info_unarchive">Archiválás visszavonása</string>
     <string name="info_block">Blokkolás</string>
     <string name="info_unblock">Blokkolás visszavonása</string>
-    <string name="info_delete">Beszélgetés törlése</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Megjelenés</string>
+    <string name="info_delete">Beszélgetés törlése
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Megjelenés</string>
     <string name="settings_category_general">Általános</string>
     <string name="settings_category_qkreply">QK válasz</string>
     <string name="settings_theme_title">Téma</string>
@@ -176,7 +180,8 @@
     <string name="settings_mobile_title">Csak mobilszámok</string>
     <string name="settings_mobile_summary">Üzenet írásánál csak a mobilszámokat mutassa</string>
     <string name="settings_auto_delete">Delete old messages automatically</string>
-    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days</string>
+    <string name="settings_auto_delete_dialog_message">Messages will be deleted after the specified number of days
+    </string>
     <string name="settings_auto_delete_dialog_hint">Number of days</string>
     <string name="settings_auto_delete_never">Never</string>
     <string name="settings_auto_delete_warning">Delete old messages automatically?</string>
@@ -184,7 +189,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
-    </plurals><string name="settings_sync_title">Üzenetek szinkronizálása</string>
+    </plurals>
+    <string name="settings_sync_title">Üzenetek szinkronizálása</string>
     <string name="settings_sync_summary">Üzenetek újra-szinkronizálása a natív Android SMS-adatbázissal</string>
     <string name="settings_about_title">A QKSMS-ről</string>
     <string name="settings_version">" %s %s %s verzió"</string>
@@ -198,9 +204,15 @@
     <string name="blocking_manager_title">Tiltáskezelő</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">A QKSMS beépített tiltási funkciója</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Egy kényelmesen kezelhető helyen a hívások és üzenetek szűrése! A Community IQ™ megakadályozza a közösség által ismert spammerek üzeneteit</string>
-    <string name="blocking_manager_sia_summary">Automatikusan szűrheti az üzeneteket a nem kívánt számok alapján a \"Should I Answer\" alkalmazás használatával</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Egy kényelmesen kezelhető helyen a hívások és üzenetek szűrése!
+        A Community IQ™ megakadályozza a közösség által ismert spammerek üzeneteit
+    </string>
+    <string name="blocking_manager_sia_summary">Automatikusan szűrheti az üzeneteket a nem kívánt számok alapján a
+        \"Should I Answer\" alkalmazás használatával
+    </string>
     <string name="blocking_manager_copy_title">Tiltott számok másolása</string>
     <string name="blocking_manager_copy_summary">%s másolása a már tiltott számok helyére</string>
     <string name="blocked_numbers_title">Tiltott számok</string>
@@ -238,11 +250,15 @@
     <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a QKSMS-t!</string>
     <string name="qksms_plus_thanks_summary">MOst hozzáférsz minden QKSMS+ funkcióhoz</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">A QKSMS+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a fejlesztést az alábbi módon megteheted.</string>
+    <string name="qksms_plus_free_title">A QKSMS+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a
+        fejlesztést az alábbi módon megteheted.
+    </string>
     <string name="qksms_plus_donate">Támogatás PayPalon keresztül</string>
     <string name="qksms_plus_coming_soon">Hamarosan</string>
     <string name="qksms_plus_themes_title">Prémium témák</string>
-    <string name="qksms_plus_themes_summary">Használj olyan csodaszép témákat amik nem érhetőek el a Material Design palettáján</string>
+    <string name="qksms_plus_themes_summary">Használj olyan csodaszép témákat amik nem érhetőek el a Material Design
+        palettáján
+    </string>
     <string name="qksms_plus_emoji_title">Személyre szabott auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Készíts személyre szabott emoji rövidítéseket</string>
     <string name="qksms_plus_delayed_title">Késleltetett küldés</string>
@@ -250,13 +266,17 @@
     <string name="qksms_plus_night_title">Automatikus éjjeli mód</string>
     <string name="qksms_plus_night_summary">Az éjjeli mód beálíltása napszaktól függően</string>
     <string name="qksms_plus_blacklist_title">Fejlett blokkolás</string>
-    <string name="qksms_plus_blacklist_summary">Megadott kulcsszavakat vagy szövegrészleteket tartalmazó üzenetek blokkolása</string>
+    <string name="qksms_plus_blacklist_summary">Megadott kulcsszavakat vagy szövegrészleteket tartalmazó üzenetek
+        blokkolása
+    </string>
     <string name="qksms_plus_forward_title">Automatikus továbbítás</string>
     <string name="qksms_plus_forward_summary">Adott küldőktől jövő üzenetek automatikus továbbítása</string>
     <string name="qksms_plus_respond_title">Automatikus válasz</string>
     <string name="qksms_plus_respond_summary">Előre megadott sablonok küldése bejövő üzenetekre</string>
     <string name="qksms_plus_more_title">Tovább</string>
-    <string name="qksms_plus_more_summary">A QKSMS folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QKSMS+ funkciókat is tartalmazza!</string>
+    <string name="qksms_plus_more_summary">A QKSMS folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QKSMS+
+        funkciókat is tartalmazza!
+    </string>
     <string name="widget_loading">Betöltés&#8230;</string>
     <string name="widget_more">További társalgások megtekintése</string>
     <string name="qkreply_menu_read">Mark read</string>
@@ -317,7 +337,8 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Oké</item>
         <item>Adj egy percet</item>
         <item>Rajta vagyok</item>

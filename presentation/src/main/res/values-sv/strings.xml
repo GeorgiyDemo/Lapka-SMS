@@ -31,7 +31,8 @@
     <string name="setup_next">Fortsätt</string>
     <string name="menu_add_person">Lägg till person</string>
     <string name="menu_call">Ring</string>
-    <string name="menu_info">Detaljer</string>    <string name="menu_share">Dela</string>
+    <string name="menu_info">Detaljer</string>
+    <string name="menu_share">Dela</string>
     <string name="main_drawer_open_cd">Öppna navigeringspanelen</string>
     <string name="main_title_selected">%d vald</string>
     <string name="main_menu_clear">Rensa</string>
@@ -125,7 +126,9 @@
     <string name="info_unarchive">Avarkivera</string>
     <string name="info_block">Blockera</string>
     <string name="info_unblock">Avblockera</string>
-    <string name="info_delete">Radera konversation</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Utseende</string>
+    <string name="info_delete">Radera konversation
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generellt</string>
     <string name="settings_category_qkreply">QK svar</string>
     <string name="settings_theme_title">Tema</string>
@@ -176,7 +179,8 @@
     <string name="settings_mobile_title">Endast mobilnummer</string>
     <string name="settings_mobile_summary">Visa endast mobilnummer när ett meddelanden skrivs</string>
     <string name="settings_auto_delete">Radera gamla meddelanden automatiskt</string>
-    <string name="settings_auto_delete_dialog_message">Meddelanden kommer att raderas efter det angivna antalet dagar</string>
+    <string name="settings_auto_delete_dialog_message">Meddelanden kommer att raderas efter det angivna antalet dagar
+    </string>
     <string name="settings_auto_delete_dialog_hint">Antal dagar</string>
     <string name="settings_auto_delete_never">Aldrig</string>
     <string name="settings_auto_delete_warning">Radera gamla meddelanden automatiskt?</string>
@@ -184,7 +188,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Efter 1 dag</item>
         <item quantity="other">Efter %d dagar</item>
-    </plurals><string name="settings_sync_title">Synkronisera meddelanden</string>
+    </plurals>
+    <string name="settings_sync_title">Synkronisera meddelanden</string>
     <string name="settings_sync_summary">Synkronisera dina meddelanden med telefonens SMS-databas</string>
     <string name="settings_about_title">Om QKSMS</string>
     <string name="settings_version">Version %s %s %s</string>
@@ -193,16 +198,25 @@
     <string name="settings_delay_duration_hint">Fyll i varaktighet (sekunder)</string>
     <string name="blocking_title">Blockerar</string>
     <string name="blocking_drop_title">Avvisa meddelanden</string>
-    <string name="blocking_drop_summary">Avvisa inkommande meddelanden från blockerade avsändare istället för att dölja dem</string>
+    <string name="blocking_drop_summary">Avvisa inkommande meddelanden från blockerade avsändare istället för att dölja
+        dem
+    </string>
     <string name="blocking_conversations">Blockerade konversationer</string>
     <string name="blocking_manager_title">Blockerings-hanterare</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Inbyggd blockeringsfunktion i QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Filtrera automatiskt dina samtal och meddelanden på ett bekvämt ställe! Med Community IQ™ kan du förhindra oönskade meddelanden från gemenskapens kända spammare</string>
-    <string name="blocking_manager_sia_summary">Filtrera automatiskt meddelanden från oönskade nummer genom att använda appen \"Borde jag svara\"</string>
+    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist
+        &amp; Schedule
+    </string>
+    <string name="blocking_manager_call_control_summary">Filtrera automatiskt dina samtal och meddelanden på ett bekvämt
+        ställe! Med Community IQ™ kan du förhindra oönskade meddelanden från gemenskapens kända spammare
+    </string>
+    <string name="blocking_manager_sia_summary">Filtrera automatiskt meddelanden från oönskade nummer genom att använda
+        appen \"Borde jag svara\"
+    </string>
     <string name="blocking_manager_copy_title">Kopiera blockerade nummer</string>
-    <string name="blocking_manager_copy_summary">Fortsätt till %s och kopiera över dina befintliga blockerade nummer</string>
+    <string name="blocking_manager_copy_summary">Fortsätt till %s och kopiera över dina befintliga blockerade nummer
+    </string>
     <string name="blocked_numbers_title">Blockerade nummer</string>
     <string name="blocked_numbers_empty">Dina blockerade nummer kommer att visas här</string>
     <string name="blocked_numbers_add_cd">Blockera ett nytt nummer</string>
@@ -238,11 +252,15 @@
     <string name="qksms_plus_thanks_title">Tack för att du stöttar QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Du har nu tillgång till alla funktioner i QKSMS+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS + är gratis för F-Droid användare! Om du vill stödja utvecklingen, Så får du gärna donationera.</string>
+    <string name="qksms_plus_free_title">QKSMS + är gratis för F-Droid användare! Om du vill stödja utvecklingen, Så får
+        du gärna donationera.
+    </string>
     <string name="qksms_plus_donate">Donera via PayPal</string>
     <string name="qksms_plus_coming_soon">Kommer snart</string>
     <string name="qksms_plus_themes_title">Högkvalitativa teman</string>
-    <string name="qksms_plus_themes_summary">Lås upp vackra färger som inte finns tillgängliga på Material Design paletten</string>
+    <string name="qksms_plus_themes_summary">Lås upp vackra färger som inte finns tillgängliga på Material Design
+        paletten
+    </string>
     <string name="qksms_plus_emoji_title">Anpassad auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Skapa anpassade auto-emoji genvägar</string>
     <string name="qksms_plus_delayed_title">Fördröj skickande av meddelanden</string>
@@ -250,13 +268,18 @@
     <string name="qksms_plus_night_title">Automatiskt nattläge</string>
     <string name="qksms_plus_night_summary">Aktivera nattläge baserat på tiden på dygnet</string>
     <string name="qksms_plus_blacklist_title">Avancerade blockering</string>
-    <string name="qksms_plus_blacklist_summary">Blockera meddelanden som innehåller specifika ord eller matchar mönster</string>
+    <string name="qksms_plus_blacklist_summary">Blockera meddelanden som innehåller specifika ord eller matchar
+        mönster
+    </string>
     <string name="qksms_plus_forward_title">Auto-forward</string>
     <string name="qksms_plus_forward_summary">Automatiskt vidarebefordra meddelanden från vissa avsändare</string>
     <string name="qksms_plus_respond_title">Auto-svara</string>
-    <string name="qksms_plus_respond_summary">Svara automatiskt på inkommande meddelanden med ett förinställt svar</string>
+    <string name="qksms_plus_respond_summary">Svara automatiskt på inkommande meddelanden med ett förinställt svar
+    </string>
     <string name="qksms_plus_more_title">Mer</string>
-    <string name="qksms_plus_more_summary">QKSMS är under aktiv utveckling, och dina köp kommer att inkludera alla kommande QKSMS+-funktioner!</string>
+    <string name="qksms_plus_more_summary">QKSMS är under aktiv utveckling, och dina köp kommer att inkludera alla
+        kommande QKSMS+-funktioner!
+    </string>
     <string name="widget_loading">Laddar&#8230;</string>
     <string name="widget_more">Visa fler konversationer</string>
     <string name="qkreply_menu_read">Markera som läst</string>
@@ -317,7 +340,8 @@
         <item>3 sekunder</item>
         <item>5 sekunder</item>
         <item>10 sekunder</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Okej</item>
         <item>Ett ögonblick</item>
         <item>Jag är på väg</item>

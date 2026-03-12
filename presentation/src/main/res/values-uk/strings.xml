@@ -31,7 +31,8 @@
     <string name="setup_next">Продовжити</string>
     <string name="menu_add_person">Додати контакт</string>
     <string name="menu_call">Зателефонувати</string>
-    <string name="menu_info">Деталі</string>    <string name="menu_share">Поділитися</string>
+    <string name="menu_info">Деталі</string>
+    <string name="menu_share">Поділитися</string>
     <string name="main_drawer_open_cd">Відкрити панель навігації</string>
     <string name="main_title_selected">Обрано: %d</string>
     <string name="main_menu_clear">Очистити</string>
@@ -127,7 +128,9 @@
     <string name="info_unarchive">Розархівувати</string>
     <string name="info_block">Заблокувати</string>
     <string name="info_unblock">Розблокувати</string>
-    <string name="info_delete">Видалити бесіду</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">Зовнішній вигляд</string>
+    <string name="info_delete">Видалити бесіду
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">Зовнішній вигляд</string>
     <string name="settings_category_general">Загальні</string>
     <string name="settings_category_qkreply">QK Відповідь</string>
     <string name="settings_theme_title">Тема</string>
@@ -153,7 +156,8 @@
     <string name="settings_qkreply_title">QK Відповідь</string>
     <string name="settings_qkreply_summary">Виринаюче вікно для нових повідомлень</string>
     <string name="settings_qkreply_tap_dismiss_title">Торкніться, щоб вимкнути</string>
-    <string name="settings_qkreply_tap_dismiss_summary">Торкніться за межами виринаючого вікна, щоб закрити його</string>
+    <string name="settings_qkreply_tap_dismiss_summary">Торкніться за межами виринаючого вікна, щоб закрити його
+    </string>
     <string name="settings_delayed_title">Затримка відправлення</string>
     <string name="settings_swipe_actions">Дії жестів</string>
     <string name="settings_swipe_actions_summary">Налаштуйте використання жестів для розмови</string>
@@ -178,7 +182,8 @@
     <string name="settings_mobile_title">Лише номери мобільних</string>
     <string name="settings_mobile_summary">При написанні повідомлення показувати лише мобільні номери</string>
     <string name="settings_auto_delete">Автоматично видаляти старі повідомлення</string>
-    <string name="settings_auto_delete_dialog_message">Повідомлення будуть видалені після вказаної кількості днів</string>
+    <string name="settings_auto_delete_dialog_message">Повідомлення будуть видалені після вказаної кількості днів
+    </string>
     <string name="settings_auto_delete_dialog_hint">Кількість днів</string>
     <string name="settings_auto_delete_never">Ніколи</string>
     <string name="settings_auto_delete_warning">Автоматично видаляти старі повідомлення?</string>
@@ -188,8 +193,10 @@
         <item quantity="few">Після %d днів</item>
         <item quantity="many">Після %d днів</item>
         <item quantity="other">Після %d днів</item>
-    </plurals><string name="settings_sync_title">Синхронізація повідомлень</string>
-    <string name="settings_sync_summary">Повторна синхронізація ваших повідомлень з власною базою даних SMS Android</string>
+    </plurals>
+    <string name="settings_sync_title">Синхронізація повідомлень</string>
+    <string name="settings_sync_summary">Повторна синхронізація ваших повідомлень з власною базою даних SMS Android
+    </string>
     <string name="settings_about_title">Про QKSMS</string>
     <string name="settings_version">Версія %s %s %s</string>
     <string name="settings_logging_enabled">Ведення журналу зневаження увімкнуте</string>
@@ -197,16 +204,26 @@
     <string name="settings_delay_duration_hint">Введіть тривалість (у секундах)</string>
     <string name="blocking_title">Блокування</string>
     <string name="blocking_drop_title">Видалити повідомлення</string>
-    <string name="blocking_drop_summary">Видаляти вхідні повідомлення від заблокованих відправників, а не приховувати їх</string>
+    <string name="blocking_drop_summary">Видаляти вхідні повідомлення від заблокованих відправників, а не приховувати
+        їх
+    </string>
     <string name="blocking_conversations">Заблоковані бесіди</string>
     <string name="blocking_manager_title">Керування блокуванням</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Вбудована функція блокування QKSMS</string>
-    <string name="blocking_manager_call_blocker_summary">Блокуйте спам-повідомлення, невідомі номери та дзвінки за допомогою чорного списку та за розкладом</string>
-    <string name="blocking_manager_call_control_summary">Автоматична фільтрація дзвінків та повідомлень в одному зручному місці! Community IQ™ дозволить запобігти отримуванню небажаних повідомлень від відомих спільноті спамерів</string>
-    <string name="blocking_manager_sia_summary">Автоматично фільтрувати повідомлення від небажаних номерів, використовуючи додаток «Should I Answer»</string>
+    <string name="blocking_manager_call_blocker_summary">Блокуйте спам-повідомлення, невідомі номери та дзвінки за
+        допомогою чорного списку та за розкладом
+    </string>
+    <string name="blocking_manager_call_control_summary">Автоматична фільтрація дзвінків та повідомлень в одному
+        зручному місці! Community IQ™ дозволить запобігти отримуванню небажаних повідомлень від відомих спільноті
+        спамерів
+    </string>
+    <string name="blocking_manager_sia_summary">Автоматично фільтрувати повідомлення від небажаних номерів,
+        використовуючи додаток «Should I Answer»
+    </string>
     <string name="blocking_manager_copy_title">Скопіювати заблоковані номери</string>
-    <string name="blocking_manager_copy_summary">Продовжити з %s і записати їх замість наявних заблокованих номерів</string>
+    <string name="blocking_manager_copy_summary">Продовжити з %s і записати їх замість наявних заблокованих номерів
+    </string>
     <string name="blocked_numbers_title">Заблоковані номери</string>
     <string name="blocked_numbers_empty">Тут з\'являтимуться ваші заблоковані номери</string>
     <string name="blocked_numbers_add_cd">Заблокувати новий номер</string>
@@ -246,11 +263,14 @@
     <string name="qksms_plus_thanks_title">Дякуємо вам за підтримку QKSMS!</string>
     <string name="qksms_plus_thanks_summary">Тепер у вас є доступ до всіх функцій QKSMS+</string>
     <string name="qksms_plus_error">Сталася помилка, спробуйте ще раз</string>
-    <string name="qksms_plus_free_title">QKSMS+ є безкоштовним для користувачів F-Droid! Якщо ви хочете підтримати подальший розвиток програми, зробіть пожертву.</string>
+    <string name="qksms_plus_free_title">QKSMS+ є безкоштовним для користувачів F-Droid! Якщо ви хочете підтримати
+        подальший розвиток програми, зробіть пожертву.
+    </string>
     <string name="qksms_plus_donate">Пожертвування через PayPal</string>
     <string name="qksms_plus_coming_soon">Незабаром</string>
     <string name="qksms_plus_themes_title">Преміум теми</string>
-    <string name="qksms_plus_themes_summary">Розблокуйте гарні кольори теми, недоступні в палітрі Material Design</string>
+    <string name="qksms_plus_themes_summary">Розблокуйте гарні кольори теми, недоступні в палітрі Material Design
+    </string>
     <string name="qksms_plus_emoji_title">Власні авто-emoji</string>
     <string name="qksms_plus_emoji_summary">Створюйте ярлик власних авто-emoji</string>
     <string name="qksms_plus_delayed_title">Відкладене надсилання</string>
@@ -258,13 +278,19 @@
     <string name="qksms_plus_night_title">Автоматичний нічний режим</string>
     <string name="qksms_plus_night_summary">Увімкнення нічного режиму на основі часу доби</string>
     <string name="qksms_plus_blacklist_title">Розширене блокування</string>
-    <string name="qksms_plus_blacklist_summary">Блокувати повідомлення, які містять ключові слова або відповідають шаблонам</string>
+    <string name="qksms_plus_blacklist_summary">Блокувати повідомлення, які містять ключові слова або відповідають
+        шаблонам
+    </string>
     <string name="qksms_plus_forward_title">Автоматичне пересилання</string>
     <string name="qksms_plus_forward_summary">Автоматичне пересилання повідомлень від певних відправників</string>
     <string name="qksms_plus_respond_title">Автоматична відповідь</string>
-    <string name="qksms_plus_respond_summary">Автоматично відповідати на вхідні повідомлення за допомогою попередньо налаштованих шаблонів</string>
+    <string name="qksms_plus_respond_summary">Автоматично відповідати на вхідні повідомлення за допомогою попередньо
+        налаштованих шаблонів
+    </string>
     <string name="qksms_plus_more_title">Ще</string>
-    <string name="qksms_plus_more_summary">QKSMS перебуває у активній розробці, і Ваша покупка буде включати в себе всі майбутні можливості QKSMS +!</string>
+    <string name="qksms_plus_more_summary">QKSMS перебуває у активній розробці, і Ваша покупка буде включати в себе всі
+        майбутні можливості QKSMS +!
+    </string>
     <string name="widget_loading">Завантаження&#8230;</string>
     <string name="widget_more">Переглянути більше бесід</string>
     <string name="qkreply_menu_read">Позначити як прочитане</string>
@@ -327,7 +353,8 @@
         <item>3 секунди</item>
         <item>5 секунд</item>
         <item>10 секунд</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>Добре</item>
         <item>Одну хвилинку</item>
         <item>Мені по дорозі</item>

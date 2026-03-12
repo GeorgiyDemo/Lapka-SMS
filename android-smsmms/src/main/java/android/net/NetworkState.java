@@ -26,6 +26,17 @@ import android.os.Parcelable;
  */
 public class NetworkState implements Parcelable {
 
+    public static final Creator<NetworkState> CREATOR = new Creator<NetworkState>() {
+        @Override
+        public NetworkState createFromParcel(Parcel in) {
+            return new NetworkState(in);
+        }
+
+        @Override
+        public NetworkState[] newArray(int size) {
+            return new NetworkState[size];
+        }
+    };
     public final NetworkInfo networkInfo;
     public final LinkProperties linkProperties;
     public final LinkCapabilities linkCapabilities;
@@ -70,17 +81,5 @@ public class NetworkState implements Parcelable {
         out.writeString(subscriberId);
         out.writeString(networkId);
     }
-
-    public static final Creator<NetworkState> CREATOR = new Creator<NetworkState>() {
-        @Override
-        public NetworkState createFromParcel(Parcel in) {
-            return new NetworkState(in);
-        }
-
-        @Override
-        public NetworkState[] newArray(int size) {
-            return new NetworkState[size];
-        }
-    };
 
 }

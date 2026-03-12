@@ -31,7 +31,8 @@
     <string name="setup_next">続行</string>
     <string name="menu_add_person">人を追加</string>
     <string name="menu_call">通話</string>
-    <string name="menu_info">詳細</string>    <string name="menu_share">共有</string>
+    <string name="menu_info">詳細</string>
+    <string name="menu_share">共有</string>
     <string name="main_drawer_open_cd">ナビゲーション引き出しを開く</string>
     <string name="main_title_selected">%d 選択された</string>
     <string name="main_menu_clear">消去しました</string>
@@ -124,7 +125,9 @@
     <string name="info_unarchive">アーカイブ解除</string>
     <string name="info_block">ブロック</string>
     <string name="info_unblock">ブロックを解除</string>
-    <string name="info_delete">会話を削除</string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->    <string name="settings_category_appearance">外観</string>
+    <string name="info_delete">会話を削除
+    </string>    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="settings_category_appearance">外観</string>
     <string name="settings_category_general">全般</string>
     <string name="settings_category_qkreply">QK 返信</string>
     <string name="settings_theme_title">テーマ</string>
@@ -182,7 +185,8 @@
     <string name="settings_auto_delete_warning_message">続行すると、今すぐ %1$d 件のメッセージが削除されます</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 日後</item>
-    </plurals><string name="settings_sync_title">メッセージを同期</string>
+    </plurals>
+    <string name="settings_sync_title">メッセージを同期</string>
     <string name="settings_sync_summary">メッセージをネイティブの Android SMS データベースと再同期します</string>
     <string name="settings_about_title">QKSMS について</string>
     <string name="settings_version">バージョン %s %s %s</string>
@@ -191,14 +195,21 @@
     <string name="settings_delay_duration_hint">期間を入力してください (秒)</string>
     <string name="blocking_title">ブロック</string>
     <string name="blocking_drop_title">メッセージをドロップ</string>
-    <string name="blocking_drop_summary">ブロックした送信者からの受信メッセージを非表示にする代わりにドロップします</string>
+    <string name="blocking_drop_summary">ブロックした送信者からの受信メッセージを非表示にする代わりにドロップします
+    </string>
     <string name="blocking_conversations">ブロックした会話</string>
     <string name="blocking_manager_title">ブロッキングマネージャー</string>
     <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">QKSMS の内蔵ブロック機能</string>
-    <string name="blocking_manager_call_blocker_summary">ブラックリストとスケジュールにより迷惑メッセージ、番号、不明な通話をブロック</string>
-    <string name="blocking_manager_call_control_summary">一か所で便利に通話とメッセージを自動的にフィルタリングします! Community IQ™を使用すると、コミュニティで知られているスパマーからの不要なメッセージを防ぐことができます</string>
-    <string name="blocking_manager_sia_summary">\"Should I Answer\" アプリを使用して、迷惑な番号からのメッセージを自動的にフィルタします</string>
+    <string name="blocking_manager_call_blocker_summary">
+        ブラックリストとスケジュールにより迷惑メッセージ、番号、不明な通話をブロック
+    </string>
+    <string name="blocking_manager_call_control_summary">一か所で便利に通話とメッセージを自動的にフィルタリングします!
+        Community IQ™を使用すると、コミュニティで知られているスパマーからの不要なメッセージを防ぐことができます
+    </string>
+    <string name="blocking_manager_sia_summary">\"Should I Answer\"
+        アプリを使用して、迷惑な番号からのメッセージを自動的にフィルタします
+    </string>
     <string name="blocking_manager_copy_title">ブロックした番号をコピー</string>
     <string name="blocking_manager_copy_summary">既存のブロックした番号のコピーを %s まで続けます</string>
     <string name="blocked_numbers_title">ブロックした番号</string>
@@ -234,11 +245,15 @@
     <string name="qksms_plus_thanks_title">QKSMS を支援いただきありがとうございます!</string>
     <string name="qksms_plus_thanks_summary">QKSMS+ のすべての機能にアクセスできます</string>
     <string name="qksms_plus_error">エラーが発生しました。もう一度やり直してください</string>
-    <string name="qksms_plus_free_title">QKSMS+ は F-Droid ユーザーは無料です! 開発をサポートしたい場合は、気軽に寄付をしてください。</string>
+    <string name="qksms_plus_free_title">QKSMS+ は F-Droid ユーザーは無料です!
+        開発をサポートしたい場合は、気軽に寄付をしてください。
+    </string>
     <string name="qksms_plus_donate">PayPal で寄付する</string>
     <string name="qksms_plus_coming_soon">近日登場</string>
     <string name="qksms_plus_themes_title">プレミアムテーマ</string>
-    <string name="qksms_plus_themes_summary">マテリアルデザインパレットで利用できない美しいテーマカラーのロックを解除します</string>
+    <string name="qksms_plus_themes_summary">
+        マテリアルデザインパレットで利用できない美しいテーマカラーのロックを解除します
+    </string>
     <string name="qksms_plus_emoji_title">カスタム自動絵文字</string>
     <string name="qksms_plus_emoji_summary">カスタム自動絵文字のショートカットを作成します</string>
     <string name="qksms_plus_delayed_title">送信を遅らせる</string>
@@ -246,13 +261,16 @@
     <string name="qksms_plus_night_title">自動夜間モード</string>
     <string name="qksms_plus_night_summary">時間に基づいて夜間モードを有効にします</string>
     <string name="qksms_plus_blacklist_title">高度なブロック</string>
-    <string name="qksms_plus_blacklist_summary">キーワードを含む、またはパターンに一致するメッセージをブロックします</string>
+    <string name="qksms_plus_blacklist_summary">キーワードを含む、またはパターンに一致するメッセージをブロックします
+    </string>
     <string name="qksms_plus_forward_title">自動転送</string>
     <string name="qksms_plus_forward_summary">特定の送信者からのメッセージを自動的に転送します</string>
     <string name="qksms_plus_respond_title">自動応答</string>
     <string name="qksms_plus_respond_summary">あらかじめ設定された応答で、受信したメッセージに自動的に返信します</string>
     <string name="qksms_plus_more_title">さらに</string>
-    <string name="qksms_plus_more_summary">QKMSは活発に開発中です、そして、あなたの購入はすべての将来のQKMS+機能を含みます！</string>
+    <string name="qksms_plus_more_summary">
+        QKMSは活発に開発中です、そして、あなたの購入はすべての将来のQKMS+機能を含みます！
+    </string>
     <string name="widget_loading">ロード中...</string>
     <string name="widget_more">さらに会話を表示</string>
     <string name="qkreply_menu_read">既読にする</string>
@@ -312,7 +330,8 @@
         <item>3秒</item>
         <item>5秒</item>
         <item>10秒</item>
-    </string-array><string-array name="qk_responses">
+    </string-array>
+    <string-array name="qk_responses">
         <item>OK</item>
         <item>しばらくお待ちください</item>
         <item>今、途中です</item>

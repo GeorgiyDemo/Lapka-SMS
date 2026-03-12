@@ -42,13 +42,14 @@ Requires **JDK 17**.
 
 ## Threat Model
 
-The primary adversary is the **mobile operator** who can read SMS content. Lapka SMS encrypts message content via steganography so the operator sees only innocuous-looking messages.
+The primary adversary is the **mobile operator** who can read SMS content. Lapka SMS encrypts message content via
+steganography so the operator sees only innocuous-looking messages.
 
-| Protected | Not Protected |
-|---|---|
-| Message content (AES-256-GCM) | Communication metadata (who, when, how often) |
-| Message length (PKCS7 padding) | The fact that both parties use Lapka SMS |
-| Key material at rest (EncryptedSharedPreferences) | |
+| Protected                                         | Not Protected                                 |
+|---------------------------------------------------|-----------------------------------------------|
+| Message content (AES-256-GCM)                     | Communication metadata (who, when, how often) |
+| Message length (PKCS7 padding)                    | The fact that both parties use Lapka SMS      |
+| Key material at rest (EncryptedSharedPreferences) |                                               |
 
 ## Encryption Protocol (v2)
 

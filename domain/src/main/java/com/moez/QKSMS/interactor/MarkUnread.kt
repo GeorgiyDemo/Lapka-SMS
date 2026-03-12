@@ -29,8 +29,8 @@ class MarkUnread @Inject constructor(
 
     override fun buildObservable(params: List<Long>): Flowable<*> {
         return Flowable.just(params.toLongArray())
-                .doOnNext { threadId -> messageRepo.markUnread(*threadId) }
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
+            .doOnNext { threadId -> messageRepo.markUnread(*threadId) }
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
     }
 
 }

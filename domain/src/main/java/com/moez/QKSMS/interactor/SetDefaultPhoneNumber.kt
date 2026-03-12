@@ -30,9 +30,9 @@ class SetDefaultPhoneNumber @Inject constructor(
 
     override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(params)
-                .doOnNext { (lookupKey, phoneNumberId) ->
-                    contactRepo.setDefaultPhoneNumber(lookupKey, phoneNumberId)
-                }
+            .doOnNext { (lookupKey, phoneNumberId) ->
+                contactRepo.setDefaultPhoneNumber(lookupKey, phoneNumberId)
+            }
     }
 
 }

@@ -18,32 +18,32 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/toolbar"
-        style="@style/Toolbar"
-        android:elevation="8dp">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/toolbar"
+            style="@style/Toolbar"
+            android:elevation="8dp">
 
         <com.moez.QKSMS.common.widget.QkTextView
-            android:id="@+id/toolbarTitle"
-            style="@style/ToolbarText"
-            tools:text="Conversations" />
+                android:id="@+id/toolbarTitle"
+                style="@style/ToolbarText"
+                tools:text="Conversations"/>
 
     </androidx.appcompat.widget.Toolbar>
 
     <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/divider" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/divider"/>
 
 </LinearLayout>

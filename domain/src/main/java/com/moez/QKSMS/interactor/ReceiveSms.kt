@@ -44,54 +44,59 @@ class ReceiveSms @Inject constructor(
 
     override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(params)
-                .filter { it.messages.isNotEmpty() }
-                .mapNotNull {
-                    // Don't continue if the sender is blocked
-                    val messages = it.messages
-                    val address = messages[0].displayOriginatingAddress
-                    val action = blockingClient.shouldBlock(address).blockingGet()
-                    val shouldDrop = prefs.drop.get()
-                    Timber.v("block=$action, drop=$shouldDrop")
+            .filter { it.messages.isNotEmpty() }
+            .mapNotNull {
+                // Don't continue if the sender is blocked
+                val messages = it.messages
+                val address = messages[0].displayOriginatingAddress
+                val action = blockingClient.shouldBlock(address).blockingGet()
+                val shouldDrop = prefs.drop.get()
+                Timber.v("block=$action, drop=$shouldDrop")
 
-                    // If we should drop the message, don't even save it
-                    if (action is BlockingClient.Action.Block && shouldDrop) {
-                        return@mapNotNull null
+                // If we should drop the message, don't even save it
+                if (action is BlockingClient.Action.Block && shouldDrop) {
+                    return@mapNotNull null
+                }
+
+                val time = messages[0].timestampMillis
+                val body: String = messages
+                    .mapNotNull { message -> message.displayMessageBody }
+                    .reduce { body, new -> body + new }
+
+                // Add the message to the db
+                val message = messageRepo.insertReceivedSms(it.subId, address, body, time)
+
+                when (action) {
+                    is BlockingClient.Action.Block -> {
+                        messageRepo.markRead(message.threadId)
+                        conversationRepo.markBlocked(
+                            listOf(message.threadId),
+                            prefs.blockingManager.get(),
+                            action.reason
+                        )
                     }
 
-                    val time = messages[0].timestampMillis
-                    val body: String = messages
-                            .mapNotNull { message -> message.displayMessageBody }
-                            .reduce { body, new -> body + new }
+                    is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
+                    else -> Unit
+                }
 
-                    // Add the message to the db
-                    val message = messageRepo.insertReceivedSms(it.subId, address, body, time)
-
-                    when (action) {
-                        is BlockingClient.Action.Block -> {
-                            messageRepo.markRead(message.threadId)
-                            conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
-                        }
-                        is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
-                        else -> Unit
-                    }
-
-                    message
-                }
-                .doOnNext { message ->
-                    conversationRepo.updateConversations(message.threadId) // Update the conversation
-                }
-                .mapNotNull { message ->
-                    conversationRepo.getOrCreateConversation(message.threadId) // Map message to conversation
-                }
-                .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
-                .doOnNext { conversation ->
-                    // Unarchive conversation if necessary
-                    if (conversation.archived) conversationRepo.markUnarchived(conversation.id)
-                }
-                .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
-                .doOnNext { threadId -> notificationManager.update(threadId) } // Update the notification
-                .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge and widget
+                message
+            }
+            .doOnNext { message ->
+                conversationRepo.updateConversations(message.threadId) // Update the conversation
+            }
+            .mapNotNull { message ->
+                conversationRepo.getOrCreateConversation(message.threadId) // Map message to conversation
+            }
+            .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
+            .doOnNext { conversation ->
+                // Unarchive conversation if necessary
+                if (conversation.archived) conversationRepo.markUnarchived(conversation.id)
+            }
+            .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
+            .doOnNext { threadId -> notificationManager.update(threadId) } // Update the notification
+            .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge and widget
     }
 
 }

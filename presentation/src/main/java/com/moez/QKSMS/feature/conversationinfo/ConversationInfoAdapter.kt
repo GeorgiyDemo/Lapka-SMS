@@ -71,9 +71,12 @@ class ConversationInfoAdapter @Inject constructor(
                 itemView.findViewById<PreferenceView>(R.id.block).clicks().subscribe(blockClicks)
                 itemView.findViewById<PreferenceView>(R.id.delete).clicks().subscribe(deleteClicks)
                 itemView.findViewById<PreferenceView>(R.id.encryptionKey).clicks().subscribe(encryptionKeyClicks)
-                itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).clicks().subscribe(deleteEncryptedAfterClicks)
-                itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).clicks().subscribe(deleteReceivedAfterClicks)
-                itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).clicks().subscribe(deleteSentAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).clicks()
+                    .subscribe(deleteEncryptedAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).clicks()
+                    .subscribe(deleteReceivedAfterClicks)
+                itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).clicks()
+                    .subscribe(deleteSentAfterClicks)
             }
 
             else -> throw IllegalStateException()
@@ -104,30 +107,38 @@ class ConversationInfoAdapter @Inject constructor(
                 holder.itemView.findViewById<PreferenceView>(R.id.notifications).isEnabled = !item.blocked
 
                 holder.itemView.findViewById<PreferenceView>(R.id.archive).isEnabled = !item.blocked
-                holder.itemView.findViewById<PreferenceView>(R.id.archive).title = context.getString(when (item.archived) {
-                    true -> R.string.info_unarchive
-                    false -> R.string.info_archive
-                })
+                holder.itemView.findViewById<PreferenceView>(R.id.archive).title = context.getString(
+                    when (item.archived) {
+                        true -> R.string.info_unarchive
+                        false -> R.string.info_archive
+                    }
+                )
 
-                holder.itemView.findViewById<PreferenceView>(R.id.block).title = context.getString(when (item.blocked) {
-                    true -> R.string.info_unblock
-                    false -> R.string.info_block
-                })
+                holder.itemView.findViewById<PreferenceView>(R.id.block).title = context.getString(
+                    when (item.blocked) {
+                        true -> R.string.info_unblock
+                        false -> R.string.info_block
+                    }
+                )
 
                 // partisan
-                holder.itemView.findViewById<PreferenceView>(R.id.encryptionKey).summary = if (item.encryptionKeyExist) "***" else ""
+                holder.itemView.findViewById<PreferenceView>(R.id.encryptionKey).summary =
+                    if (item.encryptionKeyExist) "***" else ""
 
                 val labels = context.resources.getStringArray(R.array.delete_message_after_labels)
 
                 holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).visibility =
                     if (item.encryptionKeyExist) View.VISIBLE else View.GONE
-                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).summary = labels[item.deleteEncryptedAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).summary =
+                    labels[item.deleteEncryptedAfter]
                 deleteEncryptedAfterDialog.adapter.selectedItem = item.deleteEncryptedAfter
 
-                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).summary = labels[item.deleteReceivedAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).summary =
+                    labels[item.deleteReceivedAfter]
                 deleteReceivedAfterDialog.adapter.selectedItem = item.deleteReceivedAfter
 
-                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).summary = labels[item.deleteSentAfter]
+                holder.itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).summary =
+                    labels[item.deleteSentAfter]
                 deleteSentAfterDialog.adapter.selectedItem = item.deleteSentAfter
             }
 
@@ -144,7 +155,7 @@ class ConversationInfoAdapter @Inject constructor(
     override fun areItemsTheSame(old: ConversationInfoItem, new: ConversationInfoItem): Boolean {
         return when {
             old is ConversationInfoRecipient && new is ConversationInfoRecipient -> {
-               old.value.id == new.value.id
+                old.value.id == new.value.id
             }
 
             old is ConversationInfoSettings && new is ConversationInfoSettings -> {

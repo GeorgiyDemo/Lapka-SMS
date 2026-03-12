@@ -18,10 +18,10 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/widget"
-    android:minWidth="180dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/widget_preview"
-    android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen|keyguard" />
+                    android:initialLayout="@layout/widget"
+                    android:minWidth="180dp"
+                    android:minHeight="110dp"
+                    android:previewImage="@drawable/widget_preview"
+                    android:resizeMode="horizontal|vertical"
+                    android:updatePeriodMillis="0"
+                    android:widgetCategory="home_screen|keyguard"/>
