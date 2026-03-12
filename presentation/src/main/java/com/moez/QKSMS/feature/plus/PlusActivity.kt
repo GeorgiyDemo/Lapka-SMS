@@ -42,8 +42,8 @@ import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.plus.experiment.UpgradeButtonExperiment
 import com.moez.QKSMS.manager.BillingManager
 import dagger.android.AndroidInjection
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -127,7 +127,7 @@ class PlusActivity : QkThemedActivity(), PlusView {
     }
 
     override fun initiatePurchaseFlow(billingManager: BillingManager, sku: String) {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             try {
                 billingManager.initiatePurchaseFlow(this@PlusActivity, sku)
             } catch (e: Exception) {

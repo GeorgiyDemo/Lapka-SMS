@@ -19,6 +19,7 @@
 package com.moez.QKSMS.feature.blocking.messages
 
 import android.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Context
 import android.view.Menu
@@ -107,7 +108,7 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     override fun clearSelection() = blockedMessagesAdapter.clearSelection()
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
-        blockingDialog.show(activity!!, conversations, block)
+        blockingDialog.show(activity!! as AppCompatActivity, conversations, block)
     }
 
     override fun showDeleteDialog(conversations: List<Long>) {

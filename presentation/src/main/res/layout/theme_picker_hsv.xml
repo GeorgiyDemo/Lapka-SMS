@@ -106,6 +106,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/main_menu_clear"
         android:padding="16dp"
         android:src="@drawable/ic_cancel_black_24dp"
         android:tint="?android:attr/textColorSecondary"

@@ -86,6 +86,7 @@
             <ImageView
                 android:id="@+id/inboxIcon"
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_inbox_black_24dp"
                 tools:tint="@color/tools_theme" />
 
@@ -102,6 +103,7 @@
             <ImageView
                 android:id="@+id/archivedIcon"
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_archive_white_24dp"
                 tools:tint="?android:attr/textColorSecondary" />
 
@@ -124,6 +126,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_block_white_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
@@ -146,6 +149,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_settings_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
@@ -162,6 +166,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_star_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
@@ -178,6 +183,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_help_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
@@ -194,6 +200,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_people_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
@@ -220,6 +227,7 @@
                 android:id="@+id/plusIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_star_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -256,6 +264,7 @@
                 android:id="@+id/plusNext"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_chevron_right_black_24dp"
                 android:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -279,6 +288,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_favorite_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@id/rateSummary"
                 app:layout_constraintStart_toStartOf="parent"

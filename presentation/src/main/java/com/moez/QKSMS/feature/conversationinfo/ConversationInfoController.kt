@@ -21,6 +21,7 @@ package com.moez.QKSMS.feature.conversationinfo
 import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -133,7 +134,7 @@ class ConversationInfoController(
     }
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
-        blockingDialog.show(activity!!, conversations, block)
+        blockingDialog.show(activity!! as AppCompatActivity, conversations, block)
     }
 
     override fun requestDefaultSms() {

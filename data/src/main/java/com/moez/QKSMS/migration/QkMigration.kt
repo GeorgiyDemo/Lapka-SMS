@@ -23,7 +23,9 @@ import com.moez.QKSMS.blocking.QksmsBlockingClient
 import com.moez.QKSMS.common.util.extensions.versionCode
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.util.Preferences
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +37,7 @@ class QkMigration @Inject constructor(
 ) {
 
     fun performMigration() {
-        GlobalScope.launch {
+        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
             val oldVersion = prefs.version.get()
 
             if (oldVersion < 2199) {

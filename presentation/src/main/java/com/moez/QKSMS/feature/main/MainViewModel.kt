@@ -50,8 +50,8 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -188,7 +188,7 @@ class MainViewModel @Inject constructor(
         // Show changelog
         if (changelogManager.didUpdate()) {
             if (Locale.getDefault().language.startsWith("en")) {
-                GlobalScope.launch(Dispatchers.Main) {
+                viewModelScope.launch(Dispatchers.Main) {
                     val changelog = changelogManager.getChangelog()
                     changelogManager.markChangelogSeen()
                     view.showChangelog(changelog)

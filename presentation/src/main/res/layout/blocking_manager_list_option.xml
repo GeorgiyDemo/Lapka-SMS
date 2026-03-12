@@ -22,6 +22,7 @@
     android:id="@+id/action"
     android:layout_width="56dp"
     android:layout_height="match_parent"
+    android:contentDescription="@null"
     android:orientation="vertical"
     android:padding="16dp"
     tools:src="@drawable/ic_chevron_right_black_24dp"

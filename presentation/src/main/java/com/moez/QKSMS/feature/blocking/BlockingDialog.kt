@@ -18,8 +18,8 @@
  */
 package com.moez.QKSMS.feature.blocking
 
-import android.app.Activity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Context
 import com.moez.QKSMS.R
@@ -29,8 +29,8 @@ import com.moez.QKSMS.interactor.MarkUnblocked
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.util.Preferences
 import timber.log.Timber
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -45,7 +45,7 @@ class BlockingDialog @Inject constructor(
     private val markUnblocked: MarkUnblocked
 ) {
 
-    fun show(activity: Activity, conversationIds: List<Long>, block: Boolean) = GlobalScope.launch {
+    fun show(activity: AppCompatActivity, conversationIds: List<Long>, block: Boolean) = activity.lifecycleScope.launch {
         val addresses = conversationIds.toLongArray()
                 .let { conversationRepo.getConversations(*it) }
                 .flatMap { conversation -> conversation.recipients }
@@ -83,11 +83,11 @@ class BlockingDialog @Inject constructor(
     }
 
     private suspend fun showDialog(
-        activity: Activity,
+        activity: AppCompatActivity,
         conversationIds: List<Long>,
         addresses: List<String>,
         block: Boolean
-    ) = withContext(MainScope().coroutineContext) {
+    ) = withContext(Dispatchers.Main) {
         val res = when (block) {
             true -> R.plurals.blocking_block_external
             false -> R.plurals.blocking_unblock_external

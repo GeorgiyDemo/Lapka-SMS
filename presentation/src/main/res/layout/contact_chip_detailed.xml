@@ -79,6 +79,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/button_delete"
         android:padding="16dp"
         android:src="@drawable/ic_cancel_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"

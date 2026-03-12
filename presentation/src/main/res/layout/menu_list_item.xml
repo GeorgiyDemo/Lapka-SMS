@@ -30,6 +30,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
+        android:contentDescription="@null"
         android:src="@drawable/radio_button"
         tools:tint="?android:attr/textColorTertiary" />
 

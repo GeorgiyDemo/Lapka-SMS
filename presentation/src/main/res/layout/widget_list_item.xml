@@ -52,6 +52,7 @@
             android:id="@+id/icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:contentDescription="@null"
             android:layout_gravity="center"
             android:src="@drawable/ic_person_black_24dp"
             tools:tint="@color/textPrimaryDark" />
@@ -60,12 +61,14 @@
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@null"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/avatarMask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@null"
             android:src="@drawable/circle_mask" />
 
     </FrameLayout>

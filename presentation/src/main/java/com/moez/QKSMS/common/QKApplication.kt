@@ -40,8 +40,9 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -116,7 +117,7 @@ class QKApplication : Application(), HasAndroidInjector {
 
         qkMigration.performMigration()
 
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             referralManager.trackReferrer()
             billingManager.checkForPurchases()
             billingManager.queryProducts()
