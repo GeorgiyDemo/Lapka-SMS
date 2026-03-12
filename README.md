@@ -1,30 +1,68 @@
-# Partisan-SMS - Encrypted SMS messages
+# Koshka-SMS - Encrypted SMS Messenger
 
-[![Bitcoin donation](https://img.shields.io/badge/donate-bitcoin-fe9515.svg)](https://telegra.ph/CP-02-17)
-[![Ethereum donation](https://img.shields.io/badge/donate-ethereum-536bc3.svg)](https://telegra.ph/CP-02-17)
-[![USDT donation](https://img.shields.io/badge/donate-USDT-26A17B.svg)](https://telegra.ph/CP-02-17)
-[![Monero donation](https://img.shields.io/badge/donate-monero-f26822.svg)](https://telegra.ph/CP-02-17)
-[![Litecoin donation](https://img.shields.io/badge/donate-Litecoin-345d9d.svg)](https://telegra.ph/CP-02-17)
+Koshka-SMS is a fork of [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) with modernized dependencies, updated Android APIs, and significantly improved encryption.
 
-Partisan-SMS is based on the open-source SMS app [QKSMS](https://github.com/moezbhatti/qksms). P-SMS encrypts SMS messages to allow for peaceful protesters to communicate without authoritarian regimes being able to spy on them.
+## Origin & Attribution
 
-## Download
+This project is based on the following open-source projects:
 
-You can download the latest version of the application from the [releases](https://github.com/wrwrabbit/Partisan-SMS/releases/latest) in this repository. You can also find it in our [telegram channel](https://t.me/cpartisans_security).
+- **Partisan-SMS** by [Cyber Partisans](https://github.com/wrwrabbit/Partisan-SMS) - encrypted SMS via steganography
+- **QKSMS** by [Moez Bhatti](https://github.com/moezbhatti/qksms) - the original open-source SMS app
 
-## Reporting bugs
+All original copyright notices and license terms are preserved.
 
-A great bug report contains a description of the problem and steps to reproduce the problem. We need to know what we're looking for and where to look for it.
+## Changes from Partisan-SMS
 
-When reporting a bug, please make sure to provide the following information:
-- Steps to reproduce the issue
-- P-SMS version
-- Device / OS information
+### Encryption (v2 protocol)
 
-## Contact
+- **AES-256-GCM** instead of AES-CFB with 4-byte IV — authenticated encryption with 12-byte random nonce and 128-bit auth tag
+- **HKDF key derivation** (RFC 5869) — separate encryption and MAC keys derived from master key
+- **Replay protection** — 4-byte timestamp in payload, 48-hour acceptance window
+- **PKCS7 padding** — message length hidden from operator (padded to 16-byte blocks)
+- **Constant-time HMAC comparison** — prevents timing side-channel attacks
+- **Encrypted key storage** — global encryption key stored in Android EncryptedSharedPreferences (AES-256-GCM, backed by Android Keystore)
+- **Key fingerprint** — SHA-256 fingerprint displayed in key settings for out-of-band verification
 
-Partisan-SMS is developed and maintained by [Cyber Partisans](https://t.me/cpartisans_security). If you have questions about the application, you can ask them in our [bot](https://t.me/partisan_telegram_bot).
+### Codebase
+
+- `psms-lib` module built from source instead of pre-compiled AAR
+- Updated 15+ dependencies to current versions (Dagger, Glide, Timber, Material, etc.)
+- Replaced deprecated Android APIs (onBackPressed, startActivityForResult, Handler without Looper, etc.)
+- Removed jcenter() repository dependency
+- Added SDK version checks for PackageManager APIs
+- Migrated to AndroidX ActivityResult APIs
+
+## Threat Model
+
+The primary adversary is the **mobile operator** who can read SMS content and metadata. Koshka-SMS encrypts message content via steganography (encoded as Russian text, Base64, or Cyrillic Base64) so the operator sees only innocuous-looking messages.
+
+**What is protected:**
+- Message content (AES-256-GCM encryption)
+- Message length (PKCS7 padding)
+- Key material at rest (EncryptedSharedPreferences)
+
+**What is NOT protected:**
+- Communication metadata (who messages whom, when, how often)
+- The fact that both parties use Koshka-SMS (if operator inspects app installs)
+
+## Building
+
+```
+./gradlew assembleNoAnalyticsDebug
+```
+
+Requires JDK 17.
 
 ## License
 
-Partisan-SMS is released under the **The GNU General Public License v3.0 (GPLv3)**, which can be found in the `LICENSE` file in the root of this project.
+Koshka-SMS is released under the **GNU General Public License v3.0 (GPLv3)**, the same license as the original Partisan-SMS and QKSMS projects. The full license text can be found in the `LICENSE` file.
+
+In compliance with GPLv3:
+- The complete source code of this fork is available in this repository
+- All modifications are documented in the git history
+- Original copyright notices from Partisan-SMS and QKSMS are preserved in all source files
+
+## Original Projects
+
+- Partisan-SMS: https://github.com/wrwrabbit/Partisan-SMS
+- QKSMS: https://github.com/moezbhatti/qksms
