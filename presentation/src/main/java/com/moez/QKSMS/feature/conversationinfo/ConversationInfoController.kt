@@ -20,7 +20,6 @@ package com.moez.QKSMS.feature.conversationinfo
 
 import android.content.Context
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.GridLayoutManager
@@ -50,19 +49,27 @@ class ConversationInfoController(
 
     @Inject
     lateinit var context: Context
+
     @Inject
     override lateinit var presenter: ConversationInfoPresenter
+
     @Inject
     lateinit var blockingDialog: BlockingDialog
+
     @Inject
     lateinit var navigator: Navigator
+
     @Inject
     lateinit var adapter: ConversationInfoAdapter
 
     private val recyclerView: RecyclerView get() = containerView!!.findViewById(R.id.recyclerView)
 
-    private val nameDialog: TextInputDialog by lazy {
-        TextInputDialog(activity!!, activity!!.getString(R.string.info_name), nameChangeSubject::onNext)
+    private var nameDialog: TextInputDialog? = null
+    private fun getNameDialog(): TextInputDialog? {
+        return nameDialog ?: activity?.let {
+            TextInputDialog(it, it.getString(R.string.info_name), nameChangeSubject::onNext)
+                .also { d -> nameDialog = d }
+        }
     }
 
     private val nameChangeSubject: Subject<String> = PublishSubject.create()
@@ -80,7 +87,7 @@ class ConversationInfoController(
 
     override fun onViewCreated() {
         recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(GridSpacingItemDecoration(adapter, activity!!))
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(adapter, activity ?: return))
         recyclerView.layoutManager = GridLayoutManager(activity, 3).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int = if (adapter.getItemViewType(position) == 2) 1 else 3
@@ -134,7 +141,9 @@ class ConversationInfoController(
 
     override fun deleteSentAfterSelected(): Observable<Int> = adapter.deleteSentAfterDialog.adapter.menuItemClicks
 
-    override fun showNameDialog(name: String) = nameDialog.setText(name).show()
+    override fun showNameDialog(name: String) {
+        getNameDialog()?.setText(name)?.show()
+    }
 
     override fun showThemePicker(recipientId: Long) {
         router.pushController(
@@ -145,16 +154,18 @@ class ConversationInfoController(
     }
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
-        blockingDialog.show(activity!! as AppCompatActivity, conversations, block)
+        (activity as? AppCompatActivity)?.let { blockingDialog.show(it, conversations, block) }
     }
 
     override fun requestDefaultSms() {
-        val launcher = (activity as? ConversationInfoActivity)?.defaultSmsLauncher
-        navigator.showDefaultSmsDialog(activity!!, launcher)
+        val act = activity ?: return
+        val launcher = (act as? ConversationInfoActivity)?.defaultSmsLauncher
+        navigator.showDefaultSmsDialog(act, launcher)
     }
 
     override fun showDeleteDialog() {
-        MaterialAlertDialogBuilder(activity!!)
+        val ctx = activity ?: return
+        MaterialAlertDialogBuilder(ctx)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, 1))
             .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteSubject.onNext(Unit) }
@@ -166,11 +177,15 @@ class ConversationInfoController(
         navigator.showConversationKeySettings(conversation.id)
     }
 
-    override fun showDeleteEncryptedAfterDialog(conversation: Conversation) =
-        adapter.deleteEncryptedAfterDialog.show(activity!!)
+    override fun showDeleteEncryptedAfterDialog(conversation: Conversation) {
+        activity?.let { adapter.deleteEncryptedAfterDialog.show(it) }
+    }
 
-    override fun showDeleteReceivedAfterDialog(conversation: Conversation) =
-        adapter.deleteReceivedAfterDialog.show(activity!!)
+    override fun showDeleteReceivedAfterDialog(conversation: Conversation) {
+        activity?.let { adapter.deleteReceivedAfterDialog.show(it) }
+    }
 
-    override fun showDeleteSentAfterDialog(conversation: Conversation) = adapter.deleteSentAfterDialog.show(activity!!)
+    override fun showDeleteSentAfterDialog(conversation: Conversation) {
+        activity?.let { adapter.deleteSentAfterDialog.show(it) }
+    }
 }

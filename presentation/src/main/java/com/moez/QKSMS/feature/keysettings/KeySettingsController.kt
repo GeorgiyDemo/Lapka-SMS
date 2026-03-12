@@ -1,16 +1,13 @@
 package com.moez.QKSMS.feature.keysettings
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.os.Bundle
 import android.util.Base64
 import android.view.MenuItem
 import android.view.View
@@ -53,22 +50,24 @@ class KeySettingsController(
     val threadId: Long = KeySettingsInvalidThreadId
 ) : QkController<KeySettingsView, KeySettingsState, KeySettingsPresenter>(), KeySettingsView {
 
-    companion object {
-        const val EncryptionKeyKey = "encryption_key"
-    }
-
     @Inject
     lateinit var prefs: Preferences
+
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var context: Context
+
     @Inject
     lateinit var qrCodeWriter: QRCodeWriter
+
     @Inject
     lateinit var compatibilityModeDialog: QkDialog
+
     @Inject
     lateinit var textViewStyler: TextViewStyler
+
     @Inject
     override lateinit var presenter: KeySettingsPresenter
 
@@ -83,7 +82,6 @@ class KeySettingsController(
 
     private val keyTextWatcher = KeyTextWatcher()
     private var scannedQr: String? = null
-    private var savedState: KeySettingsState? = null
 
     // View accessors
     private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
@@ -123,11 +121,6 @@ class KeySettingsController(
 
     override fun compatibilityModeSelected(): Observable<Int> = compatibilityModeDialog.adapter.menuItemClicks
 
-    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-        savedState = args.getParcelable("state")
-        super.onRestoreViewState(view, savedViewState)
-    }
-
     override fun render(state: KeySettingsState) {
         if (!state.bound) {
             return
@@ -137,7 +130,6 @@ class KeySettingsController(
             return
         }
 
-        args.putParcelable("state", state)
         encryptionKeyCategory.text =
             if (!state.isConversation) context.getText(R.string.settings_global_encryption_key_title)
             else context.getText(R.string.settings_conversation_encryption_key_title)
@@ -257,8 +249,7 @@ class KeySettingsController(
     override fun onAttach(view: View) {
         super.onAttach(view)
         presenter.bindIntents(this)
-        stateRestored.onNext(Optional(savedState))
-        savedState = null
+        stateRestored.onNext(Optional(null))
         checkScannedQr()
         setTitle(R.string.settings_encryption_key_title)
         showBackButton(true)
@@ -342,10 +333,13 @@ class KeySettingsController(
         } else false
     }
 
-    override fun showCompatibilityModeDialog() = compatibilityModeDialog.show(activity!!)
+    override fun showCompatibilityModeDialog() {
+        activity?.let { compatibilityModeDialog.show(it) }
+    }
 
     override fun showResetKeyDialog(disableKey: Boolean) {
-        MaterialAlertDialogBuilder(this.activity!!)
+        val ctx = activity ?: return
+        MaterialAlertDialogBuilder(ctx)
             .setMessage(R.string.settings_reset_key_confirmation_text)
             .setNegativeButton(R.string.button_cancel, null)
             .setPositiveButton(R.string.button_reset) { _, _ ->
@@ -360,7 +354,8 @@ class KeySettingsController(
     }
 
     override fun showSaveDialog(allowSave: Boolean) {
-        val builder = MaterialAlertDialogBuilder(this.activity!!)
+        val ctx = activity ?: return
+        val builder = MaterialAlertDialogBuilder(ctx)
             .setMessage(R.string.settings_exit_with_no_changes)
             .setNeutralButton(R.string.button_cancel, null)
             .setNegativeButton(R.string.rate_dismiss) { _, _ -> exitWithSavingIntent.onNext(false) }
@@ -375,7 +370,6 @@ class KeySettingsController(
     }
 
     override fun onSaved(key: String?) {
-        val intent = Intent().putExtra(EncryptionKeyKey, key)
-        activity?.setResult(Activity.RESULT_OK, intent)
+        activity?.setResult(if (key != null) Activity.RESULT_OK else Activity.RESULT_CANCELED)
     }
 }

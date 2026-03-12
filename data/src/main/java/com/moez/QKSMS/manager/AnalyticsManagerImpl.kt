@@ -31,8 +31,8 @@ class AnalyticsManagerImpl @Inject constructor() : AnalyticsManager {
         // Log the event, but don't do anything else
         JSONObject(
             properties
-            .associateBy { pair -> pair.first }
-            .mapValues { pair -> pair.value.second })
+                .associateBy { pair -> pair.first }
+                .mapValues { pair -> pair.value.second })
             .also { Timber.v("$event: $it") }
     }
 

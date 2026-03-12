@@ -33,9 +33,11 @@ fun Cursor.forEach(closeOnComplete: Boolean = true, method: (Cursor) -> Unit = {
 }
 
 fun <T> Cursor.map(map: (Cursor) -> T): List<T> {
-    return List(count) { position ->
-        moveToPosition(position)
-        map(this)
+    return use {
+        List(count) { position ->
+            moveToPosition(position)
+            map(this)
+        }
     }
 }
 

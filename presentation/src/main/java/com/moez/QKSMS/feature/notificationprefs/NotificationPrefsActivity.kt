@@ -50,8 +50,10 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
 
     @Inject
     lateinit var previewModeDialog: QkDialog
+
     @Inject
     lateinit var actionsDialog: QkDialog
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 

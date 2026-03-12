@@ -52,8 +52,10 @@ class ThemePickerController(
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var themeAdapter: ThemeAdapter
+
     @Inject
     lateinit var themePagerAdapter: ThemePagerAdapter
 
@@ -111,7 +113,8 @@ class ThemePickerController(
     }
 
     override fun showQksmsPlusSnackbar() {
-        Snackbar.make(view!!, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
+        val v = view ?: return
+        Snackbar.make(v, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
             setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
             setActionTextColor(colors.theme().theme)
             show()

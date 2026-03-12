@@ -146,7 +146,7 @@ class CursorToMessageImpl @Inject constructor(
     }
 
     override fun getMessageCursor(id: Long): Cursor? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return null
     }
 
     private fun getMmsAddress(messageId: Long): String {

@@ -15,14 +15,19 @@ class BlockingManagerTest {
 
     @Mock
     lateinit var prefs: Preferences
+
     @Mock
     lateinit var callBlockerClient: CallBlockerBlockingClient
+
     @Mock
     lateinit var callControlClient: CallControlBlockingClient
+
     @Mock
     lateinit var qksmsClient: QksmsBlockingClient
+
     @Mock
     lateinit var shouldIAnswerClient: ShouldIAnswerBlockingClient
+
     @Mock
     lateinit var blockingManagerPref: Preference<Int>
 

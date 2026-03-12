@@ -58,8 +58,10 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     @Inject
     lateinit var contactsAdapter: ComposeItemAdapter
+
     @Inject
     lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 

@@ -20,7 +20,7 @@ const val VERSION = 3
 private const val MAX_FRONT_PADDING_STRIP = 256
 private const val TIMESTAMP_SIZE = 4
 private const val PADDING_BLOCK_SIZE = 16
-private const val MAX_MESSAGE_AGE_SECONDS = 48 * 3600L
+private const val MAX_MESSAGE_AGE_SECONDS = 24 * 3600L
 private const val MAX_FUTURE_SECONDS = 300L
 
 private val ENC_KEY_INFO = "k-sms-v2-enc".toByteArray()

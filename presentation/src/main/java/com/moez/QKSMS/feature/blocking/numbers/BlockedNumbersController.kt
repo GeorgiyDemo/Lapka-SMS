@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
@@ -44,8 +43,10 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
 
     @Inject
     override lateinit var presenter: BlockedNumbersPresenter
+
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var phoneNumberUtils: PhoneNumberUtils
 
@@ -89,7 +90,8 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
         val layout = LayoutInflater.from(activity).inflate(R.layout.blocked_numbers_add_dialog, null)
         val input = layout.findViewById<EditText>(R.id.input)
         val textWatcher = BlockedNumberTextWatcher(input, phoneNumberUtils)
-        val dialog = MaterialAlertDialogBuilder(activity!!)
+        val ctx = activity ?: return
+        val dialog = MaterialAlertDialogBuilder(ctx)
             .setView(layout)
             .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
                 saveAddressSubject.onNext(input.text.toString())

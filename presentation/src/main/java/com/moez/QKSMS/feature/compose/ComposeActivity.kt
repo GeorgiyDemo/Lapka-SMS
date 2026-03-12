@@ -60,7 +60,6 @@ import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.compose.editing.ChipsAdapter
 import com.moez.QKSMS.feature.contacts.ContactsActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
-import com.moez.QKSMS.feature.keysettings.KeySettingsController
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.Recipient
@@ -77,12 +76,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     @Inject
     lateinit var chipsAdapter: ChipsAdapter
+
     @Inject
     lateinit var dateFormatter: DateFormatter
+
     @Inject
     lateinit var messageAdapter: MessagesAdapter
+
     @Inject
     lateinit var navigator: Navigator
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -90,16 +93,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             chipsSelectedIntent.onNext(
                 result.data?.getSerializableExtra(ContactsActivity.ChipsKey)
-                ?.let { serializable -> serializable as? HashMap<String, String?> }
-                ?: hashMapOf())
+                    ?.let { serializable -> serializable as? HashMap<String, String?> }
+                    ?: hashMapOf())
         }
 
     private val encryptionKeyLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
-                    encryptionKeySetIntent.onNext(Unit)
-                }
+                encryptionKeySetIntent.onNext(Unit)
             }
         }
 

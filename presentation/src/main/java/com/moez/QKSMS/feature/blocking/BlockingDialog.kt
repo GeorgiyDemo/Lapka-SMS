@@ -18,16 +18,18 @@
  */
 package com.moez.QKSMS.feature.blocking
 
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Context
+import androidx.lifecycle.Lifecycle
 import com.moez.QKSMS.R
 import com.moez.QKSMS.blocking.BlockingClient
 import com.moez.QKSMS.interactor.MarkBlocked
 import com.moez.QKSMS.interactor.MarkUnblocked
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.util.Preferences
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import timber.log.Timber
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -58,29 +60,31 @@ class BlockingDialog @Inject constructor(
             }
 
             if (blockingManager.getClientCapability() == BlockingClient.Capability.BLOCK_WITHOUT_PERMISSION) {
-                // If we can block/unblock in the external manager, then just fire that off and exit
                 if (block) {
                     markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                    blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
+                    blockingManager.block(addresses)
+                        .autoDisposable(activity.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe({}, { Timber.w(it) })
                 } else {
                     markUnblocked.execute(conversationIds)
-                    blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
+                    blockingManager.unblock(addresses)
+                        .autoDisposable(activity.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe({}, { Timber.w(it) })
                 }
             } else if (block == allBlocked(addresses)) {
-                // If all of the addresses are already in their correct state in the blocking manager, just marked the
-                // conversations blocked and exit
                 when (block) {
                     true -> markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
                     false -> markUnblocked.execute(conversationIds)
                 }
             } else {
-                // Otherwise, show the UI that lets the users know they need to mark the number as blocked in the client
                 showDialog(activity, conversationIds, addresses, block)
             }
         }
 
-    private fun allBlocked(addresses: List<String>): Boolean = addresses.all { address ->
-        blockingManager.isBlacklisted(address).blockingGet() is BlockingClient.Action.Block
+    private suspend fun allBlocked(addresses: List<String>): Boolean = withContext(Dispatchers.IO) {
+        addresses.all { address ->
+            blockingManager.isBlacklisted(address).blockingGet() is BlockingClient.Action.Block
+        }
     }
 
     private suspend fun showDialog(
@@ -118,10 +122,14 @@ class BlockingDialog @Inject constructor(
             .setPositiveButton(R.string.button_continue) { _, _ ->
                 if (block) {
                     markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                    blockingManager.block(addresses).subscribe({}, { Timber.w(it) })
+                    blockingManager.block(addresses)
+                        .autoDisposable(activity.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe({}, { Timber.w(it) })
                 } else {
                     markUnblocked.execute(conversationIds)
-                    blockingManager.unblock(addresses).subscribe({}, { Timber.w(it) })
+                    blockingManager.unblock(addresses)
+                        .autoDisposable(activity.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe({}, { Timber.w(it) })
                 }
             }
             .setNegativeButton(R.string.button_cancel) { _, _ -> }

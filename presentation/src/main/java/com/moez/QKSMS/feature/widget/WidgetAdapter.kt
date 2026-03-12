@@ -54,12 +54,16 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
     @Inject
     lateinit var context: Context
+
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var conversationRepo: ConversationRepository
+
     @Inject
     lateinit var dateFormatter: DateFormatter
+
     @Inject
     lateinit var prefs: Preferences
 

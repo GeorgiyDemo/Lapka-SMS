@@ -52,8 +52,10 @@ class PlusActivity : QkThemedActivity(), PlusView {
 
     @Inject
     lateinit var fontProvider: FontProvider
+
     @Inject
     lateinit var upgradeButtonExperiment: UpgradeButtonExperiment
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 

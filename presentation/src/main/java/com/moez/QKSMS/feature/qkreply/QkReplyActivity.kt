@@ -50,6 +50,7 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
 
     @Inject
     lateinit var adapter: MessagesAdapter
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 

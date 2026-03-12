@@ -33,6 +33,7 @@ class DefaultSmsChangedReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var prefs: Preferences
+
     @Inject
     lateinit var syncMessages: SyncMessages
 

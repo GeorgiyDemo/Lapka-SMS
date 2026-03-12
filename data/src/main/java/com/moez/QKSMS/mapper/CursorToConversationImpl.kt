@@ -48,10 +48,10 @@ class CursorToConversationImpl @Inject constructor(
             id = from.getLong(ID)
             recipients.addAll(
                 from.getString(RECIPIENT_IDS)
-                .split(" ")
-                .filter { it.isNotBlank() }
-                .map { recipientId -> recipientId.toLong() }
-                .map { recipientId -> Recipient().apply { id = recipientId } })
+                    .split(" ")
+                    .filter { it.isNotBlank() }
+                    .map { recipientId -> recipientId.toLong() }
+                    .map { recipientId -> Recipient().apply { id = recipientId } })
         }
     }
 

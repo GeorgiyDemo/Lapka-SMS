@@ -32,10 +32,13 @@ class BlockThreadReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var blockingClient: BlockingClient
+
     @Inject
     lateinit var conversationRepo: ConversationRepository
+
     @Inject
     lateinit var markBlocked: MarkBlocked
+
     @Inject
     lateinit var prefs: Preferences
 
@@ -44,13 +47,17 @@ class BlockThreadReceiver : BroadcastReceiver() {
 
         val pendingResult = goAsync()
         val threadId = intent.getLongExtra("threadId", 0)
-        val conversation = conversationRepo.getConversation(threadId)!!
+        val conversation = conversationRepo.getConversation(threadId)
+        if (conversation == null) {
+            pendingResult.finish()
+            return
+        }
         val blockingManager = prefs.blockingManager.get()
 
         blockingClient
             .block(conversation.recipients.map { it.address })
             .andThen(markBlocked.buildObservable(MarkBlocked.Params(listOf(threadId), blockingManager, null)))
-            .subscribe { pendingResult.finish() }
+            .subscribe({ pendingResult.finish() }, { pendingResult.finish() })
     }
 
 }

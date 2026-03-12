@@ -77,121 +77,128 @@ class SyncRepositoryImpl @Inject constructor(
         syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
         val realm = Realm.getDefaultInstance()
-        realm.beginTransaction()
+        try {
+            realm.beginTransaction()
 
-        val persistedData = realm.copyFromRealm(
-            realm.where(Conversation::class.java)
-                .beginGroup()
-                .equalTo("archived", true)
-                .or()
-                .equalTo("blocked", true)
-                .or()
-                .equalTo("pinned", true)
-                .or()
-                .isNotEmpty("name")
-                .or()
-                .isNotNull("blockingClient")
-                .or()
-                .isNotEmpty("blockReason")
-                .endGroup()
-                .findAll()
-        )
-            .associateBy { conversation -> conversation.id }
-            .toMutableMap()
+            val persistedData = realm.copyFromRealm(
+                realm.where(Conversation::class.java)
+                    .beginGroup()
+                    .equalTo("archived", true)
+                    .or()
+                    .equalTo("blocked", true)
+                    .or()
+                    .equalTo("pinned", true)
+                    .or()
+                    .isNotEmpty("name")
+                    .or()
+                    .isNotNull("blockingClient")
+                    .or()
+                    .isNotEmpty("blockReason")
+                    .endGroup()
+                    .findAll()
+            )
+                .associateBy { conversation -> conversation.id }
+                .toMutableMap()
 
-        realm.delete(Contact::class.java)
-        realm.delete(ContactGroup::class.java)
-        realm.delete(Conversation::class.java)
-        realm.delete(Message::class.java)
-        realm.delete(Recipient::class.java)
+            realm.delete(Contact::class.java)
+            realm.delete(ContactGroup::class.java)
+            realm.delete(Conversation::class.java)
+            realm.delete(Message::class.java)
+            realm.delete(Recipient::class.java)
 
-        keys.reset()
+            keys.reset()
 
-        val messageCursor = cursorToMessage.getMessagesCursor()
-        val conversationCursor = cursorToConversation.getConversationsCursor()
-        val recipientCursor = cursorToRecipient.getRecipientCursor()
+            val messageCursor = cursorToMessage.getMessagesCursor()
+            val conversationCursor = cursorToConversation.getConversationsCursor()
+            val recipientCursor = cursorToRecipient.getRecipientCursor()
 
-        val max = (messageCursor?.count ?: 0) +
-                (conversationCursor?.count ?: 0) +
-                (recipientCursor?.count ?: 0)
+            val max = (messageCursor?.count ?: 0) +
+                    (conversationCursor?.count ?: 0) +
+                    (recipientCursor?.count ?: 0)
 
-        var progress = 0
+            var progress = 0
 
-        // Sync messages
-        messageCursor?.use {
-            val messageColumns = CursorToMessage.MessageColumns(messageCursor)
-            messageCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val message = cursorToMessage.map(Pair(cursor, messageColumns))
-                    realm.insertOrUpdate(message)
-                }
-            }
-        }
-
-        // Migrate blocked conversations from 2.7.3
-        val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
-        oldBlockedSenders.get()
-            .map { threadIdString -> threadIdString.toLong() }
-            .filter { threadId -> !persistedData.contains(threadId) }
-            .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
-
-        // Sync conversations
-        conversationCursor?.use {
-            conversationCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val conversation = cursorToConversation.map(cursor).apply {
-                        persistedData[id]?.let { persistedConversation ->
-                            archived = persistedConversation.archived
-                            blocked = persistedConversation.blocked
-                            pinned = persistedConversation.pinned
-                            name = persistedConversation.name
-                            blockingClient = persistedConversation.blockingClient
-                            blockReason = persistedConversation.blockReason
-                            encryptionKey = persistedConversation.encryptionKey
-                            deleteEncryptedAfter = persistedConversation.deleteEncryptedAfter
-                            deleteReceivedAfter = persistedConversation.deleteReceivedAfter
-                            deleteSentAfter = persistedConversation.deleteSentAfter
-                        }
-                        lastMessage = realm.where(Message::class.java)
-                            .sort("date", Sort.DESCENDING)
-                            .equalTo("threadId", id)
-                            .findFirst()
+            // Sync messages
+            messageCursor?.use {
+                val messageColumns = CursorToMessage.MessageColumns(messageCursor)
+                messageCursor.forEach { cursor ->
+                    tryOrNull {
+                        progress++
+                        syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
+                        val message = cursorToMessage.map(Pair(cursor, messageColumns))
+                        realm.insertOrUpdate(message)
                     }
-                    realm.insertOrUpdate(conversation)
                 }
             }
-        }
 
-        // Sync recipients
-        recipientCursor?.use {
-            val contacts = realm.copyToRealmOrUpdate(getContacts())
-            recipientCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val recipient = cursorToRecipient.map(cursor).apply {
-                        contact = contacts.firstOrNull { contact ->
-                            contact.numbers.any { phoneNumberUtils.compare(address, it.address) }
+            // Migrate blocked conversations from 2.7.3
+            val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
+            oldBlockedSenders.get()
+                .map { threadIdString -> threadIdString.toLong() }
+                .filter { threadId -> !persistedData.contains(threadId) }
+                .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
+
+            // Sync conversations
+            conversationCursor?.use {
+                conversationCursor.forEach { cursor ->
+                    tryOrNull {
+                        progress++
+                        syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
+                        val conversation = cursorToConversation.map(cursor).apply {
+                            persistedData[id]?.let { persistedConversation ->
+                                archived = persistedConversation.archived
+                                blocked = persistedConversation.blocked
+                                pinned = persistedConversation.pinned
+                                name = persistedConversation.name
+                                blockingClient = persistedConversation.blockingClient
+                                blockReason = persistedConversation.blockReason
+                                encryptionKey = persistedConversation.encryptionKey
+                                deleteEncryptedAfter = persistedConversation.deleteEncryptedAfter
+                                deleteReceivedAfter = persistedConversation.deleteReceivedAfter
+                                deleteSentAfter = persistedConversation.deleteSentAfter
+                            }
+                            lastMessage = realm.where(Message::class.java)
+                                .sort("date", Sort.DESCENDING)
+                                .equalTo("threadId", id)
+                                .findFirst()
                         }
+                        realm.insertOrUpdate(conversation)
                     }
-                    realm.insertOrUpdate(recipient)
                 }
             }
+
+            // Sync recipients
+            recipientCursor?.use {
+                val contacts = realm.copyToRealmOrUpdate(getContacts())
+                recipientCursor.forEach { cursor ->
+                    tryOrNull {
+                        progress++
+                        syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
+                        val recipient = cursorToRecipient.map(cursor).apply {
+                            contact = contacts.firstOrNull { contact ->
+                                contact.numbers.any { phoneNumberUtils.compare(address, it.address) }
+                            }
+                        }
+                        realm.insertOrUpdate(recipient)
+                    }
+                }
+            }
+
+            syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
+
+            realm.insert(SyncLog())
+            realm.commitTransaction()
+
+            // Only delete this after the sync has successfully completed
+            oldBlockedSenders.delete()
+        } catch (e: Exception) {
+            if (realm.isInTransaction) {
+                realm.cancelTransaction()
+            }
+            throw e
+        } finally {
+            realm.close()
         }
-
-        syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
-
-
-        realm.insert(SyncLog())
-        realm.commitTransaction()
-        realm.close()
-
-        // Only delete this after the sync has successfully completed
-        oldBlockedSenders.delete()
 
         syncProgress.onNext(SyncRepository.SyncProgress.Idle)
     }
@@ -317,8 +324,8 @@ class SyncRepositoryImpl @Inject constructor(
         groups.forEach { group ->
             group.contacts.addAll(
                 groupMembers
-                .filter { member -> member.groupId == group.id }
-                .mapNotNull { member -> contacts.find { contact -> contact.lookupKey == member.lookupKey } })
+                    .filter { member -> member.groupId == group.id }
+                    .mapNotNull { member -> contacts.find { contact -> contact.lookupKey == member.lookupKey } })
         }
 
         return groups

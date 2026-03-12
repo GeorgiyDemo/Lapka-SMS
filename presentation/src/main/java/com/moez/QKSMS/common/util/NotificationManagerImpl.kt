@@ -164,12 +164,12 @@ class NotificationManagerImpl @Inject constructor(
                 person.setName(recipient?.getDisplayName() ?: message.address)
                 person.setIcon(
                     GlideApp.with(context)
-                    .asBitmap()
-                    .circleCrop()
-                    .load(recipient?.contact?.photoUri)
-                    .submit(64.dpToPx(context), 64.dpToPx(context))
-                    .let { futureGet -> tryOrNull(false) { futureGet.get() } }
-                    ?.let(IconCompat::createWithBitmap))
+                        .asBitmap()
+                        .circleCrop()
+                        .load(recipient?.contact?.photoUri)
+                        .submit(64.dpToPx(context), 64.dpToPx(context))
+                        .let { futureGet -> tryOrNull(false) { futureGet.get() } }
+                        ?.let(IconCompat::createWithBitmap))
 
                 recipient?.contact
                     ?.let { contact -> "${ContactsContract.Contacts.CONTENT_LOOKUP_URI}/${contact.lookupKey}" }

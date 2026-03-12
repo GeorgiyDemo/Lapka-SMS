@@ -34,12 +34,16 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var conversationRepo: ConversationRepository
+
     @Inject
     lateinit var markRead: MarkRead
+
     @Inject
     lateinit var messageRepo: MessageRepository
+
     @Inject
     lateinit var sendMessage: SendMessage
+
     @Inject
     lateinit var subscriptionManager: SubscriptionManagerCompat
 

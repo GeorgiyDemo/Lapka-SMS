@@ -62,14 +62,19 @@ class QKApplication : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var billingManager: BillingManager
+
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+
     @Inject
     lateinit var fileLoggingTree: FileLoggingTree
+
     @Inject
     lateinit var nightModeManager: NightModeManager
+
     @Inject
     lateinit var realmMigration: QkRealmMigration
+
     @Inject
     lateinit var referralManager: ReferralManager
 

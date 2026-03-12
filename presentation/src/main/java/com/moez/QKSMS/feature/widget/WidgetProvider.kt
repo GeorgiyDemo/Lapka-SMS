@@ -43,6 +43,7 @@ class WidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var prefs: Preferences
 

@@ -40,6 +40,7 @@ class AvatarView @JvmOverloads constructor(
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var navigator: Navigator
 

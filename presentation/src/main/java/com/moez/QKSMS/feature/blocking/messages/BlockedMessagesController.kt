@@ -50,12 +50,16 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
 
     @Inject
     lateinit var blockedMessagesAdapter: BlockedMessagesAdapter
+
     @Inject
     lateinit var blockingDialog: BlockingDialog
+
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var context: Context
+
     @Inject
     override lateinit var presenter: BlockedMessagesPresenter
 

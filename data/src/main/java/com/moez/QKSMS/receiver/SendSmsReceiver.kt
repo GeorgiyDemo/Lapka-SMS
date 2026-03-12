@@ -30,6 +30,7 @@ class SendSmsReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var messageRepo: MessageRepository
+
     @Inject
     lateinit var retrySending: RetrySending
 

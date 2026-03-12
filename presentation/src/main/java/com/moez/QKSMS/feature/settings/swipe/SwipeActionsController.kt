@@ -44,8 +44,10 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
 
     @Inject
     override lateinit var presenter: SwipeActionsPresenter
+
     @Inject
     lateinit var actionsDialog: QkDialog
+
     @Inject
     lateinit var colors: Colors
 

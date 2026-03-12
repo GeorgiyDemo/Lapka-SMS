@@ -29,6 +29,7 @@ open class MmsPart : RealmObject() {
 
     @PrimaryKey
     var id: Long = 0
+
     @Index
     var messageId: Long = 0
     var type: String = ""

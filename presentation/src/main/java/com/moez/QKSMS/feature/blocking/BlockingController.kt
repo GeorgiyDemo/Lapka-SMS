@@ -50,6 +50,7 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     override lateinit var presenter: BlockingPresenter
 

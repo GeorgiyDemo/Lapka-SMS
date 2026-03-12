@@ -367,6 +367,7 @@ public class LinkCapabilities implements Parcelable {
          * Video Chat Application at 480p
          */
         public static final String VIDEO_CHAT_480P = "video.chat.480i";
+
         /**
          * No constructor
          */

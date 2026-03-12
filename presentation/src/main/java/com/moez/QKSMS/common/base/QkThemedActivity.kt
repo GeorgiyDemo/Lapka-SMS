@@ -66,12 +66,16 @@ abstract class QkThemedActivity : QkActivity() {
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var conversationRepo: ConversationRepository
+
     @Inject
     lateinit var messageRepo: MessageRepository
+
     @Inject
     lateinit var phoneNumberUtils: PhoneNumberUtils
+
     @Inject
     lateinit var prefs: Preferences
 

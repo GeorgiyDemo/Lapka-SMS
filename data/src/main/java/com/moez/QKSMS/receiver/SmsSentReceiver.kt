@@ -31,6 +31,7 @@ class SmsSentReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var markSent: MarkSent
+
     @Inject
     lateinit var markFailed: MarkFailed
 

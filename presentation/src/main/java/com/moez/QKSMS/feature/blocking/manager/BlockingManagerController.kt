@@ -1,7 +1,6 @@
 package com.moez.QKSMS.feature.blocking.manager
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.res.ColorStateList
 import android.view.View
@@ -23,6 +22,7 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     override lateinit var presenter: BlockingManagerPresenter
 
@@ -96,7 +96,8 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
     override fun siaClicked(): Observable<*> = shouldIAnswer.clicks()
 
     override fun showCopyDialog(manager: String): Single<Boolean> = Single.create { emitter ->
-        MaterialAlertDialogBuilder(activity!!)
+        val ctx = activity ?: run { emitter.onSuccess(false); return@create }
+        MaterialAlertDialogBuilder(ctx)
             .setTitle(R.string.blocking_manager_copy_title)
             .setMessage(resources?.getString(R.string.blocking_manager_copy_summary, manager))
             .setPositiveButton(R.string.button_continue) { _, _ -> emitter.onSuccess(true) }

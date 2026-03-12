@@ -34,6 +34,7 @@ class QkSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var prefs: Preferences
 

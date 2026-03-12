@@ -43,6 +43,7 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var conversationRepo: ConversationRepository
 

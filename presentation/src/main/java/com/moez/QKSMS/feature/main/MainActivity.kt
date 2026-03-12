@@ -83,18 +83,25 @@ class MainActivity : QkThemedActivity(), MainView {
 
     @Inject
     lateinit var blockingDialog: BlockingDialog
+
     @Inject
     lateinit var disposables: CompositeDisposable
+
     @Inject
     lateinit var navigator: Navigator
+
     @Inject
     lateinit var conversationsAdapter: ConversationsAdapter
+
     @Inject
     lateinit var drawerBadgesExperiment: DrawerBadgesExperiment
+
     @Inject
     lateinit var searchAdapter: SearchAdapter
+
     @Inject
     lateinit var itemTouchCallback: ConversationItemTouchCallback
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -194,8 +201,9 @@ class MainActivity : QkThemedActivity(), MainView {
         }
 
         (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
-            syncingProgress?.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
-            syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+            val themeColor = colors.theme().theme
+            syncingProgress?.progressTintList = ColorStateList.valueOf(themeColor)
+            syncingProgress?.indeterminateTintList = ColorStateList.valueOf(themeColor)
         }
 
         // Pull-to-refresh setup

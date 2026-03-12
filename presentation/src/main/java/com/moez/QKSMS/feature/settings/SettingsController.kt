@@ -27,7 +27,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
@@ -71,18 +70,25 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     @Inject
     lateinit var context: Context
+
     @Inject
     lateinit var colors: Colors
+
     @Inject
     lateinit var navigator: Navigator
+
     @Inject
     lateinit var nightModeDialog: QkDialog
+
     @Inject
     lateinit var textSizeDialog: QkDialog
+
     @Inject
     lateinit var sendDelayDialog: QkDialog
+
     @Inject
     lateinit var deleteEncryptedAfterDialog: QkDialog
+
     @Inject
     lateinit var prefs: Preferences
 
@@ -90,23 +96,40 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     @Inject
     override lateinit var presenter: SettingsPresenter
 
-    private val signatureDialog: TextInputDialog by lazy {
-        TextInputDialog(activity!!, context.getString(R.string.settings_signature_title), signatureSubject::onNext)
-    }
-    private val autoDeleteDialog: AutoDeleteDialog by lazy {
-        AutoDeleteDialog(activity!!, autoDeleteSubject::onNext)
-    }
-
-    private val encryptionKeyDialog: KeyInputDialog by lazy {
-        KeyInputDialog(
-            activity!!,
-            context.getString(R.string.conversation_encryption_key_title),
-            globalEncryptionKeySubject::onNext
-        )
+    private var signatureDialog: TextInputDialog? = null
+    private fun getSignatureDialog(): TextInputDialog? {
+        return signatureDialog ?: activity?.let {
+            TextInputDialog(it, context.getString(R.string.settings_signature_title), signatureSubject::onNext)
+                .also { d -> signatureDialog = d }
+        }
     }
 
-    private val smsForResetDialog: TextInputDialog by lazy {
-        TextInputDialog(activity!!, context.getString(R.string.sms_for_reset), smsForResetSubject::onNext)
+    private var autoDeleteDialog: AutoDeleteDialog? = null
+    private fun getAutoDeleteDialog(): AutoDeleteDialog? {
+        return autoDeleteDialog ?: activity?.let {
+            AutoDeleteDialog(it, autoDeleteSubject::onNext)
+                .also { d -> autoDeleteDialog = d }
+        }
+    }
+
+    private var encryptionKeyDialog: KeyInputDialog? = null
+    private fun getEncryptionKeyDialog(): KeyInputDialog? {
+        return encryptionKeyDialog ?: activity?.let {
+            KeyInputDialog(
+                it,
+                context.getString(R.string.conversation_encryption_key_title),
+                globalEncryptionKeySubject::onNext
+            )
+                .also { d -> encryptionKeyDialog = d }
+        }
+    }
+
+    private var smsForResetDialog: TextInputDialog? = null
+    private fun getSmsForResetDialog(): TextInputDialog? {
+        return smsForResetDialog ?: activity?.let {
+            TextInputDialog(it, context.getString(R.string.sms_for_reset), smsForResetSubject::onNext)
+                .also { d -> smsForResetDialog = d }
+        }
     }
 
     private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
@@ -290,9 +313,9 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         showInTaskSwitcher.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.showInTaskSwitcher
 
         if (state.showInTaskSwitcher) {
-            activity!!.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
-            activity!!.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 
@@ -306,8 +329,9 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
     }
 
-    // TODO change this to a PopupWindow
-    override fun showNightModeDialog() = nightModeDialog.show(activity!!)
+    override fun showNightModeDialog() {
+        activity?.let { nightModeDialog.show(it) }
+    }
 
     override fun showStartTimePicker(hour: Int, minute: Int) {
         TimePickerDialog(activity, { _, newHour, newMinute ->
@@ -321,17 +345,26 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }, hour, minute, DateFormat.is24HourFormat(activity)).show()
     }
 
-    override fun showTextSizePicker() = textSizeDialog.show(activity!!)
+    override fun showTextSizePicker() {
+        activity?.let { textSizeDialog.show(it) }
+    }
 
-    override fun showDelayDurationDialog() = sendDelayDialog.show(activity!!)
+    override fun showDelayDurationDialog() {
+        activity?.let { sendDelayDialog.show(it) }
+    }
 
-    override fun showSignatureDialog(signature: String) = signatureDialog.setText(signature).show()
+    override fun showSignatureDialog(signature: String) {
+        getSignatureDialog()?.setText(signature)?.show()
+    }
 
-    override fun showAutoDeleteDialog(days: Int) = autoDeleteDialog.setExpiry(days).show()
+    override fun showAutoDeleteDialog(days: Int) {
+        getAutoDeleteDialog()?.setExpiry(days)?.show()
+    }
 
     override suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean = withContext(Dispatchers.Main) {
         suspendCancellableCoroutine<Boolean> { cont ->
-            MaterialAlertDialogBuilder(activity!!)
+            val ctx = activity ?: run { cont.resume(false); return@suspendCancellableCoroutine }
+            MaterialAlertDialogBuilder(ctx)
                 .setTitle(R.string.settings_auto_delete_warning)
                 .setMessage(context.resources.getString(R.string.settings_auto_delete_warning_message, messages))
                 .setOnCancelListener { cont.resume(false) }
@@ -367,7 +400,9 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun showGlobalEncryptionKeySettings() = navigator.showGlobalKeysSettings()
 
-    override fun showSmsForResetDialog(smsForReset: String) = smsForResetDialog.setText(smsForReset).show()
+    override fun showSmsForResetDialog(smsForReset: String) {
+        getSmsForResetDialog()?.setText(smsForReset)?.show()
+    }
 
     override fun showLanguageDialog() {
         val locales = listOf(
@@ -418,7 +453,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         val currentLang = prefs.language.get()
         val checkedItem = codes.indexOf(currentLang).coerceAtLeast(0)
 
-        MaterialAlertDialogBuilder(activity!!)
+        val ctx = activity ?: return
+        MaterialAlertDialogBuilder(ctx)
             .setTitle(R.string.settings_language_title)
             .setSingleChoiceItems(names, checkedItem) { dialog, which ->
                 languageSubject.onNext(codes[which])
@@ -438,6 +474,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(localeList)
     }
 
-    override fun showDeleteEncryptedAfterDialog() = deleteEncryptedAfterDialog.show(activity!!)
+    override fun showDeleteEncryptedAfterDialog() {
+        activity?.let { deleteEncryptedAfterDialog.show(it) }
+    }
 
 }
