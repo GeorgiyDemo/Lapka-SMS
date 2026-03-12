@@ -25,7 +25,7 @@ import androidx.appcompat.app.AlertDialog
 import com.moez.QKSMS.R
 import android.widget.EditText
 
-class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {
+class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog) {
 
     private val layout = LayoutInflater.from(context).inflate(R.layout.settings_auto_delete_dialog, null)
 

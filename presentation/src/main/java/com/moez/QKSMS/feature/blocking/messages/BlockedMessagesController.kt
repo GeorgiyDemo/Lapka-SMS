@@ -19,6 +19,7 @@
 package com.moez.QKSMS.feature.blocking.messages
 
 import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
@@ -111,7 +112,7 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
 
     override fun showDeleteDialog(conversations: List<Long>) {
         val count = conversations.size
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity!!)
                 .setTitle(R.string.dialog_delete_title)
                 .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, count, count))
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }

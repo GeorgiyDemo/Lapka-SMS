@@ -15,7 +15,7 @@ import javax.crypto.KeyGenerator
 import android.view.View
 
 
-class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> Unit) : AlertDialog(context) {
+class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> Unit) : AlertDialog(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog) {
 
     private val layout = LayoutInflater.from(context).inflate(R.layout.key_input_dialog, null)
 

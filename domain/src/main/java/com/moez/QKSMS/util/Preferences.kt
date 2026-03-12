@@ -80,13 +80,14 @@ class Preferences @Inject constructor(
         const val BLOCKING_MANAGER_SIA = 2
         const val BLOCKING_MANAGER_CB = 3
 
+        /**
+         * Sentinel value meaning "use system dynamic color".
+         * When theme color equals this, Colors class resolves the actual dynamic color.
+         */
+        const val THEME_DEFAULT_DYNAMIC = 0
+
         fun getDefaultSchemeByLocale(): Int {
-            return if (setOf("ru", "be", "uk", "kk", "ky", "mo", "hy", "ka", "az", "lv", "lt", "uz")
-                .contains(Locale.getDefault().getLanguage())) {
-                2
-            } else {
-                0
-            }
+            return 0 // BASE64
         }
     }
 
@@ -143,18 +144,23 @@ class Preferences @Inject constructor(
         RxSharedPreferences.create(encPrefs)
     }
     val globalEncryptionKey = securePrefs.getString("globalEncryptionKey", "")
-    val smsForReset = rxPrefs.getString("smsForReset", "")
+    val smsForReset = securePrefs.getString("smsForReset", "")
     val deleteEncryptedAfter = rxPrefs.getInteger("deleteEncryptedAfter", 0)
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
     val legacyEncryptionEnabled = rxPrefs.getBoolean("legacyEncryptionEnabled", false)
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
 
     init {
-        // Migrate global encryption key from plaintext to encrypted storage
+        // Migrate sensitive data from plaintext to encrypted storage
         val oldKey = sharedPrefs.getString("globalEncryptionKey", "")
         if (!oldKey.isNullOrEmpty()) {
             globalEncryptionKey.set(oldKey)
             sharedPrefs.edit().remove("globalEncryptionKey").apply()
+        }
+        val oldReset = sharedPrefs.getString("smsForReset", "")
+        if (!oldReset.isNullOrEmpty()) {
+            smsForReset.set(oldReset)
+            sharedPrefs.edit().remove("smsForReset").apply()
         }
 
         // Migrate from old night mode preference to new one, now that we support android Q night mode
@@ -188,10 +194,10 @@ class Preferences @Inject constructor(
 
     fun theme(
         recipientId: Long = 0,
-        default: Int = rxPrefs.getInteger("theme", 0xFFD21F34.toInt()).get()
+        default: Int = rxPrefs.getInteger("theme", THEME_DEFAULT_DYNAMIC).get()
     ): Preference<Int> {
         return when (recipientId) {
-            0L -> rxPrefs.getInteger("theme", 0xFFD21F34.toInt())
+            0L -> rxPrefs.getInteger("theme", THEME_DEFAULT_DYNAMIC)
             else -> rxPrefs.getInteger("theme_$recipientId", default)
         }
     }

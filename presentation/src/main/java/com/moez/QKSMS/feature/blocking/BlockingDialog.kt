@@ -20,6 +20,7 @@ package com.moez.QKSMS.feature.blocking
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Context
 import com.moez.QKSMS.R
 import com.moez.QKSMS.blocking.BlockingClient
@@ -102,7 +103,7 @@ class BlockingDialog @Inject constructor(
 
         // Otherwise, show a dialog asking the user if they want to be directed to the external
         // blocking manager
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
                 .setTitle(when (block) {
                     true -> R.string.blocking_block_title
                     false -> R.string.blocking_unblock_title

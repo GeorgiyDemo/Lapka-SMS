@@ -23,8 +23,6 @@ apply plugin: 'kotlin-kapt'
 android {
     namespace "com.moez.QKSMS.data"
     compileSdkVersion 34
-    flavorDimensions "analytics"
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -39,12 +37,6 @@ android {
         targetSdkVersion 34
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "AMPLITUDE_API_KEY", "\"${System.getenv("AMPLITUDE_API_KEY")}\""
-    }
-
-    productFlavors {
-        withAnalytics { dimension "analytics" }
-        noAnalytics { dimension "analytics" }
     }
 }
 
@@ -96,9 +88,6 @@ dependencies {
     implementation project(':common')
     implementation project(':domain')
     implementation project(':psms-lib')
-
-    withAnalyticsImplementation 'com.android.installreferrer:installreferrer:1.1'
-    withAnalyticsImplementation "com.amplitude:android-sdk:2.16.0"
 
     implementation 'commons-codec:commons-codec:1.15'
 }

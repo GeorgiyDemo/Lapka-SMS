@@ -21,6 +21,7 @@ package com.moez.QKSMS.feature.conversationinfo
 import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bluelinelabs.conductor.RouterTransaction
@@ -142,7 +143,7 @@ class ConversationInfoController(
     }
 
     override fun showDeleteDialog() {
-        AlertDialog.Builder(activity!!)
+        MaterialAlertDialogBuilder(activity!!)
                 .setTitle(R.string.dialog_delete_title)
                 .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, 1))
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteSubject.onNext(Unit) }

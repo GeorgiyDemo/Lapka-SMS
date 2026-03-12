@@ -82,7 +82,7 @@
         android:id="@+id/sendAsGroupBackground"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?attr/colorPrimary"
+        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="@id/sendAsGroupSummary"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -328,6 +328,23 @@
                 style="@style/ToolbarText"
                 android:layout_height="wrap_content"
                 tools:text="Moez Bhatti" />
+
+            <com.moez.QKSMS.common.widget.QkEditText
+                android:id="@+id/searchInput"
+                style="@style/ToolbarText"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_rectangle_24dp"
+                android:backgroundTint="?attr/bubbleColor"
+                android:hint="@string/compose_search_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColorHint="?android:attr/textColorTertiary"
+                android:visibility="gone" />
 
             <com.moez.QKSMS.common.widget.QkTextView
                 android:id="@+id/toolbarSubtitle"

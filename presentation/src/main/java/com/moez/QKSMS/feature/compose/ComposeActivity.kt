@@ -40,6 +40,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.inputmethod.EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
@@ -143,6 +144,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     private val contentView: ConstraintLayout by lazy { findViewById(R.id.contentView) }
+    private val searchInput: QkEditText by lazy { findViewById(R.id.searchInput) }
     private val messageList: RecyclerView by lazy { findViewById(R.id.messageList) }
     private val messagesEmpty: QkTextView by lazy { findViewById(R.id.messagesEmpty) }
     private val loading: ProgressBar by lazy { findViewById(R.id.loading) }
@@ -203,6 +205,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val encryptionKeySetIntent: Subject<Unit> = PublishSubject.create()
+    override val searchQueryChangedIntent by lazy { searchInput.textChanges() }
 
     private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ComposeViewModel::class.java] }
 
@@ -282,25 +285,28 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
             state.searchResults)
 
-        toolbarTitle.setVisible(!state.editingMode)
+        searchInput.setVisible(state.searching)
+        toolbarTitle.setVisible(!state.editingMode && !state.searching)
         chips.setVisible(state.editingMode)
         composeBar.setVisible(!state.loading)
 
         // Don't set the adapters unless needed
         if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
 
+        toolbar.menu.findItem(R.id.search)?.isVisible = !state.editingMode && state.selectedMessages == 0
+                && !state.searching && state.query.isEmpty()
         toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
-                && state.query.isEmpty()
+                && state.query.isEmpty() && !state.searching
         toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0
-                && state.query.isEmpty()
+                && state.query.isEmpty() && !state.searching
         toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-        toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-        toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
+        toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
+        toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
+        toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && (state.query.isNotEmpty() || state.searching)
         toolbar.menu.findItem(R.id.encrypted)?.isVisible = state.encryptionEnabled
         toolbar.menu.findItem(R.id.raw)?.isVisible = !state.encryptionEnabled
 
@@ -346,7 +352,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun clearSelection() = messageAdapter.clearSelection()
 
     override fun showDetails(details: String) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(R.string.compose_details_title)
             .setMessage(details)
             .setCancelable(true)
@@ -473,6 +479,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         cameraDestination = savedInstanceState.getParcelable(CameraDestinationKey)
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun showSearch() {
+        searchInput.requestFocus()
+        searchInput.postDelayed({ searchInput.showKeyboard() }, 200)
+    }
+
+    override fun clearSearch() {
+        searchInput.setText("")
+        searchInput.hideKeyboard()
     }
 
     override fun showEncryptionKeySettings(conversation: Conversation) {

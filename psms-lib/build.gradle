@@ -18,6 +18,12 @@ android {
         minSdkVersion 23
         targetSdkVersion 34
     }
+
+    sourceSets {
+        main {
+            resources.srcDirs = ['src/main/resources']
+        }
+    }
 }
 
 dependencies {

@@ -21,6 +21,7 @@ package com.moez.QKSMS.common.util
 import android.content.Context
 import android.graphics.Color
 import androidx.core.content.res.getColorOrThrow
+import com.google.android.material.color.DynamicColors
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.util.extensions.getColorCompat
 import com.moez.QKSMS.model.Recipient
@@ -78,10 +79,29 @@ class Colors @Inject constructor(
     private val secondaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textSecondaryDark))
     private val tertiaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textTertiaryDark))
 
+    /**
+     * Resolve the system dynamic color (Material You) as the default theme color.
+     * Falls back to Material Blue 500 on pre-Android 12 devices.
+     */
+    val systemDynamicColor: Int by lazy {
+        val dynamicContext = DynamicColors.wrapContextIfAvailable(context)
+        val ta = dynamicContext.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
+        val color = ta.getColor(0, 0xFF448AFF.toInt()) // fallback: Material Blue A200
+        ta.recycle()
+        color
+    }
+
+    /**
+     * Replace the sentinel value [Preferences.THEME_DEFAULT_DYNAMIC] with the actual dynamic color.
+     */
+    private fun resolveColor(color: Int): Int {
+        return if (color == Preferences.THEME_DEFAULT_DYNAMIC) systemDynamicColor else color
+    }
+
     fun theme(recipient: Recipient? = null): Theme {
         val pref = prefs.theme(recipient?.id ?: 0)
         val color = when {
-            recipient == null || !prefs.autoColor.get() || pref.isSet -> pref.get()
+            recipient == null || !prefs.autoColor.get() || pref.isSet -> resolveColor(pref.get())
             else -> generateColor(recipient)
         }
         return Theme(color, this)
@@ -94,7 +114,7 @@ class Colors @Inject constructor(
             else -> prefs.theme(recipient.id, prefs.theme().get())
         }
         return pref.asObservable()
-                .map { color -> Theme(color, this) }
+                .map { color -> Theme(resolveColor(color), this) }
     }
 
     fun highlightColorForTheme(theme: Int): Int = FloatArray(3)

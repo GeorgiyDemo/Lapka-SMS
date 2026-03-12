@@ -21,16 +21,23 @@ package com.moez.QKSMS.common.base
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.widget.Toolbar
 import com.moez.QKSMS.R
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.iterator
+import androidx.core.view.updatePadding
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.color.DynamicColors
 import androidx.lifecycle.Lifecycle
 import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.resolveThemeBoolean
 import com.moez.QKSMS.common.util.extensions.resolveThemeColor
 import com.moez.QKSMS.extensions.Optional
 import com.moez.QKSMS.extensions.asObservable
@@ -101,7 +108,15 @@ abstract class QkThemedActivity : QkActivity() {
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getActivityThemeRes(prefs.black.get()))
+        DynamicColors.applyIfAvailable(this)
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        // Activity transitions
+        window.enterTransition = Slide(Gravity.END).apply { duration = 250 }
+        window.exitTransition = Slide(Gravity.START).apply { duration = 200 }
+        window.returnTransition = Slide(Gravity.END).apply { duration = 200 }
+        window.reenterTransition = Slide(Gravity.START).apply { duration = 250 }
 
         // When certain preferences change, we need to recreate the activity
         val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont)
@@ -111,23 +126,64 @@ abstract class QkThemedActivity : QkActivity() {
                 .autoDisposable(scope())
                 .subscribe { recreate() }
 
-        // We can only set light nav bar on API 27 in attrs, but we can do it in API 26 here
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
-            val night = !resolveThemeBoolean(R.attr.isLightTheme)
-            window.decorView.systemUiVisibility = if (night) 0 else
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
-
-        // Some devices don't let you modify android.R.attr.navigationBarColor
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            window.navigationBarColor = resolveThemeColor(android.R.attr.windowBackground)
-        }
-
         // Set the color for the recent apps title
-        val toolbarColor = resolveThemeColor(R.attr.colorPrimary)
+        val toolbarColor = resolveThemeColor(android.R.attr.windowBackground)
         val icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
         val taskDesc = ActivityManager.TaskDescription(getString(R.string.app_name), icon, toolbarColor)
         setTaskDescription(taskDesc)
+    }
+
+    override fun setContentView(layoutResID: Int) {
+        super.setContentView(layoutResID)
+
+        // Apply window insets for edge-to-edge
+        val contentRoot = findViewById<View>(android.R.id.content)?.let {
+            (it as? android.view.ViewGroup)?.getChildAt(0)
+        }
+
+        // Find the actual content view to apply bottom padding to.
+        // DrawerLayout doesn't support padding for child positioning,
+        // so we need to find its first child (the main content container).
+        val bottomTarget = if (contentRoot is DrawerLayout) {
+            (contentRoot as android.view.ViewGroup).getChildAt(0)
+        } else {
+            contentRoot
+        }
+
+        contentRoot?.let { root ->
+            // CoordinatorLayout with AppBarLayout (fitsSystemWindows) handles its own
+            // insets dispatch — don't intercept, just ensure fitsSystemWindows is set
+            if (root is CoordinatorLayout) {
+                root.fitsSystemWindows = true
+                return
+            }
+
+            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsets ->
+                val statusBars = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+                val navBars = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                val imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+
+                // Apply status bar padding to toolbar
+                findViewById<View>(R.id.toolbar)?.updatePadding(top = statusBars.top)
+
+                // Apply nav bar or IME padding to content
+                val bottomInset = maxOf(navBars.bottom, imeInsets.bottom)
+                bottomTarget?.updatePadding(bottom = bottomInset)
+
+                // Apply insets to drawer panel if present
+                if (root is DrawerLayout) {
+                    for (i in 0 until root.childCount) {
+                        val child = root.getChildAt(i)
+                        val lp = child.layoutParams as? DrawerLayout.LayoutParams
+                        if (lp != null && lp.gravity != android.view.Gravity.NO_GRAVITY && lp.gravity != 0) {
+                            child.updatePadding(top = statusBars.top, bottom = navBars.bottom)
+                        }
+                    }
+                }
+
+                windowInsets
+            }
+        }
     }
 
     override fun onStart() {

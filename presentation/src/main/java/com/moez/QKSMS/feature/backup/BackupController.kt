@@ -28,6 +28,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -80,14 +81,14 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
                     }
                 }
 
-        AlertDialog.Builder(activity!!)
+        MaterialAlertDialogBuilder(activity!!)
                 .setView(dialogView)
                 .setCancelable(true)
                 .create()
     }
 
     private val confirmRestoreDialog by lazy {
-        AlertDialog.Builder(activity!!)
+        MaterialAlertDialogBuilder(activity!!)
                 .setTitle(R.string.backup_restore_confirm_title)
                 .setMessage(R.string.backup_restore_confirm_message)
                 .setPositiveButton(R.string.backup_restore_title, confirmRestoreSubject)
@@ -96,7 +97,7 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     }
 
     private val stopRestoreDialog by lazy {
-        AlertDialog.Builder(activity!!)
+        MaterialAlertDialogBuilder(activity!!)
                 .setTitle(R.string.backup_restore_stop_title)
                 .setMessage(R.string.backup_restore_stop_message)
                 .setPositiveButton(R.string.button_stop, stopRestoreSubject)

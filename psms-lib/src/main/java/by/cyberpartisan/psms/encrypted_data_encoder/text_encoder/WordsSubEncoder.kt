@@ -1,6 +1,5 @@
 package by.cyberpartisan.psms.encrypted_data_encoder.text_encoder
 
-import by.cyberpartisan.psms.isDigit
 import by.cyberpartisan.psms.isLetter
 import com.ionspin.kotlin.bignum.integer.BigInteger
 
@@ -16,22 +15,12 @@ class WordsSubEncoder(private val words: List<String>) : SubEncoder {
 
     override fun decode(str: String, index: Int): DecodeResult? {
         var lastIndex = index + 1
-        while (lastIndex <= str.length) {
-            if (lastIndex < str.length && (isLetter(str[lastIndex]) || isDigit(str[lastIndex]))) {
-                lastIndex++
-                continue
-            }
-            if (lastIndex + 1 < str.length && str[lastIndex] != ' ' && str[lastIndex + 1] != ' ') {
-                return null
-            }
-            val word = str.substring(index, lastIndex)
-            val value = wordsToIndexMap[word]
-            if (value != null) {
-                val newPosition = if (lastIndex < str.length && str[lastIndex] == ' ') lastIndex + 1 else lastIndex
-                return DecodeResult(words.size, value, newPosition)
-            }
+        while (lastIndex < str.length && isLetter(str[lastIndex])) {
             lastIndex++
         }
-        return null
+        val word = str.substring(index, lastIndex)
+        val value = wordsToIndexMap[word] ?: return null
+        val newPosition = if (lastIndex < str.length && str[lastIndex] == ' ') lastIndex + 1 else lastIndex
+        return DecodeResult(words.size, value, newPosition)
     }
 }

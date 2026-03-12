@@ -25,8 +25,6 @@ apply plugin: 'kotlin-kapt'
 android {
     namespace "com.moez.QKSMS"
     compileSdkVersion 34
-    flavorDimensions "analytics"
-
     defaultConfig {
         applicationId "com.moez.QKSMS"
         minSdkVersion 23
@@ -49,6 +47,13 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            applicationIdSuffix ""
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (!variant.name.contains("debug")) {
+            variant.mergedFlavor.applicationId = "org.cpartisans.psms"
         }
     }
 
@@ -63,11 +68,6 @@ android {
 
     lint {
         abortOnError false
-    }
-
-    productFlavors {
-        withAnalytics { dimension "analytics" }
-        noAnalytics { dimension "analytics" }
     }
 
     if (System.getenv("CI") == "true") {
@@ -89,22 +89,6 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        if (variant.name.contains("debug")) {
-            variant.mergedFlavor.applicationId = "com.moez.QKSMS"
-        } else {
-            variant.mergedFlavor.applicationId = "org.cpartisans.psms"
-        }
-    }
-
-}
-
-
-configurations {
-    noAnalyticsDebug
-    noAnalyticsRelease
-    withAnalyticsDebug
-    withAnalyticsRelease
 }
 
 dependencies {
@@ -114,6 +98,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+
+    // splash screen
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
     // androidx
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
@@ -214,18 +201,5 @@ dependencies {
     implementation project(':domain')
     implementation project(':psms-lib')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:17.3.0'
-    withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
-    withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
-    noAnalyticsDebug project(path: ':data', configuration: 'noAnalyticsDebug')
-    noAnalyticsRelease project(path: ':data', configuration: 'noAnalyticsRelease')
-    withAnalyticsDebug project(path: ':data', configuration: 'withAnalyticsDebug')
-    withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
-
     implementation 'commons-codec:commons-codec:1.15'
-}
-
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("WithAnalytics")) {
-    apply plugin: 'com.google.gms.google-services'
-    apply plugin: 'com.google.firebase.crashlytics'
 }

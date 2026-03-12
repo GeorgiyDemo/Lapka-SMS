@@ -28,8 +28,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="8dp"
         android:paddingBottom="8dp">
+
+        <!-- Drawer Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@mipmap/ic_launcher"
+                android:importantForAccessibility="no" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <com.moez.QKSMS.common.widget.QkTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textStyle="bold"
+                    app:textSize="primary" />
+
+                <com.moez.QKSMS.common.widget.QkTextView
+                    android:id="@+id/drawerVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorTertiary"
+                    app:textSize="tertiary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:background="?android:attr/divider" />
 
         <LinearLayout
             android:id="@+id/inbox"
@@ -163,7 +211,8 @@
 
         <LinearLayout
             android:id="@+id/plus"
-            style="@style/DrawerRow">
+            style="@style/DrawerRow"
+            android:visibility="gone">
 
             <ImageView
                 style="@style/DrawerIcon"
@@ -178,7 +227,8 @@
 
         <LinearLayout
             android:id="@+id/help"
-            style="@style/DrawerRow">
+            style="@style/DrawerRow"
+            android:visibility="gone">
 
             <ImageView
                 style="@style/DrawerIcon"
@@ -193,7 +243,8 @@
 
         <LinearLayout
             android:id="@+id/invite"
-            style="@style/DrawerRow">
+            style="@style/DrawerRow"
+            android:visibility="gone">
 
             <ImageView
                 style="@style/DrawerIcon"
@@ -210,6 +261,7 @@
             android:id="@+id/plusBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"

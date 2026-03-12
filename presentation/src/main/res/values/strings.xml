@@ -120,6 +120,8 @@
     <string name="compose_menu_previous">Previous</string>
     <string name="compose_menu_next">Next</string>
     <string name="compose_menu_clear">Clear</string>
+    <string name="compose_menu_search">Search</string>
+    <string name="compose_search_hint">Search in conversation…</string>
     <string name="compose_menu_encrypted">Encrypted</string>
     <string name="compose_menu_raw">Raw</string>
     <string name="compose_details_title">Message details</string>
@@ -384,7 +386,7 @@
     <string name="about_developer" translatable="false">Cpartisans, Moez Bhatti</string>
     <string name="about_source" translatable="false">https://github.com/wrwrabbit/Partisan-SMS, based on https://github.com/moezbhatti/qksms</string>
     <string name="about_changelog" translatable="false">https://github.com/wrwrabbit/Partisan-SMS/releases</string>
-    <string name="about_contact" translatable="false">https://t.me/cpartisans</string>
+    <string name="about_contact" translatable="false"></string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
     <string name="about_copyright" translatable="false">© 2014–2019</string>
 

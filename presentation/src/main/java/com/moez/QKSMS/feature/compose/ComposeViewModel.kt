@@ -67,6 +67,7 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 import by.cyberpartisan.psms.Message as PSmsMessage
@@ -408,11 +409,39 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe(searchSelection)
 
+        // Open in-conversation search
+        view.optionsItemIntent
+                .filter { it == R.id.search }
+                .autoDisposable(view.scope())
+                .subscribe {
+                    newState { copy(searching = true) }
+                    view.showSearch()
+                }
+
+        // Handle search query changes from in-conversation search
+        view.searchQueryChangedIntent
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { query ->
+                    newState { copy(query = query.toString()) }
+                }
+                .filter { it.isNotEmpty() }
+                .withLatestFrom(conversation) { query, conv ->
+                    messageRepo.getMessages(conv.id, query.toString())
+                }
+                .switchMap { messages -> messages.asObservable() }
+                .filter { it.isLoaded && it.isValid }
+                .autoDisposable(view.scope())
+                .subscribe(searchResults::onNext)
+
         // Clear the search
         view.optionsItemIntent
                 .filter { it == R.id.clear }
                 .autoDisposable(view.scope())
-                .subscribe { newState { copy(query = "", searchSelectionId = -1) } }
+                .subscribe {
+                    newState { copy(query = "", searching = false, searchSelectionId = -1) }
+                    view.clearSearch()
+                }
 
         // Toggle the group sending mode
         view.sendAsGroupIntent
@@ -761,6 +790,10 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(state) { _, state ->
                     when {
                         state.selectedMessages > 0 -> view.clearSelection()
+                        state.searching -> {
+                            newState { copy(query = "", searching = false, searchSelectionId = -1) }
+                            view.clearSearch()
+                        }
                         else -> newState { copy(hasError = true) }
                     }
                 }

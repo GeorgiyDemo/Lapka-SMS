@@ -28,7 +28,7 @@ import com.moez.QKSMS.common.base.QkAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.moez.QKSMS.common.widget.QkTextView
 
-class QkDialog(private val context: Activity) : AlertDialog(context) {
+class QkDialog(private val context: Activity) : AlertDialog(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog) {
 
     private val view = LayoutInflater.from(context).inflate(R.layout.qk_dialog, null)
 

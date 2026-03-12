@@ -25,7 +25,7 @@ import androidx.appcompat.app.AlertDialog
 import com.moez.QKSMS.R
 import android.widget.EditText
 
-class TextInputDialog(context: Activity, hint: String, listener: (String) -> Unit) : AlertDialog(context) {
+class TextInputDialog(context: Activity, hint: String, listener: (String) -> Unit) : AlertDialog(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog) {
 
     private val layout = LayoutInflater.from(context).inflate(R.layout.text_input_dialog, null)
 

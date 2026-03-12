@@ -34,6 +34,7 @@ data class ComposeState(
     val conversationtitle: String = "",
     val loading: Boolean = false,
     val query: String = "",
+    val searching: Boolean = false,
     val searchSelectionId: Long = -1,
     val searchSelectionPosition: Int = 0,
     val searchResults: Int = 0,

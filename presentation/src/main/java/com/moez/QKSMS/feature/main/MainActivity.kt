@@ -21,8 +21,10 @@ package com.moez.QKSMS.feature.main
 import android.Manifest
 import android.animation.ObjectAnimator
 import androidx.activity.addCallback
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -38,14 +40,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.moez.QKSMS.R
+import com.moez.QKSMS.BuildConfig
 import com.moez.QKSMS.common.Navigator
 import com.moez.QKSMS.common.androidxcompat.drawerOpen
 import com.moez.QKSMS.common.base.QkThemedActivity
@@ -89,8 +94,11 @@ class MainActivity : QkThemedActivity(), MainView {
     private val toolbar: androidx.appcompat.widget.Toolbar by lazy { findViewById(R.id.toolbar) }
     private val toolbarSearch: QkEditText by lazy { findViewById(R.id.toolbarSearch) }
     private val toolbarTitle: QkTextView by lazy { findViewById(R.id.toolbarTitle) }
+    private val swipeRefresh: SwipeRefreshLayout by lazy { findViewById(R.id.swipeRefresh) }
     private val recyclerView: RecyclerView by lazy { findViewById(R.id.recyclerView) }
-    private val compose: ImageView by lazy { findViewById(R.id.compose) }
+    private val compose: FloatingActionButton by lazy { findViewById(R.id.compose) }
+    private val emptyContainer: LinearLayout by lazy { findViewById(R.id.emptyContainer) }
+    private val emptyIcon: ImageView by lazy { findViewById(R.id.emptyIcon) }
     private val empty: QkTextView by lazy { findViewById(R.id.empty) }
     private val drawer: View by lazy { findViewById(R.id.drawer) }
     private val inbox: LinearLayout by lazy { findViewById(R.id.inbox) }
@@ -165,6 +173,7 @@ class MainActivity : QkThemedActivity(), MainView {
     private val defaultSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -184,6 +193,16 @@ class MainActivity : QkThemedActivity(), MainView {
             syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
         }
 
+        // Pull-to-refresh setup
+        swipeRefresh.setOnRefreshListener {
+            // Dismiss after a short delay since conversations auto-update via Realm
+            swipeRefresh.postDelayed({ swipeRefresh.isRefreshing = false }, 1000)
+            contentResolver.notifyChange(android.net.Uri.parse("content://sms"), null)
+        }
+
+        // Set drawer version text
+        findViewById<QkTextView>(R.id.drawerVersion)?.text = "v${BuildConfig.VERSION_NAME}"
+
         toggle.syncState()
         toolbar.setNavigationOnClickListener {
             dismissKeyboard()
@@ -192,6 +211,14 @@ class MainActivity : QkThemedActivity(), MainView {
 
         itemTouchCallback.adapter = conversationsAdapter
         conversationsAdapter.autoScrollToStart(recyclerView)
+
+        // Hide FAB on scroll down, show on scroll up
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0 && compose.isShown) compose.hide()
+                else if (dy < 0 && !compose.isShown) compose.show()
+            }
+        })
 
         // Don't allow clicks to pass through the drawer layout
         drawer.clicks().autoDisposable(scope()).subscribe()
@@ -221,10 +248,14 @@ class MainActivity : QkThemedActivity(), MainView {
                     syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
                     plusIcon.setTint(theme.theme)
                     rateIcon.setTint(theme.theme)
-                    compose.setBackgroundTint(theme.theme)
+                    swipeRefresh.setColorSchemeColors(theme.theme)
+                    compose.backgroundTintList = ColorStateList.valueOf(theme.theme)
 
                     // Set the FAB compose icon color
-                    compose.setTint(theme.textPrimary)
+                    compose.imageTintList = ColorStateList.valueOf(theme.textPrimary)
+
+                    // Tint empty state icon
+                    emptyIcon.setColorFilter(theme.theme)
                 }
 
         // These theme attributes don't apply themselves on API 21
@@ -291,15 +322,15 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbar.menu.findItem(R.id.block)?.isVisible = selectedConversations != 0
 
         listOf(plusBadge1, plusBadge2).forEach { badge ->
-            badge.isVisible = drawerBadgesExperiment.variant && !state.upgraded
+            badge.isVisible = false
         }
-        plus.isVisible = state.upgraded
-        plusBanner.isVisible = !state.upgraded
-        rateLayout.setVisible(state.showRating)
+        plus.isVisible = false
+        plusBanner.isVisible = false
+        rateLayout.setVisible(false)
 
         compose.setVisible(state.page is Inbox || state.page is Archived)
-        conversationsAdapter.emptyView = empty.takeIf { state.page is Inbox || state.page is Archived }
-        searchAdapter.emptyView = empty.takeIf { state.page is Searching }
+        conversationsAdapter.emptyView = emptyContainer.takeIf { state.page is Inbox || state.page is Archived }
+        searchAdapter.emptyView = emptyContainer.takeIf { state.page is Searching }
 
         when (state.page) {
             is Inbox -> {
@@ -436,7 +467,7 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override fun showDeleteDialog(conversations: List<Long>) {
         val count = conversations.size
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_delete_title)
                 .setMessage(resources.getQuantityString(R.plurals.dialog_delete_message, count, count))
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }

@@ -65,6 +65,7 @@
             android:id="@+id/contact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:summary="@string/about_contact"
             app:title="@string/about_contact_title" />
 

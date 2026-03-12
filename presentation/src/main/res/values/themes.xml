@@ -25,18 +25,17 @@
     <attr name="switchTrackEnabled" format="color" />
     <attr name="switchTrackDisabled" format="color" />
 
-    <style name="AppLaunchTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:navigationBarColor">@color/backgroundDark</item>
-        <item name="android:statusBarColor">@color/backgroundDark</item>
-        <item name="android:windowBackground">@color/backgroundDark</item>
+    <style name="AppLaunchTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/backgroundDark</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme" />
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:divider">@color/separatorLight</item>
         <item name="android:queryBackground">@color/bubbleLight</item>
-        <item name="android:statusBarColor">@color/black</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:textColorTertiary">@color/text_tertiary</item>
@@ -54,7 +53,7 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppThemeDialog" parent="Theme.Material3.Light.Dialog">
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:textColorTertiary">@color/text_tertiary</item>
@@ -67,7 +66,7 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="PopupTheme" parent="ThemeOverlay.AppCompat.Light">
+    <style name="PopupTheme" parent="ThemeOverlay.Material3.Light">
         <item name="android:colorBackground">@color/backgroundLight</item>
         <item name="android:textColor">@color/textPrimary</item>
     </style>

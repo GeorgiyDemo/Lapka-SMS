@@ -4,6 +4,7 @@ import by.cyberpartisan.psms.InvalidDataException
 import by.cyberpartisan.psms.encrypted_data_encoder.EncryptedDataEncoder
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.Sign
+import java.security.SecureRandom
 
 class TextEncoder(
     nonSpacesSubEncoders: List<SubEncoder>,
@@ -39,7 +40,13 @@ class TextEncoder(
             } catch (_: RequirePadding) {
                 if (bytesList.isEmpty()) {
                     dataCopy = actualData
-                    bytesList.addAll((0..255).map { it.toByte() }.shuffled())
+                    val bytes = ByteArray(256) { it.toByte() }
+                    val rng = SecureRandom()
+                    for (i in bytes.size - 1 downTo 1) {
+                        val j = rng.nextInt(i + 1)
+                        val tmp = bytes[i]; bytes[i] = bytes[j]; bytes[j] = tmp
+                    }
+                    bytesList.addAll(bytes.toList())
                 }
                 actualData = byteArrayOf(bytesList.removeLast()) + dataCopy
             }

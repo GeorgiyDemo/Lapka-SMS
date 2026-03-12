@@ -59,10 +59,6 @@ class PlusViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
 
-        view.donateIntent
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showDonation() }
-
         view.themeClicks
                 .autoDisposable(view.scope())
                 .subscribe { navigator.showSettings() }

@@ -28,6 +28,7 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.google.android.material.snackbar.Snackbar
@@ -167,11 +168,18 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         showBackButton(true)
     }
 
-    override fun preferenceClicks(): Observable<PreferenceView> = (0 until preferences.childCount)
-            .map { index -> preferences.getChildAt(index) }
-            .mapNotNull { view -> view as? PreferenceView }
-            .map { preference -> preference.clicks().map { preference } }
-            .let { preferences -> Observable.merge(preferences) }
+    override fun preferenceClicks(): Observable<PreferenceView> {
+        val prefViews = mutableListOf<PreferenceView>()
+        fun collect(group: android.view.ViewGroup) {
+            for (i in 0 until group.childCount) {
+                val child = group.getChildAt(i)
+                if (child is PreferenceView) prefViews.add(child)
+                else if (child is android.view.ViewGroup) collect(child)
+            }
+        }
+        collect(preferences)
+        return Observable.merge(prefViews.map { pref -> pref.clicks().map { pref } })
+    }
 
     override fun aboutLongClicks(): Observable<*> = about.longClicks()
 
@@ -307,7 +315,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean = withContext(Dispatchers.Main) {
         suspendCancellableCoroutine<Boolean> { cont ->
-            AlertDialog.Builder(activity!!)
+            MaterialAlertDialogBuilder(activity!!)
                     .setTitle(R.string.settings_auto_delete_warning)
                     .setMessage(context.resources.getString(R.string.settings_auto_delete_warning_message, messages))
                     .setOnCancelListener { cont.resume(false) }

@@ -57,6 +57,7 @@ interface ComposeView : QkView<ComposeState> {
     val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val encryptionKeySetIntent: Subject<Unit>
+    val searchQueryChangedIntent: Observable<CharSequence>
 
     fun clearSelection()
     fun showDetails(details: String)
@@ -73,6 +74,8 @@ interface ComposeView : QkView<ComposeState> {
     fun setDraft(draft: String)
     fun scrollToMessage(id: Long)
     fun showQksmsPlusSnackbar(@StringRes message: Int)
+    fun showSearch()
+    fun clearSearch()
     fun showEncryptionKeySettings(conversation: Conversation)
 
 }

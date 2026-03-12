@@ -152,11 +152,6 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-    fun showDeveloper() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/cpartisans"))
-        startActivityExternal(intent)
-    }
-
     fun showSourceCode() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wrwrabbit/Partisan-SMS"))
         startActivityExternal(intent)
@@ -180,11 +175,6 @@ class Navigator @Inject constructor(
     fun makePhoneCall(address: String) {
         val action = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
         val intent = Intent(action, Uri.parse("tel:$address"))
-        startActivityExternal(intent)
-    }
-
-    fun showDonation() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/cpartisans/337"))
         startActivityExternal(intent)
     }
 
@@ -227,20 +217,6 @@ class Navigator @Inject constructor(
         val url = "https://play.google.com/store/apps/details?id=org.mistergroup.shouldianswer"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivityExternal(intent)
-    }
-
-    fun showSupport() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/partisan_telegram_bot"))
-        startActivityExternal(intent)
-    }
-
-    fun showInvite() {
-        analyticsManager.track("Clicked Invite")
-        Intent(Intent.ACTION_SEND)
-                .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, "https://t.me/cpartisans_security/83")
-                .let { Intent.createChooser(it, null) }
-                .let(::startActivityExternal)
     }
 
     fun addContact(address: String) {

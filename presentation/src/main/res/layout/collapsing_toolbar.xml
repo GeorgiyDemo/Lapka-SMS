@@ -22,13 +22,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="108dp"
+    android:layout_height="wrap_content"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:id="@+id/collapsingToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="108dp"
+        android:fitsSystemWindows="true"
         app:collapsedTitleTextAppearance="@style/CollapsingToolbarCollapsedText"
         app:expandedTitleMarginBottom="8dp"
         app:expandedTitleMarginEnd="24dp"
