@@ -34,4 +34,6 @@ interface PermissionManager {
 
     fun hasStorage(): Boolean
 
+    fun hasNotifications(): Boolean
+
 }

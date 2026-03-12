@@ -455,6 +455,7 @@
     <string name="show_in_task_switcher">Show App Content in Task Switcher</string>
     <string name="channel_id">Channel ID</string>
     <string name="invalid_key">Invalid Key</string>
+    <string name="decryption_failed">⚠ Decryption failed</string>
     <string name="button_generate">&#128259;</string>
     <string name="key_description">Share this key with your interlocutor for a secure messaging</string>
     <string name="settings_reset_key">Reset encryption key</string>

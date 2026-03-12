@@ -24,7 +24,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace "com.moez.QKSMS"
-    compileSdkVersion 34
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.moez.QKSMS"
         minSdkVersion 23
@@ -158,9 +158,9 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
-    androidTestImplementation "androidx.test:core:1.5.0"
-    androidTestImplementation "androidx.test:runner:1.5.2"
-    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test:core:1.6.1"
+    androidTestImplementation "androidx.test:runner:1.6.2"
+    androidTestImplementation "androidx.test.ext:junit:1.2.1"
     testImplementation "androidx.test:runner:$androidx_testrunner_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
@@ -191,5 +191,5 @@ dependencies {
     implementation project(':domain')
     implementation project(':psms-lib')
 
-    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'commons-codec:commons-codec:1.17.1'
 }

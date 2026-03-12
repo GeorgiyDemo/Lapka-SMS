@@ -119,12 +119,14 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
     override fun clearSelection() = blockedMessagesAdapter.clearSelection()
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
-        blockingDialog.show(activity!! as AppCompatActivity, conversations, block)
+        val appCompatActivity = activity as? AppCompatActivity ?: return
+        blockingDialog.show(appCompatActivity, conversations, block)
     }
 
     override fun showDeleteDialog(conversations: List<Long>) {
+        val activity = activity ?: return
         val count = conversations.size
-        MaterialAlertDialogBuilder(activity!!)
+        MaterialAlertDialogBuilder(activity)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, count, count))
             .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }

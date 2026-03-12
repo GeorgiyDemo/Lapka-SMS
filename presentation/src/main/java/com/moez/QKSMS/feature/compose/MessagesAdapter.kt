@@ -242,13 +242,15 @@ class MessagesAdapter @Inject constructor(
         // Bind encrypted icon
 
         val encryptionKey = encryptionKey.value
+        var decryptionFailed = false
         val isEncrypted = if (conversation != null) {
             if (!encryptionKey.isNullOrEmpty()) {
                 try {
                     KSmsEncryptorFactory.create()
                         .isEncrypted(message.body, Base64.decode(encryptionKey, Base64.DEFAULT))
                 } catch (_: InvalidVersionException) {
-                    false
+                    decryptionFailed = true
+                    true
                 }
             } else {
                 false
@@ -273,22 +275,29 @@ class MessagesAdapter @Inject constructor(
             }
         )
 
-        val decryptedMessage = if (!encryptionKey.isNullOrEmpty()) {
+        val decryptedMessage = if (decryptionFailed) {
+            null
+        } else if (!encryptionKey.isNullOrEmpty()) {
             try {
                 KSmsEncryptorFactory.create()
                     .tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
             } catch (_: InvalidVersionException) {
-                PSmsMessage(messageText.toString())
+                decryptionFailed = true
+                null
             }
         } else {
             PSmsMessage(messageText.toString())
         }
-        if (decryptedMessage.channelId != null) {
+
+        if (decryptionFailed) {
+            holder.itemView.findViewById<TightTextView>(R.id.body).text =
+                context.getString(R.string.decryption_failed)
+        } else if (decryptedMessage?.channelId != null) {
             val channelIdStr = context.resources.getString(R.string.channel_id)
             holder.itemView.findViewById<TightTextView>(R.id.body).text =
                 decryptedMessage.text + " (${channelIdStr}: ${decryptedMessage.channelId})"
         } else {
-            holder.itemView.findViewById<TightTextView>(R.id.body).text = decryptedMessage.text
+            holder.itemView.findViewById<TightTextView>(R.id.body).text = decryptedMessage?.text ?: messageText
         }
 
         if (message.isMe()) {

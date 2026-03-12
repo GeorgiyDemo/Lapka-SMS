@@ -139,6 +139,7 @@ class MainViewModel @Inject constructor(
         when {
             !permissionManager.isDefaultSms() -> view.requestDefaultSms()
             !permissionManager.hasReadSms() || !permissionManager.hasContacts() -> view.requestPermissions()
+            !permissionManager.hasNotifications() -> view.requestPermissions()
         }
 
         val permissions = view.activityResumedIntent
