@@ -119,7 +119,7 @@ abstract class QkThemedActivity : QkActivity() {
         window.reenterTransition = Slide(Gravity.START).apply { duration = 250 }
 
         // When certain preferences change, we need to recreate the activity
-        val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont)
+        val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont, prefs.theme())
         Observable.merge(triggers.map { it.asObservable().skip(1) })
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

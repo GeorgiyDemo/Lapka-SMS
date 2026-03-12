@@ -346,7 +346,7 @@
         <item>LOL</item>
         <item>Это нормально</item>
     </string-array>
-    <string name="settings_category_hidden">Партизанские настройки</string>
+    <string name="settings_category_hidden">Безопасность</string>
     <string name="conversation_encryption_key_title">Ключ шифрования</string>
     <string name="settings_delete_encrypted_after_title">Удалять зашифрованные сообщения через</string>
     <string name="settings_delete_encrypted_after_default">Не удалять</string>

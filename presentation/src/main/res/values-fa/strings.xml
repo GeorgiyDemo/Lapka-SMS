@@ -334,7 +334,7 @@
         <item>خخخخ</item>
         <item>خوبه</item>
     </string-array>
-    <string name="settings_category_hidden">Partisan تنظیمات</string>
+    <string name="settings_category_hidden">امنیت</string>
     <string name="conversation_encryption_key_title">کد رمزگذاری</string>
     <string name="settings_delete_encrypted_after_title">حذف پیامهای رمز شده پس از</string>
     <string name="settings_delete_encrypted_after_default">حذف نکن</string>

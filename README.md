@@ -28,10 +28,6 @@
 - **SMS-only** — lightweight, no MMS bloat
 - **Themed icons** support (Android 13+)
 
-## Screenshots
-
-<!-- TODO: add screenshots -->
-
 ## Download
 
 Download the latest APK from [Releases](https://github.com/GeorgiyDemo/Lapka-SMS/releases).

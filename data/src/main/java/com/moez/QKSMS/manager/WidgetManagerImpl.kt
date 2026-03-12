@@ -31,12 +31,18 @@ class WidgetManagerImpl @Inject constructor(private val context: Context) : Widg
     }
 
     override fun updateTheme() {
-        val ids = AppWidgetManager.getInstance(context)
-                .getAppWidgetIds(ComponentName(context.packageName, "com.moez.QKSMS.feature.widget.WidgetProvider"))
+        val component = ComponentName(context.packageName, "com.moez.QKSMS.feature.widget.WidgetProvider")
+        val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(component)
 
-        val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            .setComponent(component)
 
-        sendExplicitBroadcast(intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        try {
+            context.sendBroadcast(intent)
+        } catch (e: SecurityException) {
+            // Ignore — widget may not be placed
+        }
     }
 
     private fun sendExplicitBroadcast(intent: Intent, action: String) {
@@ -45,7 +51,11 @@ class WidgetManagerImpl @Inject constructor(private val context: Context) : Widg
         for (info in resolveInfos) {
             val explicit = Intent(intent)
             explicit.component = ComponentName(info.activityInfo.packageName, info.activityInfo.name)
-            context.sendBroadcast(explicit)
+            try {
+                context.sendBroadcast(explicit)
+            } catch (e: SecurityException) {
+                // Skip receivers we're not allowed to broadcast to
+            }
         }
         if (resolveInfos.isEmpty()) {
             context.sendBroadcast(intent)

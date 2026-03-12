@@ -25,8 +25,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Fix JDK path for CI
+        run: sed -i "s|org.gradle.java.home=.*|org.gradle.java.home=$JAVA_HOME|" gradle.properties
+
       - name: Build debug APK
-        run: ./gradlew assembleDebug -Dorg.gradle.java.home=$JAVA_HOME
+        run: ./gradlew assembleDebug
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

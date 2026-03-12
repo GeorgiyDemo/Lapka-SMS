@@ -3,92 +3,77 @@ package com.moez.QKSMS.common.widget
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.DialogInterface
 import android.util.Base64
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.moez.QKSMS.R
 import javax.crypto.KeyGenerator
-import android.view.View
 
+class KeyInputDialog(private val context: Activity, private val hint: String, private val listener: (String) -> Unit) {
 
-class KeyInputDialog(context: Activity, hint: String, val listener: (String) -> Unit) : AlertDialog(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog) {
-
-    private val layout = LayoutInflater.from(context).inflate(R.layout.key_input_dialog, null)
-
-    init {
-        layout.apply {
-            findViewById<EditText>(R.id.field).hint = hint
-            findViewById<View>(R.id.btnGenerateKey).setOnClickListener {
-                generateKey()
-            }
-            findViewById<View>(R.id.btnCopyKey).setOnClickListener {
-                findViewById<EditText>(R.id.field).apply {
-                    if(copyToClipboard()) {
-                        selectAll()
-                        Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-
-        setView(layout)
-        setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.button_cancel), null as DialogInterface.OnClickListener?)
-        setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.button_save), null as DialogInterface.OnClickListener?)
-    }
-
+    private var text: String = ""
 
     fun setText(text: String): KeyInputDialog {
-        if (validate(text)) {
-            layout.findViewById<EditText>(R.id.field).setText(text)
-        } else {
-            layout.findViewById<EditText>(R.id.field).setText(text)
-            layout.findViewById<EditText>(R.id.field).error = context.resources.getString(R.string.invalid_key)
-        }
+        this.text = text
         return this
     }
 
-    private fun EditText.copyToClipboard(): Boolean {
-        val clipboard = getSystemService(context, ClipboardManager::class.java)
-        return if (text.isNotBlank() && clipboard != null) {
-            clipboard.setPrimaryClip(
-                ClipData.newPlainText(resources.getString(R.string.conversation_encryption_key_title), text)
-            )
-            true
-        } else false
+    fun show() {
+        val layout = LayoutInflater.from(context).inflate(R.layout.key_input_dialog, null)
+        val field = layout.findViewById<EditText>(R.id.field)
+        field.hint = hint
+        field.setText(text)
+        if (text.isNotEmpty() && !validate(text)) {
+            field.error = context.getString(R.string.invalid_key)
+        }
+
+        layout.findViewById<View>(R.id.btnGenerateKey).setOnClickListener {
+            val keyGen = KeyGenerator.getInstance("AES")
+            keyGen.init(256)
+            field.setText(Base64.encodeToString(keyGen.generateKey().encoded, Base64.NO_WRAP))
+        }
+
+        layout.findViewById<View>(R.id.btnCopyKey).setOnClickListener {
+            val clipboard = getSystemService(context, ClipboardManager::class.java)
+            if (field.text.isNotBlank() && clipboard != null) {
+                clipboard.setPrimaryClip(
+                    ClipData.newPlainText(context.getString(R.string.conversation_encryption_key_title), field.text)
+                )
+                field.selectAll()
+                Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setView(layout)
+            .setNegativeButton(R.string.button_cancel, null)
+            .setPositiveButton(R.string.button_save, null)
+            .create()
+
+        dialog.show()
+
+        dialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            val value = field.text.toString()
+            if (validate(value)) {
+                listener(value)
+                dialog.dismiss()
+            } else {
+                field.error = context.getString(R.string.invalid_key)
+            }
+        }
     }
 
     private fun validate(text: String): Boolean {
         return try {
-            if (text.isEmpty()) {
-                return true
-            }
+            if (text.isEmpty()) return true
             val data = Base64.decode(text, Base64.DEFAULT)
             data.size == 16 || data.size == 24 || data.size == 32
         } catch (ignored: IllegalArgumentException) {
             false
-        }
-    }
-
-    private fun generateKey() {
-        val keyGen = KeyGenerator.getInstance("AES")
-        keyGen.init(256)
-        val secretKey = keyGen.generateKey()
-        layout.findViewById<EditText>(R.id.field).setText(Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP))
-    }
-
-    override fun show() {
-        super.show()
-        getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
-            if (validate(layout.findViewById<EditText>(R.id.field).text.toString())) {
-                listener(layout.findViewById<EditText>(R.id.field).text.toString())
-                dismiss()
-            } else {
-                layout.findViewById<EditText>(R.id.field).error = context.resources.getString(R.string.invalid_key)
-            }
         }
     }
 }
