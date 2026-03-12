@@ -229,7 +229,7 @@ class KeySettingsController(
         return try {
             val keyBytes = Base64.decode(base64Key, Base64.DEFAULT)
             val hash = MessageDigest.getInstance("SHA-256").digest(keyBytes)
-            hash.take(8).joinToString(" ") { "%02X".format(it) }
+            hash.take(16).joinToString(" ") { "%02X".format(it) }
         } catch (e: Exception) {
             ""
         }
