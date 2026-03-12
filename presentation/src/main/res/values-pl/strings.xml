@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Zezwól</string>
     <string name="drawer_inbox">Odebrane</string>
     <string name="drawer_archived">Zarchiwizowane</string>
-    <string name="drawer_scheduled">Zaplanowane</string>
     <string name="drawer_blocking">Blokowane</string>
     <string name="drawer_more">Więcej</string>
     <string name="drawer_settings">Ustawienia</string>
@@ -97,10 +96,6 @@
     <string name="compose_send_group_summary">Odbiorcy i odpowiedzi będą widoczne dla wszystkich</string>
     <string name="compose_messages_empty">To jest początek rozmowy. Powiedz coś miłego!</string>
     <string name="compose_vcard_label">Karta kontaktu</string>
-    <string name="compose_scheduled_for">Zaplanowane na</string>
-    <string name="compose_scheduled_future">Wybrany czas musi być w przyszłości</string>
-    <string name="compose_scheduled_plus">Musisz odblokować QKSMS+, aby móc używac planowanych widomości</string>
-    <string name="compose_scheduled_toast">Dodano do zaplanowanych wiadomości</string>
     <string name="compose_hint">Napisz wiadomość&#8230;</string>
     <string name="compose_menu_copy">Kopiuj tekst</string>
     <string name="compose_menu_forward">Przekaż dalej</string>
@@ -119,13 +114,9 @@
     <string name="compose_details_received">Otrzymano: %s</string>
     <string name="compose_details_delivered">Dostarczono: %s</string>
     <string name="compose_details_error_code">Kod błędu: %d</string>
-    <string name="compose_attach_cd">Dodaj załącznik</string>
-    <string name="compose_gallery_cd">Załącz zdjęcie</string>
-    <string name="compose_camera_cd">Zrób zdjęcie</string>
-    <string name="compose_schedule_cd">Zaplanuj wiadomość</string>
-    <string name="compose_contact_cd">Załącz kontakt</string>
-    <string name="compose_contact_error">Nie można odczytać kontaktu</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Załącz zdjęcie</string>
+<string name="compose_contact_cd">Załącz kontakt</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Wybrano kartę SIM %1$d (%2$s)</string>
     <string name="compose_sim_cd">Wybrano %s, zmień kartę SIM</string>
     <string name="compose_send_cd">Wyślij wiadomość</string>
@@ -142,48 +133,8 @@
     <string name="info_block">Zablokuj</string>
     <string name="info_unblock">Odblokuj</string>
     <string name="info_delete">Usuń rozmowę</string>
-    <string name="gallery_error">Nie można wczytać multimediów</string>
-    <string name="gallery_toast_saved">Zapisano w galerii</string>
-    <string name="backup_title">Kopia zap. i przywr.</string>
-    <string name="backup_backing_up">Tworzenie kopii zapasowej wiadomości</string>
-    <string name="backup_restoring">Przywracanie z kopii zapasowej</string>
-    <string name="backup_last">Ostatnia kopia zapasowa</string>
-    <string name="backup_loading">Wcztywanie&#8230;</string>
-    <string name="backup_never">Nigdy</string>
-    <string name="backup_restore_title">Przywróć</string>
-    <string name="backup_restore_summary">Wybierz kopię zapasową</string>
-    <string name="backup_restore_error_plus">Odblokuj QKSMS+, aby używać kopii i przywracania</string>
-    <string name="backup_restore_error_backup">Tworzenie kopii zapasowej&#8230;</string>
-    <string name="backup_restore_error_restore">Przywracanie kopii zapasowej&#8230;</string>
-    <string name="backup_restore_confirm_title">Przywróć z kopii zapasowej</string>
-    <string name="backup_restore_confirm_message">Czy na pewno chcesz przywrócić wiadomości z tej kopii zapasowej?</string>
-    <string name="backup_restore_stop_title">Zatrzymaj przywracanie</string>
-    <string name="backup_restore_stop_message">Wiadomości, które już zostały przywrócone, pozostaną w urządzeniu</string>
-    <string name="backup_restore_dialog_title">Kopie zapasowe</string>
-    <string name="backup_restore_dialog_empty">Nie znaleziono kopii zapasowych</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d wiadomość</item>
-        <item quantity="few">%d wiadomości</item>
-        <item quantity="many">%d wiadomości</item>
-        <item quantity="other">%d wiadomości</item>
-    </plurals>
-    <string name="backup_disclaimer">Obecnie można wykonywać i przwracać tylko kopie zapasowe SMSów. Wsparcie dla MMSów i planowane kopie zapasowe zostaną wprawdzone wkrótce.</string>
-    <string name="backup_now">Utwórz kopię zapasową teraz</string>
-    <string name="backup_progress_parsing">Przetwarzanie kopii zapasowej&#8230;</string>
-    <string name="backup_progress_running">%d/%d wiadomości</string>
-    <string name="backup_progress_saving">Zapisywanie kopii zapasowej&#8230;</string>
-    <string name="backup_progress_syncing">Synchronizowanie wiadomości&#8230;</string>
-    <string name="backup_progress_finished">Zakończono</string>
-    <string name="backup_notification_channel_name">Kopia zapasowa i przywracanie</string>
-    <string name="scheduled_title">Zaplanowane</string>
-    <string name="scheduled_empty_description">Automatyczne wysyłanie wiadomości, w dowolnym wybranym przez Ciebie momencie</string>
-    <string name="scheduled_empty_message_1">Cześć! Możesz powtórzyć kiedy były Twoje urodziny?</string>
-    <string name="scheduled_empty_message_2">23-go grudnia</string>
-    <string name="scheduled_empty_message_3">Wszystkiego najlepszego! Zobacz jaki dobry jestem, pamiętam datę Twoich urodzin!</string>
+<string name="gallery_toast_saved">Zapisano w galerii</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Do wysłania 23-go grudnia</string>
-    <string name="scheduled_compose_cd">Zaplanuj wiadomość</string>
-    <string name="scheduled_options_title">Zaplanowana wiadomość</string>
     <string-array name="scheduled_options">
         <item>Wyślij teraz</item>
         <item>Skopiuj treść</item>
@@ -251,10 +202,8 @@
         <item quantity="many">Po %d dniach</item>
         <item quantity="other">Po %d dniach</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Wysyłaj długie wiadomości jako MMS</string>
-    <string name="settings_long_as_mms_summary">Jeśli dłuższe wiadomości tekstowe nie są wysyłane lub wysyłane są w złej kolejności, możesz wysyłać je jako wiadomości MMS. Mogą zostać naliczone dodatkowe opłaty</string>
-    <string name="settings_mms_size_title">Kompresja załączników MMSów</string>
-    <string name="settings_sync_title">Synchronizuj wiadomości</string>
+<string name="settings_long_as_mms_summary">Jeśli dłuższe wiadomości tekstowe nie są wysyłane lub wysyłane są w złej kolejności, możesz wysyłać je jako wiadomości MMS. Mogą zostać naliczone dodatkowe opłaty</string>
+<string name="settings_sync_title">Synchronizuj wiadomości</string>
     <string name="settings_sync_summary">Zsynchronizuj wiadomości z systemową bazą danych</string>
     <string name="settings_about_title">O aplikacji</string>
     <string name="settings_version">Wersja %s %s %s</string>
@@ -319,10 +268,6 @@
     <string name="qksms_plus_themes_summary">Odblokuj piękne kolory motywów, które nie są dostępne w palecie Material Design</string>
     <string name="qksms_plus_emoji_title">Własne automatyczne emoji</string>
     <string name="qksms_plus_emoji_summary">Twórz niestandardowe skróty do automatycznych emoji</string>
-    <string name="qksms_plus_backup_title">Kopie zapasowe wiadomości</string>
-    <string name="qksms_plus_backup_summary">Automatycznie wykonuj kopie zapasowe wiadomości. Nie martw się o ich utratę, jeśli zmienisz lub zgubisz urządzenie.</string>
-    <string name="qksms_plus_scheduled_title">Zaplanowane wiadomości</string>
-    <string name="qksms_plus_scheduled_summary">Zaplanuj wysyłanie wiadomości na określony czas i dzień</string>
     <string name="qksms_plus_delayed_title">Opóźnione wysyłanie</string>
     <string name="qksms_plus_delayed_summary">Poczekaj kilka sekund przed wysłaniem wiadomości</string>
     <string name="qksms_plus_night_title">Automatyczny tryb nocny</string>
@@ -397,18 +342,7 @@
         <item>3 sekundy</item>
         <item>5 sekund</item>
         <item>10 sekund</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automatyczna</item>
-        <item>100 KB</item>
-        <item>200 KB</item>
-        <item>300 KB</item>
-        <item>600 KB</item>
-        <item>1000 KB</item>
-        <item>2000 KB</item>
-        <item>Wyłączona</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>OK</item>
         <item>Daj mi chwilę</item>
         <item>Jestem w drodze</item>

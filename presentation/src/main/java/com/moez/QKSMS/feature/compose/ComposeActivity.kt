@@ -23,23 +23,14 @@ import android.animation.LayoutTransition
 import android.app.Activity
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.provider.MediaStore
-import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
@@ -70,7 +61,6 @@ import com.moez.QKSMS.feature.compose.editing.ChipsAdapter
 import com.moez.QKSMS.feature.contacts.ContactsActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsController
-import com.moez.QKSMS.model.Attachment
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.Recipient
@@ -81,19 +71,10 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
-    companion object {
-        private const val CameraDestinationKey = "camera_destination"
-    }
-
-    @Inject lateinit var attachmentAdapter: AttachmentAdapter
     @Inject lateinit var chipsAdapter: ChipsAdapter
     @Inject lateinit var dateFormatter: DateFormatter
     @Inject lateinit var messageAdapter: MessagesAdapter
@@ -106,29 +87,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             ?: hashMapOf())
     }
 
-    private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            cameraDestination?.let(attachmentSelectedIntent::onNext)
-        }
-    }
-
-    private val attachPhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            data?.clipData?.itemCount
-                ?.let { count -> 0 until count }
-                ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
-                ?.forEach(attachmentSelectedIntent::onNext)
-                ?: data?.data?.let(attachmentSelectedIntent::onNext)
-        }
-    }
-
-    private val attachContactLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let(contactSelectedIntent::onNext)
-        }
-    }
-
     private val encryptionKeyLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringExtra(KeySettingsController.EncryptionKeyKey)?.let {
@@ -136,8 +94,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             }
         }
     }
-
-    private val storagePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     private val smsPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
 
@@ -158,21 +114,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     private val composeBar: Group by lazy { findViewById(R.id.composeBar) }
     private val messageBackground: View by lazy { findViewById(R.id.messageBackground) }
     private val message: QkEditText by lazy { findViewById(R.id.message) }
-    private val attachments: RecyclerView by lazy { findViewById(R.id.attachments) }
-    private val attach: ImageView by lazy { findViewById(R.id.attach) }
-    private val attachingBackground: View by lazy { findViewById(R.id.attachingBackground) }
-    private val attaching: Group by lazy { findViewById(R.id.attaching) }
-    private val camera: ImageView by lazy { findViewById(R.id.camera) }
-    private val cameraLabel: QkTextView by lazy { findViewById(R.id.cameraLabel) }
-    private val gallery: ImageView by lazy { findViewById(R.id.gallery) }
-    private val galleryLabel: QkTextView by lazy { findViewById(R.id.galleryLabel) }
-    private val schedule: ImageView by lazy { findViewById(R.id.schedule) }
-    private val scheduleLabel: QkTextView by lazy { findViewById(R.id.scheduleLabel) }
-    private val contact: ImageView by lazy { findViewById(R.id.contact) }
-    private val contactLabel: QkTextView by lazy { findViewById(R.id.contactLabel) }
-    private val scheduledGroup: Group by lazy { findViewById(R.id.scheduledGroup) }
-    private val scheduledTime: QkTextView by lazy { findViewById(R.id.scheduledTime) }
-    private val scheduledCancel: ImageView by lazy { findViewById(R.id.scheduledCancel) }
     private val counter: QkTextView by lazy { findViewById(R.id.counter) }
     private val sim: ImageView by lazy { findViewById(R.id.sim) }
     private val simIndex: QkTextView by lazy { findViewById(R.id.simIndex) }
@@ -185,22 +126,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
     override val messageClickIntent: Subject<Long> by lazy { messageAdapter.clicks }
-    override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
     override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSending }
-    override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
-    override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }
-    override val cameraIntent by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
-    override val galleryIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
-    override val scheduleIntent by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
-    override val attachContactIntent by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
-    override val attachmentSelectedIntent: Subject<Uri> = PublishSubject.create()
-    override val contactSelectedIntent: Subject<Uri> = PublishSubject.create()
-    override val inputContentIntent by lazy { message.inputContentSelected }
-    override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
     override val changeSimIntent by lazy { sim.clicks() }
-    override val scheduleCancelIntent by lazy { scheduledCancel.clicks() }
     override val sendIntent by lazy { send.clicks() }
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
@@ -208,8 +137,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val searchQueryChangedIntent by lazy { searchInput.textChanges() }
 
     private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ComposeViewModel::class.java] }
-
-    private var cameraDestination: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -233,14 +160,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageList.setHasFixedSize(true)
         messageList.adapter = messageAdapter
 
-        attachments.adapter = attachmentAdapter
-
-        message.supportsInputContent = true
-
         theme
             .doOnNext { loading.setTint(it.theme) }
-            .doOnNext { attach.setBackgroundTint(it.theme) }
-            .doOnNext { attach.setTint(it.textPrimary) }
             .doOnNext { messageAdapter.theme = it }
             .autoDisposable(scope())
             .subscribe()
@@ -322,16 +243,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageAdapter.conversationData = state.messages
         messageAdapter.highlight = state.searchSelectionId
 
-        scheduledGroup.isVisible = state.scheduled != 0L
-        scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
-
-        val hasMedia = state.messages?.second?.any { m -> m.isMms() && m.attachmentType != Message.AttachmentType.TEXT } ?: false
-        attachments.setVisible(state.attachments.isNotEmpty() || hasMedia)
-        attachmentAdapter.data = state.attachments
-
-        attach.animate().rotation(if (state.attaching) 135f else 0f).start()
-        attaching.isVisible = state.attaching
-
         counter.text = state.remaining
         counter.setVisible(counter.text.isNotBlank())
 
@@ -363,39 +274,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         navigator.showDefaultSmsDialog(this, defaultSmsLauncher)
     }
 
-    override fun requestStoragePermission() {
-        storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    }
-
     override fun requestSmsPermission() {
         smsPermissionLauncher.launch(arrayOf(
             Manifest.permission.READ_SMS,
             Manifest.permission.SEND_SMS))
-    }
-
-    override fun requestDatePicker() {
-        val calendar = Calendar.getInstance()
-        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month)
-                calendar.set(Calendar.DAY_OF_MONTH, day)
-                calendar.set(Calendar.HOUR_OF_DAY, hour)
-                calendar.set(Calendar.MINUTE, minute)
-                scheduleSelectedIntent.onNext(calendar.timeInMillis)
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this))
-                .show()
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-
-        // On some devices, the keyboard can cover the date picker
-        message.hideKeyboard()
-    }
-
-    override fun requestContact() {
-        val intent = Intent(Intent.ACTION_PICK)
-            .setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
-
-        attachContactLauncher.launch(Intent.createChooser(intent, null))
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
@@ -415,26 +297,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.postDelayed({
             message.showKeyboard()
         }, 200)
-    }
-
-    override fun requestCamera() {
-        cameraDestination = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            .let { timestamp -> ContentValues().apply { put(MediaStore.Images.Media.TITLE, timestamp) } }
-            .let { cv -> contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv) }
-
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        takePhotoLauncher.launch(Intent.createChooser(intent, null))
-    }
-
-    override fun requestGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-            .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            .setType("image/*")
-        attachPhotoLauncher.launch(Intent.createChooser(intent, null))
     }
 
     override fun setDraft(draft: String) {
@@ -469,16 +331,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun getColoredMenuItems(): List<Int> {
         return super.getColoredMenuItems() + R.id.call
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(CameraDestinationKey, cameraDestination)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        cameraDestination = savedInstanceState.getParcelable(CameraDestinationKey)
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun showSearch() {

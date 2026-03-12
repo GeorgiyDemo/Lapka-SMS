@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Salli</string>
     <string name="drawer_inbox">Saapuneet</string>
     <string name="drawer_archived">Arkistoidut</string>
-    <string name="drawer_scheduled">Ajoitetut</string>
     <string name="drawer_blocking">Estäminen</string>
     <string name="drawer_more">Lisää</string>
     <string name="drawer_settings">Asetukset</string>
@@ -95,10 +94,6 @@
     <string name="compose_send_group_summary">Vastaanottajat ja vastaukset näkyvät kaikille</string>
     <string name="compose_messages_empty">Tämä on keskustelusi alku. Sano jotain mukavaa!</string>
     <string name="compose_vcard_label">Käyntikortti</string>
-    <string name="compose_scheduled_for">Ajoitettu</string>
-    <string name="compose_scheduled_future">Valitun ajan täytyy olla tulevaisuudessa!</string>
-    <string name="compose_scheduled_plus">Sinun täytyy avata QKSMS+ ajoittaaksesi viestejä</string>
-    <string name="compose_scheduled_toast">Lisätty ajoitettuihin viesteihin</string>
     <string name="compose_hint">Kirjoita viesti&#8230;</string>
     <string name="compose_menu_copy">Kopioi teksti</string>
     <string name="compose_menu_forward">Edelleenlähetä</string>
@@ -117,13 +112,9 @@
     <string name="compose_details_received">Vastaanotettu: %s</string>
     <string name="compose_details_delivered">Toimitettu: %s</string>
     <string name="compose_details_error_code">Virhekoodi: %d</string>
-    <string name="compose_attach_cd">Lisää liite</string>
-    <string name="compose_gallery_cd">Liitä kuva</string>
-    <string name="compose_camera_cd">Ota kuva</string>
-    <string name="compose_schedule_cd">Ajoita viesti</string>
-    <string name="compose_contact_cd">Liitä yhteystieto</string>
-    <string name="compose_contact_error">Yhteystiedon lukuvirhe</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Liitä kuva</string>
+<string name="compose_contact_cd">Liitä yhteystieto</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) valittu</string>
     <string name="compose_sim_cd">%s valittu, vaihda SIM-korttia</string>
     <string name="compose_send_cd">Lähetä viesti</string>
@@ -140,46 +131,8 @@
     <string name="info_block">Estä</string>
     <string name="info_unblock">Salli</string>
     <string name="info_delete">Poista keskustelu</string>
-    <string name="gallery_error">Mediaa ei voitu ladata</string>
-    <string name="gallery_toast_saved">Tallennettu galleriaan</string>
-    <string name="backup_title">Varmuuskopioi ja palauta</string>
-    <string name="backup_backing_up">Viestejä varmuuskopioidaan</string>
-    <string name="backup_restoring">Viestejä palautetaan</string>
-    <string name="backup_last">Viimeisin varmuuskopio</string>
-    <string name="backup_loading">Ladataan&#8230;</string>
-    <string name="backup_never">Ei koskaan</string>
-    <string name="backup_restore_title">Palauta</string>
-    <string name="backup_restore_summary">Valitse varmuuskopio</string>
-    <string name="backup_restore_error_plus">Ole hyvä ja avaa QKSMS+ käyttääksesi varmuuskopiointia ja palautusta</string>
-    <string name="backup_restore_error_backup">Varmuuskopiointi käynnissä&#8230;</string>
-    <string name="backup_restore_error_restore">Palautus käynnissä&#8230;</string>
-    <string name="backup_restore_confirm_title">Palauta varmuuskopiosta</string>
-    <string name="backup_restore_confirm_message">Oletko varma, että haluat palauttaa viestisi tästä varmuuskopiosta?</string>
-    <string name="backup_restore_stop_title">Pysäytä palautus</string>
-    <string name="backup_restore_stop_message">Aiemmin palautetut viestit pysyvät laitteellasi</string>
-    <string name="backup_restore_dialog_title">Varmuuskopiot</string>
-    <string name="backup_restore_dialog_empty">Varmuuskopioita ei löytynyt</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d viesti</item>
-        <item quantity="other">%d viestiä</item>
-    </plurals>
-    <string name="backup_disclaimer">Vain tekstiviestejä voidaan varmuuskopioita ja palauttaa tällä hetkellä. Tuki multimediaviesteille ja varmuuskopiointien ajastus tulevat pian!</string>
-    <string name="backup_now">Varmuuskopioi nyt</string>
-    <string name="backup_progress_parsing">Varmuuskopiota jäsennetään&#8230;</string>
-    <string name="backup_progress_running">%d/%d viestiä</string>
-    <string name="backup_progress_saving">Varmuuskopiota tallennetaan&#8230;</string>
-    <string name="backup_progress_syncing">Synkronoidaan viestejä&#8230;</string>
-    <string name="backup_progress_finished">Valmis!</string>
-    <string name="backup_notification_channel_name">Varmuuskopiointi ja palautus</string>
-    <string name="scheduled_title">Ajoitettu</string>
-    <string name="scheduled_empty_description">Lähetä viesti automaattisesti haluamallasi ajankohdalla</string>
-    <string name="scheduled_empty_message_1">Hei! Milloin syntymäpäiväsi olikaan?</string>
-    <string name="scheduled_empty_message_2">Se on joulukuun 23. päivänä</string>
-    <string name="scheduled_empty_message_3">Hyvää syntymäpäivää! Katso miten hyvä ystävä olen, muistan syntymäpäiväsi</string>
+<string name="gallery_toast_saved">Tallennettu galleriaan</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Lähetetään joulukuun 23. päivänä</string>
-    <string name="scheduled_compose_cd">Ajoita viesti</string>
-    <string name="scheduled_options_title">Ajoitettu viesti</string>
     <string-array name="scheduled_options">
         <item>Lähetä nyt</item>
         <item>Kopioi teksti</item>
@@ -245,10 +198,8 @@
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Lähetä pitkät viestit multimediaviesteinä</string>
-    <string name="settings_long_as_mms_summary">Jos pidempien viestiesi lähetys epäonnistuu, tai viestit lähtevät väärässä järjestyksessä, voit lähettää ne multimediaviesteinä. Operaattori saattaa veloittaa tästä lisämaksuja.</string>
-    <string name="settings_mms_size_title">Pakkaa multimediaviestien liitteet automaattisesti</string>
-    <string name="settings_sync_title">Synkronoi viestit</string>
+<string name="settings_long_as_mms_summary">Jos pidempien viestiesi lähetys epäonnistuu, tai viestit lähtevät väärässä järjestyksessä, voit lähettää ne multimediaviesteinä. Operaattori saattaa veloittaa tästä lisämaksuja.</string>
+<string name="settings_sync_title">Synkronoi viestit</string>
     <string name="settings_sync_summary">Synkronoi viestisi uudelleen Androidin oman SMS-tietokannan kanssa</string>
     <string name="settings_about_title">Tietoja QKSMS:tä</string>
     <string name="settings_version">Versio %s %s %s</string>
@@ -309,10 +260,6 @@
     <string name="qksms_plus_themes_summary">Avaa upeat teemavärit, joita ei ole saatavilla Material Design -väripaletissa</string>
     <string name="qksms_plus_emoji_title">Mukautettu auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Luo mukautettuja auto-emoji -pikakuvakkeita</string>
-    <string name="qksms_plus_backup_title">Viestien varmuuskopiointi</string>
-    <string name="qksms_plus_backup_summary">Varmuuskopioi viestisi automaattisesti. Sinun ei enää ikinä tarvitse huolehtia historiasi katoamisesta, jos vaihdat tai hukkaat puhelimesi</string>
-    <string name="qksms_plus_scheduled_title">Ajoitetut viestit</string>
-    <string name="qksms_plus_scheduled_summary">Ajoita viestit lähtemään automaattisesti tiettyinä aikoina ja päivinä</string>
     <string name="qksms_plus_delayed_title">Lykätty lähetys</string>
     <string name="qksms_plus_delayed_summary">Odota muutama sekunti ennen viestin lähettämistä</string>
     <string name="qksms_plus_night_title">Automaattinen yötila</string>
@@ -385,18 +332,7 @@
         <item>3 sekuntia</item>
         <item>5 sekuntia</item>
         <item>10 sekuntia</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automaattinen</item>
-        <item>100 kt</item>
-        <item>200 kt</item>
-        <item>300 kt</item>
-        <item>600 kt</item>
-        <item>1000 kt</item>
-        <item>2000 kt</item>
-        <item>Ei pakkausta</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>Okei</item>
         <item>Anna minulle hetki</item>
         <item>Olen matkalla</item>

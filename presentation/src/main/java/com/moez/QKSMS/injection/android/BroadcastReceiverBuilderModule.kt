@@ -27,13 +27,8 @@ import com.moez.QKSMS.receiver.DeleteMessagesReceiver
 import com.moez.QKSMS.receiver.MarkArchivedReceiver
 import com.moez.QKSMS.receiver.MarkReadReceiver
 import com.moez.QKSMS.receiver.MarkSeenReceiver
-import com.moez.QKSMS.receiver.MmsReceivedReceiver
-import com.moez.QKSMS.receiver.MmsReceiver
-import com.moez.QKSMS.receiver.MmsSentReceiver
-import com.moez.QKSMS.receiver.MmsUpdatedReceiver
 import com.moez.QKSMS.receiver.NightModeReceiver
 import com.moez.QKSMS.receiver.RemoteMessagingReceiver
-import com.moez.QKSMS.receiver.SendScheduledMessageReceiver
 import com.moez.QKSMS.receiver.SmsDeliveredReceiver
 import com.moez.QKSMS.receiver.SmsProviderChangedReceiver
 import com.moez.QKSMS.receiver.SmsReceiver
@@ -74,31 +69,11 @@ abstract class BroadcastReceiverBuilderModule {
 
     @ActivityScope
     @ContributesAndroidInjector()
-    abstract fun bindMmsReceivedReceiver(): MmsReceivedReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsReceiver(): MmsReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsSentReceiver(): MmsSentReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsUpdatedReceiver(): MmsUpdatedReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
     abstract fun bindNightModeReceiver(): NightModeReceiver
 
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindRemoteMessagingReceiver(): RemoteMessagingReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindSendScheduledMessageReceiver(): SendScheduledMessageReceiver
 
     @ActivityScope
     @ContributesAndroidInjector()

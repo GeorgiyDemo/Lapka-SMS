@@ -30,12 +30,8 @@ class RetrySending @Inject constructor(private val messageRepo: MessageRepositor
         return Flowable.just(params)
                 .doOnNext(messageRepo::markSending)
                 .mapNotNull(messageRepo::getMessage)
-                .doOnNext { message ->
-                    when (message.isSms()) {
-                        true -> messageRepo.sendSms(message)
-                        false -> messageRepo.resendMms(message)
-                    }
-                }
+                .filter { message -> message.isSms() }
+                .doOnNext { message -> messageRepo.sendSms(message) }
     }
 
 }

@@ -29,7 +29,6 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -74,8 +73,6 @@
 
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />
-                <data android:scheme="mms" />
-                <data android:scheme="mmsto" />
                 <data android:scheme="sms_body" />
             </intent-filter>
             <intent-filter>
@@ -83,22 +80,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/x-vcard" />
-            </intent-filter>
-
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
                 android:value=".common.util.QkChooserTargetService" />
@@ -106,9 +87,6 @@
         <activity android:name=".feature.settings.SettingsActivity" />
         <activity android:name=".feature.keysettings.KeySettingsActivity" />
         <activity android:name=".feature.plus.PlusActivity" />
-        <activity
-            android:name=".feature.gallery.GalleryActivity"
-            android:theme="@style/AppTheme.Black" />
         <activity android:name=".feature.conversationinfo.ConversationInfoActivity" />
         <activity android:name=".feature.notificationprefs.NotificationPrefsActivity" />
         <activity android:name=".feature.blocking.BlockingActivity" />
@@ -118,8 +96,6 @@
             android:taskAffinity=""
             android:theme="@style/AppThemeDialog"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".feature.scheduled.ScheduledActivity" />
-        <activity android:name=".feature.backup.BackupActivity" />
         <activity android:name=".feature.contacts.ContactsActivity" />
 
         <receiver android:name=".receiver.BootReceiver" android:exported="true">
@@ -141,29 +117,8 @@
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".receiver.MmsReceiver"
-            android:exported="true"
-            android:permission="android.permission.BROADCAST_WAP_PUSH">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
-                <data android:mimeType="application/vnd.wap.mms-message" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".receiver.SmsSentReceiver" android:exported="false" />
         <receiver android:name=".receiver.SmsDeliveredReceiver" android:exported="false" />
-        <receiver
-            android:name=".receiver.MmsSentReceiver"
-            android:exported="false"
-            android:taskAffinity="com.moez.QKSMS.MMS_SENT" />
-        <receiver
-            android:name=".receiver.MmsUpdatedReceiver"
-            android:exported="false"
-            android:taskAffinity="com.moez.QKSMS.MMS_UPDATED" />
-        <receiver
-            android:name=".receiver.MmsReceivedReceiver"
-            android:exported="false"
-            android:taskAffinity="com.klinker.android.messaging.MMS_RECEIVED" />
         <receiver android:name=".receiver.MarkArchivedReceiver" android:exported="false" />
         <receiver android:name=".receiver.BlockThreadReceiver" android:exported="false" />
         <receiver android:name=".receiver.MarkSeenReceiver" android:exported="false" />
@@ -175,7 +130,6 @@
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.SendScheduledMessageReceiver" android:exported="false" />
         <receiver android:name=".feature.widget.WidgetProvider" android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -188,11 +142,6 @@
         </receiver>
         <receiver android:name=".receiver.SendSmsReceiver" android:exported="false" />
 
-        <service android:name="com.android.mms.transaction.TransactionService" android:exported="false" />
-        <service
-            android:name=".feature.backup.RestoreBackupService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
         <service
             android:name=".feature.widget.WidgetService"
             android:exported="false"
@@ -210,8 +159,6 @@
 
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />
-                <data android:scheme="mms" />
-                <data android:scheme="mmsto" />
             </intent-filter>
         </service>
         <service

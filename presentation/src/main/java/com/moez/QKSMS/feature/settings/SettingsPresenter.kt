@@ -124,9 +124,6 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.autoDelete.asObservable()
                 .subscribe { autoDelete -> newState { copy(autoDelete = autoDelete) } }
 
-        disposables += prefs.longAsMms.asObservable()
-                .subscribe { enabled -> newState { copy(longAsMms = enabled) } }
-
         // partisan
         disposables += prefs.globalEncryptionKey.asObservable()
                 .subscribe { globalEncryptionKey -> newState { copy(globalEncryptionKey = globalEncryptionKey) } }
@@ -141,14 +138,6 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.deleteEncryptedAfter.asObservable()
                 .subscribe { id -> newState { copy(deleteEncryptedAfterSummary =
                 deleteEncryptedAfterDialogLabels[id], deleteEncryptedAfterId = id) } }
-
-        val mmsSizeLabels = context.resources.getStringArray(R.array.mms_sizes)
-        val mmsSizeIds = context.resources.getIntArray(R.array.mms_sizes_ids)
-        disposables += prefs.mmsSize.asObservable()
-                .subscribe { maxMmsSize ->
-                    val index = mmsSizeIds.indexOf(maxMmsSize)
-                    newState { copy(maxMmsSizeSummary = mmsSizeLabels[index], maxMmsSizeId = maxMmsSize) }
-                }
 
         disposables += syncRepo.syncProgress
                 .sample(16, TimeUnit.MILLISECONDS)
@@ -209,10 +198,6 @@ class SettingsPresenter @Inject constructor(
                         R.id.mobileOnly -> prefs.mobileOnly.set(!prefs.mobileOnly.get())
 
                         R.id.autoDelete -> view.showAutoDeleteDialog(prefs.autoDelete.get())
-
-                        R.id.longAsMms -> prefs.longAsMms.set(!prefs.longAsMms.get())
-
-                        R.id.mmsSize -> view.showMmsSizePicker()
 
                         R.id.sync -> syncMessages.execute(Unit)
 
@@ -308,10 +293,6 @@ class SettingsPresenter @Inject constructor(
                 .doOnNext(prefs.autoDelete::set)
                 .autoDisposable(view.scope())
                 .subscribe()
-
-        view.mmsSizeSelected()
-                .autoDisposable(view.scope())
-                .subscribe(prefs.mmsSize::set)
 
         // partisan
 

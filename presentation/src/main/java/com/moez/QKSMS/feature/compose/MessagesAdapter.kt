@@ -20,12 +20,8 @@ package com.moez.QKSMS.feature.compose
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Build
 import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,11 +44,8 @@ import com.moez.QKSMS.common.util.extensions.setPadding
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
 import com.moez.QKSMS.compat.SubscriptionManagerCompat
-import com.moez.QKSMS.extensions.isSmil
-import com.moez.QKSMS.extensions.isText
 import com.moez.QKSMS.feature.compose.BubbleUtils.canGroup
 import com.moez.QKSMS.feature.compose.BubbleUtils.getBubble
-import com.moez.QKSMS.feature.compose.part.PartsAdapter
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.Recipient
@@ -64,7 +57,6 @@ import io.realm.RealmResults
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Provider
 import android.util.Base64
 import com.moez.QKSMS.common.widget.AvatarView
 import com.moez.QKSMS.common.widget.QkTextView
@@ -77,7 +69,6 @@ class MessagesAdapter @Inject constructor(
     private val context: Context,
     private val colors: Colors,
     private val dateFormatter: DateFormatter,
-    private val partsAdapterProvider: Provider<PartsAdapter>,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val textViewStyler: TextViewStyler
@@ -95,7 +86,6 @@ class MessagesAdapter @Inject constructor(
     }
 
     val clicks: Subject<Long> = PublishSubject.create()
-    val partClicks: Subject<Long> = PublishSubject.create()
     val cancelSending: Subject<Long> = PublishSubject.create()
     val encryptionKey: BehaviorSubject<String> = BehaviorSubject.create()
 
@@ -128,7 +118,6 @@ class MessagesAdapter @Inject constructor(
 
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
-    private val partsViewPool = RecyclerView.RecycledViewPool()
     private val subs = subscriptionManager.activeSubscriptionInfoList
 
     var theme: Colors.Theme = colors.theme()
@@ -158,10 +147,6 @@ class MessagesAdapter @Inject constructor(
             view.findViewById<TightTextView>(R.id.body).hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NONE
         }
 
-        val partsAdapter = partsAdapterProvider.get()
-        partsAdapter.clicks.subscribe(partClicks)
-        view.findViewById<RecyclerView>(R.id.attachments).adapter = partsAdapter
-        view.findViewById<RecyclerView>(R.id.attachments).setRecycledViewPool(partsViewPool)
         view.findViewById<TightTextView>(R.id.body).forwardTouches(view)
 
         return QkViewHolder(view).apply {
@@ -237,7 +222,6 @@ class MessagesAdapter @Inject constructor(
         holder.itemView.findViewById<QkTextView>(R.id.simIndex).setVisible(message.subId != previous?.subId && subscription != null && subs.size > 1)
 
         // Bind the grouping
-        val media = message.parts.filter { !it.isSmil() && !it.isText() }
         holder.containerView.setPadding(bottom = if (canGroup(message, next)) 0 else 16.dpToPx(context))
 
         // Bind the avatar and bubble colour
@@ -274,27 +258,7 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the body text
-        val messageText = when (message.isSms()) {
-            true -> message.body
-            false -> {
-                val subject = message.getCleansedSubject()
-                val body = message.parts
-                        .filter { part -> part.isText() }
-                        .mapNotNull { part -> part.text }
-                        .filter { text -> text.isNotBlank() }
-                        .joinToString("\n")
-
-                when {
-                    subject.isNotBlank() -> {
-                        val spannable = SpannableString(if (body.isNotBlank()) "$subject\n$body" else subject)
-                        spannable.setSpan(StyleSpan(Typeface.BOLD), 0, subject.length,
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-                        spannable
-                    }
-                    else -> body
-                }
-            }
-        }
+        val messageText = message.body
         val emojiOnly = messageText.isNotBlank() && messageText.matches(EMOJI_REGEX)
         textViewStyler.setTextSize(holder.itemView.findViewById<TightTextView>(R.id.body), when (emojiOnly) {
             true -> TextViewStyler.SIZE_EMOJI
@@ -323,17 +287,13 @@ class MessagesAdapter @Inject constructor(
             holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setImageResource(android.R.drawable.ic_secure)
         }
 
-        holder.itemView.findViewById<TightTextView>(R.id.body).setVisible(message.isSms() || messageText.isNotBlank())
+        holder.itemView.findViewById<TightTextView>(R.id.body).setVisible(messageText.isNotBlank())
         holder.itemView.findViewById<TightTextView>(R.id.body).setBackgroundResource(getBubble(
                 emojiOnly = emojiOnly,
-                canGroupWithPrevious = canGroup(message, previous) || media.isNotEmpty(),
+                canGroupWithPrevious = canGroup(message, previous),
                 canGroupWithNext = canGroup(message, next),
                 isMe = message.isMe()))
 
-        // Bind the attachments
-        val partsAdapter = holder.itemView.findViewById<RecyclerView>(R.id.attachments).adapter as PartsAdapter
-        partsAdapter.theme = theme
-        partsAdapter.setData(message, previous, next, holder)
     }
 
     private fun bindStatus(holder: QkViewHolder, message: Message, next: Message?) {

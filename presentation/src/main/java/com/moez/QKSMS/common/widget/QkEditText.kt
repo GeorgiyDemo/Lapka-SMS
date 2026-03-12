@@ -29,7 +29,6 @@ import android.widget.EditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
-import com.google.android.mms.ContentType
 import com.moez.QKSMS.common.util.TextViewStyler
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.util.tryOrNull
@@ -82,10 +81,10 @@ class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         if (supportsInputContent) {
             EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf(
-                    ContentType.IMAGE_JPEG,
-                    ContentType.IMAGE_JPG,
-                    ContentType.IMAGE_PNG,
-                    ContentType.IMAGE_GIF))
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "image/gif"))
         }
 
         val callback = InputConnectionCompat.OnCommitContentListener { inputContentInfo, flags, opts ->

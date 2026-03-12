@@ -27,17 +27,14 @@ import com.moez.QKSMS.common.util.ClipboardUtils
 import com.moez.QKSMS.common.util.extensions.makeToast
 import com.moez.QKSMS.extensions.asObservable
 import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.ConversationInfoMedia
 import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.ConversationInfoRecipient
 import com.moez.QKSMS.interactor.*
 import com.moez.QKSMS.manager.PermissionManager
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
@@ -47,7 +44,6 @@ import javax.inject.Named
 
 class ConversationInfoPresenter @Inject constructor(
     @Named("threadId") threadId: Long,
-    messageRepo: MessageRepository,
     private val context: Context,
     private val conversationRepo: ConversationRepository,
     private val deleteConversations: DeleteConversations,
@@ -79,16 +75,13 @@ class ConversationInfoPresenter @Inject constructor(
         disposables += markUnarchived
         disposables += deleteConversations
 
-        disposables += Observables
-                .combineLatest(
-                        conversation,
-                        messageRepo.getPartsForConversation(threadId).asObservable()
-                ) { conversation, parts ->
+        disposables += conversation
+                .subscribe { conversation ->
                     val data = mutableListOf<ConversationInfoItem>()
 
                     // If some data was deleted, this isn't the place to handle it
-                    if (!conversation.isLoaded || !conversation.isValid || !parts.isLoaded || !parts.isValid) {
-                        return@combineLatest
+                    if (!conversation.isLoaded || !conversation.isValid) {
+                        return@subscribe
                     }
 
                     data += conversation.recipients.map(::ConversationInfoRecipient)
@@ -101,11 +94,9 @@ class ConversationInfoPresenter @Inject constructor(
                             deleteEncryptedAfter = conversation.deleteEncryptedAfter,
                             deleteReceivedAfter = conversation.deleteReceivedAfter,
                             deleteSentAfter = conversation.deleteSentAfter)
-                    data += parts.map(::ConversationInfoMedia)
 
                     newState { copy(data = data) }
                 }
-                .subscribe()
     }
 
     override fun bindIntents(view: ConversationInfoView) {
@@ -186,11 +177,6 @@ class ConversationInfoPresenter @Inject constructor(
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .autoDisposable(view.scope())
                 .subscribe { conversation -> deleteConversations.execute(listOf(conversation.id)) }
-
-        // Media
-        view.mediaClicks()
-                .autoDisposable(view.scope())
-                .subscribe(navigator::showMedia)
 
         // Partisan
         view.encryptionKeyClicks()

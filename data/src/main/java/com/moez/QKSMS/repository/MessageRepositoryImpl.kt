@@ -24,40 +24,27 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
 import android.os.Build
-import android.os.Environment
 import android.provider.Telephony
 import android.provider.Telephony.Mms
 import android.provider.Telephony.Sms
 import android.telephony.SmsManager
 import android.util.Base64
-import android.webkit.MimeTypeMap
 import androidx.core.content.contentValuesOf
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
-import com.google.android.mms.ContentType
-import com.google.android.mms.MMSPart
-import com.google.android.mms.pdu_alt.MultimediaMessagePdu
-import com.google.android.mms.pdu_alt.PduPersister
-import com.klinker.android.send_message.SmsManagerFactory
-import com.klinker.android.send_message.StripAccents
-import com.klinker.android.send_message.Transaction
+import java.text.Normalizer
 import com.moez.QKSMS.common.util.extensions.now
 import com.moez.QKSMS.compat.TelephonyCompat
 import com.moez.QKSMS.extensions.anyOf
 import com.moez.QKSMS.interactor.ResetSettings
 import com.moez.QKSMS.manager.ActiveConversationManager
 import com.moez.QKSMS.manager.KeyManager
-import com.moez.QKSMS.model.Attachment
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.receiver.DeleteMessagesReceiver
 import com.moez.QKSMS.receiver.SendSmsReceiver
 import com.moez.QKSMS.receiver.SmsDeliveredReceiver
 import com.moez.QKSMS.receiver.SmsSentReceiver
-import com.moez.QKSMS.util.ImageUtils
 import com.moez.QKSMS.util.PhoneNumberUtils
 import com.moez.QKSMS.util.Preferences
 import com.moez.QKSMS.util.tryOrNull
@@ -66,15 +53,10 @@ import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
 import timber.log.Timber
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
-import kotlin.math.sqrt
 
 @Singleton
 class MessageRepositoryImpl @Inject constructor(
@@ -156,58 +138,6 @@ class MessageRepositoryImpl @Inject constructor(
                     .equalTo("lastMessage.read", false)
                     .count()
         }
-    }
-
-    override fun getPart(id: Long): MmsPart? {
-        return Realm.getDefaultInstance()
-                .where(MmsPart::class.java)
-                .equalTo("id", id)
-                .findFirst()
-    }
-
-    override fun getPartsForConversation(threadId: Long): RealmResults<MmsPart> {
-        return Realm.getDefaultInstance()
-                .where(MmsPart::class.java)
-                .equalTo("messages.threadId", threadId)
-                .beginGroup()
-                .contains("type", "image/")
-                .or()
-                .contains("type", "video/")
-                .endGroup()
-                .sort("id", Sort.DESCENDING)
-                .findAllAsync()
-    }
-
-    override fun savePart(id: Long): File? {
-        val part = getPart(id) ?: return null
-
-        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type) ?: return null
-        val date = part.messages?.first()?.date
-        val dir = File(Environment.getExternalStorageDirectory(), "QKSMS/Media").apply { mkdirs() }
-        val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
-                ?: "${part.type.split("/").last()}_$date.$extension"
-        var file: File
-        var index = 0
-        do {
-            file = File(dir, if (index == 0) fileName else fileName.replace(".$extension", " ($index).$extension"))
-            index++
-        } while (file.exists())
-
-        try {
-            FileOutputStream(file).use { outputStream ->
-                context.contentResolver.openInputStream(part.getUri())?.use { inputStream ->
-                    inputStream.copyTo(outputStream, 1024)
-                }
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        MediaScannerConnection.scanFile(context, arrayOf(file.path), null, null)
-
-        return file.takeIf { it.exists() }
     }
 
     /**
@@ -346,7 +276,6 @@ class MessageRepositoryImpl @Inject constructor(
         threadId: Long,
         addresses: List<String>,
         body: String,
-        attachments: List<Attachment>,
         delay: Int
     ) {
         val signedBody = when {
@@ -355,141 +284,38 @@ class MessageRepositoryImpl @Inject constructor(
             else -> prefs.signature.get()
         }
 
-        val smsManager = subId.takeIf { it != -1 }
-                ?.let(SmsManagerFactory::createSmsManager)
-                ?: SmsManager.getDefault()
-
         // We only care about stripping SMS
         val strippedBody = when (prefs.unicode.get()) {
-            true -> StripAccents.stripAccents(signedBody)
+            true -> stripAccents(signedBody)
             false -> signedBody
         }
 
-        val parts = smsManager.divideMessage(strippedBody).orEmpty()
-        val forceMms = prefs.longAsMms.get() && parts.size > 1
+        if (delay > 0) { // With delay
+            val sendTime = System.currentTimeMillis() + delay
+            val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, sendTime)
 
-        if (addresses.size == 1 && attachments.isEmpty() && !forceMms) { // SMS
-            if (delay > 0) { // With delay
-                val sendTime = System.currentTimeMillis() + delay
-                val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, sendTime)
+            val intent = getIntentForDelayedSms(message.id)
 
-                val intent = getIntentForDelayedSms(message.id)
-
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, sendTime, intent)
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, sendTime, intent)
-                }
-
-            } else { // No delay
-                val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, now())
-                sendSms(message)
-            }
-        } else { // MMS
-            val parts = arrayListOf<MMSPart>()
-
-            val maxWidth = smsManager.carrierConfigValues.getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_WIDTH)
-                    .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
-
-            val maxHeight = smsManager.carrierConfigValues.getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_HEIGHT)
-                    .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
-
-            var remainingBytes = when (prefs.mmsSize.get()) {
-                -1 -> smsManager.carrierConfigValues.getInt(SmsManager.MMS_CONFIG_MAX_MESSAGE_SIZE)
-                0 -> Int.MAX_VALUE
-                else -> prefs.mmsSize.get() * 1024
-            } * 0.9 // Ugly, but buys us a bit of wiggle room
-
-            signedBody.takeIf { it.isNotEmpty() }?.toByteArray()?.let { bytes ->
-                remainingBytes -= bytes.size
-                parts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, sendTime, intent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, sendTime, intent)
             }
 
-            // Attach contacts
-            parts += attachments
-                    .mapNotNull { attachment -> attachment as? Attachment.Contact }
-                    .map { attachment -> attachment.vCard.toByteArray() }
-                    .map { vCard ->
-                        remainingBytes -= vCard.size
-                        MMSPart("contact", ContentType.TEXT_VCARD, vCard)
-                    }
-
-            val imageBytesByAttachment = attachments
-                    .mapNotNull { attachment -> attachment as? Attachment.Image }
-                    .associateWith { attachment ->
-                        val uri = attachment.getUri() ?: return@associateWith byteArrayOf()
-                        when (attachment.isGif(context)) {
-                            true -> ImageUtils.getScaledGif(context, uri, maxWidth, maxHeight)
-                            false -> ImageUtils.getScaledImage(context, uri, maxWidth, maxHeight)
-                        }
-                    }
-                    .toMutableMap()
-
-            val imageByteCount = imageBytesByAttachment.values.sumBy { byteArray -> byteArray.size }
-            if (imageByteCount > remainingBytes) {
-                imageBytesByAttachment.forEach { (attachment, originalBytes) ->
-                    val uri = attachment.getUri() ?: return@forEach
-                    val maxBytes = originalBytes.size / imageByteCount.toFloat() * remainingBytes
-
-                    // Get the image dimensions
-                    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                    BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri), null, options)
-                    val width = options.outWidth
-                    val height = options.outHeight
-                    val aspectRatio = width.toFloat() / height.toFloat()
-
-                    var attempts = 0
-                    var scaledBytes = originalBytes
-
-                    while (scaledBytes.size > maxBytes) {
-                        // Estimate how much we need to scale the image down by. If it's still too big, we'll need to
-                        // try smaller and smaller values
-                        val scale = maxBytes / originalBytes.size * (0.9 - attempts * 0.2)
-                        if (scale <= 0) {
-                            Timber.w("Failed to compress ${originalBytes.size / 1024}Kb to ${maxBytes.toInt() / 1024}Kb")
-                            return@forEach
-                        }
-
-                        val newArea = scale * width * height
-                        val newWidth = sqrt(newArea * aspectRatio).toInt()
-                        val newHeight = (newWidth / aspectRatio).toInt()
-
-                        attempts++
-                        scaledBytes = when (attachment.isGif(context)) {
-                            true -> ImageUtils.getScaledGif(context, uri, newWidth, newHeight, 80)
-                            false -> ImageUtils.getScaledImage(context, uri, newWidth, newHeight, 80)
-                        }
-
-                        Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024}/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*$newHeight)")
-                    }
-
-                    Timber.v("Compressed ${originalBytes.size / 1024}Kb to ${scaledBytes.size / 1024}Kb with a target size of ${maxBytes.toInt() / 1024}Kb in $attempts attempts")
-                    imageBytesByAttachment[attachment] = scaledBytes
-                }
-            }
-
-            imageBytesByAttachment.forEach { (attachment, bytes) ->
-                parts += when (attachment.isGif(context)) {
-                    true -> MMSPart("image", ContentType.IMAGE_GIF, bytes)
-                    false -> MMSPart("image", ContentType.IMAGE_JPEG, bytes)
-                }
-            }
-
-            // We need to strip the separators from outgoing MMS, or else they'll appear to have sent and not go through
-            val transaction = Transaction(context)
-            val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
-            transaction.sendNewMessage(subId, threadId, recipients, parts, null, null)
+        } else { // No delay
+            val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, now())
+            sendSms(message)
         }
     }
 
     override fun sendSms(message: Message) {
         val smsManager = message.subId.takeIf { it != -1 }
-                ?.let(SmsManagerFactory::createSmsManager)
+                ?.let { subId -> @Suppress("DEPRECATION") SmsManager.getSmsManagerForSubscriptionId(subId) }
                 ?: SmsManager.getDefault()
 
         val parts = smsManager
-                .divideMessage(if (prefs.unicode.get()) StripAccents.stripAccents(message.body) else message.body)
+                .divideMessage(if (prefs.unicode.get()) stripAccents(message.body) else message.body)
                 ?: arrayListOf()
 
         val sentIntents = parts.map {
@@ -505,36 +331,18 @@ class MessageRepositoryImpl @Inject constructor(
         }
 
         try {
+            @Suppress("DEPRECATION")
             smsManager.sendMultipartTextMessage(
                     message.address,
                     null,
                     parts,
-                    ArrayList(sentIntents),
-                    ArrayList(deliveredIntents)
+                    java.util.ArrayList(sentIntents),
+                    java.util.ArrayList(deliveredIntents)
             )
         } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Message body lengths: ${parts.map { it?.length }}")
+            Timber.w(e, "Message body lengths: ${parts.map { part -> part?.length }}")
             markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
         }
-    }
-
-    override fun resendMms(message: Message) {
-        val subId = message.subId
-        val threadId = message.threadId
-        val pdu = tryOrNull {
-            PduPersister.getPduPersister(context).load(message.getUri()) as MultimediaMessagePdu
-        } ?: return
-
-        val addresses = pdu.to.map { it.string }.filter { it.isNotBlank() }
-        val parts = message.parts.mapNotNull { part ->
-            val bytes = tryOrNull(false) {
-                context.contentResolver.openInputStream(part.getUri())?.use { inputStream -> inputStream.readBytes() }
-            } ?: return@mapNotNull null
-
-            MMSPart(part.name.orEmpty(), part.type, bytes)
-        }
-
-        Transaction(context).sendNewMessage(subId, threadId, addresses, parts, message.subject, message.getUri())
     }
 
     override fun cancelDelayedSms(id: Long) {
@@ -856,5 +664,10 @@ class MessageRepositoryImpl @Inject constructor(
 
             uris.forEach { uri -> context.contentResolver.delete(uri, null, null) }
         }
+    }
+
+    private fun stripAccents(text: String): String {
+        val normalized = Normalizer.normalize(text, Normalizer.Form.NFD)
+        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
     }
 }

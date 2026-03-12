@@ -28,7 +28,6 @@ import com.moez.QKSMS.common.widget.QkEditText
 import com.moez.QKSMS.common.widget.QkSwitch
 import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.common.widget.RadioPreferenceView
-import com.moez.QKSMS.feature.backup.BackupController
 import com.moez.QKSMS.feature.blocking.BlockingController
 import com.moez.QKSMS.feature.blocking.manager.BlockingManagerController
 import com.moez.QKSMS.feature.blocking.messages.BlockedMessagesController
@@ -65,7 +64,6 @@ interface AppComponent {
     fun inject(application: QKApplication)
 
     fun inject(controller: AboutController)
-    fun inject(controller: BackupController)
     fun inject(controller: BlockedMessagesController)
     fun inject(controller: BlockedNumbersController)
     fun inject(controller: BlockingController)

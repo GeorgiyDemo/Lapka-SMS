@@ -1,6 +1,5 @@
 package com.moez.QKSMS.feature.conversationinfo
 
-import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.model.Recipient
 import io.realm.RealmList
 
@@ -19,7 +18,5 @@ sealed class ConversationInfoItem {
         var deleteReceivedAfter: Int,
         var deleteSentAfter: Int
     ) : ConversationInfoItem()
-
-    data class ConversationInfoMedia(val value: MmsPart) : ConversationInfoItem()
 
 }

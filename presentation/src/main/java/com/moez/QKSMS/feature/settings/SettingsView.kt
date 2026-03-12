@@ -33,7 +33,6 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun sendDelaySelected(): Observable<Int>
     fun signatureChanged(): Observable<String>
     fun autoDeleteChanged(): Observable<Int>
-    fun mmsSizeSelected(): Observable<Int>
     fun globalEncryptionKeySet(): Observable<String>
     fun smsForResetSet(): Observable<String>
     fun deleteEncryptedAfterSelected(): Observable<Int>
@@ -47,7 +46,6 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun showSignatureDialog(signature: String)
     fun showAutoDeleteDialog(days: Int)
     suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean
-    fun showMmsSizePicker()
     fun showSwipeActions()
     fun showThemePicker()
     fun showAbout()

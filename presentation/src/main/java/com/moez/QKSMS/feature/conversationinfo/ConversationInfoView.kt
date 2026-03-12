@@ -34,7 +34,6 @@ interface ConversationInfoView : QkViewContract<ConversationInfoState> {
     fun blockClicks(): Observable<*>
     fun deleteClicks(): Observable<*>
     fun confirmDelete(): Observable<*>
-    fun mediaClicks(): Observable<Long>
     fun encryptionKeyClicks(): Observable<*>
     fun deleteEncryptedAfterClicks(): Observable<*>
     fun deleteReceivedAfterClicks(): Observable<*>

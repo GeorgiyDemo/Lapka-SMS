@@ -22,13 +22,12 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.klinker.android.send_message.BroadcastUtils
 import javax.inject.Inject
 
 class WidgetManagerImpl @Inject constructor(private val context: Context) : WidgetManager {
 
     override fun updateUnreadCount() {
-        BroadcastUtils.sendExplicitBroadcast(context, Intent(), WidgetManager.ACTION_NOTIFY_DATASET_CHANGED)
+        sendExplicitBroadcast(Intent(), WidgetManager.ACTION_NOTIFY_DATASET_CHANGED)
     }
 
     override fun updateTheme() {
@@ -37,7 +36,20 @@ class WidgetManagerImpl @Inject constructor(private val context: Context) : Widg
 
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 
-        BroadcastUtils.sendExplicitBroadcast(context, intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        sendExplicitBroadcast(intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+    }
+
+    private fun sendExplicitBroadcast(intent: Intent, action: String) {
+        intent.action = action
+        val resolveInfos = context.packageManager.queryBroadcastReceivers(intent, 0)
+        for (info in resolveInfos) {
+            val explicit = Intent(intent)
+            explicit.component = ComponentName(info.activityInfo.packageName, info.activityInfo.name)
+            context.sendBroadcast(explicit)
+        }
+        if (resolveInfos.isEmpty()) {
+            context.sendBroadcast(intent)
+        }
     }
 
 }

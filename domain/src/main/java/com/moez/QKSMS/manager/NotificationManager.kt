@@ -18,8 +18,6 @@
  */
 package com.moez.QKSMS.manager
 
-import androidx.core.app.NotificationCompat
-
 interface NotificationManager {
 
     fun update(threadId: Long)
@@ -29,7 +27,5 @@ interface NotificationManager {
     fun createNotificationChannel(threadId: Long = 0L)
 
     fun buildNotificationChannelId(threadId: Long): String
-
-    fun getNotificationForBackup(): NotificationCompat.Builder
 
 }

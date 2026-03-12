@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Povolit</string>
     <string name="drawer_inbox">Příchozí zprávy</string>
     <string name="drawer_archived">Archivováno</string>
-    <string name="drawer_scheduled">Naplánováno</string>
     <string name="drawer_blocking">Blokování</string>
     <string name="drawer_more">Více</string>
     <string name="drawer_settings">Nastavení</string>
@@ -97,10 +96,6 @@
     <string name="compose_send_group_summary">Příjemci a odpovědi budou viditelné všem</string>
     <string name="compose_messages_empty">Toto je začátek vaší konverzace. Řekněte něco hezkého!</string>
     <string name="compose_vcard_label">Karta kontaktu</string>
-    <string name="compose_scheduled_for">Naplánováno na</string>
-    <string name="compose_scheduled_future">Vybraný čas musí teprve nastat (musí být v budoucnu).</string>
-    <string name="compose_scheduled_plus">Pro použití plánování zpráv je třeba povýšit na QKSMS+</string>
-    <string name="compose_scheduled_toast">Přidáno do naplánovaných zpráv</string>
     <string name="compose_hint">Napsat zprávu&#8230;</string>
     <string name="compose_menu_copy">Kopírovat text</string>
     <string name="compose_menu_forward">Přeposlat</string>
@@ -119,13 +114,9 @@
     <string name="compose_details_received">Přijato: %s</string>
     <string name="compose_details_delivered">Doručeno: %s</string>
     <string name="compose_details_error_code">Kód chyby: %d</string>
-    <string name="compose_attach_cd">Připojit přílohu</string>
-    <string name="compose_gallery_cd">Připojit fotografii</string>
-    <string name="compose_camera_cd">Fotografovat</string>
-    <string name="compose_schedule_cd">Naplánovat zprávu</string>
-    <string name="compose_contact_cd">Přiložit kontakt</string>
-    <string name="compose_contact_error">Chyba čtení kontaktu</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Připojit fotografii</string>
+<string name="compose_contact_cd">Přiložit kontakt</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Vybrána SIM %1$d (%2$s)</string>
     <string name="compose_sim_cd">%s vybráno, změňte SIM kartu</string>
     <string name="compose_send_cd">Odeslat zprávu</string>
@@ -142,48 +133,8 @@
     <string name="info_block">Blokovat</string>
     <string name="info_unblock">Odblokovat</string>
     <string name="info_delete">Smazat konverzaci</string>
-    <string name="gallery_error">Soubor nelze načíst</string>
-    <string name="gallery_toast_saved">Uloženo do galerie</string>
-    <string name="backup_title">Záloha a obnovení</string>
-    <string name="backup_backing_up">Zálohování zpráv</string>
-    <string name="backup_restoring">Obnovení ze zálohy</string>
-    <string name="backup_last">Poslední záloha</string>
-    <string name="backup_loading">Načítání&#8230;</string>
-    <string name="backup_never">Nikdy</string>
-    <string name="backup_restore_title">Obnovit</string>
-    <string name="backup_restore_summary">Vybrat zálohu</string>
-    <string name="backup_restore_error_plus">Odemkněte QKSMS+ pro použití funkce zálohování a obnovení</string>
-    <string name="backup_restore_error_backup">Zálohování&#8230;</string>
-    <string name="backup_restore_error_restore">Probíhá obnova&#8230;</string>
-    <string name="backup_restore_confirm_title">Obnovit ze zálohy</string>
-    <string name="backup_restore_confirm_message">Opravdu chcete obnovit všechny vaše zprávy z této zálohy?</string>
-    <string name="backup_restore_stop_title">Zastavit obnovu</string>
-    <string name="backup_restore_stop_message">Dříve obnovené zprávy zůstanou ve vašem zařízení</string>
-    <string name="backup_restore_dialog_title">Zálohy</string>
-    <string name="backup_restore_dialog_empty">Nenalezeny žádné zálohy</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d zpráva</item>
-        <item quantity="few">%d zpráv</item>
-        <item quantity="many">%d zprávy</item>
-        <item quantity="other">%d zprávy</item>
-    </plurals>
-    <string name="backup_disclaimer">Momentálně jsou pro zálohování a obnovení podporovány pouze SMS. MMS podpora a plánované zálohy budou přidány již brzy!</string>
-    <string name="backup_now">Zálohovat nyní</string>
-    <string name="backup_progress_parsing">Analyzování zálohy&#8230;</string>
-    <string name="backup_progress_running">%d/%d zpráv</string>
-    <string name="backup_progress_saving">Ukládání zálohy&#8230;</string>
-    <string name="backup_progress_syncing">Synchronizace zpráv&#8230;</string>
-    <string name="backup_progress_finished">Hotovo!</string>
-    <string name="backup_notification_channel_name">Zálohování a obnovení</string>
-    <string name="scheduled_title">Naplánováno</string>
-    <string name="scheduled_empty_description">Automaticky odeslat zprávu v přesný okamžik, který chcete</string>
-    <string name="scheduled_empty_message_1">Zdar! Kdy máš narozeniny?</string>
-    <string name="scheduled_empty_message_2">23. prosince</string>
-    <string name="scheduled_empty_message_3">Všechno nejlepší! Hleďme, ještě že si je pamatuji</string>
+<string name="gallery_toast_saved">Uloženo do galerie</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Posíláno 23. prosince</string>
-    <string name="scheduled_compose_cd">Naplánovat zprávu</string>
-    <string name="scheduled_options_title">Naplánovaná zpráva</string>
     <string-array name="scheduled_options">
         <item>Odeslat nyní</item>
         <item>Kopírovat text</item>
@@ -251,10 +202,8 @@
         <item quantity="many">Po %d dnech</item>
         <item quantity="other">Po %d dnech</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Odesílat dlouhé zprávy jako MMS</string>
-    <string name="settings_long_as_mms_summary">Nedaří-li se odeslat vaše dlouhé zprávy, nebo jsou-li poslány v nesprávném pořadí, lze je odeslat jako MMS. Mohou být účtovány další poplatky.</string>
-    <string name="settings_mms_size_title">Automaticky komprimovat MMS přílohy</string>
-    <string name="settings_sync_title">Synchronizovat zprávy</string>
+<string name="settings_long_as_mms_summary">Nedaří-li se odeslat vaše dlouhé zprávy, nebo jsou-li poslány v nesprávném pořadí, lze je odeslat jako MMS. Mohou být účtovány další poplatky.</string>
+<string name="settings_sync_title">Synchronizovat zprávy</string>
     <string name="settings_sync_summary">Opětovná synchronizace zpráv s nativní Android SMS databází</string>
     <string name="settings_about_title">O aplikaci QKSMS</string>
     <string name="settings_version">Verze %s %s %s</string>
@@ -319,10 +268,6 @@
     <string name="qksms_plus_themes_summary">Nádherné barvy, které nejsou na paletě Material designu</string>
     <string name="qksms_plus_emoji_title">Vlastní automatické emoji</string>
     <string name="qksms_plus_emoji_summary">Vytvořte si zkratky pro vlastní automatické emoji</string>
-    <string name="qksms_plus_backup_title">Zálohování zpráv</string>
-    <string name="qksms_plus_backup_summary">Zálohujte automaticky své zprávy. Už se nemusíte obávat ztráty historie zpráv při ztrátě nebo výměně telefonu</string>
-    <string name="qksms_plus_scheduled_title">Plánované zprávy</string>
-    <string name="qksms_plus_scheduled_summary">Plánované zprávy budou automaticky odeslány v určené datum a čas</string>
     <string name="qksms_plus_delayed_title">Zpožděné odeslání</string>
     <string name="qksms_plus_delayed_summary">Vyčkání několik sekund před odesláním zprávy</string>
     <string name="qksms_plus_night_title">Automatický noční režim</string>
@@ -397,18 +342,7 @@
         <item>3 sekundy</item>
         <item>5 sekund</item>
         <item>10 sekund</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automaticky</item>
-        <item>100 kB</item>
-        <item>200 kB</item>
-        <item>300 kB</item>
-        <item>600 kB</item>
-        <item>1 000 kB</item>
-        <item>2 000 kB</item>
-        <item>Bez komprese</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>OK</item>
         <item>Dej mi chvíli</item>
         <item>Jsem na cestě</item>

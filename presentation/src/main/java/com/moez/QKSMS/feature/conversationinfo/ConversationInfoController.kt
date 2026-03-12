@@ -116,7 +116,6 @@ class ConversationInfoController(
     override fun blockClicks(): Observable<*> = adapter.blockClicks
     override fun deleteClicks(): Observable<*> = adapter.deleteClicks
     override fun confirmDelete(): Observable<*> = confirmDeleteSubject
-    override fun mediaClicks(): Observable<Long> = adapter.mediaClicks
     override fun encryptionKeyClicks(): Observable<*> = adapter.encryptionKeyClicks
     override fun deleteEncryptedAfterClicks(): Observable<*> = adapter.deleteEncryptedAfterClicks
     override fun deleteReceivedAfterClicks(): Observable<*>  = adapter.deleteReceivedAfterClicks

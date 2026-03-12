@@ -75,7 +75,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     @Inject lateinit var nightModeDialog: QkDialog
     @Inject lateinit var textSizeDialog: QkDialog
     @Inject lateinit var sendDelayDialog: QkDialog
-    @Inject lateinit var mmsSizeDialog: QkDialog
     @Inject lateinit var deleteEncryptedAfterDialog: QkDialog
     @Inject lateinit var prefs: Preferences
 
@@ -123,8 +122,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val unicode: PreferenceView get() = containerView!!.findViewById(R.id.unicode)
     private val mobileOnly: PreferenceView get() = containerView!!.findViewById(R.id.mobileOnly)
     private val autoDelete: PreferenceView get() = containerView!!.findViewById(R.id.autoDelete)
-    private val longAsMms: PreferenceView get() = containerView!!.findViewById(R.id.longAsMms)
-    private val mmsSize: PreferenceView get() = containerView!!.findViewById(R.id.mmsSize)
     private val syncingProgress: ProgressBar get() = containerView!!.findViewById(R.id.syncingProgress)
     private val about: PreferenceView get() = containerView!!.findViewById(R.id.about)
     private val globalEncryptionKey: PreferenceView get() = containerView!!.findViewById(R.id.globalEncryptionKey)
@@ -155,7 +152,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
         textSizeDialog.adapter.setData(R.array.text_sizes)
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
-        mmsSizeDialog.adapter.setData(R.array.mms_sizes, R.array.mms_sizes_ids)
         deleteEncryptedAfterDialog.adapter.setData(R.array.delete_message_after_labels)
 
         about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME, "3.9.4", by.cyberpartisan.psms.VERSION.toString())
@@ -198,8 +194,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun signatureChanged(): Observable<String> = signatureSubject
 
     override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject
-
-    override fun mmsSizeSelected(): Observable<Int> = mmsSizeDialog.adapter.menuItemClicks
 
     // partisan
     override fun globalEncryptionKeySet(): Observable<String> = globalEncryptionKeySubject
@@ -245,11 +239,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
             else -> context.resources.getQuantityString(
                     R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
         }
-
-        longAsMms.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.longAsMms
-
-        mmsSize.summary = state.maxMmsSizeSummary
-        mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
 
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> syncingProgress.isVisible = false
@@ -324,8 +313,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
                     .show()
         }
     }
-
-    override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
 
     override fun showSwipeActions() {
         router.pushController(RouterTransaction.with(SwipeActionsController())

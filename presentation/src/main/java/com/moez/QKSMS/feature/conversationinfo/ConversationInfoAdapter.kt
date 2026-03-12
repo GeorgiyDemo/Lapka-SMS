@@ -13,16 +13,13 @@ import com.moez.QKSMS.common.base.QkViewHolder
 import com.moez.QKSMS.common.util.Colors
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.extensions.isVideo
 import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.*
-import com.moez.QKSMS.util.GlideApp
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import android.widget.ImageView
 import android.widget.TextView
 import com.moez.QKSMS.common.widget.AvatarView
 import com.moez.QKSMS.common.widget.PreferenceView
-import com.moez.QKSMS.common.widget.SquareImageView
 import javax.inject.Inject
 
 class ConversationInfoAdapter @Inject constructor(
@@ -41,7 +38,6 @@ class ConversationInfoAdapter @Inject constructor(
     val archiveClicks: Subject<Unit> = PublishSubject.create()
     val blockClicks: Subject<Unit> = PublishSubject.create()
     val deleteClicks: Subject<Unit> = PublishSubject.create()
-    val mediaClicks: Subject<Long> = PublishSubject.create()
     val encryptionKeyClicks: Subject<Unit> = PublishSubject.create()
     val deleteEncryptedAfterClicks: Subject<Unit> = PublishSubject.create()
     val deleteReceivedAfterClicks: Subject<Unit> = PublishSubject.create()
@@ -78,13 +74,6 @@ class ConversationInfoAdapter @Inject constructor(
                 itemView.findViewById<PreferenceView>(R.id.conversationDeleteEncryptedAfter).clicks().subscribe(deleteEncryptedAfterClicks)
                 itemView.findViewById<PreferenceView>(R.id.conversationDeleteReceivedAfter).clicks().subscribe(deleteReceivedAfterClicks)
                 itemView.findViewById<PreferenceView>(R.id.conversationDeleteSentAfter).clicks().subscribe(deleteSentAfterClicks)
-            }
-
-            2 -> QkViewHolder(inflater.inflate(R.layout.conversation_media_list_item, parent, false)).apply {
-                itemView.setOnClickListener {
-                    val item = getItem(adapterPosition) as? ConversationInfoMedia
-                    item?.value?.id?.run(mediaClicks::onNext)
-                }
             }
 
             else -> throw IllegalStateException()
@@ -142,16 +131,6 @@ class ConversationInfoAdapter @Inject constructor(
                 deleteSentAfterDialog.adapter.selectedItem = item.deleteSentAfter
             }
 
-            is ConversationInfoMedia -> {
-                val part = item.value
-
-                GlideApp.with(context)
-                        .load(part.getUri())
-                        .fitCenter()
-                        .into(holder.itemView.findViewById<SquareImageView>(R.id.thumbnail))
-
-                holder.itemView.findViewById<ImageView>(R.id.video).isVisible = part.isVideo()
-            }
         }
     }
 
@@ -159,7 +138,6 @@ class ConversationInfoAdapter @Inject constructor(
         return when (data[position]) {
             is ConversationInfoRecipient -> 0
             is ConversationInfoSettings -> 1
-            is ConversationInfoMedia -> 2
         }
     }
 
@@ -171,10 +149,6 @@ class ConversationInfoAdapter @Inject constructor(
 
             old is ConversationInfoSettings && new is ConversationInfoSettings -> {
                 true
-            }
-
-            old is ConversationInfoMedia && new is ConversationInfoMedia -> {
-                old.value.id == new.value.id
             }
 
             else -> false

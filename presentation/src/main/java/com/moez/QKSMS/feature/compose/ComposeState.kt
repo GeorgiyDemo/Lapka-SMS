@@ -19,7 +19,6 @@
 package com.moez.QKSMS.feature.compose
 
 import com.moez.QKSMS.compat.SubscriptionInfoCompat
-import com.moez.QKSMS.model.Attachment
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.Recipient
@@ -40,9 +39,6 @@ data class ComposeState(
     val searchResults: Int = 0,
     val messages: Pair<Conversation, RealmResults<Message>>? = null,
     val selectedMessages: Int = 0,
-    val scheduled: Long = 0,
-    val attachments: List<Attachment> = ArrayList(),
-    val attaching: Boolean = false,
     val remaining: String = "",
     val subscription: SubscriptionInfoCompat? = null,
     val canSend: Boolean = false,

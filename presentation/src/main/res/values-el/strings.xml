@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Να επιτραπεί</string>
     <string name="drawer_inbox">Εισερχόμενα</string>
     <string name="drawer_archived">Αρχείο</string>
-    <string name="drawer_scheduled">Προγραμματισμένα</string>
     <string name="drawer_blocking">Με φραγή</string>
     <string name="drawer_more">Περισσότερα</string>
     <string name="drawer_settings">Ρυθμίσεις</string>
@@ -95,10 +94,6 @@
     <string name="compose_send_group_summary">Οι παραλήπτες και απαντήσεις θα είναι ορατοί σε όλους</string>
     <string name="compose_messages_empty">Εδώ ξεκινά η συζήτηση. Πείτε κάτι ωραίο!</string>
     <string name="compose_vcard_label">Κάρτα επαφής</string>
-    <string name="compose_scheduled_for">Προγραμματίστηκε για</string>
-    <string name="compose_scheduled_future">Η χρονική στιγμή πρέπει να βρίσκεται στο μέλλον!</string>
-    <string name="compose_scheduled_plus">Πρέπει να ξεκλειδώσετε το QKSMS+ για να αποκτήσετε τη δυνατότητα προγραμματισμού μηνυμάτων</string>
-    <string name="compose_scheduled_toast">Προστέθηκε στα προγραμματισμένα μηνύματα</string>
     <string name="compose_hint">Γράψτε ένα μήνυμα&#8230;</string>
     <string name="compose_menu_copy">Αντιγραφή κειμένου</string>
     <string name="compose_menu_forward">Προώθηση</string>
@@ -117,13 +112,9 @@
     <string name="compose_details_received">Ελήφθη: %s</string>
     <string name="compose_details_delivered">Παραδόθηκε: %s</string>
     <string name="compose_details_error_code">Κωδικός σφάλματος: %d</string>
-    <string name="compose_attach_cd">Προσθήκη συνημμένου</string>
-    <string name="compose_gallery_cd">Επισύναψη φωτογραφίας</string>
-    <string name="compose_camera_cd">Λήψη φωτογραφίας</string>
-    <string name="compose_schedule_cd">Προγραμματισμός μηνύματος</string>
-    <string name="compose_contact_cd">Επισύναψη επαφής</string>
-    <string name="compose_contact_error">Πρόβλημα ανάγνωσης επαφής</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Επισύναψη φωτογραφίας</string>
+<string name="compose_contact_cd">Επισύναψη επαφής</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">Επελέγη το %s, αλλάξτε την κάρτα SIM</string>
     <string name="compose_send_cd">Αποστολή μηνύματος</string>
@@ -140,46 +131,8 @@
     <string name="info_block">Φραγή</string>
     <string name="info_unblock">Αναίρεση φραγής</string>
     <string name="info_delete">Διαγραφή συζήτησης</string>
-    <string name="gallery_error">Αδυναμία φόρτωσης μέσων</string>
-    <string name="gallery_toast_saved">Αποθηκεύτηκε στη συλλογή</string>
-    <string name="backup_title">Αντίγραφα ασφαλείας και επαναφορά</string>
-    <string name="backup_backing_up">Δημιουργία αντιγράφου ασφαλείας μηνυμάτων</string>
-    <string name="backup_restoring">Επαναφορά αντιγράφου ασφαλείας μηνυμάτων</string>
-    <string name="backup_last">Τελευταίο αντίγραφο ασφαλείας</string>
-    <string name="backup_loading">Φόρτωση&#8230;</string>
-    <string name="backup_never">Ποτέ</string>
-    <string name="backup_restore_title">Επαναφορά</string>
-    <string name="backup_restore_summary">Επιλέξτε ένα αντίγραφο ασφαλείας</string>
-    <string name="backup_restore_error_plus">Παρακαλώ ξεκλειδώστε το QKSMS+ για τη δημιουργία και επαναφορά αντιγράφων ασφαλείας</string>
-    <string name="backup_restore_error_backup">Δημιουργία αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_restore_error_restore">Επαναφορά αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_restore_confirm_title">Επαναφορά αντιγράφου ασφαλείας</string>
-    <string name="backup_restore_confirm_message">Σίγουρα επιθυμείτε να επαναφέρετε τα μηνύματα σας από αυτό το αντίγραφο ασφαλείας;</string>
-    <string name="backup_restore_stop_title">Διακοπή επαναφοράς</string>
-    <string name="backup_restore_stop_message">Τα μηνύματα που έχουν ήδη ανακτηθεί θα παραμείνουν στη συσκευή σας</string>
-    <string name="backup_restore_dialog_title">Αντίγραφα ασφαλείας</string>
-    <string name="backup_restore_dialog_empty">Δεν βρέθηκαν αντίγραφα ασφαλείας</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d message</item>
-        <item quantity="other">%d μηνύματα</item>
-    </plurals>
-    <string name="backup_disclaimer">Προς το παρόν, μπορούν να δημιουργηθούν αντίγραφα ασφαλείας μόνο για SMS. Η υποστήριξη MMS και ο προγραμματισμός αντιγράφων ασφαλείας θα προστεθούν σύντομα!</string>
-    <string name="backup_now">Δημιουργία αντιγράφου τώρα</string>
-    <string name="backup_progress_parsing">Ανάγνωση αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_progress_running">%d/%d μηνύματα</string>
-    <string name="backup_progress_saving">Αποθήκευση αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_progress_syncing">Συγχρονισμός μηνυμάτων&#8230;</string>
-    <string name="backup_progress_finished">Ολοκληρώθηκε!</string>
-    <string name="backup_notification_channel_name">Αντίγραφα ασφαλείας και επαναφορά</string>
-    <string name="scheduled_title">Προγραμματισμένα</string>
-    <string name="scheduled_empty_description">Στείλτε μήνυμα αυτόματα, την ακριβή στιγμή που επιθυμείτε</string>
-    <string name="scheduled_empty_message_1">Γεια! Πότε είπαμε ότι έχεις γενέθλια;</string>
-    <string name="scheduled_empty_message_2">Στις 23 Δεκεμβρίου</string>
-    <string name="scheduled_empty_message_3">Χρόνια πολλά! Δες τι καλός φίλος που είμαι και θυμήθηκα τα γενέθλιά σου</string>
+<string name="gallery_toast_saved">Αποθηκεύτηκε στη συλλογή</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Αποστολή στις 23 Δεκεμβρίου</string>
-    <string name="scheduled_compose_cd">Προγραμματισμός μηνύματος</string>
-    <string name="scheduled_options_title">Προγραμματισμένο μήνυμα</string>
     <string-array name="scheduled_options">
         <item>Αποστολή τώρα</item>
         <item>Αντιγραφή κειμένου</item>
@@ -245,10 +198,8 @@
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Send long messages as MMS</string>
-    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
-    <string name="settings_sync_title">Συγχρονισμός μηνυμάτων</string>
+<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
+<string name="settings_sync_title">Συγχρονισμός μηνυμάτων</string>
     <string name="settings_sync_summary">Επανασυγχρονισμός μηνυμάτων με τη βάση δεδομένων SMS του Android</string>
     <string name="settings_about_title">Σχετικά με το QKSMS</string>
     <string name="settings_version">Έκδοση %s %s %s</string>
@@ -309,10 +260,6 @@
     <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design palette</string>
     <string name="qksms_plus_emoji_title">Custom auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Create custom auto-emoji shortcuts</string>
-    <string name="qksms_plus_backup_title">Message backup</string>
-    <string name="qksms_plus_backup_summary">Automatically back up your messages. Never again worry about losing your history if you change phones or your phone gets lost</string>
-    <string name="qksms_plus_scheduled_title">Scheduled messages</string>
-    <string name="qksms_plus_scheduled_summary">Schedule messages to automatically be sent at a specific time and date</string>
     <string name="qksms_plus_delayed_title">Delayed sending</string>
     <string name="qksms_plus_delayed_summary">Wait a few seconds before sending your message</string>
     <string name="qksms_plus_night_title">Automatic night mode</string>
@@ -385,18 +332,7 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automatic</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>No compression</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>Okay</item>
         <item>Give me a moment</item>
         <item>On my way</item>

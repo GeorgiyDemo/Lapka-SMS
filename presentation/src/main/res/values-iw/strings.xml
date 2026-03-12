@@ -64,7 +64,6 @@
     <string name="main_permission_allow">אפשר</string>
     <string name="drawer_inbox">דואר נכנס</string>
     <string name="drawer_archived">בארכיון</string>
-    <string name="drawer_scheduled">מתוזמן</string>
     <string name="drawer_blocking">חסימה</string>
     <string name="drawer_more">עוד</string>
     <string name="drawer_settings">הגדרות</string>
@@ -97,10 +96,6 @@
     <string name="compose_send_group_summary">הנמענים והתגובות יהיו חשופים בפני כולם</string>
     <string name="compose_messages_empty">זאת תחילת ההתכתבות שלך. כדאי לפתוח במשהו נחמד!</string>
     <string name="compose_vcard_label">כרטיס קשר</string>
-    <string name="compose_scheduled_for">מתוזמן למועד</string>
-    <string name="compose_scheduled_future">הזמן הנבחר חייב להיות בעתיד!</string>
-    <string name="compose_scheduled_plus">עליך לשחרר את QKSMS+‎ כדי להשתמש בהודעות מתוזמנות</string>
-    <string name="compose_scheduled_toast">הוספה להודעות המתוזמנות</string>
     <string name="compose_hint">כתוב הודעה&#8230;</string>
     <string name="compose_menu_copy">העתק טקסט</string>
     <string name="compose_menu_forward">העבר</string>
@@ -119,13 +114,9 @@
     <string name="compose_details_received">התקבל: %s</string>
     <string name="compose_details_delivered">נמסר: %s</string>
     <string name="compose_details_error_code">קוד שגיאה: %d</string>
-    <string name="compose_attach_cd">הוסף קובץ מצורף</string>
-    <string name="compose_gallery_cd">צרף תמונה</string>
-    <string name="compose_camera_cd">צלם תמונה</string>
-    <string name="compose_schedule_cd">תזמון הודעה</string>
-    <string name="compose_contact_cd">צרף איש קשר</string>
-    <string name="compose_contact_error">שגיאה בקריאת איש קשר</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">צרף תמונה</string>
+<string name="compose_contact_cd">צרף איש קשר</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">נבחר SIM מס׳ %1$d ‏(%2$s)</string>
     <string name="compose_sim_cd">%s נבחר, החלף כרטיס SIM</string>
     <string name="compose_send_cd">שלח הודעה</string>
@@ -142,48 +133,8 @@
     <string name="info_block">חסום</string>
     <string name="info_unblock">בטל חסימה</string>
     <string name="info_delete">מחק התכתבות</string>
-    <string name="gallery_error">לא ניתן לטעון מדיה</string>
-    <string name="gallery_toast_saved">נשמר לגלריה</string>
-    <string name="backup_title">גיבוי ושחזור</string>
-    <string name="backup_backing_up">מגבה הודעות</string>
-    <string name="backup_restoring">משחזר מגיבוי</string>
-    <string name="backup_last">גיבוי אחרון</string>
-    <string name="backup_loading">טוען&#8230;</string>
-    <string name="backup_never">לעולם לא</string>
-    <string name="backup_restore_title">שחזור</string>
-    <string name="backup_restore_summary">בחר גיבוי</string>
-    <string name="backup_restore_error_plus">נא לשחרר את QKSMS+‎ כדי להשתמש בגיבוי ובשחזור</string>
-    <string name="backup_restore_error_backup">מתבצע גיבוי&#8230;</string>
-    <string name="backup_restore_error_restore">מתבצע שחזור&#8230;</string>
-    <string name="backup_restore_confirm_title">שחזר מגיבוי</string>
-    <string name="backup_restore_confirm_message">אתה בטוח שברצונך לשחזר את ההודעות שלך מגיבוי זה?</string>
-    <string name="backup_restore_stop_title">עצור שחזור</string>
-    <string name="backup_restore_stop_message">הודעות שכבר שוחזרו יישארו במכשיר שלך</string>
-    <string name="backup_restore_dialog_title">גיבויים</string>
-    <string name="backup_restore_dialog_empty">לא נמצאו גיבויים</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">הודעה %d</item>
-        <item quantity="two">%d הודעות</item>
-        <item quantity="many">%d הודעות</item>
-        <item quantity="other">%d הודעות</item>
-    </plurals>
-    <string name="backup_disclaimer">נכון לעכשיו, קיימת תמיכה בהודעות מסוג SMS בתכונת הגיבוי והשחזור. תמיכה ב־MMS וגיבויים מתוזמנים יגיעו בעתיד הקרוב!</string>
-    <string name="backup_now">גבה כעת</string>
-    <string name="backup_progress_parsing">הגיבוי מפוענח&#8230;</string>
-    <string name="backup_progress_running">%d/%d הודעות</string>
-    <string name="backup_progress_saving">שומר גיבוי&#8230;</string>
-    <string name="backup_progress_syncing">מסנכרן הודעות&#8230;</string>
-    <string name="backup_progress_finished">הסתיים!</string>
-    <string name="backup_notification_channel_name">גיבוי ושחזור</string>
-    <string name="scheduled_title">מתוזמן</string>
-    <string name="scheduled_empty_description">שלח הודעה אוטומטית, ברגע המדויק שמתאים לך</string>
-    <string name="scheduled_empty_message_1">היי! מתי יום ההולדת שלך שוב?</string>
-    <string name="scheduled_empty_message_2">ב־23 בדצמבר</string>
-    <string name="scheduled_empty_message_3">מזל טוב! תראה איך החברות בינינו פורחת, זכרתי את יום ההולדת שלך</string>
+<string name="gallery_toast_saved">נשמר לגלריה</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">לשליחה ב־23 בדצמבר</string>
-    <string name="scheduled_compose_cd">תזמון הודעה</string>
-    <string name="scheduled_options_title">הודעה מתוזמנת</string>
     <string-array name="scheduled_options">
         <item>שלח כעת</item>
         <item>העתק טקסט</item>
@@ -251,10 +202,8 @@
         <item quantity="many">לאחר %d ימים</item>
         <item quantity="other">לאחר %d ימים</item>
     </plurals>
-    <string name="settings_long_as_mms_title">לשלוח הודעות ארוכות כ־MMS</string>
-    <string name="settings_long_as_mms_summary">אם יש לך בעיה בשליחת הודעות טקסט ארוכות יותר או בעיה ברצף שליחת ההודעה, ניתן לשלוח כהודעת MMS במקום. עלול לגרור עלויות נוספות</string>
-    <string name="settings_mms_size_title">דחיסה אוטומטית של קבצים מצורפים להודעות MMS</string>
-    <string name="settings_sync_title">סנכרון הודעות</string>
+<string name="settings_long_as_mms_summary">אם יש לך בעיה בשליחת הודעות טקסט ארוכות יותר או בעיה ברצף שליחת ההודעה, ניתן לשלוח כהודעת MMS במקום. עלול לגרור עלויות נוספות</string>
+<string name="settings_sync_title">סנכרון הודעות</string>
     <string name="settings_sync_summary">סנכרון ההודעות שלך מחדש עם מסד הנתונים המובנה של Android</string>
     <string name="settings_about_title">על אודות QKSMS</string>
     <string name="settings_version">גרסה %s %s %s</string>
@@ -319,10 +268,6 @@
     <string name="qksms_plus_themes_summary">חשיפת צבעי ערכות עיצוב שאינן זמינות בערת הצבעים של עיצובי Material</string>
     <string name="qksms_plus_emoji_title">אימוג׳י אוטומטי בהתאמה אישית</string>
     <string name="qksms_plus_emoji_summary">יצירת קיצורי דרך מותאמים אישית לאימוג׳י</string>
-    <string name="qksms_plus_backup_title">גיבוי הודעות</string>
-    <string name="qksms_plus_backup_summary">גיבוי ההודעות שלך אוטומטית. לעולם לא תטריד אותך האפשרות שההיסטוריה שלך תלך לאיבוד עקב החלפת טלפונים או אבדן טלפון</string>
-    <string name="qksms_plus_scheduled_title">הודעות מתוזמנות</string>
-    <string name="qksms_plus_scheduled_summary">תזמון הודעות לשליחה אוטומטית במועדים שנקבעו מראש</string>
     <string name="qksms_plus_delayed_title">שליחה מושהית</string>
     <string name="qksms_plus_delayed_summary">להמתין מספר שניות בטרם שליחת ההודעה</string>
     <string name="qksms_plus_night_title">מצב לילה אוטומטי</string>
@@ -397,18 +342,7 @@
         <item>3 שניות</item>
         <item>5 שניות</item>
         <item>10 שניות</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>אוטומטי</item>
-        <item>100 ק״ב</item>
-        <item>200 ק״ב</item>
-        <item>300 ק״ב</item>
-        <item>600 ק״ב</item>
-        <item>1000 ק״ב</item>
-        <item>2000 ק״ב</item>
-        <item>ללא דחיסה</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>בסדר</item>
         <item>כבר אחזור אליך</item>
         <item>בדרך</item>

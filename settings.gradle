@@ -1,1 +1,1 @@
-include ':presentation', ':android-smsmms', ':domain', ':data', ':common', ':psms-lib'
+include ':presentation', ':domain', ':data', ':common', ':psms-lib'

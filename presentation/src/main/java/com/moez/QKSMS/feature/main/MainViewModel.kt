@@ -276,8 +276,6 @@ class MainViewModel @Inject constructor(
                             }
                             else -> newState { copy(hasError = true) }
                         }
-                        NavItem.BACKUP -> navigator.showBackup()
-                        NavItem.SCHEDULED -> navigator.showScheduled()
                         NavItem.BLOCKING -> navigator.showBlockedConversations()
                         NavItem.SETTINGS -> navigator.showSettings()
                         NavItem.PLUS -> navigator.showQksmsPlusActivity("main_menu")

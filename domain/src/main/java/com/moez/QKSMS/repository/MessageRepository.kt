@@ -18,11 +18,8 @@
  */
 package com.moez.QKSMS.repository
 
-import com.moez.QKSMS.model.Attachment
 import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
 import io.realm.RealmResults
-import java.io.File
 
 interface MessageRepository {
 
@@ -35,12 +32,6 @@ interface MessageRepository {
     fun getLastIncomingMessage(threadId: Long): RealmResults<Message>
 
     fun getUnreadCount(): Long
-
-    fun getPart(id: Long): MmsPart?
-
-    fun getPartsForConversation(threadId: Long): RealmResults<MmsPart>
-
-    fun savePart(id: Long): File?
 
     /**
      * Retrieves the list of messages which should be shown in the notification
@@ -67,7 +58,6 @@ interface MessageRepository {
         threadId: Long,
         addresses: List<String>,
         body: String,
-        attachments: List<Attachment>,
         delay: Int = 0
     )
 
@@ -75,8 +65,6 @@ interface MessageRepository {
      * Attempts to send the SMS message. This can be called if the message has already been persisted
      */
     fun sendSms(message: Message)
-
-    fun resendMms(message: Message)
 
     /**
      * Attempts to cancel sending the message with the given id

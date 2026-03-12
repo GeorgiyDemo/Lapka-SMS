@@ -64,7 +64,6 @@
     <string name="main_permission_allow">अनुमति दे</string>
     <string name="drawer_inbox">इनबॉक्स</string>
     <string name="drawer_archived">संग्रहीत</string>
-    <string name="drawer_scheduled">अनुसूचित</string>
     <string name="drawer_blocking">अवरुद्ध</string>
     <string name="drawer_more">और</string>
     <string name="drawer_settings">सेटिंग्स</string>
@@ -95,10 +94,6 @@
     <string name="compose_send_group_summary">प्राप्तकर्ता और उत्तर सभी को दिखाई देंगे</string>
     <string name="compose_messages_empty">यह आपकी बातचीत की शुरुआत है । कुछ अच्छा कहिये!</string>
     <string name="compose_vcard_label">संपर्क कार्ड</string>
-    <string name="compose_scheduled_for">के लिए निर्धारित</string>
-    <string name="compose_scheduled_future">चयनित समय भविष्य में होना चाहिए!</string>
-    <string name="compose_scheduled_plus">आप QKSMS + अनुसूचित संदेश का उपयोग करने के लिए अनलॉक करना होगा</string>
-    <string name="compose_scheduled_toast">अनुसूचित संदेशों में जोड़ा गया</string>
     <string name="compose_hint">संदेश लिखें</string>
     <string name="compose_menu_copy">पाठ की प्रतिलिपि बनाएं</string>
     <string name="compose_menu_forward">आगे</string>
@@ -117,13 +112,9 @@
     <string name="compose_details_received">प्राप्त: %s</string>
     <string name="compose_details_delivered">वितरित: %s</string>
     <string name="compose_details_error_code">त्रुटि संकेत: %d</string>
-    <string name="compose_attach_cd">Add an attachment</string>
-    <string name="compose_gallery_cd">चित्र संलग्न करें</string>
-    <string name="compose_camera_cd">चित्र खिंचे</string>
-    <string name="compose_schedule_cd">संदेश अनुसूचित करें</string>
-    <string name="compose_contact_cd">Attach a contact</string>
-    <string name="compose_contact_error">Error reading contact</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">चित्र संलग्न करें</string>
+<string name="compose_contact_cd">Attach a contact</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">संदेश भेजें</string>
@@ -140,46 +131,8 @@
     <string name="info_block">अवरुदध करें</string>
     <string name="info_unblock">Unblock</string>
     <string name="info_delete">वार्तालाप मिटाऐं</string>
-    <string name="gallery_error">Couldn\'t load media</string>
-    <string name="gallery_toast_saved">गैलरी मैं सेव किया गया है</string>
-    <string name="backup_title">Backup and restore</string>
-    <string name="backup_backing_up">Backing up messages</string>
-    <string name="backup_restoring">Restoring from backup</string>
-    <string name="backup_last">पिछला बेकप</string>
-    <string name="backup_loading">लोड हो रहा है...</string>
-    <string name="backup_never">कभी नहीं</string>
-    <string name="backup_restore_title">Restore</string>
-    <string name="backup_restore_summary">किसी बैकअप का चयन करें</string>
-    <string name="backup_restore_error_plus">Please unlock QKSMS+ to use backup and restore</string>
-    <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
-    <string name="backup_restore_error_restore">Restore in progress&#8230;</string>
-    <string name="backup_restore_confirm_title">Restore from backup</string>
-    <string name="backup_restore_confirm_message">Are you sure you would like to restore your messages from this backup?</string>
-    <string name="backup_restore_stop_title">Stop restore</string>
-    <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
-    <string name="backup_restore_dialog_title">बैकअप</string>
-    <string name="backup_restore_dialog_empty">कोई बैकअप नहीं मिला</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d संदेश</item>
-        <item quantity="other">%d संदेशें</item>
-    </plurals>
-    <string name="backup_disclaimer">वर्तमान में, केवल एसएमएस बैकअप और बहाल द्वारा समर्थित है| एमएमएस समर्थन और अनुसूचित बैकअप जल्द ही आ रहा है!</string>
-    <string name="backup_now">अभी बैकअप लें</string>
-    <string name="backup_progress_parsing">बैकअप पदच्छेद हो रहा है...</string>
-    <string name="backup_progress_running">%d/%d संदेशें</string>
-    <string name="backup_progress_saving">बैकअप सहेजा जा रहा है...</string>
-    <string name="backup_progress_syncing">संदेश सिंक्रनाइज़ हो रहा है...</string>
-    <string name="backup_progress_finished">समाप्त!</string>
-    <string name="backup_notification_channel_name">बैकअप और पुनर्स्थापना</string>
-    <string name="scheduled_title">अनुसूचित</string>
-    <string name="scheduled_empty_description">स्वचालित रूप से एक संदेश भेजें, जिस समय आप चाहते हैं</string>
-    <string name="scheduled_empty_message_1">सुनो! आपका जन्मदिन कब था?</string>
-    <string name="scheduled_empty_message_2">यह 23 दिसंबर को था</string>
-    <string name="scheduled_empty_message_3">जन्मदिन की शुभकामनाएं! देखो, मैं कौन सा मित्र हूं, तुम्हारा जन्मदिन याद कर रहा हूं</string>
+<string name="gallery_toast_saved">गैलरी मैं सेव किया गया है</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">23 दिसंबर को भेजा जा रहा है </string>
-    <string name="scheduled_compose_cd">एक संदेश अनुसूचित करें</string>
-    <string name="scheduled_options_title">निर्धारित संदेश</string>
     <string-array name="scheduled_options">
         <item>अभी भेजें</item>
         <item>Copy text</item>
@@ -245,10 +198,8 @@
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Send long messages as MMS</string>
-    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
-    <string name="settings_sync_title">Sync messages</string>
+<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
+<string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
     <string name="settings_about_title">About QKSMS</string>
     <string name="settings_version">संस्करण %s %s %s</string>
@@ -309,10 +260,6 @@
     <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design palette</string>
     <string name="qksms_plus_emoji_title">Custom auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Create custom auto-emoji shortcuts</string>
-    <string name="qksms_plus_backup_title">Message backup</string>
-    <string name="qksms_plus_backup_summary">Automatically back up your messages. Never again worry about losing your history if you change phones or your phone gets lost</string>
-    <string name="qksms_plus_scheduled_title">Scheduled messages</string>
-    <string name="qksms_plus_scheduled_summary">Schedule messages to automatically be sent at a specific time and date</string>
     <string name="qksms_plus_delayed_title">Delayed sending</string>
     <string name="qksms_plus_delayed_summary">Wait a few seconds before sending your message</string>
     <string name="qksms_plus_night_title">Automatic night mode</string>
@@ -385,18 +332,7 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automatic</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>No compression</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>ठीक</item>
         <item>एक क्षण दें</item>
         <item>On my way</item>

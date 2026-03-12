@@ -64,7 +64,6 @@
     <string name="main_permission_allow">سماح</string>
     <string name="drawer_inbox">صندوق الوارد</string>
     <string name="drawer_archived">المؤرشفة</string>
-    <string name="drawer_scheduled">المجدولة</string>
     <string name="drawer_blocking">الحظر</string>
     <string name="drawer_more">المزيد</string>
     <string name="drawer_settings">الإعدادات</string>
@@ -99,10 +98,6 @@
     <string name="compose_send_group_summary">المتلقون والردود سيكونان مرئيين للجميع</string>
     <string name="compose_messages_empty">هذا أول المحادثة. قل شيئا لطيفاً!</string>
     <string name="compose_vcard_label">بطاقة جهة الاتصال</string>
-    <string name="compose_scheduled_for">مجدولة لـ</string>
-    <string name="compose_scheduled_future">الوقت المحدّد يجب أن يكون مستقبلاً!</string>
-    <string name="compose_scheduled_plus">يلزمك فك QKSMS+ لاستخدام التراسل المجدول</string>
-    <string name="compose_scheduled_toast">أضيفت إلى الرسائل المجدولة</string>
     <string name="compose_hint">كتابة رسالة&#8230;</string>
     <string name="compose_menu_copy">نسخ النص</string>
     <string name="compose_menu_forward">إعادة توجيه</string>
@@ -121,13 +116,9 @@
     <string name="compose_details_received">استلمت: %s</string>
     <string name="compose_details_delivered">التسليم: %s</string>
     <string name="compose_details_error_code">رمز الخطأ: %d</string>
-    <string name="compose_attach_cd">إضافة مرفق</string>
-    <string name="compose_gallery_cd">إرفاق صورة</string>
-    <string name="compose_camera_cd">التقاط صورة</string>
-    <string name="compose_schedule_cd">جدوِل الرسالة</string>
-    <string name="compose_contact_cd">إرفاق جهة اتصال</string>
-    <string name="compose_contact_error">خطأ في قراءة جهة الاتصال</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">إرفاق صورة</string>
+<string name="compose_contact_cd">إرفاق جهة اتصال</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">تحديد الشريحة</string>
     <string name="compose_sim_cd">%s محددة، غيّر شريحة SIM</string>
     <string name="compose_send_cd">إرسال الرسالة</string>
@@ -144,50 +135,8 @@
     <string name="info_block">حظر</string>
     <string name="info_unblock">إلغاء الحظر</string>
     <string name="info_delete">حذف المحادثة</string>
-    <string name="gallery_error">تعذر تحميل الوسائط</string>
-    <string name="gallery_toast_saved">تم الحفظ في المعرض</string>
-    <string name="backup_title">النسخ الاحتياطي والاستعادة</string>
-    <string name="backup_backing_up">النسخ الاحتياطي للرسائل</string>
-    <string name="backup_restoring">استعادة من النسخة الاحتياطية</string>
-    <string name="backup_last">آخر نسخ احتياطي</string>
-    <string name="backup_loading">تحميل&#8230;</string>
-    <string name="backup_never">أبداً</string>
-    <string name="backup_restore_title">استعادة</string>
-    <string name="backup_restore_summary">اختر نسخة احتياطية</string>
-    <string name="backup_restore_error_plus">يرجى إلغاء تأمين QKSMS+ للتمكن من استخدام النسخ الاحتياطي والاستعادة</string>
-    <string name="backup_restore_error_backup">النسخ الاحتياطي قيد التقدم&#8230;</string>
-    <string name="backup_restore_error_restore">الاستعادة قيد التقدُّم&#8230;</string>
-    <string name="backup_restore_confirm_title">الاستعادة من النسخ الاحتياطي</string>
-    <string name="backup_restore_confirm_message">هل أنت متأكد من رغبتك استرجاع رسائلك من هذه النسخة الاحتياطية؟</string>
-    <string name="backup_restore_stop_title">إيقاف الاستعادة</string>
-    <string name="backup_restore_stop_message">الرسائل التي تمت استعادتها ستبقى في جهازك</string>
-    <string name="backup_restore_dialog_title">النسخ الاحتياطية</string>
-    <string name="backup_restore_dialog_empty">لا توجد أي نسخة احتياطية</string>
-    <plurals name="backup_message_count">
-        <item quantity="zero">لا رسائل</item>
-        <item quantity="one">رسالة</item>
-        <item quantity="two">رسالتان</item>
-        <item quantity="few">%d رسائل</item>
-        <item quantity="many">%d رسائل</item>
-        <item quantity="other">%d رسائل</item>
-    </plurals>
-    <string name="backup_disclaimer">النسخ الاحتياطي والاستعادة متاحة الآن فقط للرسائل النصّية. دعم رسائل الوسائط والرسائل المجدولة قادم قريباً!</string>
-    <string name="backup_now">النسخ الاحتياطي الآن</string>
-    <string name="backup_progress_parsing">توزيع النسخ الاحتياطي&#8230;</string>
-    <string name="backup_progress_running">%d/%d رسائل</string>
-    <string name="backup_progress_saving">جارٍ حفظُ النسخة الاحتياطية&#8230;</string>
-    <string name="backup_progress_syncing">مزامنة الرسائل جارية&#8230;</string>
-    <string name="backup_progress_finished">تم!</string>
-    <string name="backup_notification_channel_name">النسخ الاحتياطي والاستعادة</string>
-    <string name="scheduled_title">مجدولة</string>
-    <string name="scheduled_empty_description">الإرسال الآلي لأي رسالة في الوقت الذي ترغب بالضبط</string>
-    <string name="scheduled_empty_message_1">مهلاً..متى عيد ميلادك؟</string>
-    <string name="scheduled_empty_message_2">إنه في 23 ديسمبر</string>
-    <string name="scheduled_empty_message_3">عيد ميلاد سعيد! أنظر ما أجمل صديقك QKSMS ، يتذكر عيد ميلادك</string>
+<string name="gallery_toast_saved">تم الحفظ في المعرض</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">الإرسال في 23 ديسمبر</string>
-    <string name="scheduled_compose_cd">جدولة رسالة</string>
-    <string name="scheduled_options_title">الرسالة المجدولة</string>
     <string-array name="scheduled_options">
         <item>أرسل الآن</item>
         <item>نسخ النص</item>
@@ -257,10 +206,8 @@
         <item quantity="many">After %d days</item>
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">ارسل الرسائل الطويلة كرسائل الوسائط المتعددة</string>
-    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">الضغط التلقائي لمرفقات رسائل الوسائط</string>
-    <string name="settings_sync_title">مزامنة الرسائل</string>
+<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
+<string name="settings_sync_title">مزامنة الرسائل</string>
     <string name="settings_sync_summary">إعادة مزامنة رسائلك مع قاعدة البيانات الأصلية للرسائل في النظام</string>
     <string name="settings_about_title">حول QKSMS</string>
     <string name="settings_version">النسخة %s %s %s</string>
@@ -329,11 +276,6 @@
     <string name="qksms_plus_themes_summary">استفد من ألوان رائعة للسمات لاتوجد في لوح ألوان Material Design</string>
     <string name="qksms_plus_emoji_title">إيموجي تلقائية ومخصصة</string>
     <string name="qksms_plus_emoji_summary">إنشاء اختصارات إيموجي تلقائية ومخصّصة</string>
-    <string name="qksms_plus_backup_title">النسخ الاحتياطي للرسائل</string>
-    <string name="qksms_plus_backup_summary">النسخ الاحتياطي التلقائي لرسائلك.
-لا تقلق ثانية من فقد سجلات رسائلك عندما تغير جوالك أو عند فقده</string>
-    <string name="qksms_plus_scheduled_title">الرسائل المجدولة</string>
-    <string name="qksms_plus_scheduled_summary">جدولة الرسائل ليتم إرسالها تلقائياً في وقت وتاريخ محدد</string>
     <string name="qksms_plus_delayed_title">إرسال متأخر</string>
     <string name="qksms_plus_delayed_summary">انتظر بضع ثوان قبل إرسال رسالتك</string>
     <string name="qksms_plus_night_title">الوضع الليلي التلقائي</string>
@@ -410,18 +352,7 @@
         <item>ثلاث ثوان</item>
         <item>خمس ثوان</item>
         <item>عشر ثوان</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>تلقائي</item>
-        <item>100كيلوبايت</item>
-        <item>200كيلوبايت</item>
-        <item>300كيلوبايت</item>
-        <item>600كيلوبايت</item>
-        <item>1000كيلوبايت</item>
-        <item>2000كيلوبايت</item>
-        <item>بدون ضغط</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>حسنًا</item>
         <item>أمهلني بعض الوقت</item>
         <item>في طريقي</item>

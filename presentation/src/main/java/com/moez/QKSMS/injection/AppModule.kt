@@ -67,13 +67,9 @@ import com.moez.QKSMS.mapper.CursorToConversation
 import com.moez.QKSMS.mapper.CursorToConversationImpl
 import com.moez.QKSMS.mapper.CursorToMessage
 import com.moez.QKSMS.mapper.CursorToMessageImpl
-import com.moez.QKSMS.mapper.CursorToPart
-import com.moez.QKSMS.mapper.CursorToPartImpl
 import com.moez.QKSMS.mapper.CursorToRecipient
 import com.moez.QKSMS.mapper.CursorToRecipientImpl
 import com.moez.QKSMS.mapper.RatingManagerImpl
-import com.moez.QKSMS.repository.BackupRepository
-import com.moez.QKSMS.repository.BackupRepositoryImpl
 import com.moez.QKSMS.repository.BlockingRepository
 import com.moez.QKSMS.repository.BlockingRepositoryImpl
 import com.moez.QKSMS.repository.ContactRepository
@@ -82,8 +78,6 @@ import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.repository.ConversationRepositoryImpl
 import com.moez.QKSMS.repository.MessageRepository
 import com.moez.QKSMS.repository.MessageRepositoryImpl
-import com.moez.QKSMS.repository.ScheduledMessageRepository
-import com.moez.QKSMS.repository.ScheduledMessageRepositoryImpl
 import com.moez.QKSMS.repository.SyncRepository
 import com.moez.QKSMS.repository.SyncRepositoryImpl
 import com.squareup.moshi.Moshi
@@ -192,15 +186,9 @@ class AppModule(private var application: Application) {
     fun provideCursorToMessage(mapper: CursorToMessageImpl): CursorToMessage = mapper
 
     @Provides
-    fun provideCursorToPart(mapper: CursorToPartImpl): CursorToPart = mapper
-
-    @Provides
     fun provideCursorToRecipient(mapper: CursorToRecipientImpl): CursorToRecipient = mapper
 
     // Repository
-
-    @Provides
-    fun provideBackupRepository(repository: BackupRepositoryImpl): BackupRepository = repository
 
     @Provides
     fun provideBlockingRepository(repository: BlockingRepositoryImpl): BlockingRepository = repository
@@ -213,9 +201,6 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideMessageRepository(repository: MessageRepositoryImpl): MessageRepository = repository
-
-    @Provides
-    fun provideScheduledMessagesRepository(repository: ScheduledMessageRepositoryImpl): ScheduledMessageRepository = repository
 
     @Provides
     fun provideSyncRepository(repository: SyncRepositoryImpl): SyncRepository = repository

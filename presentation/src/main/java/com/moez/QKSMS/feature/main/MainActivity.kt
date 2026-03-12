@@ -105,15 +105,11 @@ class MainActivity : QkThemedActivity(), MainView {
     private val inboxIcon: ImageView by lazy { findViewById(R.id.inboxIcon) }
     private val archived: LinearLayout by lazy { findViewById(R.id.archived) }
     private val archivedIcon: ImageView by lazy { findViewById(R.id.archivedIcon) }
-    private val backup: LinearLayout by lazy { findViewById(R.id.backup) }
-    private val scheduled: LinearLayout by lazy { findViewById(R.id.scheduled) }
     private val blocking: LinearLayout by lazy { findViewById(R.id.blocking) }
     private val settings: LinearLayout by lazy { findViewById(R.id.settings) }
     private val plus: LinearLayout by lazy { findViewById(R.id.plus) }
     private val help: LinearLayout by lazy { findViewById(R.id.help) }
     private val invite: LinearLayout by lazy { findViewById(R.id.invite) }
-    private val plusBadge1: QkTextView by lazy { findViewById(R.id.plusBadge1) }
-    private val plusBadge2: QkTextView by lazy { findViewById(R.id.plusBadge2) }
     private val plusBanner: ConstraintLayout by lazy { findViewById(R.id.plusBanner) }
     private val plusIcon: ImageView by lazy { findViewById(R.id.plusIcon) }
     private val rateLayout: ConstraintLayout by lazy { findViewById(R.id.rateLayout) }
@@ -137,8 +133,6 @@ class MainActivity : QkThemedActivity(), MainView {
                 backPressedSubject,
                 inbox.clicks().map { NavItem.INBOX },
                 archived.clicks().map { NavItem.ARCHIVED },
-                backup.clicks().map { NavItem.BACKUP },
-                scheduled.clicks().map { NavItem.SCHEDULED },
                 blocking.clicks().map { NavItem.BLOCKING },
                 settings.clicks().map { NavItem.SETTINGS },
                 plus.clicks().map { NavItem.PLUS },
@@ -240,11 +234,7 @@ class MainActivity : QkThemedActivity(), MainView {
                             }
 
                     // Miscellaneous views
-                    listOf(plusBadge1, plusBadge2).forEach { badge ->
-                        badge.setBackgroundTint(theme.theme)
-                        badge.setTextColor(theme.textPrimary)
-                    }
-                    syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
+                                syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
                     syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
                     plusIcon.setTint(theme.theme)
                     rateIcon.setTint(theme.theme)
@@ -321,9 +311,6 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbar.menu.findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
         toolbar.menu.findItem(R.id.block)?.isVisible = selectedConversations != 0
 
-        listOf(plusBadge1, plusBadge2).forEach { badge ->
-            badge.isVisible = false
-        }
         plus.isVisible = false
         plusBanner.isVisible = false
         rateLayout.setVisible(false)

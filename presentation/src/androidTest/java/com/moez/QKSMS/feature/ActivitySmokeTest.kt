@@ -4,18 +4,15 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.moez.QKSMS.feature.backup.BackupActivity
 import com.moez.QKSMS.feature.blocking.BlockingActivity
 import com.moez.QKSMS.feature.compose.ComposeActivity
 import com.moez.QKSMS.feature.contacts.ContactsActivity
 import com.moez.QKSMS.feature.conversationinfo.ConversationInfoActivity
-import com.moez.QKSMS.feature.gallery.GalleryActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
 import com.moez.QKSMS.feature.main.MainActivity
 import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivity
 import com.moez.QKSMS.feature.plus.PlusActivity
 import com.moez.QKSMS.feature.qkreply.QkReplyActivity
-import com.moez.QKSMS.feature.scheduled.ScheduledActivity
 import com.moez.QKSMS.feature.settings.SettingsActivity
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,16 +66,6 @@ class ActivitySmokeTest {
     }
 
     @Test
-    fun scheduledActivity_launches() {
-        launchAndVerify<ScheduledActivity>()
-    }
-
-    @Test
-    fun backupActivity_launches() {
-        launchAndVerify<BackupActivity>()
-    }
-
-    @Test
     fun contactsActivity_launches() {
         launchAndVerify<ContactsActivity>()
     }
@@ -110,10 +97,4 @@ class ActivitySmokeTest {
         }
     }
 
-    @Test
-    fun galleryActivity_launches() {
-        launchAndVerify<GalleryActivity> {
-            putExtra("partId", 0L)
-        }
-    }
 }

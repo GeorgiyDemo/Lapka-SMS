@@ -59,8 +59,6 @@ class PlusActivity : QkThemedActivity(), PlusView {
     private val upgradeDonate: QkTextView by lazy { findViewById(R.id.upgradeDonate) }
     private val donate: QkTextView by lazy { findViewById(R.id.donate) }
     private val themes: PreferenceView by lazy { findViewById(R.id.themes) }
-    private val schedule: PreferenceView by lazy { findViewById(R.id.schedule) }
-    private val backup: PreferenceView by lazy { findViewById(R.id.backup) }
     private val delayed: PreferenceView by lazy { findViewById(R.id.delayed) }
     private val night: PreferenceView by lazy { findViewById(R.id.night) }
     private val free: LinearLayout by lazy { findViewById(R.id.free) }
@@ -77,8 +75,6 @@ class PlusActivity : QkThemedActivity(), PlusView {
     override val upgradeDonateIntent by lazy { upgradeDonate.clicks() }
     override val donateIntent by lazy { donate.clicks() }
     override val themeClicks by lazy { themes.clicks() }
-    override val scheduleClicks by lazy { schedule.clicks() }
-    override val backupClicks by lazy { backup.clicks() }
     override val delayedClicks by lazy { delayed.clicks() }
     override val nightClicks by lazy { night.clicks() }
 
@@ -126,8 +122,6 @@ class PlusActivity : QkThemedActivity(), PlusView {
         upgraded.setVisible(false)
 
         themes.isEnabled = state.upgraded
-        schedule.isEnabled = state.upgraded
-        backup.isEnabled = state.upgraded
         delayed.isEnabled = state.upgraded
         night.isEnabled = state.upgraded
     }

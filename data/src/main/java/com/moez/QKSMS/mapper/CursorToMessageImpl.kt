@@ -22,9 +22,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.Telephony.*
-import com.google.android.mms.pdu_alt.EncodedStringValue
-import com.google.android.mms.pdu_alt.PduHeaders
-import com.google.android.mms.pdu_alt.PduPersister
 import com.moez.QKSMS.extensions.map
 import com.moez.QKSMS.manager.KeyManager
 import com.moez.QKSMS.manager.PermissionManager
@@ -36,7 +33,6 @@ import javax.inject.Inject
 
 class CursorToMessageImpl @Inject constructor(
     private val context: Context,
-    private val cursorToPart: CursorToPart,
     private val keys: KeyManager,
     private val permissionManager: PermissionManager,
     private val preferences: Preferences
@@ -117,11 +113,8 @@ class CursorToMessageImpl @Inject constructor(
                     readReportString = cursor.getString(columnsMap.mmsReadReport) ?: ""
                     messageType = cursor.getInt(columnsMap.mmsMessageType)
                     mmsStatus = cursor.getInt(columnsMap.mmsStatus)
-                    val subjectCharset = cursor.getInt(columnsMap.mmsSubjectCharset)
                     subject = cursor.getString(columnsMap.mmsSubject)
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let(PduPersister::getBytes)
-                            ?.let { EncodedStringValue(subjectCharset, it).string } ?: ""
+                            ?.takeIf { it.isNotBlank() } ?: ""
                     textContentType = ""
                     attachmentType = Message.AttachmentType.NOT_LOADED
                 }
@@ -163,7 +156,7 @@ class CursorToMessageImpl @Inject constructor(
 
         //TODO: Use Charset to ensure address is decoded correctly
         val projection = arrayOf(Mms.Addr.ADDRESS, Mms.Addr.CHARSET)
-        val selection = "${Mms.Addr.TYPE} = ${PduHeaders.FROM}"
+        val selection = "${Mms.Addr.TYPE} = ${0x89}" // PduHeaders.FROM
 
         val cursor = context.contentResolver.query(uri, projection, selection, null, null)
         cursor?.use {

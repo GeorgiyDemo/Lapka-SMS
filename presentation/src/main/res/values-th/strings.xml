@@ -64,7 +64,6 @@
     <string name="main_permission_allow">อนุญาต</string>
     <string name="drawer_inbox">กล่องขาเข้า</string>
     <string name="drawer_archived">จัดเก็บ</string>
-    <string name="drawer_scheduled">กำหนดเวลา</string>
     <string name="drawer_blocking">บล็อก</string>
     <string name="drawer_more">เพิ่มเติม</string>
     <string name="drawer_settings">การตั้งค่า</string>
@@ -94,10 +93,6 @@
     <string name="compose_send_group_summary">ผู้รับและการตอบกลับจะแสดงให้ทุกคนเห็นทุกคน</string>
     <string name="compose_messages_empty">การเริ่มต้นของการสนทนาของคุณ บอกกล่าวบางอย่างที่นี่</string>
     <string name="compose_vcard_label">นามบัตร</string>
-    <string name="compose_scheduled_for">กำหนดการ</string>
-    <string name="compose_scheduled_future">เลือกเวลาที่ต้องเป็นเวลาในอนาคต</string>
-    <string name="compose_scheduled_plus">คุณต้องปลดล็อก QKSMS + เพื่อการใช้ข้อความที่กำหนดเวลาได้</string>
-    <string name="compose_scheduled_toast">เพิ่มข้อความที่กำหนดเวลา</string>
     <string name="compose_hint">เขียนข้อความ...</string>
     <string name="compose_menu_copy">คัดลอกข้อความ</string>
     <string name="compose_menu_forward">ส่งต่อ</string>
@@ -116,13 +111,9 @@
     <string name="compose_details_received">รับ: %s</string>
     <string name="compose_details_delivered">การจัดส่ง: %s</string>
     <string name="compose_details_error_code">รหัสข้อผิดพลาด: %d</string>
-    <string name="compose_attach_cd">เพิ่มสิ่งที่แนบ</string>
-    <string name="compose_gallery_cd">แนบรูปภาพ</string>
-    <string name="compose_camera_cd">ถ่ายภาพ</string>
-    <string name="compose_schedule_cd">กำหนดเวลาของข้อความ</string>
-    <string name="compose_contact_cd">Attach a contact</string>
-    <string name="compose_contact_error">Error reading contact</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">แนบรูปภาพ</string>
+<string name="compose_contact_cd">Attach a contact</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s เลือก เปลี่ยน SIM การ์ด</string>
     <string name="compose_send_cd">ส่งข้อความ</string>
@@ -139,45 +130,8 @@
     <string name="info_block">ปิดกั้น</string>
     <string name="info_unblock">ยกเลิกการปิดกั้น</string>
     <string name="info_delete">ลบการสนทนา</string>
-    <string name="gallery_error">Couldn\'t load media</string>
-    <string name="gallery_toast_saved">บันทึกรูปภาพแล้ว</string>
-    <string name="backup_title">Backup and restore</string>
-    <string name="backup_backing_up">Backing up messages</string>
-    <string name="backup_restoring">Restoring from backup</string>
-    <string name="backup_last">Last backup</string>
-    <string name="backup_loading">Loading&#8230;</string>
-    <string name="backup_never">Never</string>
-    <string name="backup_restore_title">Restore</string>
-    <string name="backup_restore_summary">Select a backup</string>
-    <string name="backup_restore_error_plus">Please unlock QKSMS+ to use backup and restore</string>
-    <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
-    <string name="backup_restore_error_restore">Restore in progress&#8230;</string>
-    <string name="backup_restore_confirm_title">Restore from backup</string>
-    <string name="backup_restore_confirm_message">Are you sure you would like to restore your messages from this backup?</string>
-    <string name="backup_restore_stop_title">Stop restore</string>
-    <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
-    <string name="backup_restore_dialog_title">Backups</string>
-    <string name="backup_restore_dialog_empty">No backups found</string>
-    <plurals name="backup_message_count">
-        <item quantity="other">%d messages</item>
-    </plurals>
-    <string name="backup_disclaimer">Currently, only SMS is supported by Backup and Restore. MMS support and scheduled backups will be coming soon!</string>
-    <string name="backup_now">Backup now</string>
-    <string name="backup_progress_parsing">Parsing backup&#8230;</string>
-    <string name="backup_progress_running">%d/%d messages</string>
-    <string name="backup_progress_saving">Saving backup&#8230;</string>
-    <string name="backup_progress_syncing">Syncing messages&#8230;</string>
-    <string name="backup_progress_finished">Finished!</string>
-    <string name="backup_notification_channel_name">Backup and restore</string>
-    <string name="scheduled_title">กำหนดการ</string>
-    <string name="scheduled_empty_description">ส่งข้อความ โดยอัตโนมัติที่คุณต้องการ</string>
-    <string name="scheduled_empty_message_1">วันเกิดของคุณอีกครั้งเมื่อไหร่</string>
-    <string name="scheduled_empty_message_2">วันที่ 23 นี้ธันวาคม</string>
-    <string name="scheduled_empty_message_3">Happy birthday! Look at what a great friend I am, remembering your birthday</string>
+<string name="gallery_toast_saved">บันทึกรูปภาพแล้ว</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd </string>
-    <string name="scheduled_compose_cd">Schedule a message</string>
-    <string name="scheduled_options_title">Scheduled message</string>
     <string-array name="scheduled_options">
         <item>Send now</item>
         <item>Copy text</item>
@@ -242,10 +196,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Send long messages as MMS</string>
-    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">บีบอัดสิ่งที่แนบมาใน MMS อัตโนมัติ</string>
-    <string name="settings_sync_title">ซิงค์ข้อความ</string>
+<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
+<string name="settings_sync_title">ซิงค์ข้อความ</string>
     <string name="settings_sync_summary">ซิงค์ข้อความของคุณกับฐานข้อมูลของ Android SMS</string>
     <string name="settings_about_title">เกี่ยวกับ QKSMS</string>
     <string name="settings_version">เวอร์ชัน: %s %s %s</string>
@@ -304,10 +256,6 @@
     <string name="qksms_plus_themes_summary">ปลดล็อครูปแบบการแสดงผลที่ไม่ได้อยู่ใน Material Design</string>
     <string name="qksms_plus_emoji_title">อีโมจิอัตโนมัติที่กำหนดเอง</string>
     <string name="qksms_plus_emoji_summary">สร้างทางลัดอิโมจิอัตโนมัติแบบกำหนดเอง</string>
-    <string name="qksms_plus_backup_title">สำรองข้อมูลข้อความ</string>
-    <string name="qksms_plus_backup_summary">สำรองข้อมูลข้อความของคุณโดยอัตโนมัติ ไม่ต้องกังวลว่าประวัติข้อความของคุณจะสูญหายถ้าคุณเปลี่ยนโทรศัพท์มือถือ หรือทำโทรศัพท์หาย</string>
-    <string name="qksms_plus_scheduled_title">ข้อความที่กำหนดเวลา</string>
-    <string name="qksms_plus_scheduled_summary">ข้อความจะถูกส่งโดยอัตโนมัติตามวันและเวลาที่กำหนด</string>
     <string name="qksms_plus_delayed_title">การส่งแบบล่าช้า</string>
     <string name="qksms_plus_delayed_summary">รอสักครู่ก่อนที่จะส่งข้อความของคุณ</string>
     <string name="qksms_plus_night_title">โหมดกลางคืนอัตโนมัติ</string>
@@ -379,18 +327,7 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automatic</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>No compression</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>ตกลง</item>
         <item>ให้เวลาฉันสักครู่</item>
         <item>ตามใจฉัน</item>

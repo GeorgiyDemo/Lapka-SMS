@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Дозволи</string>
     <string name="drawer_inbox">Примљено</string>
     <string name="drawer_archived">Сачувано</string>
-    <string name="drawer_scheduled">Заказане поруке</string>
     <string name="drawer_blocking">Блокирање</string>
     <string name="drawer_more">Још</string>
     <string name="drawer_settings">Подешавања</string>
@@ -96,10 +95,6 @@
     <string name="compose_send_group_summary">Примаоци и одговори ће бити свима видљиви</string>
     <string name="compose_messages_empty">Овде почиње ваш разговор. Реци нешто лепо за почетак!</string>
     <string name="compose_vcard_label">Контакт картица</string>
-    <string name="compose_scheduled_for">Заказано за</string>
-    <string name="compose_scheduled_future">Изабрано време мора бити у будућности!</string>
-    <string name="compose_scheduled_plus">Да би заказивао поруке мораш откључати QKSMS+</string>
-    <string name="compose_scheduled_toast">Додато у заказане поруке</string>
     <string name="compose_hint">Напиши поруку&#8230;</string>
     <string name="compose_menu_copy">Копирај текст</string>
     <string name="compose_menu_forward">Проследи</string>
@@ -118,13 +113,9 @@
     <string name="compose_details_received">Примљено: %s</string>
     <string name="compose_details_delivered">Испоручено: %s</string>
     <string name="compose_details_error_code">Кôд грешке: %d</string>
-    <string name="compose_attach_cd">Додај прилог</string>
-    <string name="compose_gallery_cd">Приложи фотографију</string>
-    <string name="compose_camera_cd">Сними фотографију</string>
-    <string name="compose_schedule_cd">Планирај поруку</string>
-    <string name="compose_contact_cd">Приложи контакт</string>
-    <string name="compose_contact_error">Грешка при учитавању контакта</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Приложи фотографију</string>
+<string name="compose_contact_cd">Приложи контакт</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Изабрана SIM картица %1$d (%2$s)</string>
     <string name="compose_sim_cd">Изабрано: %s; промените SIM картицу</string>
     <string name="compose_send_cd">Пошаљи поруку</string>
@@ -141,47 +132,8 @@
     <string name="info_block">Блокирај</string>
     <string name="info_unblock">Одблокирај</string>
     <string name="info_delete">Обриши разговор</string>
-    <string name="gallery_error">Неуспешно учитавање</string>
-    <string name="gallery_toast_saved">Сачувано у галерију</string>
-    <string name="backup_title">Резервнe копијe</string>
-    <string name="backup_backing_up">Правим копију</string>
-    <string name="backup_restoring">Враћање резервне копије</string>
-    <string name="backup_last">Последња копија</string>
-    <string name="backup_loading">Учитавање&#8230;</string>
-    <string name="backup_never">Никад</string>
-    <string name="backup_restore_title">Поврати копију</string>
-    <string name="backup_restore_summary">Изабери резервну копију</string>
-    <string name="backup_restore_error_plus">Молимо откључајте QKSMS+ да бисте користили опцију за прављење резервне копије</string>
-    <string name="backup_restore_error_backup">Правим резервну копију&#8230;</string>
-    <string name="backup_restore_error_restore">Враћам резервну копију&#8230;</string>
-    <string name="backup_restore_confirm_title">Поврати резервну копију</string>
-    <string name="backup_restore_confirm_message">Да ли сте сигурни да желите да вратите своје поруке из резервне копије?</string>
-    <string name="backup_restore_stop_title">Заустави повраћај</string>
-    <string name="backup_restore_stop_message">Поруке које су већ повраћене ће остати сачуване на Вашем уређају</string>
-    <string name="backup_restore_dialog_title">Резервне копије</string>
-    <string name="backup_restore_dialog_empty">Нема резервних копија</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d порука</item>
-        <item quantity="few">%d порука</item>
-        <item quantity="other">%d порука</item>
-    </plurals>
-    <string name="backup_disclaimer">Тренутно су подржане резервне копије само SMS порука. Ускоро очекујте подршку за MMS поруке и заказано прављење резервних копија!</string>
-    <string name="backup_now">Одмах направите копију</string>
-    <string name="backup_progress_parsing">Обрађујем копију&#8230;</string>
-    <string name="backup_progress_running">%d/%d порука</string>
-    <string name="backup_progress_saving">Сачувавам резерну копију&#8230;</string>
-    <string name="backup_progress_syncing">Синхронизујем поруке&#8230;</string>
-    <string name="backup_progress_finished">Завршено!</string>
-    <string name="backup_notification_channel_name">Резервне копије</string>
-    <string name="scheduled_title">Заказано</string>
-    <string name="scheduled_empty_description">Аутоматски пошаљи поруку у тачно одређеном тренутку</string>
-    <string name="scheduled_empty_message_1">Хеј! Кад ти оно беше рођендан?</string>
-    <string name="scheduled_empty_message_2">23. децембра</string>
-    <string name="scheduled_empty_message_3">Срећан рођендан! Видиш како сам добар друг, сетио сам се твог рођедана!</string>
+<string name="gallery_toast_saved">Сачувано у галерију</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Шаље се 23. децембра.</string>
-    <string name="scheduled_compose_cd">Закажи слање</string>
-    <string name="scheduled_options_title">Заказана порука</string>
     <string-array name="scheduled_options">
         <item>Пошаљи одмах</item>
         <item>Копирај текст</item>
@@ -248,10 +200,8 @@
         <item quantity="few">Након %d дана</item>
         <item quantity="other">Након %d дана</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Пошаљи дугачке поруке као MMS</string>
-    <string name="settings_long_as_mms_summary">Ако дугачке поруке не могу да се пошаљу или се шаљу погрешним редоследом, можете их послати као MMS, што може имати додатне трошкове.</string>
-    <string name="settings_mms_size_title">Аутоматска оптимизација величине MMS прилога.</string>
-    <string name="settings_sync_title">Синхронизуј поруке</string>
+<string name="settings_long_as_mms_summary">Ако дугачке поруке не могу да се пошаљу или се шаљу погрешним редоследом, можете их послати као MMS, што може имати додатне трошкове.</string>
+<string name="settings_sync_title">Синхронизуј поруке</string>
     <string name="settings_sync_summary">Поново синхронизуј поруке са изворном Андроид SMS базом података.</string>
     <string name="settings_about_title">О апликацији</string>
     <string name="settings_version">Верзија %s %s %s</string>
@@ -314,10 +264,6 @@
     <string name="qksms_plus_themes_summary">Откључај прелепе боје које нису доступне у Material Design палети</string>
     <string name="qksms_plus_emoji_title">Уређивање аутоматских емотикона</string>
     <string name="qksms_plus_emoji_summary">Направите своје аутоматске пречице за емотиконе</string>
-    <string name="qksms_plus_backup_title">Резервне копије порука</string>
-    <string name="qksms_plus_backup_summary">Аутоматски сачувајте своје поруке. Више не морате да бринете да ћете изгубити историју разговора у случају да промените или изгубите телефон!</string>
-    <string name="qksms_plus_scheduled_title">Заказане поруке</string>
-    <string name="qksms_plus_scheduled_summary">Закажите аутоматско слање порука у тачно одређено време</string>
     <string name="qksms_plus_delayed_title">Одложено слање</string>
     <string name="qksms_plus_delayed_summary">Сачекајте неколико секунди пре него што пошаљете поруку</string>
     <string name="qksms_plus_night_title">Аутоматски ноћни мод</string>
@@ -391,18 +337,7 @@
         <item>3 секунде</item>
         <item>5 секунди</item>
         <item>10 секунди</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Аутоматско</item>
-        <item>100kB</item>
-        <item>200kB</item>
-        <item>300kB</item>
-        <item>600kB</item>
-        <item>1000kB</item>
-        <item>2000kB</item>
-        <item>Без оптимизације</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>У реду</item>
         <item>Сачекај секунд</item>
         <item>Стижем</item>

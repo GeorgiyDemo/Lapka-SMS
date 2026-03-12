@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Разрешить</string>
     <string name="drawer_inbox">Входящие</string>
     <string name="drawer_archived">Архив</string>
-    <string name="drawer_scheduled">Планировщик</string>
     <string name="drawer_blocking">Блокировка</string>
     <string name="drawer_more">Ещё</string>
     <string name="drawer_settings">Настройки</string>
@@ -97,10 +96,6 @@
     <string name="compose_send_group_summary">Получатели и ответы будут видны всем</string>
     <string name="compose_messages_empty">Это начало вашей беседы. Скажите что-нибудь приятное!</string>
     <string name="compose_vcard_label">Карточка контакта</string>
-    <string name="compose_scheduled_for">Запланировано на</string>
-    <string name="compose_scheduled_future">Выбранное время должно быть в будущем!</string>
-    <string name="compose_scheduled_plus">Вы должны разблокировать QKSMS+, чтобы использовать запланированные сообщения</string>
-    <string name="compose_scheduled_toast">Добавлено в планировщик сообщений</string>
     <string name="compose_hint">Написать сообщение&#8230;</string>
     <string name="compose_menu_copy">Скопировать текст</string>
     <string name="compose_menu_forward">Переслать</string>
@@ -123,13 +118,9 @@
     <string name="compose_details_received">Получено: %s</string>
     <string name="compose_details_delivered">Доставлено: %s</string>
     <string name="compose_details_error_code">Код ошибки: %d</string>
-    <string name="compose_attach_cd">Добавить вложение</string>
-    <string name="compose_gallery_cd">Прикрепить фото</string>
-    <string name="compose_camera_cd">Сделать снимок</string>
-    <string name="compose_schedule_cd">Запланировать сообщение</string>
-    <string name="compose_contact_cd">Прикрепить контакт</string>
-    <string name="compose_contact_error">Ошибка чтения контакта</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Прикрепить фото</string>
+<string name="compose_contact_cd">Прикрепить контакт</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">Выбрана SIM-карта %1$d (%2$s)</string>
     <string name="compose_sim_cd">Выбрано %s, сменить SIM-карту</string>
     <string name="compose_send_cd">Отправить сообщение</string>
@@ -146,48 +137,8 @@
     <string name="info_block">Заблокировать</string>
     <string name="info_unblock">Разблокировать</string>
     <string name="info_delete">Удалить беседу</string>
-    <string name="gallery_error">Не удалось загрузить медиа</string>
-    <string name="gallery_toast_saved">Сохранено в галерее</string>
-    <string name="backup_title">Резервное копирование</string>
-    <string name="backup_backing_up">Резервное копирование сообщений</string>
-    <string name="backup_restoring">Восстановление из резервной копии</string>
-    <string name="backup_last">Последнее резервирование</string>
-    <string name="backup_loading">Загрузка&#8230;</string>
-    <string name="backup_never">Никогда</string>
-    <string name="backup_restore_title">Восстановление</string>
-    <string name="backup_restore_summary">Выберите резервную копию</string>
-    <string name="backup_restore_error_plus">Пожалуйста, разблокируйте QKSMS+ для использования резервного копирования и восстановления</string>
-    <string name="backup_restore_error_backup">Выполняется резервное копирование&#8230;</string>
-    <string name="backup_restore_error_restore">Выполняется восстановление&#8230;</string>
-    <string name="backup_restore_confirm_title">Восстановление из резервной копии</string>
-    <string name="backup_restore_confirm_message">Вы уверены, что хотите восстановить свои сообщения из этой резервной копии?</string>
-    <string name="backup_restore_stop_title">Остановить восстановление</string>
-    <string name="backup_restore_stop_message">Сообщения, которые уже были восстановлены останутся на вашем устройстве</string>
-    <string name="backup_restore_dialog_title">Резервирование</string>
-    <string name="backup_restore_dialog_empty">Резервные копии не найдены</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d сообщение</item>
-        <item quantity="few">%d сообщения</item>
-        <item quantity="many">%d сообщений</item>
-        <item quantity="other">%d сообщений</item>
-    </plurals>
-    <string name="backup_disclaimer">В настоящее время поддерживается резервное копирование и восстановление только SMS. Поддержка MMS и регулярные резервные копии появятся в ближайшее время!</string>
-    <string name="backup_now">Резервировать</string>
-    <string name="backup_progress_parsing">Анализ резервной копии&#8230;</string>
-    <string name="backup_progress_running">%d/%d сообщений</string>
-    <string name="backup_progress_saving">Сохранение резервной копии&#8230;</string>
-    <string name="backup_progress_syncing">Синхронизация сообщений&#8230;</string>
-    <string name="backup_progress_finished">Завершено!</string>
-    <string name="backup_notification_channel_name">Резервирование</string>
-    <string name="scheduled_title">Планировщик</string>
-    <string name="scheduled_empty_description">Автоматически отправить сообщение когда пожелаете</string>
-    <string name="scheduled_empty_message_1">Привет! Когда у вас был день рождения?</string>
-    <string name="scheduled_empty_message_2">Он был 23 декабря</string>
-    <string name="scheduled_empty_message_3">С днём рождения! Посмотрите, какой я отличный друг, помнящий о вашем дне рождения!</string>
+<string name="gallery_toast_saved">Сохранено в галерее</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Отправка 23 декабря </string>
-    <string name="scheduled_compose_cd">Запланировать сообщение</string>
-    <string name="scheduled_options_title">Запланированное сообщение</string>
     <string-array name="scheduled_options">
         <item>Отправить сейчас</item>
         <item>Копировать текст</item>
@@ -255,10 +206,8 @@
         <item quantity="many">Через %d дней</item>
         <item quantity="other">Через %d дней</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Отправлять длинные сообщения как MMS</string>
-    <string name="settings_long_as_mms_summary">Если не удаётся отправить длинные текстовые сообщения или они отправляются в неправильном порядке, вы можете отправить их в виде MMS. Может взиматься дополнительная плата.</string>
-    <string name="settings_mms_size_title">Автоматически сжимать вложения MMS</string>
-    <string name="settings_sync_title">Синхронизация сообщений</string>
+<string name="settings_long_as_mms_summary">Если не удаётся отправить длинные текстовые сообщения или они отправляются в неправильном порядке, вы можете отправить их в виде MMS. Может взиматься дополнительная плата.</string>
+<string name="settings_sync_title">Синхронизация сообщений</string>
     <string name="settings_sync_summary">Принудительная синхронизация сообщений с собственной базой данных SMS Android</string>
     <string name="settings_about_title">О K-SMS</string>
     <string name="settings_version">Версия %s\nверсия QKSMS %s\nверсия K-SMS-lib %s</string>
@@ -323,10 +272,6 @@
     <string name="qksms_plus_themes_summary">Разблокируйте красивые цвета темы, недоступные в палитре Material Design</string>
     <string name="qksms_plus_emoji_title">Пользовательские авто-emoji</string>
     <string name="qksms_plus_emoji_summary">Создайте ярлык пользовательских авто-emoji</string>
-    <string name="qksms_plus_backup_title">Резервирование сообщений</string>
-    <string name="qksms_plus_backup_summary">Автоматически создавайте резервные копии сообщений. Не беспокойтесь о потере истории, если вы поменяете или потеряете телефон</string>
-    <string name="qksms_plus_scheduled_title">Запланированные сообщения</string>
-    <string name="qksms_plus_scheduled_summary">Запланированные сообщения для автоматической отправки в определённое время и дату</string>
     <string name="qksms_plus_delayed_title">Отложенная отправка</string>
     <string name="qksms_plus_delayed_summary">Выжидание несколько секунд перед отправкой сообщения</string>
     <string name="qksms_plus_night_title">Автоматический ночной режим</string>
@@ -402,18 +347,7 @@
         <item>3 секунды</item>
         <item>5 секунд</item>
         <item>10 секунд</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Автоматически</item>
-        <item>100 Кб</item>
-        <item>200 Кб</item>
-        <item>300 Кб</item>
-        <item>600 Кб</item>
-        <item>1000 Кб</item>
-        <item>2000 Кб</item>
-        <item>Без сжатия</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>Хорошо</item>
         <item>Дайте мне минуту</item>
         <item>Мне по пути</item>

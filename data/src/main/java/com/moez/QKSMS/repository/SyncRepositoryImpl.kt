@@ -32,13 +32,11 @@ import com.moez.QKSMS.mapper.CursorToContactGroup
 import com.moez.QKSMS.mapper.CursorToContactGroupMember
 import com.moez.QKSMS.mapper.CursorToConversation
 import com.moez.QKSMS.mapper.CursorToMessage
-import com.moez.QKSMS.mapper.CursorToPart
 import com.moez.QKSMS.mapper.CursorToRecipient
 import com.moez.QKSMS.model.Contact
 import com.moez.QKSMS.model.ContactGroup
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
 import com.moez.QKSMS.model.PhoneNumber
 import com.moez.QKSMS.model.Recipient
 import com.moez.QKSMS.model.SyncLog
@@ -48,7 +46,6 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
-import io.realm.RealmList
 import io.realm.Sort
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,7 +56,6 @@ class SyncRepositoryImpl @Inject constructor(
     private val conversationRepo: ConversationRepository,
     private val cursorToConversation: CursorToConversation,
     private val cursorToMessage: CursorToMessage,
-    private val cursorToPart: CursorToPart,
     private val cursorToRecipient: CursorToRecipient,
     private val cursorToContact: CursorToContact,
     private val cursorToContactGroup: CursorToContactGroup,
@@ -105,33 +101,19 @@ class SyncRepositoryImpl @Inject constructor(
         realm.delete(ContactGroup::class.java)
         realm.delete(Conversation::class.java)
         realm.delete(Message::class.java)
-        realm.delete(MmsPart::class.java)
         realm.delete(Recipient::class.java)
 
         keys.reset()
 
-        val partsCursor = cursorToPart.getPartsCursor()
         val messageCursor = cursorToMessage.getMessagesCursor()
         val conversationCursor = cursorToConversation.getConversationsCursor()
         val recipientCursor = cursorToRecipient.getRecipientCursor()
 
-        val max = (partsCursor?.count ?: 0) +
-                (messageCursor?.count ?: 0) +
+        val max = (messageCursor?.count ?: 0) +
                 (conversationCursor?.count ?: 0) +
                 (recipientCursor?.count ?: 0)
 
         var progress = 0
-
-        // Sync message parts
-        partsCursor?.use {
-            partsCursor.forEach {
-                tryOrNull {
-                    progress++
-                    val part = cursorToPart.map(partsCursor)
-                    realm.insertOrUpdate(part)
-                }
-            }
-        }
 
         // Sync messages
         messageCursor?.use {
@@ -140,15 +122,7 @@ class SyncRepositoryImpl @Inject constructor(
                 tryOrNull {
                     progress++
                     syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val message = cursorToMessage.map(Pair(cursor, messageColumns)).apply {
-                        if (isMms()) {
-                            parts = RealmList<MmsPart>().apply {
-                                addAll(realm.where(MmsPart::class.java)
-                                        .equalTo("messageId", contentId)
-                                        .findAll())
-                            }
-                        }
-                    }
+                    val message = cursorToMessage.map(Pair(cursor, messageColumns))
                     realm.insertOrUpdate(message)
                 }
             }
@@ -257,12 +231,6 @@ class SyncRepositoryImpl @Inject constructor(
             val columnsMap = CursorToMessage.MessageColumns(cursor)
             cursorToMessage.map(Pair(cursor, columnsMap)).apply {
                 existingId?.let { this.id = it }
-
-                if (isMms()) {
-                    parts = RealmList<MmsPart>().apply {
-                        addAll(cursorToPart.getPartsCursor(contentId)?.map { cursorToPart.map(it) }.orEmpty())
-                    }
-                }
 
                 conversationRepo.getOrCreateConversation(threadId)
                 insertOrUpdate()

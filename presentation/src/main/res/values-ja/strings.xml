@@ -64,7 +64,6 @@
     <string name="main_permission_allow">許可する</string>
     <string name="drawer_inbox">受信トレイ</string>
     <string name="drawer_archived">アーカイブ済</string>
-    <string name="drawer_scheduled">スケジュール済</string>
     <string name="drawer_blocking">ブロック</string>
     <string name="drawer_more">もっと</string>
     <string name="drawer_settings">設定</string>
@@ -94,10 +93,6 @@
     <string name="compose_send_group_summary">受信者と返信は全員に表示されます</string>
     <string name="compose_messages_empty">これが会話の始まりです。 何か素敵なことを言ってください!</string>
     <string name="compose_vcard_label">連絡先カード</string>
-    <string name="compose_scheduled_for">予定されている</string>
-    <string name="compose_scheduled_future">選択した時間は、将来的にする必要があります!</string>
-    <string name="compose_scheduled_plus">あなたのロックを解除する必要があります QKSMS + スケジュールされたメッセージングを使用するには</string>
-    <string name="compose_scheduled_toast">スケジュールされたメッセージに追加</string>
     <string name="compose_hint">メッセージを書く&#8230;</string>
     <string name="compose_menu_copy">テキストのコピー</string>
     <string name="compose_menu_forward">転送</string>
@@ -116,13 +111,9 @@
     <string name="compose_details_received">受け取った: %s</string>
     <string name="compose_details_delivered">配達: %s</string>
     <string name="compose_details_error_code">エラーコード:%d</string>
-    <string name="compose_attach_cd">添付ファイルを追加する</string>
-    <string name="compose_gallery_cd">写真を添付する</string>
-    <string name="compose_camera_cd">写真を撮る</string>
-    <string name="compose_schedule_cd">スケジュールメッセージ</string>
-    <string name="compose_contact_cd">連絡先を添付する</string>
-    <string name="compose_contact_error">連絡先の読み取りエラー</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">写真を添付する</string>
+<string name="compose_contact_cd">連絡先を添付する</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) を選択しました</string>
     <string name="compose_sim_cd">%s 選択、SIMカードを交換</string>
     <string name="compose_send_cd">メッセージを送る</string>
@@ -139,45 +130,8 @@
     <string name="info_block">ブロック</string>
     <string name="info_unblock">ブロックを解除</string>
     <string name="info_delete">会話を削除</string>
-    <string name="gallery_error">メディアを読み込めませんでした</string>
-    <string name="gallery_toast_saved">ギャラリーに保存</string>
-    <string name="backup_title">バックアップと復元</string>
-    <string name="backup_backing_up">メッセージをバックアップする</string>
-    <string name="backup_restoring">バックアップからの復元</string>
-    <string name="backup_last">最後のバックアップ</string>
-    <string name="backup_loading">ロード中...</string>
-    <string name="backup_never">決して</string>
-    <string name="backup_restore_title">リストア</string>
-    <string name="backup_restore_summary">バックアップを選択</string>
-    <string name="backup_restore_error_plus">バックアップと復元を使用するにはQKSMS+のロックを解除してください</string>
-    <string name="backup_restore_error_backup">バックアップ中&#8230;</string>
-    <string name="backup_restore_error_restore">復元中&#8230;</string>
-    <string name="backup_restore_confirm_title">バックアップから復元</string>
-    <string name="backup_restore_confirm_message">このバックアップからメッセージを復元してもよろしいですか？</string>
-    <string name="backup_restore_stop_title">復元を停止する</string>
-    <string name="backup_restore_stop_message">既に復元されたメッセージはあなたのデバイスに残ります</string>
-    <string name="backup_restore_dialog_title">バックアップ</string>
-    <string name="backup_restore_dialog_empty">バックアップが見つかりません</string>
-    <plurals name="backup_message_count">
-        <item quantity="other">%d メッセージ</item>
-    </plurals>
-    <string name="backup_disclaimer">現在、SMSのみがバックアップと復元でサポートされています。 MMSのサポートと定期的なバックアップは近日中に開始されます。</string>
-    <string name="backup_now">今すぐバックアップ</string>
-    <string name="backup_progress_parsing">バックアップの解析中...</string>
-    <string name="backup_progress_running">%d/%dすべてのメッセージ</string>
-    <string name="backup_progress_saving">バックアップを保存しています...</string>
-    <string name="backup_progress_syncing">メッセージを同期しています...</string>
-    <string name="backup_progress_finished">終了しました。</string>
-    <string name="backup_notification_channel_name">バックアップと復元</string>
-    <string name="scheduled_title">予定</string>
-    <string name="scheduled_empty_description">希望する瞬間に自動的にメッセージを送信する</string>
-    <string name="scheduled_empty_message_1">ちょっと！あなたの誕生日はいつでしたか？</string>
-    <string name="scheduled_empty_message_2">12月23日です</string>
-    <string name="scheduled_empty_message_3">お誕生日おめでとうございます！ 私はあなたの誕生日を思い出して、何という素晴らしい友達なのか見て</string>
+<string name="gallery_toast_saved">ギャラリーに保存</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">12月23日に発送</string>
-    <string name="scheduled_compose_cd">メッセージをスケジュールする</string>
-    <string name="scheduled_options_title">スケジュールされたメッセージ</string>
     <string-array name="scheduled_options">
         <item>今すぐ送る</item>
         <item>テキストをコピー</item>
@@ -242,10 +196,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">%d 日後</item>
     </plurals>
-    <string name="settings_long_as_mms_title">長いメッセージをMMSとして送信する</string>
-    <string name="settings_long_as_mms_summary">長いテキストメッセージの送信が失敗する場合、または間違った順序で送信される場合は、代わりにMMSメッセージとして送信できます。 追加料金が適用される場合があります</string>
-    <string name="settings_mms_size_title">MMS添付ファイルの自動圧縮</string>
-    <string name="settings_sync_title">メッセージを同期</string>
+<string name="settings_long_as_mms_summary">長いテキストメッセージの送信が失敗する場合、または間違った順序で送信される場合は、代わりにMMSメッセージとして送信できます。 追加料金が適用される場合があります</string>
+<string name="settings_sync_title">メッセージを同期</string>
     <string name="settings_sync_summary">メッセージをネイティブの Android SMS データベースと再同期します</string>
     <string name="settings_about_title">QKSMS について</string>
     <string name="settings_version">バージョン %s %s %s</string>
@@ -304,10 +256,6 @@
     <string name="qksms_plus_themes_summary">マテリアルデザインパレットで利用できない美しいテーマカラーのロックを解除します</string>
     <string name="qksms_plus_emoji_title">カスタム自動絵文字</string>
     <string name="qksms_plus_emoji_summary">カスタム自動絵文字のショートカットを作成します</string>
-    <string name="qksms_plus_backup_title">メッセージのバックアップ</string>
-    <string name="qksms_plus_backup_summary">メッセージを自動的にバックアップします。携帯電話を変更したり、お使いの携帯電話をなくしても、もう二度と履歴がなくなる心配はいりません。</string>
-    <string name="qksms_plus_scheduled_title">スケジュールされたメッセージ</string>
-    <string name="qksms_plus_scheduled_summary">特定の日時に自動的に送信されるようにメッセージをスケジュールする</string>
     <string name="qksms_plus_delayed_title">送信を遅らせる</string>
     <string name="qksms_plus_delayed_summary">メッセージを送信する前に、数秒間待ちます</string>
     <string name="qksms_plus_night_title">自動夜間モード</string>
@@ -379,18 +327,7 @@
         <item>3秒</item>
         <item>5秒</item>
         <item>10秒</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>自動</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>圧縮なし</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>OK</item>
         <item>しばらくお待ちください</item>
         <item>今、途中です</item>

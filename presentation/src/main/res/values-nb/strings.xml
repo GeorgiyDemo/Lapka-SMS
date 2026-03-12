@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Tillat</string>
     <string name="drawer_inbox">Innboks</string>
     <string name="drawer_archived">Arkivert</string>
-    <string name="drawer_scheduled">Planlagt</string>
     <string name="drawer_blocking">Blokkert</string>
     <string name="drawer_more">Mer</string>
     <string name="drawer_settings">Innstillinger</string>
@@ -95,10 +94,6 @@
     <string name="compose_send_group_summary">Mottakere og svar er synlig for alle</string>
     <string name="compose_messages_empty">Nå starter samtalen. Si noe hyggelig!</string>
     <string name="compose_vcard_label">Kontakt</string>
-    <string name="compose_scheduled_for">Planlagt for</string>
-    <string name="compose_scheduled_future">Valgt tid må være i fremtid.</string>
-    <string name="compose_scheduled_plus">Du må ha QKSMS+ for å kunne bruke planlagte meldinger</string>
-    <string name="compose_scheduled_toast">Lagt til planlagte meldinger</string>
     <string name="compose_hint">Skriv en melding</string>
     <string name="compose_menu_copy">Kopier tekst</string>
     <string name="compose_menu_forward">Videresend</string>
@@ -117,13 +112,9 @@
     <string name="compose_details_received">Mottatt: %s</string>
     <string name="compose_details_delivered">Levert: %s</string>
     <string name="compose_details_error_code">Feilkode: %d</string>
-    <string name="compose_attach_cd">Legg til vedlegg</string>
-    <string name="compose_gallery_cd">Legg til bilde</string>
-    <string name="compose_camera_cd">Ta bilde</string>
-    <string name="compose_schedule_cd">Planlegg melding</string>
-    <string name="compose_contact_cd">Legg til kontakt</string>
-    <string name="compose_contact_error">Feil ved åpning av kontakt</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Legg til bilde</string>
+<string name="compose_contact_cd">Legg til kontakt</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s er valgt, velg annet SIM-kort</string>
     <string name="compose_send_cd">Send melding</string>
@@ -140,46 +131,8 @@
     <string name="info_block">Blokker</string>
     <string name="info_unblock">Ta bort blokkering</string>
     <string name="info_delete">Slett samtale</string>
-    <string name="gallery_error">Media kunne ikke lastes</string>
-    <string name="gallery_toast_saved">Lagret i galleriet</string>
-    <string name="backup_title">Sikret</string>
-    <string name="backup_backing_up">Sikkerhetskopierer meldinger</string>
-    <string name="backup_restoring">Gjenoppretter fra sikkerhetskopi</string>
-    <string name="backup_last">Siste sikkerhetskopi</string>
-    <string name="backup_loading">Henter &#8230;</string>
-    <string name="backup_never">Aldri</string>
-    <string name="backup_restore_title">Gjenopprett</string>
-    <string name="backup_restore_summary">Velg en sikkerhetskopi</string>
-    <string name="backup_restore_error_plus">Vennligst aktiver QKSMS+ for å bruke sikkerhetskopiering og gjenoppretting</string>
-    <string name="backup_restore_error_backup">Sikkerhetskopiering pågår &#8230;</string>
-    <string name="backup_restore_error_restore">Gjenoppretting pågår &#8230;</string>
-    <string name="backup_restore_confirm_title">Gjenopprett fra sikkerhetskopi</string>
-    <string name="backup_restore_confirm_message">Er du sikker på at du vil gjenopprette meldinger fra denne sikkerhetskopien?</string>
-    <string name="backup_restore_stop_title">Avbryt gjenoppretting</string>
-    <string name="backup_restore_stop_message">Meldinger som allerede er gjenopprettet vil forbli på din enhet</string>
-    <string name="backup_restore_dialog_title">Sikkerhetskopier</string>
-    <string name="backup_restore_dialog_empty">Fant ingen sikkerhetskopier</string>
-    <plurals name="backup_message_count">
-        <item quantity="one">%d melding</item>
-        <item quantity="other">%d meldinger</item>
-    </plurals>
-    <string name="backup_disclaimer">Per idag er bare mulig å sikkerhetskopiere SMS. MMS og planlagte sikkerhetskopier kommer snart.</string>
-    <string name="backup_now">Sikkerhetskopier nå</string>
-    <string name="backup_progress_parsing">Ser gjennom sikkerhetskopien &#8230;</string>
-    <string name="backup_progress_running">%d/%d meldinger</string>
-    <string name="backup_progress_saving">Lagrer sikkerhetskopi &#8230;</string>
-    <string name="backup_progress_syncing">Synkroniserer meldinger &#8230;</string>
-    <string name="backup_progress_finished">Ferdig!</string>
-    <string name="backup_notification_channel_name">Sikkerhetskopiering og gjenoppretting</string>
-    <string name="scheduled_title">Planlagt</string>
-    <string name="scheduled_empty_description">Send automatisk en melding på det tidspunktet du ønsker</string>
-    <string name="scheduled_empty_message_1">Hei! Når var fødselsdagen din igjen?</string>
-    <string name="scheduled_empty_message_2">Den er på 23. desember</string>
-    <string name="scheduled_empty_message_3">Gratulerer med dagen! For en god venn jeg er som husker på bursdagen din</string>
+<string name="gallery_toast_saved">Lagret i galleriet</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Sender den 23. desember</string>
-    <string name="scheduled_compose_cd">Planlegg en melding</string>
-    <string name="scheduled_options_title">Planlagt melding</string>
     <string-array name="scheduled_options">
         <item>Send nå</item>
         <item>Copy text</item>
@@ -245,10 +198,8 @@
         <item quantity="one">After 1 day</item>
         <item quantity="other">After %d days</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Send long messages as MMS</string>
-    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">Komprimer MMS-vedlegg</string>
-    <string name="settings_sync_title">Synkroniser meldinger</string>
+<string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
+<string name="settings_sync_title">Synkroniser meldinger</string>
     <string name="settings_sync_summary">Resynkroniser meldinger med Androids interne meldingslager</string>
     <string name="settings_about_title">Om QKSMS</string>
     <string name="settings_version">Versjon %s %s %s</string>
@@ -309,10 +260,6 @@
     <string name="qksms_plus_themes_summary">Aktiver vakre draktfarger som ikke er tilgjengelig i Material-design-paletten</string>
     <string name="qksms_plus_emoji_title">Egne auto-emoji</string>
     <string name="qksms_plus_emoji_summary">Lag egne auto-emoji snarveier</string>
-    <string name="qksms_plus_backup_title">Sikkerhetskopi av meldinger</string>
-    <string name="qksms_plus_backup_summary">Automatisk sikkerhetskopiering av dine meldinger. Slutt på bekymringer om å miste dine meldinger når du bytter telefon eller mister den</string>
-    <string name="qksms_plus_scheduled_title">Planlagte meldinger</string>
-    <string name="qksms_plus_scheduled_summary">Planlegg at meldinger sendes automatisk ved en tid og dato</string>
     <string name="qksms_plus_delayed_title">Forsinket sending</string>
     <string name="qksms_plus_delayed_summary">Vent noen sekunder før meldingen sendes</string>
     <string name="qksms_plus_night_title">Automatisk nattmodus</string>
@@ -385,18 +332,7 @@
         <item>3 seconds</item>
         <item>5 seconds</item>
         <item>10 seconds</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Automatic</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>No compression</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>Ok</item>
         <item>Vent litt</item>
         <item>Er på vei</item>

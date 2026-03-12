@@ -64,7 +64,6 @@
     <string name="main_permission_allow">Izinkan</string>
     <string name="drawer_inbox">Kotak masuk</string>
     <string name="drawer_archived">Diarsipkan</string>
-    <string name="drawer_scheduled">Terjadwal</string>
     <string name="drawer_blocking">Pemblokiran</string>
     <string name="drawer_more">Lainnya</string>
     <string name="drawer_settings">Setelan</string>
@@ -94,10 +93,6 @@
     <string name="compose_send_group_summary">Penerima dan balasan akan ditampilkan ke semua orang</string>
     <string name="compose_messages_empty">Ini adalah awal percakapan anda. Katakan sesuatu yang baik!</string>
     <string name="compose_vcard_label">Kartu nama</string>
-    <string name="compose_scheduled_for">Jadwalkan pada</string>
-    <string name="compose_scheduled_future">Waktu yang dipilih harus berada di masa depan!</string>
-    <string name="compose_scheduled_plus">Anda harus membuka akses QKSMS+ untuk menggunakan pesan terjadwal</string>
-    <string name="compose_scheduled_toast">Ditambahkan ke pesan terjadwal</string>
     <string name="compose_hint">Tulis pesan&#8230;</string>
     <string name="compose_menu_copy">Salin teks</string>
     <string name="compose_menu_forward">Teruskan</string>
@@ -116,13 +111,9 @@
     <string name="compose_details_received">Diterima: %s</string>
     <string name="compose_details_delivered">Terkirim: %s</string>
     <string name="compose_details_error_code">Kode galat: %d</string>
-    <string name="compose_attach_cd">Tambah lampiran</string>
-    <string name="compose_gallery_cd">Lampirkan foto</string>
-    <string name="compose_camera_cd">Ambil foto</string>
-    <string name="compose_schedule_cd">Jadwalkan pesan</string>
-    <string name="compose_contact_cd">Lampirkan kontak</string>
-    <string name="compose_contact_error">Galat membaca kontak</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
+<string name="compose_gallery_cd">Lampirkan foto</string>
+<string name="compose_contact_cd">Lampirkan kontak</string>
+<!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) dipilih</string>
     <string name="compose_sim_cd">%s dipilih, ganti kartu SIM</string>
     <string name="compose_send_cd">Kirim pesan</string>
@@ -139,45 +130,8 @@
     <string name="info_block">Blokir</string>
     <string name="info_unblock">Buka blokir</string>
     <string name="info_delete">Hapus percakapan</string>
-    <string name="gallery_error">Tidak bisa memuat media</string>
-    <string name="gallery_toast_saved">Disimpan ke galeri</string>
-    <string name="backup_title">Cadangan dan pemulihan</string>
-    <string name="backup_backing_up">Mencadangankan pesan</string>
-    <string name="backup_restoring">Memulihkan cadangan pesan</string>
-    <string name="backup_last">Cadangan terakhir</string>
-    <string name="backup_loading">Memuat&#8230;</string>
-    <string name="backup_never">Tidak pernah</string>
-    <string name="backup_restore_title">Pulihkan</string>
-    <string name="backup_restore_summary">Pilih cadangan</string>
-    <string name="backup_restore_error_plus">Silakan buka akses QKSMS+ untuk menggunakan fitur cadangan dan pemulihan</string>
-    <string name="backup_restore_error_backup">Pencadangan sedang berlangsung&#8230;</string>
-    <string name="backup_restore_error_restore">Pemulihan sedang berlangsung&#8230;</string>
-    <string name="backup_restore_confirm_title">Pulihkan dari cadangan</string>
-    <string name="backup_restore_confirm_message">Apakah anda yakin ingin memulihkan pesan anda dari cadangan ini?</string>
-    <string name="backup_restore_stop_title">Setop pemulihan</string>
-    <string name="backup_restore_stop_message">Pesan yang telah dipulihkan akan tetap berada di perangkat anda</string>
-    <string name="backup_restore_dialog_title">Cadangan</string>
-    <string name="backup_restore_dialog_empty">Cadangan tidak ditemukan</string>
-    <plurals name="backup_message_count">
-        <item quantity="other">%d pesan</item>
-    </plurals>
-    <string name="backup_disclaimer">Saat ini, Cadangan dan Pemulihan hanya mendukung pesan SMS. Dukungan MMS dan cadangan terjadwal akan segera datang!</string>
-    <string name="backup_now">Cadangkan sekarang</string>
-    <string name="backup_progress_parsing">Membaca cadangan&#8230;</string>
-    <string name="backup_progress_running">%d/%d pesan</string>
-    <string name="backup_progress_saving">Menyimpan cadangan&#8230;</string>
-    <string name="backup_progress_syncing">Menyinkronkan pesan&#8230;</string>
-    <string name="backup_progress_finished">Selesai!</string>
-    <string name="backup_notification_channel_name">Cadangan dan pemulihan</string>
-    <string name="scheduled_title">Terjadwal</string>
-    <string name="scheduled_empty_description">Otomatis mengirim pesan pada waktu yang anda inginkan</string>
-    <string name="scheduled_empty_message_1">Hai! Kapan kamu ulang tahun?</string>
-    <string name="scheduled_empty_message_2">23 Desember</string>
-    <string name="scheduled_empty_message_3">Selamat ulang tahun! Aku teman yang baik kan?, selalu ingat ulang tahunmu.</string>
+<string name="gallery_toast_saved">Disimpan ke galeri</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Mengirim pada tanggal 23 Desember</string>
-    <string name="scheduled_compose_cd">Jadwalkan pesan</string>
-    <string name="scheduled_options_title">Pesan terjadwal</string>
     <string-array name="scheduled_options">
         <item>Kirim sekarang</item>
         <item>Salin teks</item>
@@ -242,10 +196,8 @@
     <plurals name="settings_auto_delete_summary">
         <item quantity="other">Setelah %d hari</item>
     </plurals>
-    <string name="settings_long_as_mms_title">Kirim pesan panjang sebagai MMS</string>
-    <string name="settings_long_as_mms_summary">Jika pesan teks panjang anda gagal dikirim, atau dikirim dalam urutan yang salah, anda bisa mengirimkannya sebagai pesan MMS. Mungkin akan dikenai tagihan tambahan</string>
-    <string name="settings_mms_size_title">Otomatis kompres lampiran MMS</string>
-    <string name="settings_sync_title">Sinkronisasi pesan</string>
+<string name="settings_long_as_mms_summary">Jika pesan teks panjang anda gagal dikirim, atau dikirim dalam urutan yang salah, anda bisa mengirimkannya sebagai pesan MMS. Mungkin akan dikenai tagihan tambahan</string>
+<string name="settings_sync_title">Sinkronisasi pesan</string>
     <string name="settings_sync_summary">Sinkronisasi ulang pesan anda dengan basis data aplikasi SMS Android bawaan</string>
     <string name="settings_about_title">Tentang QKSMS</string>
     <string name="settings_version">Versi %s %s %s</string>
@@ -304,10 +256,6 @@
     <string name="qksms_plus_themes_summary">Unlock beautiful theme colors not available on the Material Design palette</string>
     <string name="qksms_plus_emoji_title">Emoji otomatis khusus</string>
     <string name="qksms_plus_emoji_summary">Buat pintasan emoji otomatis khusus</string>
-    <string name="qksms_plus_backup_title">Cadangan pesan</string>
-    <string name="qksms_plus_backup_summary">Cadangkan otomatis pesan anda. Tidak perlu khawatir kehilangan riwayat pesan jika anda mengganti telepon atau telepon hilang</string>
-    <string name="qksms_plus_scheduled_title">Pesan terjadwal</string>
-    <string name="qksms_plus_scheduled_summary">Menjadwalkan pesan untuk secara otomatis dikirim pada waktu dan tanggal tertentu</string>
     <string name="qksms_plus_delayed_title">Pengiriman tertunda</string>
     <string name="qksms_plus_delayed_summary">Tunggu beberapa detik sebelum mengirim pesan</string>
     <string name="qksms_plus_night_title">Mode malam otomatis</string>
@@ -379,18 +327,7 @@
         <item>3 detik</item>
         <item>5 detik</item>
         <item>10 detik</item>
-    </string-array>
-    <string-array name="mms_sizes">
-        <item>Otomatis</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
-        <item>Tanpa kompresi</item>
-    </string-array>
-    <string-array name="qk_responses">
+    </string-array><string-array name="qk_responses">
         <item>Oke</item>
         <item>Beri saya waktu sebentar</item>
         <item>Sedang dalam perjalanan</item>

@@ -29,15 +29,12 @@ import android.provider.Settings
 import android.provider.Telephony
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.moez.QKSMS.feature.backup.BackupActivity
 import com.moez.QKSMS.feature.blocking.BlockingActivity
 import com.moez.QKSMS.feature.compose.ComposeActivity
 import com.moez.QKSMS.feature.conversationinfo.ConversationInfoActivity
-import com.moez.QKSMS.feature.gallery.GalleryActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
 import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivity
 import com.moez.QKSMS.feature.plus.PlusActivity
-import com.moez.QKSMS.feature.scheduled.ScheduledActivity
 import com.moez.QKSMS.feature.settings.SettingsActivity
 import com.moez.QKSMS.manager.AnalyticsManager
 import com.moez.QKSMS.manager.BillingManager
@@ -94,14 +91,9 @@ class Navigator @Inject constructor(
         }
     }
 
-    fun showCompose(body: String? = null, images: List<Uri>? = null) {
+    fun showCompose(body: String? = null) {
         val intent = Intent(context, ComposeActivity::class.java)
         intent.putExtra(Intent.EXTRA_TEXT, body)
-
-        images?.takeIf { it.isNotEmpty() }?.let {
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(images))
-        }
-
         startActivity(intent)
     }
 
@@ -127,23 +119,6 @@ class Navigator @Inject constructor(
     fun showConversationInfo(threadId: Long) {
         val intent = Intent(context, ConversationInfoActivity::class.java)
         intent.putExtra("threadId", threadId)
-        startActivity(intent)
-    }
-
-    fun showMedia(partId: Long) {
-        val intent = Intent(context, GalleryActivity::class.java)
-        intent.putExtra("partId", partId)
-        startActivity(intent)
-    }
-
-    fun showBackup() {
-        analyticsManager.track("Viewed Backup")
-        startActivity(Intent(context, BackupActivity::class.java))
-    }
-
-    fun showScheduled() {
-        analyticsManager.track("Viewed Scheduled")
-        val intent = Intent(context, ScheduledActivity::class.java)
         startActivity(intent)
     }
 

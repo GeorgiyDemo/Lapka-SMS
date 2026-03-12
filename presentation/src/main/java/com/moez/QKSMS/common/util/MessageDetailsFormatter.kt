@@ -19,12 +19,8 @@
 package com.moez.QKSMS.common.util
 
 import android.content.Context
-import com.google.android.mms.pdu_alt.EncodedStringValue
-import com.google.android.mms.pdu_alt.MultimediaMessagePdu
-import com.google.android.mms.pdu_alt.PduPersister
 import com.moez.QKSMS.R
 import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.util.tryOrNull
 import javax.inject.Inject
 
 class MessageDetailsFormatter @Inject constructor(
@@ -41,34 +37,15 @@ class MessageDetailsFormatter @Inject constructor(
                 ?.let { context.getString(R.string.compose_details_type, it) }
                 ?.let(builder::appendln)
 
-        if (message.isSms()) {
-            message.address
-                    .takeIf { it.isNotBlank() && !message.isMe() }
-                    ?.let { context.getString(R.string.compose_details_from, it) }
-                    ?.let(builder::appendln)
+        message.address
+                .takeIf { it.isNotBlank() && !message.isMe() }
+                ?.let { context.getString(R.string.compose_details_from, it) }
+                ?.let(builder::appendln)
 
-            message.address
-                    .takeIf { it.isNotBlank() && message.isMe() }
-                    ?.let { context.getString(R.string.compose_details_to, it) }
-                    ?.let(builder::appendln)
-        } else {
-            val pdu = tryOrNull {
-                PduPersister.getPduPersister(context)
-                        .load(message.getUri())
-                        as MultimediaMessagePdu
-            }
-
-            pdu?.from?.string
-                    ?.takeIf { it.isNotBlank() }
-                    ?.let { context.getString(R.string.compose_details_from, it) }
-                    ?.let(builder::appendln)
-
-            pdu?.to
-                    ?.let(EncodedStringValue::concat)
-                    ?.takeIf { it.isNotBlank() }
-                    ?.let { context.getString(R.string.compose_details_to, it) }
-                    ?.let(builder::appendln)
-        }
+        message.address
+                .takeIf { it.isNotBlank() && message.isMe() }
+                ?.let { context.getString(R.string.compose_details_to, it) }
+                ?.let(builder::appendln)
 
         message.date
                 .takeIf { it > 0 && message.isMe() }

@@ -21,7 +21,6 @@ package com.moez.QKSMS.interactor
 import android.content.Context
 import com.moez.QKSMS.compat.TelephonyCompat
 import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.model.Attachment
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.repository.MessageRepository
 import io.reactivex.Flowable
@@ -39,7 +38,6 @@ class SendMessage @Inject constructor(
         val threadId: Long,
         val addresses: List<String>,
         val body: String,
-        val attachments: List<Attachment> = listOf(),
         val delay: Int = 0
     )
 
@@ -51,7 +49,7 @@ class SendMessage @Inject constructor(
                     0L -> TelephonyCompat.getOrCreateThreadId(context, params.addresses.toSet())
                     else -> params.threadId
                 }
-                messageRepo.sendMessage(params.subId, threadId, params.addresses, params.body, params.attachments,
+                messageRepo.sendMessage(params.subId, threadId, params.addresses, params.body,
                         params.delay)
             }
             .mapNotNull {
