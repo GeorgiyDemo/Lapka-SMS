@@ -383,4 +383,35 @@
     <string name="invalid_key">کلید نامعتبر</string>
     <string name="button_generate">&#128259;</string>
     <string name="key_description">برای پیامرسانی ایمن، این کلید را با مخاطب خود به اشتراک بگذارید</string>
+
+    <string name="encryption_guide_toggle">چگونه رمزنگاری را فعال کنیم ▼</string>
+    <string name="encryption_guide_toggle_expanded">چگونه رمزنگاری را فعال کنیم ▲</string>
+    <string name="encryption_guide_text"><b>1.</b> روی <b>«کلید رمزنگاری»</b> ضربه بزنید و کلید را فعال کنید.\n\n<b>2.</b> روی <b>«تولید کلید جدید»</b> ضربه بزنید — یا کد QR طرف مقابل را اسکن کنید.\n\n<b>3.</b> کلید را با طرف مقابل به اشتراک بگذارید — کد QR را نشان دهید یا کپی کرده و از طریق یک <b>کانال امن</b> ارسال کنید (حضوری، Signal و غیره). کلید را با پیامک معمولی ارسال نکنید!\n\n<b>4.</b> یک <b>طرح رمزگذاری</b> انتخاب کنید:\n    • <b>Base64</b> — فشرده، شبیه کاراکترهای تصادفی به نظر می‌رسد\n    • <b>Base64 سیریلیک</b> — همان اما با حروف سیریلیک\n    • <b>کلمات روسی</b> — پنهان‌نگاری: پیام‌ها شبیه متن روسی عادی به نظر می‌رسند\n\n<b>5.</b> در چت، روی <b>آیکون قفل</b> ضربه بزنید تا رمزنگاری را برای هر پیام فعال یا غیرفعال کنید.\n\n<b>اثر انگشت ایموجی</b> زیر کلید باید روی هر دو دستگاه یکسان باشد — این تأیید می‌کند که کلید یکسان است.</string>
+    <string name="button_disable">غیرفعال</string>
+    <string name="button_reset">بازنشانی</string>
+    <string name="compose_call_confirm_title">تماس</string>
+    <string name="compose_call_confirm_message">با %s تماس بگیرید؟</string>
+    <string name="compose_call_confirm_positive">تماس</string>
+    <string name="compose_menu_search">جستجو</string>
+    <string name="compose_search_hint">جستجو در مکالمه…</string>
+    <string name="decryption_failed">⚠ رمزگشایی ناموفق</string>
+    <string name="disable_encryption_confirmation">آیا مطمئن هستید که می‌خواهید رمزنگاری این مکالمه را غیرفعال کنید؟</string>
+    <string name="encrypted_indicator_content_description">پیام رمزنگاری شده</string>
+    <string name="encryption_send_failed">رمزنگاری ناموفق، پیام ارسال نشد</string>
+    <string name="global_key_isnt_set">کلید رمزنگاری تنظیم نشده است!</string>
+    <string name="global_key_set">تنظیم کلید</string>
+    <string name="key_fingerprint">اثر انگشت: %s</string>
+    <string name="key_fingerprint_label">اثر انگشت</string>
+    <string name="qr_code_content_description">کد QR برای کلید رمزنگاری</string>
+    <string name="settings_bad_key">کلید نامعتبر!</string>
+    <string name="settings_conversation_encryption_key_title">کلید رمزنگاری مکالمه</string>
+    <string name="settings_encryption_key_title">کلید رمزنگاری</string>
+    <string name="settings_exit_with_no_changes">آیا می‌خواهید بدون ذخیره تغییرات خارج شوید؟</string>
+    <string name="settings_generate_new_key">تولید کلید جدید</string>
+    <string name="settings_key_has_been_set">کلید تنظیم شد</string>
+    <string name="settings_messages_delete">حذف پیام‌ها</string>
+    <string name="settings_reset_key">بازنشانی کلید رمزنگاری</string>
+    <string name="settings_reset_key_confirmation_text">آیا مطمئن هستید که می‌خواهید کلید رمزنگاری را بازنشانی کنید؟ امکان بازیابی آن وجود نخواهد داشت و نمی‌توانید پیام‌های رمزنگاری شده با آن را بخوانید.</string>
+    <string name="settings_scan_qr_title">اسکن کد QR با کلید</string>
+    <string name="theme_system_default">پیش‌فرض سیستم</string>
 </resources>

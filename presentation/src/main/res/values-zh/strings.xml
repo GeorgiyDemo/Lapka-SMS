@@ -336,4 +336,58 @@
         <item>啊哈哈哈哈</item>
         <item>好的</item>
     </string-array>
+
+    <string name="encryption_guide_toggle">如何啟用加密 ▼</string>
+    <string name="encryption_guide_toggle_expanded">如何啟用加密 ▲</string>
+    <string name="encryption_guide_text"><b>1.</b> 點擊<b>「加密金鑰」</b>並開啟開關。\n\n<b>2.</b> 點擊<b>「生成新金鑰」</b>——或掃描對方的 QR 碼。\n\n<b>3.</b> 與對方分享金鑰——展示 QR 碼，或複製後通過<b>安全通道</b>（當面、Signal 等）發送。不要通過普通簡訊發送金鑰！\n\n<b>4.</b> 選擇<b>編碼方案</b>：\n    • <b>Base64</b>——緊湊，看起來像隨機字符\n    • <b>西里爾 Base64</b>——相同但使用西里爾字母\n    • <b>俄語單詞</b>——隱寫術：訊息看起來像普通的俄語文字\n\n<b>5.</b> 在聊天中，點擊<b>鎖定圖示</b>來切換每條訊息的加密開關。\n\n金鑰下方的<b>表情符號指紋</b>必須在兩台設備上匹配——這確認金鑰相同。</string>
+    <string name="button_disable">停用</string>
+    <string name="button_generate">&#128259;</string>
+    <string name="button_reset">重置</string>
+    <string name="channel_id">頻道 ID</string>
+    <string name="compose_call_confirm_title">撥打電話</string>
+    <string name="compose_call_confirm_message">撥打 %s？</string>
+    <string name="compose_call_confirm_positive">撥打</string>
+    <string name="compose_menu_encrypted">已加密</string>
+    <string name="compose_menu_raw">未加密</string>
+    <string name="compose_menu_search">搜尋</string>
+    <string name="compose_search_hint">在對話中搜尋…</string>
+    <string name="conversation_delete_received_after">自動刪除收到的訊息</string>
+    <string name="conversation_delete_sent_after">自動刪除已發送的訊息</string>
+    <string name="conversation_encryption_key_title">加密金鑰</string>
+    <string name="copy">複製</string>
+    <string name="decryption_failed">⚠ 解密失敗</string>
+    <string name="disable_encryption_confirmation">確定要停用此對話的加密嗎？</string>
+    <string name="drawer_plus">捐贈</string>
+    <string name="encoding_scheme">編碼方案</string>
+    <string name="encoding_scheme_base64">Base64</string>
+    <string name="encoding_scheme_base64_cyrillic">西里爾 Base64</string>
+    <string name="encoding_scheme_default">使用設定中的方案</string>
+    <string name="encoding_scheme_russian_words">俄語單詞</string>
+    <string name="encrypted_indicator_content_description">加密訊息</string>
+    <string name="encryption_key_copied">金鑰已複製。分享後請從剪貼簿刪除！</string>
+    <string name="encryption_send_failed">加密失敗，訊息未發送</string>
+    <string name="global_key_isnt_set">加密金鑰未設定！</string>
+    <string name="global_key_set">設定金鑰</string>
+    <string name="invalid_key">無效的金鑰</string>
+    <string name="key_description">透過安全管道與對方分享此金鑰以進行加密通訊</string>
+    <string name="key_fingerprint">指紋：%s</string>
+    <string name="key_fingerprint_label">指紋</string>
+    <string name="qr_code_content_description">加密金鑰的 QR 碼</string>
+    <string name="settings_bad_key">金鑰無效！</string>
+    <string name="settings_category_hidden">安全</string>
+    <string name="settings_conversation_encryption_key_title">對話加密金鑰</string>
+    <string name="settings_delete_encrypted_after_default">不刪除</string>
+    <string name="settings_delete_encrypted_after_title">加密訊息自動刪除</string>
+    <string name="settings_encryption_key_title">加密金鑰</string>
+    <string name="settings_exit_with_no_changes">要不儲存變更就離開嗎？</string>
+    <string name="settings_generate_new_key">生成新金鑰</string>
+    <string name="settings_global_encryption_key_title">全域加密金鑰</string>
+    <string name="settings_key_has_been_set">金鑰已設定</string>
+    <string name="settings_messages_delete">訊息刪除</string>
+    <string name="settings_reset_key">重置加密金鑰</string>
+    <string name="settings_reset_key_confirmation_text">確定要重置加密金鑰嗎？將無法恢復，且無法閱讀用該金鑰加密的訊息。</string>
+    <string name="settings_scan_qr_title">掃描含金鑰的 QR 碼</string>
+    <string name="show_in_task_switcher">在任務切換器中顯示應用內容</string>
+    <string name="sms_for_reset">重置用簡訊</string>
+    <string name="theme_system_default">系統預設</string>
 </resources>

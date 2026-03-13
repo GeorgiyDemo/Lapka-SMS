@@ -262,6 +262,18 @@ class KeySettingsController(
 
         keyField.addTextChangedListener(keyTextWatcher)
         copyKey.setOnClickListener { copyKey() }
+
+        val guideToggle = containerView!!.findViewById<TextView>(R.id.guideToggle)
+        val guideText = containerView!!.findViewById<TextView>(R.id.guideText)
+        guideToggle.setOnClickListener {
+            if (guideText.visibility == View.GONE) {
+                guideText.visibility = View.VISIBLE
+                guideToggle.setText(R.string.encryption_guide_toggle_expanded)
+            } else {
+                guideText.visibility = View.GONE
+                guideToggle.setText(R.string.encryption_guide_toggle)
+            }
+        }
     }
 
     override fun onDestroyView(view: View) {

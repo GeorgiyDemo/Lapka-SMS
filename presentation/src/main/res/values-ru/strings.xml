@@ -425,4 +425,15 @@
     <string name="settings_exit_with_no_changes">Выйти без сохранения изменений?</string>
     <string name="global_key_isnt_set">Ключ шифрования не установлен!</string>
     <string name="global_key_set">Настроить</string>
+
+    <string name="encryption_guide_toggle">Как включить шифрование ▼</string>
+    <string name="encryption_guide_toggle_expanded">Как включить шифрование ▲</string>
+    <string name="encryption_guide_text"><b>1.</b> Нажмите <b>«Ключ шифрования»</b> и включите переключатель.\n\n<b>2.</b> Нажмите <b>«Сгенерировать ключ»</b> — или отсканируйте QR-код собеседника.\n\n<b>3.</b> Передайте ключ собеседнику — покажите QR-код или скопируйте и отправьте через <b>безопасный канал</b> (лично, Signal и т.д.). НЕ отправляйте ключ обычной СМС!\n\n<b>4.</b> Выберите <b>схему кодирования</b>:\n    • <b>Base64</b> — компактно, выглядит как случайные символы\n    • <b>Кириллическая Base64</b> — то же, но кириллицей\n    • <b>Русские слова</b> — стеганография: сообщения выглядят как обычный русский текст\n\n<b>5.</b> В чате нажмите <b>иконку замка</b>, чтобы включить/выключить шифрование для сообщения.\n\n<b>Эмодзи-отпечаток</b> под ключом должен совпадать на обоих устройствах — это подтверждает, что ключ одинаковый.</string>
+
+    <string name="decryption_failed">⚠ Ошибка расшифровки</string>
+    <string name="encrypted_indicator_content_description">Зашифрованное сообщение</string>
+    <string name="encryption_send_failed">Ошибка шифрования, сообщение не отправлено</string>
+    <string name="key_fingerprint">Отпечаток: %s</string>
+    <string name="key_fingerprint_label">Отпечаток</string>
+    <string name="qr_code_content_description">QR-код ключа шифрования</string>
 </resources>

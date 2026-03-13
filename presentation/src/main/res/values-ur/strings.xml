@@ -349,4 +349,58 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
+
+    <string name="encryption_guide_toggle">انکرپشن کو کیسے فعال کریں ▼</string>
+    <string name="encryption_guide_toggle_expanded">انکرپشن کو کیسے فعال کریں ▲</string>
+    <string name="encryption_guide_text"><b>1.</b> <b>\"انکرپشن کی\"</b> پر ٹیپ کریں اور ٹوگل آن کریں۔\n\n<b>2.</b> <b>\"نئی کی بنائیں\"</b> پر ٹیپ کریں — یا اپنے ساتھی کا QR کوڈ سکین کریں۔\n\n<b>3.</b> اپنے ساتھی کے ساتھ کی شیئر کریں — QR کوڈ دکھائیں یا کاپی کرکے <b>محفوظ چینل</b> (ذاتی طور پر، Signal وغیرہ) سے بھیجیں۔ عام SMS سے کی نہ بھیجیں!\n\n<b>4.</b> <b>انکوڈنگ اسکیم</b> منتخب کریں:\n    • <b>Base64</b> — مختصر، بے ترتیب حروف جیسا دکھتا ہے\n    • <b>سیریلک Base64</b> — وہی لیکن سیریلک حروف میں\n    • <b>روسی الفاظ</b> — سٹیگنوگرافی: پیغامات عام روسی متن جیسے دکھتے ہیں\n\n<b>5.</b> چیٹ میں، فی پیغام انکرپشن آن/آف کرنے کے لیے <b>لاک آئیکن</b> پر ٹیپ کریں۔\n\n<b>ایموجی فنگرپرنٹ</b> کی کے نیچے دونوں آلات پر ملنا چاہیے — یہ تصدیق کرتا ہے کہ کی ایک جیسی ہے۔</string>
+    <string name="button_disable">غیر فعال</string>
+    <string name="button_generate">&#128259;</string>
+    <string name="button_reset">ری سیٹ</string>
+    <string name="channel_id">چینل آئی ڈی</string>
+    <string name="compose_call_confirm_title">کال</string>
+    <string name="compose_call_confirm_message">%s کو کال کریں؟</string>
+    <string name="compose_call_confirm_positive">کال</string>
+    <string name="compose_menu_encrypted">انکرپٹڈ</string>
+    <string name="compose_menu_raw">غیر انکرپٹڈ</string>
+    <string name="compose_menu_search">تلاش</string>
+    <string name="compose_search_hint">گفتگو میں تلاش کریں…</string>
+    <string name="conversation_delete_received_after">موصول پیغامات خودکار حذف</string>
+    <string name="conversation_delete_sent_after">بھیجے گئے پیغامات خودکار حذف</string>
+    <string name="conversation_encryption_key_title">انکرپشن کی</string>
+    <string name="copy">کاپی</string>
+    <string name="decryption_failed">⚠ ڈکرپشن ناکام</string>
+    <string name="disable_encryption_confirmation">کیا آپ واقعی اس گفتگو کی انکرپشن غیر فعال کرنا چاہتے ہیں؟</string>
+    <string name="drawer_plus">عطیہ</string>
+    <string name="encoding_scheme">انکوڈنگ اسکیم</string>
+    <string name="encoding_scheme_base64">Base64</string>
+    <string name="encoding_scheme_base64_cyrillic">سیریلک Base64</string>
+    <string name="encoding_scheme_default">سیٹنگز سے اسکیم استعمال کریں</string>
+    <string name="encoding_scheme_russian_words">روسی الفاظ</string>
+    <string name="encrypted_indicator_content_description">انکرپٹڈ پیغام</string>
+    <string name="encryption_key_copied">کی کاپی ہو گئی۔ شیئر کرنے کے بعد کلپ بورڈ سے حذف کریں!</string>
+    <string name="encryption_send_failed">انکرپشن ناکام، پیغام نہیں بھیجا گیا</string>
+    <string name="global_key_isnt_set">انکرپشن کی سیٹ نہیں ہے!</string>
+    <string name="global_key_set">کی سیٹ کریں</string>
+    <string name="invalid_key">غلط کی</string>
+    <string name="key_description">محفوظ پیغام رسانی کے لیے یہ کی اپنے ساتھی کے ساتھ شیئر کریں</string>
+    <string name="key_fingerprint">فنگرپرنٹ: %s</string>
+    <string name="key_fingerprint_label">فنگرپرنٹ</string>
+    <string name="qr_code_content_description">انکرپشن کی کا QR کوڈ</string>
+    <string name="settings_bad_key">غلط کی!</string>
+    <string name="settings_category_hidden">سیکیورٹی</string>
+    <string name="settings_conversation_encryption_key_title">گفتگو کی انکرپشن کی</string>
+    <string name="settings_delete_encrypted_after_default">حذف نہ کریں</string>
+    <string name="settings_delete_encrypted_after_title">انکرپٹڈ پیغامات خودکار حذف</string>
+    <string name="settings_encryption_key_title">انکرپشن کی</string>
+    <string name="settings_exit_with_no_changes">کیا آپ تبدیلیاں محفوظ کیے بغیر باہر نکلنا چاہتے ہیں؟</string>
+    <string name="settings_generate_new_key">نئی کی بنائیں</string>
+    <string name="settings_global_encryption_key_title">عالمی انکرپشن کی</string>
+    <string name="settings_key_has_been_set">کی سیٹ ہو گئی</string>
+    <string name="settings_messages_delete">پیغامات کی حذف</string>
+    <string name="settings_reset_key">انکرپشن کی ری سیٹ کریں</string>
+    <string name="settings_reset_key_confirmation_text">کیا آپ واقعی انکرپشن کی ری سیٹ کرنا چاہتے ہیں؟ اسے بحال نہیں کیا جا سکے گا اور آپ اس کی سے انکرپٹ شدہ پیغامات نہیں پڑھ سکیں گے۔</string>
+    <string name="settings_scan_qr_title">کی والا QR کوڈ اسکین کریں</string>
+    <string name="show_in_task_switcher">ٹاسک سوئچر میں ایپ کا مواد دکھائیں</string>
+    <string name="sms_for_reset">ری سیٹ کے لیے SMS</string>
+    <string name="theme_system_default">سسٹم ڈیفالٹ</string>
 </resources>
