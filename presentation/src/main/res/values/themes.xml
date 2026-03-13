@@ -27,7 +27,7 @@
 
     <style name="AppLaunchTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/backgroundDark</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 

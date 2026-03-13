@@ -24,6 +24,7 @@ import android.telephony.SmsMessage
 import android.util.Base64
 import androidx.core.content.getSystemService
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
+import org.lapka.sms.PSmsEncryptor
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.Navigator
 import com.moez.QKSMS.common.base.QkViewModel
@@ -104,6 +105,10 @@ class ComposeViewModel @Inject constructor(
     private val searchSelection: Subject<Long> = BehaviorSubject.createDefault(-1)
 
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
+
+    // Cache for search: decrypted texts keyed by message id, invalidated when key changes
+    private var searchTextCache: Map<Long, String>? = null
+    private var searchCacheForKey: String? = null
 
     init {
         val initialConversation = threadId.takeIf { it != 0L }
@@ -416,7 +421,7 @@ class ComposeViewModel @Inject constructor(
             }
 
         // Handle search query changes from in-conversation search
-        // Decrypts messages in memory so encrypted content is searchable
+        // Decrypts messages once into cache, then filters by query
         view.searchQueryChangedIntent
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(Schedulers.computation())
@@ -427,18 +432,26 @@ class ComposeViewModel @Inject constructor(
             .withLatestFrom(messages, state) { query, allMessages, state ->
                 val queryStr = query.toString().lowercase()
                 val encryptionKey = state.encryptionKey
-                allMessages.filter { message ->
-                    val text = if (!encryptionKey.isNullOrEmpty()) {
-                        try {
-                            KSmsEncryptorFactory.create()
-                                .tryDecode(message.body, Base64.decode(encryptionKey, Base64.DEFAULT)).text
-                        } catch (_: Exception) {
+
+                // Build/reuse decrypted text cache
+                if (searchTextCache == null || searchCacheForKey != encryptionKey) {
+                    val encryptor = PSmsEncryptor()
+                    val keyBytes = if (!encryptionKey.isNullOrEmpty()) {
+                        try { Base64.decode(encryptionKey, Base64.DEFAULT) } catch (_: Exception) { null }
+                    } else null
+                    searchTextCache = allMessages.associate { message ->
+                        message.id to if (keyBytes != null) {
+                            try { encryptor.tryDecode(message.body, keyBytes).text } catch (_: Exception) { message.body }
+                        } else {
                             message.body
                         }
-                    } else {
-                        message.body
                     }
-                    text.lowercase().contains(queryStr)
+                    searchCacheForKey = encryptionKey
+                }
+
+                val cache = searchTextCache!!
+                allMessages.filter { message ->
+                    (cache[message.id] ?: message.body).lowercase().contains(queryStr)
                 }
             }
             .observeOn(AndroidSchedulers.mainThread())
@@ -450,6 +463,8 @@ class ComposeViewModel @Inject constructor(
             .filter { it == R.id.clear }
             .autoDisposable(view.scope())
             .subscribe {
+                searchTextCache = null
+                searchCacheForKey = null
                 newState { copy(query = "", searching = false, searchSelectionId = -1) }
                 view.clearSearch()
             }
@@ -555,7 +570,7 @@ class ComposeViewModel @Inject constructor(
         // Show the remaining character counter when necessary
         // When encryption is enabled, calculate based on encrypted message length
         view.textChangedIntent
-            .debounce(100, TimeUnit.MILLISECONDS)
+            .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(Schedulers.computation())
             .withLatestFrom(conversation, state) { draft, conv, curState ->
                 val textToMeasure = if (curState.encryptionEnabled && !curState.encryptionKey.isNullOrBlank() && draft.isNotBlank()) {

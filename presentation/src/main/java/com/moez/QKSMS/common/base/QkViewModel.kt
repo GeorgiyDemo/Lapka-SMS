@@ -28,6 +28,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import java.util.concurrent.TimeUnit
 
 abstract class QkViewModel<in View : QkView<State>, State : Any>(initialState: State) : ViewModel() {
 
@@ -47,7 +48,10 @@ abstract class QkViewModel<in View : QkView<State>, State : Any>(initialState: S
 
     @CallSuper
     open fun bindView(view: View) {
+        // Debounce rapid state changes (e.g. multiple newState calls within a single frame)
+        // to batch them into one render() call, reducing UI overhead
         state
+            .debounce(8, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(view.scope())
             .subscribe(view::render)

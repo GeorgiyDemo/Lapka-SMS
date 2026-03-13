@@ -29,7 +29,7 @@ import androidx.core.text.color
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import org.lapka.sms.InvalidVersionException
-import com.moez.QKSMS.crypto.KSmsEncryptorFactory
+import org.lapka.sms.PSmsEncryptor
 import org.lapka.sms.Message as PSmsMessage
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.Navigator
@@ -56,6 +56,11 @@ class ConversationsAdapter @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences
 ) : QkRealmAdapter<Conversation>() {
+
+    private data class CachedSnippet(val originalSnippet: String, val decoded: PSmsMessage)
+
+    private val encryptor = PSmsEncryptor()
+    private val snippetCache = android.util.LruCache<Long, CachedSnippet>(128)
 
     init {
         // This is how we access the threadId for the swipe actions
@@ -127,17 +132,25 @@ class ConversationsAdapter @Inject constructor(
         holder.itemView.findViewById<QkTextView>(R.id.date).text =
             conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
-        val snippetMessage = try {
-            if (conversation.encryptionKey.isNotEmpty()) {
-                KSmsEncryptorFactory.create().tryDecode(
-                    conversation.snippet.toString(),
-                    Base64.decode(conversation.encryptionKey, Base64.DEFAULT)
-                )
+        val snippet = conversation.snippet ?: ""
+        val snippetMessage = if (conversation.encryptionKey.isNotEmpty()) {
+            val cached = snippetCache.get(conversation.id)
+            if (cached != null && cached.originalSnippet == snippet.toString()) {
+                cached.decoded
             } else {
-                PSmsMessage(conversation.snippet ?: "")
+                val decoded = try {
+                    encryptor.tryDecode(
+                        snippet.toString(),
+                        Base64.decode(conversation.encryptionKey, Base64.DEFAULT)
+                    )
+                } catch (_: InvalidVersionException) {
+                    PSmsMessage(snippet.toString())
+                }
+                snippetCache.put(conversation.id, CachedSnippet(snippet.toString(), decoded))
+                decoded
             }
-        } catch (_: InvalidVersionException) {
-            PSmsMessage(conversation.snippet ?: "")
+        } else {
+            PSmsMessage(snippet.toString())
         }
 
 

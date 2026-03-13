@@ -28,7 +28,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
-import com.moez.QKSMS.crypto.KSmsEncryptorFactory
+import org.lapka.sms.PSmsEncryptor
 import org.lapka.sms.Message as PSmsMessage
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
@@ -77,6 +77,7 @@ class MessagesAdapter @Inject constructor(
     companion object {
         private const val VIEW_TYPE_MESSAGE_IN = 0
         private const val VIEW_TYPE_MESSAGE_OUT = 1
+        private const val DECRYPTION_CACHE_SIZE = 256
 
         // Thanks to Cory Kilger for this regex
         // https://gist.github.com/cmkilger/b8f7dba3e76244a84e7e
@@ -86,9 +87,16 @@ class MessagesAdapter @Inject constructor(
 
     }
 
+    private data class DecryptedEntry(val message: PSmsMessage, val isEncrypted: Boolean)
+
     val clicks: Subject<Long> = PublishSubject.create()
     val cancelSending: Subject<Long> = PublishSubject.create()
     val encryptionKey: BehaviorSubject<String> = BehaviorSubject.create()
+
+    private val encryptor = PSmsEncryptor()
+    private val decryptionCache = android.util.LruCache<Long, DecryptedEntry>(DECRYPTION_CACHE_SIZE)
+    private var cachedKeyBytes: ByteArray? = null
+    private var cachedKeyString: String? = null
 
     var conversationData: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -96,6 +104,7 @@ class MessagesAdapter @Inject constructor(
 
             field = value
             contactCache.clear()
+            decryptionCache.evictAll()
 
             updateData(value?.second)
         }
@@ -239,25 +248,40 @@ class MessagesAdapter @Inject constructor(
             holder.itemView.findViewById<TightTextView>(R.id.body).setBackgroundTint(theme.theme)
         }
 
-        // Decrypt message and bind encrypted icon
-        val encryptionKey = encryptionKey.value
+        // Decrypt message and bind encrypted icon (with LruCache)
+        val encryptionKeyStr = encryptionKey.value
         val messageText = message.body
         var decryptionFailed = false
         var isEncrypted = false
 
-        // Call tryDecode once to both decrypt and detect encryption
-        // (calling isEncrypted + tryDecode separately breaks NonceCache anti-replay)
-        val decryptedMessage = if (conversation != null && !encryptionKey.isNullOrEmpty()) {
-            try {
-                val result = KSmsEncryptorFactory.create()
-                    .tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
-                // If tryDecode returned different text, the message was encrypted
-                isEncrypted = result.text != messageText.toString()
-                result
-            } catch (_: InvalidVersionException) {
-                decryptionFailed = true
-                isEncrypted = true
-                null
+        // Invalidate cache if encryption key changed
+        if (encryptionKeyStr != cachedKeyString) {
+            cachedKeyString = encryptionKeyStr
+            cachedKeyBytes = if (!encryptionKeyStr.isNullOrEmpty()) {
+                try { Base64.decode(encryptionKeyStr, Base64.DEFAULT) } catch (_: Exception) { null }
+            } else null
+            decryptionCache.evictAll()
+        }
+
+        val keyBytes = cachedKeyBytes
+        val decryptedMessage = if (conversation != null && keyBytes != null) {
+            val cached = decryptionCache.get(message.id)
+            if (cached != null) {
+                isEncrypted = cached.isEncrypted
+                cached.message
+            } else {
+                try {
+                    val result = encryptor.tryDecode(messageText.toString(), keyBytes)
+                    val encrypted = result.text != messageText.toString()
+                    isEncrypted = encrypted
+                    decryptionCache.put(message.id, DecryptedEntry(result, encrypted))
+                    result
+                } catch (_: InvalidVersionException) {
+                    decryptionFailed = true
+                    isEncrypted = true
+                    decryptionCache.put(message.id, DecryptedEntry(PSmsMessage(messageText.toString()), true))
+                    null
+                }
             }
         } else {
             PSmsMessage(messageText.toString())
