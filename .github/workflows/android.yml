@@ -26,7 +26,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Fix JDK path for CI
-        run: sed -i "s|org.gradle.java.home=.*|org.gradle.java.home=$JAVA_HOME|" gradle.properties
+        run: sed -i '/org.gradle.java.home/d' gradle.properties
 
       - name: Build debug APK
         run: ./gradlew assembleDebug
