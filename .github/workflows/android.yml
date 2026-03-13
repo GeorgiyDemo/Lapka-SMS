@@ -37,8 +37,29 @@ jobs:
           name: Lapka-SMS-debug
           path: presentation/build/outputs/apk/debug/*.apk
 
-      - name: Upload APK to release
+      - name: Decode keystore
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore
+
+      - name: Build release APK
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          CI: "true"
+          keystore_password: ${{ secrets.KEYSTORE_PASSWORD }}
+          key_alias: ${{ secrets.KEY_ALIAS }}
+          key_password: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Upload release APK
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lapka-SMS-release
+          path: presentation/build/outputs/apk/release/*.apk
+
+      - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: presentation/build/outputs/apk/debug/*.apk
+          generate_release_notes: true
+          files: presentation/build/outputs/apk/release/*.apk
