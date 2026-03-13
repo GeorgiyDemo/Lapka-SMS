@@ -96,7 +96,6 @@ class KeySettingsController(
     private val schemeBase64: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64)
     private val schemeBase64Cyrillic: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64Cyrillic)
     private val schemeRussianWords: RadioButton get() = containerView!!.findViewById(R.id.schemeRussianWords)
-    private val schemeDefault: RadioButton get() = containerView!!.findViewById(R.id.schemeDefault)
 
     init {
         appComponent
@@ -154,13 +153,10 @@ class KeySettingsController(
         }
 
         val nonKeyEncryptionSettingsEnabled = state.keyEnabled
-                || state.isConversation && prefs.globalEncryptionKey.get().isNotBlank()
 
-        schemeDefault.visibility = if (state.isConversation) View.VISIBLE else View.GONE
         renderEncodingRadioButton(schemeBase64, nonKeyEncryptionSettingsEnabled)
         renderEncodingRadioButton(schemeBase64Cyrillic, nonKeyEncryptionSettingsEnabled)
         renderEncodingRadioButton(schemeRussianWords, nonKeyEncryptionSettingsEnabled)
-        renderEncodingRadioButton(schemeDefault, nonKeyEncryptionSettingsEnabled)
         if (state.encodingScheme >= 0) {
             encodingSchemes.check(encodingSchemes[state.encodingScheme].id)
         }

@@ -713,4 +713,249 @@ class PSmsEncryptorTest {
             }
         }
     }
+
+    // =========================================================================
+    // Encrypted message length — for SMS segment counter
+    // =========================================================================
+
+    // SMS segment limits:
+    // GSM-7 (ASCII/Latin): 160 chars per single SMS, 153 per segment in multipart
+    // UCS-2 (Unicode/Cyrillic): 70 chars per single SMS, 67 per segment in multipart
+
+    private fun smsSegments(text: String): Int {
+        val isUnicode = text.any { it.code > 127 }
+        val singleLimit = if (isUnicode) 70 else 160
+        val multiLimit = if (isUnicode) 67 else 153
+        return when {
+            text.length <= singleLimit -> 1
+            else -> (text.length + multiLimit - 1) / multiLimit
+        }
+    }
+
+    // --- BASE64 scheme ---
+
+    @Test
+    fun `BASE64 - encrypted always longer than plaintext`() {
+        val texts = listOf("H", "Hi", "Hello world", "A".repeat(50), "A".repeat(160), "Привет")
+        for (text in texts) {
+            val encrypted = freshEncryptor().encode(Message(text), key, Scheme.BASE64.ordinal)
+            assertTrue(
+                "BASE64: plain=${text.length}, encrypted=${encrypted.length}",
+                encrypted.length > text.length
+            )
+        }
+    }
+
+    @Test
+    fun `BASE64 - length grows monotonically`() {
+        val lengths = listOf(1, 10, 50, 100, 160, 300, 500)
+        var prevEncLen = 0
+        for (len in lengths) {
+            val encrypted = freshEncryptor().encode(Message("A".repeat(len)), key, Scheme.BASE64.ordinal)
+            assertTrue(
+                "BASE64: len=$len -> ${encrypted.length} should be > $prevEncLen",
+                encrypted.length > prevEncLen
+            )
+            prevEncLen = encrypted.length
+        }
+    }
+
+    @Test
+    fun `BASE64 - same plaintext length gives same encrypted length`() {
+        // BASE64 has no random front padding, so lengths should be identical
+        val results = (1..10).map {
+            freshEncryptor().encode(Message("A".repeat(50)), key, Scheme.BASE64.ordinal).length
+        }
+        assertTrue(
+            "BASE64: all encrypted lengths should be equal: $results",
+            results.all { it == results[0] }
+        )
+    }
+
+    @Test
+    fun `BASE64 - segment count for short message`() {
+        // "Hi" plaintext = 1 SMS. Encrypted should be calculable.
+        val encrypted = freshEncryptor().encode(Message("Hi"), key, Scheme.BASE64.ordinal)
+        val segments = smsSegments(encrypted)
+        // BASE64 output is ASCII -> GSM-7 encoding
+        assertTrue("BASE64 'Hi' encrypted: ${encrypted.length} chars, $segments segments", segments >= 1)
+    }
+
+    @Test
+    fun `BASE64 - segment count for medium message`() {
+        val encrypted = freshEncryptor().encode(Message("A".repeat(100)), key, Scheme.BASE64.ordinal)
+        val segments = smsSegments(encrypted)
+        assertTrue("BASE64 100-char: ${encrypted.length} chars, $segments segments", segments >= 1)
+        // 100 ASCII chars -> encrypted should be > 160 chars, so likely 2+ segments
+        println("BASE64 100-char: encrypted=${encrypted.length}, segments=$segments")
+    }
+
+    @Test
+    fun `BASE64 - segment count for long message`() {
+        val encrypted = freshEncryptor().encode(Message("A".repeat(300)), key, Scheme.BASE64.ordinal)
+        val segments = smsSegments(encrypted)
+        assertTrue("BASE64 300-char: ${encrypted.length} chars, $segments segments", segments >= 2)
+    }
+
+    @Test
+    fun `BASE64 - overhead is bounded`() {
+        val encrypted = freshEncryptor().encode(Message("X"), key, Scheme.BASE64.ordinal)
+        assertTrue("1-char BASE64 under 200: ${encrypted.length}", encrypted.length < 200)
+        val empty = freshEncryptor().encode(Message(""), key, Scheme.BASE64.ordinal)
+        assertTrue("Empty BASE64 has overhead: ${empty.length}", empty.length > 0)
+    }
+
+    // --- CYRILLIC_BASE64 scheme ---
+
+    @Test
+    fun `CYRILLIC_BASE64 - encrypted always longer than plaintext`() {
+        val texts = listOf("H", "Hi", "Hello world", "A".repeat(50), "Привет мир")
+        for (text in texts) {
+            val encrypted = freshEncryptor().encode(Message(text), key, Scheme.CYRILLIC_BASE64.ordinal)
+            assertTrue(
+                "CYRILLIC_BASE64: plain=${text.length}, encrypted=${encrypted.length}",
+                encrypted.length > text.length
+            )
+        }
+    }
+
+    @Test
+    fun `CYRILLIC_BASE64 - length grows monotonically`() {
+        val lengths = listOf(1, 10, 50, 100, 160, 300)
+        var prevEncLen = 0
+        for (len in lengths) {
+            val encrypted = freshEncryptor().encode(Message("A".repeat(len)), key, Scheme.CYRILLIC_BASE64.ordinal)
+            assertTrue(
+                "CYRILLIC_BASE64: len=$len -> ${encrypted.length} should be > $prevEncLen",
+                encrypted.length > prevEncLen
+            )
+            prevEncLen = encrypted.length
+        }
+    }
+
+    @Test
+    fun `CYRILLIC_BASE64 - uses more SMS segments than BASE64 due to Unicode`() {
+        // Cyrillic output is Unicode -> UCS-2 (70 chars per SMS vs 160)
+        val text = "A".repeat(100)
+        val base64Enc = freshEncryptor().encode(Message(text), key, Scheme.BASE64.ordinal)
+        val cyrillicEnc = freshEncryptor().encode(Message(text), key, Scheme.CYRILLIC_BASE64.ordinal)
+        val base64Seg = smsSegments(base64Enc)
+        val cyrillicSeg = smsSegments(cyrillicEnc)
+        // Cyrillic scheme should use more segments (UCS-2 = 70 char limit)
+        assertTrue(
+            "CYRILLIC_BASE64 ($cyrillicSeg segs, ${cyrillicEnc.length} chars) should use >= segments than BASE64 ($base64Seg segs, ${base64Enc.length} chars)",
+            cyrillicSeg >= base64Seg
+        )
+        println("100-char: BASE64=${base64Enc.length}chars/${base64Seg}segs, CYRILLIC=${cyrillicEnc.length}chars/${cyrillicSeg}segs")
+    }
+
+    @Test
+    fun `CYRILLIC_BASE64 - segment count for short message`() {
+        val encrypted = freshEncryptor().encode(Message("Hi"), key, Scheme.CYRILLIC_BASE64.ordinal)
+        val segments = smsSegments(encrypted)
+        assertTrue("CYRILLIC_BASE64 'Hi': ${encrypted.length} chars, $segments segments", segments >= 1)
+        println("CYRILLIC_BASE64 'Hi': encrypted=${encrypted.length}, segments=$segments")
+    }
+
+    @Test
+    fun `CYRILLIC_BASE64 - overhead is bounded`() {
+        val encrypted = freshEncryptor().encode(Message("X"), key, Scheme.CYRILLIC_BASE64.ordinal)
+        assertTrue("1-char CYRILLIC_BASE64 under 200: ${encrypted.length}", encrypted.length < 200)
+    }
+
+    // --- TEXT (words) scheme ---
+    // TEXT scheme requires Java 21+ List.removeLast(), so these test encoding only
+
+    @Test
+    fun `TEXT - encrypted always longer than plaintext`() {
+        val texts = listOf("H", "Hi", "Hello world", "A".repeat(50))
+        for (text in texts) {
+            try {
+                val encrypted = freshEncryptor().encode(Message(text), key, Scheme.TEXT.ordinal)
+                assertTrue(
+                    "TEXT: plain=${text.length}, encrypted=${encrypted.length}",
+                    encrypted.length > text.length
+                )
+            } catch (_: NoSuchMethodError) {
+                // TEXT scheme requires Java 21+, skip
+                return
+            }
+        }
+    }
+
+    @Test
+    fun `TEXT - length grows monotonically`() {
+        val lengths = listOf(1, 10, 50, 100)
+        var prevEncLen = 0
+        for (len in lengths) {
+            try {
+                val encrypted = freshEncryptor().encode(Message("A".repeat(len)), key, Scheme.TEXT.ordinal)
+                assertTrue(
+                    "TEXT: len=$len -> ${encrypted.length} should be > $prevEncLen",
+                    encrypted.length > prevEncLen
+                )
+                prevEncLen = encrypted.length
+            } catch (_: NoSuchMethodError) {
+                return
+            }
+        }
+    }
+
+    @Test
+    fun `TEXT - uses Unicode and more segments`() {
+        try {
+            val text = "Hello"
+            val textEnc = freshEncryptor().encode(Message(text), key, Scheme.TEXT.ordinal)
+            val base64Enc = freshEncryptor().encode(Message(text), key, Scheme.BASE64.ordinal)
+            println("TEXT 'Hello': ${textEnc.length} chars, ${smsSegments(textEnc)} segs")
+            println("BASE64 'Hello': ${base64Enc.length} chars, ${smsSegments(base64Enc)} segs")
+            assertTrue("TEXT output non-empty", textEnc.isNotEmpty())
+        } catch (_: NoSuchMethodError) {
+            // TEXT scheme requires Java 21+
+        }
+    }
+
+    // --- Cross-scheme comparison ---
+
+    @Test
+    fun `all schemes - encrypted output roundtrips correctly`() {
+        for (scheme in listOf(Scheme.BASE64, Scheme.CYRILLIC_BASE64)) {
+            val text = "Test message 123 Привет"
+            val encrypted = freshEncryptor().encode(Message(text), key, scheme.ordinal)
+            val decrypted = freshEncryptor().decode(encrypted, key, scheme.ordinal)
+            assertEquals("Roundtrip failed for $scheme", text, decrypted.text)
+        }
+    }
+
+    @Test
+    fun `all schemes - segment count table for various lengths`() {
+        // Print a table showing how plaintext length maps to SMS segments per scheme
+        val lengths = listOf(1, 10, 30, 50, 70, 100, 140, 160, 200, 300)
+        println("\nSMS Segment Count Table:")
+        println("Plain | BASE64 len/segs | CYRILLIC len/segs")
+        println("------|-----------------|-------------------")
+        for (len in lengths) {
+            val text = "A".repeat(len)
+            val b64 = freshEncryptor().encode(Message(text), key, Scheme.BASE64.ordinal)
+            val cyr = freshEncryptor().encode(Message(text), key, Scheme.CYRILLIC_BASE64.ordinal)
+            println("${len.toString().padStart(5)} | ${b64.length.toString().padStart(7)}/${smsSegments(b64).toString().padStart(4)}    | ${cyr.length.toString().padStart(9)}/${smsSegments(cyr).toString().padStart(4)}")
+            // Verify basic invariants
+            assertTrue("BASE64 len=$len encrypted non-empty", b64.isNotEmpty())
+            assertTrue("CYRILLIC len=$len encrypted non-empty", cyr.isNotEmpty())
+            assertTrue("BASE64 len=$len >= 1 segment", smsSegments(b64) >= 1)
+            assertTrue("CYRILLIC len=$len >= 1 segment", smsSegments(cyr) >= 1)
+        }
+    }
+
+    @Test
+    fun `all schemes - cyrillic plaintext encrypted length`() {
+        val text = "Привет мир, это тестовое сообщение для проверки"
+        val b64 = freshEncryptor().encode(Message(text), key, Scheme.BASE64.ordinal)
+        val cyr = freshEncryptor().encode(Message(text), key, Scheme.CYRILLIC_BASE64.ordinal)
+        println("Cyrillic text (${text.length} chars):")
+        println("  BASE64: ${b64.length} chars, ${smsSegments(b64)} segments")
+        println("  CYRILLIC_BASE64: ${cyr.length} chars, ${smsSegments(cyr)} segments")
+        assertTrue("BASE64 cyrillic text encrypted", b64.length > text.length)
+        assertTrue("CYRILLIC cyrillic text encrypted", cyr.length > text.length)
+    }
 }

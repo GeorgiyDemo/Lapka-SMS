@@ -144,10 +144,8 @@ class Preferences @Inject constructor(
         )
         RxSharedPreferences.create(encPrefs)
     }
-    val globalEncryptionKey = securePrefs.getString("globalEncryptionKey", "")
     val smsForReset = securePrefs.getString("smsForReset", "")
     val smsForResetHash = securePrefs.getString("smsForResetHash", "")
-    val deleteEncryptedAfter = rxPrefs.getInteger("deleteEncryptedAfter", 0)
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
     val language = rxPrefs.getString("language", "")

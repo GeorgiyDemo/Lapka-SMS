@@ -16,10 +16,8 @@ class ResetSettings @Inject constructor(
         return Flowable.just(params)
             .doOnNext { _ ->
                 conversationRepo.resetHiddenSettings()
-                prefs.globalEncryptionKey.set("")
                 prefs.smsForReset.set("")
                 prefs.smsForResetHash.set("")
-                prefs.deleteEncryptedAfter.set(0)
             }
     }
 

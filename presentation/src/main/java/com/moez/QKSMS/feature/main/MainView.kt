@@ -27,7 +27,6 @@ interface MainView : QkView<MainState> {
 
     val onNewIntentIntent: Observable<Intent>
     val activityResumedIntent: Observable<Boolean>
-    val showGenerateKeyIntent: Observable<Boolean>
     val queryChangedIntent: Observable<CharSequence>
     val composeIntent: Observable<Unit>
     val drawerOpenIntent: Observable<Boolean>
@@ -53,7 +52,6 @@ interface MainView : QkView<MainState> {
     fun showDeleteDialog(conversations: List<Long>)
     fun showChangelog(changelog: ChangelogManager.CumulativeChangelog)
     fun showArchivedSnackbar()
-    fun showGenerateKeyDialog()
 }
 
 enum class NavItem { BACK, INBOX, ARCHIVED, BLOCKING, SETTINGS, PLUS, HELP, INVITE }

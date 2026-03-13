@@ -32,8 +32,7 @@ data class MainState(
     val syncing: SyncRepository.SyncProgress = SyncRepository.SyncProgress.Idle,
     val defaultSms: Boolean = true,
     val smsPermission: Boolean = true,
-    val contactPermission: Boolean = true,
-    val keysIsUnset: Boolean = true
+    val contactPermission: Boolean = true
 )
 
 sealed class MainPage

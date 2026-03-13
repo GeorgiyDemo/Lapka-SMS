@@ -198,7 +198,7 @@
         <item>Mark unread</item>
     </string-array>
     <string name="settings_delivery_title">Delivery confirmations</string>
-    <string name="settings_delivery_summary">Confirm that messages were sent successfully</string>
+    <string name="settings_delivery_summary">Unstable feature. Depends on carrier support</string>
     <string name="settings_signature_title">Signature</string>
     <string name="settings_signature_summary">Add a signature to the end of your messages</string>
     <string name="settings_unicode_title">Strip accents</string>
@@ -364,6 +364,9 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_disable">Disable</string>
     <string name="disable_encryption_confirmation">Are you sure you want to disable encryption for this conversation?</string>
+    <string name="compose_call_confirm_title">Call</string>
+    <string name="compose_call_confirm_message">Call %s?</string>
+    <string name="compose_call_confirm_positive">Call</string>
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="button_stop">Stop</string>

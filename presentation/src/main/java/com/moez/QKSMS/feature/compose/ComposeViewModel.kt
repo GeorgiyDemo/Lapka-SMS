@@ -206,7 +206,7 @@ class ComposeViewModel @Inject constructor(
         }.subscribe()
 
         val encryptionEnabledObservable = conversation
-            .map { conversation -> conversation.encryptionEnabled ?: prefs.globalEncryptionKey.get().isNotBlank() }
+            .map { conversation -> conversation.encryptionEnabled ?: false }
         disposables += encryptionEnabledObservable
             .subscribe { encryptionEnabled ->
                 newState {
@@ -218,7 +218,7 @@ class ComposeViewModel @Inject constructor(
 
         val encryptionKeyObservable = conversation
             .map { conversation ->
-                conversation.encryptionKey.takeIf { it.isNotBlank() } ?: prefs.globalEncryptionKey.get()
+                conversation.encryptionKey
             }
         disposables += encryptionKeyObservable
             .subscribe { encryptionKey ->
@@ -307,14 +307,14 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { newState { copy() } }
 
-        // Open the phone dialer if the call button is clicked
+        // Open the phone dialer if the call button is clicked (with confirmation)
         view.optionsItemIntent
             .filter { it == R.id.call }
             .withLatestFrom(conversation) { _, conversation -> conversation }
             .mapNotNull { conversation -> conversation.recipients.firstOrNull() }
             .map { recipient -> recipient.address }
             .autoDisposable(view.scope())
-            .subscribe { address -> navigator.makePhoneCall(address) }
+            .subscribe { address -> view.showCallConfirmDialog(address) }
 
         // Open the conversation settings if info button is clicked
         view.optionsItemIntent
@@ -553,9 +553,30 @@ class ComposeViewModel @Inject constructor(
             .subscribe { canSend -> newState { copy(canSend = canSend) } }
 
         // Show the remaining character counter when necessary
+        // When encryption is enabled, calculate based on encrypted message length
         view.textChangedIntent
+            .debounce(100, TimeUnit.MILLISECONDS)
             .observeOn(Schedulers.computation())
-            .mapNotNull { draft -> tryOrNull { SmsMessage.calculateLength(draft, false) } }
+            .withLatestFrom(conversation, state) { draft, conv, curState ->
+                val textToMeasure = if (curState.encryptionEnabled && !curState.encryptionKey.isNullOrBlank() && draft.isNotBlank()) {
+                    try {
+                        val encryptionSchemeId = conv.encodingSchemeId
+                            .takeIf { it != Conversation.SCHEME_NOT_DEF }
+                            ?: prefs.encodingScheme.get()
+                        KSmsEncryptorFactory.create().encode(
+                            message = PSmsMessage(draft.toString()),
+                            key = Base64.decode(curState.encryptionKey, Base64.DEFAULT),
+                            encryptionSchemeId = encryptionSchemeId
+                        )
+                    } catch (_: Exception) {
+                        draft
+                    }
+                } else {
+                    draft
+                }
+                tryOrNull { SmsMessage.calculateLength(textToMeasure, false) }
+            }
+            .mapNotNull { it }
             .map { array ->
                 val messages = array[0]
                 val remaining = array[2]
@@ -711,7 +732,7 @@ class ComposeViewModel @Inject constructor(
         view.optionsItemIntent
             .filter { it == R.id.raw }
             .withLatestFrom(conversation) { _, conversation ->
-                if (conversation.encryptionKey.isBlank() && prefs.globalEncryptionKey.get().isBlank()) {
+                if (conversation.encryptionKey.isBlank()) {
                     view.showEncryptionKeySettings(conversation)
                 } else {
                     setEncryptionEnabled.execute(SetEncryptionEnabled.Params(conversation.id, true)) {

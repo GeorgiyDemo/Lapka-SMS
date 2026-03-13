@@ -61,7 +61,6 @@ import com.moez.QKSMS.common.util.extensions.scrapViews
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setTint
 import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.common.widget.KeyInputDialog
 import com.moez.QKSMS.common.widget.QkEditText
 import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.feature.blocking.BlockingDialog
@@ -134,7 +133,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override val onNewIntentIntent: Subject<Intent> = PublishSubject.create()
     override val activityResumedIntent: Subject<Boolean> = PublishSubject.create()
-    override val showGenerateKeyIntent: Subject<Boolean> = PublishSubject.create()
     override val queryChangedIntent by lazy { toolbarSearch.textChanges() }
     override val composeIntent by lazy { compose.clicks() }
     override val drawerOpenIntent: Observable<Boolean> by lazy {
@@ -272,12 +270,6 @@ class MainActivity : QkThemedActivity(), MainView {
         if (Build.VERSION.SDK_INT <= 22) {
             toolbarSearch.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
         }
-        if (prefs.globalEncryptionKey.get().isEmpty() && !conversationRepo.hasConversationEncryptionKey()) {
-            Snackbar.make(drawerLayout, R.string.global_key_isnt_set, Snackbar.LENGTH_LONG)
-                .setAction(R.string.global_key_set) { navigator.showGlobalKeysSettings() }
-                .show()
-        }
-
         onBackPressedDispatcher.addCallback(this) {
             backPressedSubject.onNext(NavItem.BACK)
         }
@@ -438,11 +430,6 @@ class MainActivity : QkThemedActivity(), MainView {
         }
     }
 
-    override fun showGenerateKeyDialog() {
-        KeyInputDialog(this, getString(R.string.conversation_encryption_key_title)) {
-            prefs.globalEncryptionKey.set(it)
-        }.show()
-    }
 
     override fun requestDefaultSms() {
         navigator.showDefaultSmsDialog(this, defaultSmsLauncher)

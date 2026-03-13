@@ -20,14 +20,14 @@ package com.moez.QKSMS.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.emoji.widget.EmojiAppCompatTextView
+import androidx.emoji2.widget.EmojiTextView
 import com.moez.QKSMS.common.util.TextViewStyler
 import com.moez.QKSMS.injection.appComponent
 import javax.inject.Inject
 
 open class QkTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : EmojiAppCompatTextView(context, attrs) {
+) : EmojiTextView(context, attrs) {
 
     @Inject
     lateinit var textViewStyler: TextViewStyler

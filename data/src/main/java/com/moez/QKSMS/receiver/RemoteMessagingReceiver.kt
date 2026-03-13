@@ -82,7 +82,6 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
 
     private fun encryptIfNeeded(body: String, conversation: Conversation): String {
         val encryptionKey = conversation.encryptionKey.takeIf { it.isNotBlank() }
-            ?: prefs.globalEncryptionKey.get().takeIf { it.isNotBlank() }
             ?: return body
 
         val encryptionEnabled = conversation.encryptionEnabled ?: true

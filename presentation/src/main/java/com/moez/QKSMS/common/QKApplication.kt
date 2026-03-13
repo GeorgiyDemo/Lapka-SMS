@@ -19,9 +19,8 @@
 package com.moez.QKSMS.common
 
 import android.app.Application
-import androidx.core.provider.FontRequest
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
+import androidx.emoji2.bundled.BundledEmojiCompatConfig
+import androidx.emoji2.text.EmojiCompat
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.util.CrashlyticsTree
 import com.moez.QKSMS.common.util.FileLoggingTree
@@ -106,14 +105,7 @@ class QKApplication : Application(), HasAndroidInjector {
 
         nightModeManager.updateCurrentTheme()
 
-        val fontRequest = FontRequest(
-            "com.google.android.gms.fonts",
-            "com.google.android.gms",
-            "Noto Color Emoji Compat",
-            R.array.com_google_android_gms_fonts_certs
-        )
-
-        EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
+        EmojiCompat.init(BundledEmojiCompatConfig(this))
 
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 

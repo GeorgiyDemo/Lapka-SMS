@@ -44,9 +44,6 @@ data class SettingsState(
     val autoDelete: Int = 0,
     val syncProgress: SyncRepository.SyncProgress = SyncRepository.SyncProgress.Idle,
     // partisan
-    val globalEncryptionKey: String = "",
     val smsForReset: String = "",
-    val deleteEncryptedAfterSummary: String = "",
-    val deleteEncryptedAfterId: Int = 0,
     val showInTaskSwitcher: Boolean = true
 )

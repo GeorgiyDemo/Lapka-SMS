@@ -97,12 +97,6 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-    fun showGlobalKeysSettings() {
-        val intent = Intent(context, KeySettingsActivity::class.java)
-            .putExtra("threadId", -1L)
-        startActivity(intent)
-    }
-
     fun showConversationKeySettings(threadId: Long) {
         val intent = Intent(context, KeySettingsActivity::class.java)
             .putExtra("threadId", threadId)

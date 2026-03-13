@@ -349,7 +349,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun getColoredMenuItems(): List<Int> {
-        return super.getColoredMenuItems() + R.id.call
+        return super.getColoredMenuItems() + R.id.call + R.id.encrypted
     }
 
     override fun showSearch() {
@@ -368,6 +368,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setNegativeButton(R.string.button_cancel, null)
             .setPositiveButton(R.string.button_disable) { _, _ ->
                 disableEncryptionConfirmed.onNext(Unit)
+            }
+            .show()
+    }
+
+    override fun showCallConfirmDialog(address: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.compose_call_confirm_title)
+            .setMessage(getString(R.string.compose_call_confirm_message, address))
+            .setNegativeButton(R.string.button_cancel, null)
+            .setPositiveButton(R.string.compose_call_confirm_positive) { _, _ ->
+                navigator.makePhoneCall(address)
             }
             .show()
     }

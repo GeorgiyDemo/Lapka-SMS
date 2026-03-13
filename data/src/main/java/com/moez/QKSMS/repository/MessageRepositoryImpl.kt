@@ -447,12 +447,6 @@ class MessageRepositoryImpl @Inject constructor(
                 minTimeoutId = conversation.deleteEncryptedAfter
             }
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(minTimeoutId))
-        } else if (isMessageEncrypted(
-                message,
-                prefs.globalEncryptionKey.get()
-            ) && prefs.deleteEncryptedAfter.get() > 0
-        ) {
-            deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(prefs.deleteEncryptedAfter.get()))
         }
     }
 
@@ -516,9 +510,6 @@ class MessageRepositoryImpl @Inject constructor(
         val messageText = if (conversation?.encryptionKey?.isNotEmpty() == true) {
             KSmsEncryptorFactory.create()
                 .tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
-        } else if (prefs.globalEncryptionKey.get().isNotEmpty()) {
-            KSmsEncryptorFactory.create()
-                .tryDecode(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)).text
         } else {
             message.getText()
         }
@@ -540,11 +531,6 @@ class MessageRepositoryImpl @Inject constructor(
                 minTimeoutId = conversation.deleteEncryptedAfter
             }
             deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(minTimeoutId))
-        } else if (prefs.globalEncryptionKey.get().isNotEmpty() && prefs.deleteEncryptedAfter.get() > 0
-            && KSmsEncryptorFactory.create()
-                .isEncrypted(message.getText(), Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT))
-        ) {
-            deleteMessageWithDelay(message, deleteMessageAfterIdToMillis(prefs.deleteEncryptedAfter.get()))
         }
     }
 

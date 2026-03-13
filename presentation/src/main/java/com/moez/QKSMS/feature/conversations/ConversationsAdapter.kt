@@ -133,11 +133,6 @@ class ConversationsAdapter @Inject constructor(
                     conversation.snippet.toString(),
                     Base64.decode(conversation.encryptionKey, Base64.DEFAULT)
                 )
-            } else if (prefs.globalEncryptionKey.get().isNotEmpty()) {
-                KSmsEncryptorFactory.create().tryDecode(
-                    conversation.snippet.toString(),
-                    Base64.decode(prefs.globalEncryptionKey.get(), Base64.DEFAULT)
-                )
             } else {
                 PSmsMessage(conversation.snippet ?: "")
             }

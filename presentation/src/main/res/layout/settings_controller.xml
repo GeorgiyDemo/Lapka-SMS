@@ -51,21 +51,6 @@
                 android:clipToPadding="true">
 
             <com.moez.QKSMS.common.widget.PreferenceView
-                    android:id="@+id/globalEncryptionKey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_lock_24dp"
-                    app:title="@string/settings_global_encryption_key_title"/>
-
-            <com.moez.QKSMS.common.widget.PreferenceView
-                    android:id="@+id/deleteEncryptedAfter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_av_timer_black_24dp"
-                    app:title="@string/settings_delete_encrypted_after_title"
-                    tools:summary="@string/settings_delete_encrypted_after_default"/>
-
-            <com.moez.QKSMS.common.widget.PreferenceView
                     android:id="@+id/smsForReset"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

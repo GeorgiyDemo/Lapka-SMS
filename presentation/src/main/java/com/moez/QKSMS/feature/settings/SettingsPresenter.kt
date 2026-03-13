@@ -124,25 +124,11 @@ class SettingsPresenter @Inject constructor(
             .subscribe { autoDelete -> newState { copy(autoDelete = autoDelete) } }
 
         // partisan
-        disposables += prefs.globalEncryptionKey.asObservable()
-            .subscribe { globalEncryptionKey -> newState { copy(globalEncryptionKey = globalEncryptionKey) } }
-
         disposables += prefs.smsForReset.asObservable()
             .subscribe { smsForReset -> newState { copy(smsForReset = smsForReset) } }
 
         disposables += prefs.showInTaskSwitcher.asObservable()
             .subscribe { showInTaskSwitcher -> newState { copy(showInTaskSwitcher = showInTaskSwitcher) } }
-
-        val deleteEncryptedAfterDialogLabels = context.resources.getStringArray(R.array.delete_message_after_labels)
-        disposables += prefs.deleteEncryptedAfter.asObservable()
-            .subscribe { id ->
-                newState {
-                    copy(
-                        deleteEncryptedAfterSummary =
-                            deleteEncryptedAfterDialogLabels[id], deleteEncryptedAfterId = id
-                    )
-                }
-            }
 
         disposables += prefs.language.asObservable()
             .subscribe { lang ->
@@ -215,11 +201,7 @@ class SettingsPresenter @Inject constructor(
 
                     R.id.about -> view.showAbout()
 
-                    R.id.globalEncryptionKey -> view.showGlobalEncryptionKeySettings()
-
                     R.id.smsForReset -> view.showSmsForResetDialog(prefs.smsForReset.get())
-
-                    R.id.deleteEncryptedAfter -> view.showDeleteEncryptedAfterDialog()
 
                     R.id.showInTaskSwitcher -> prefs.showInTaskSwitcher.set(!prefs.showInTaskSwitcher.get())
                 }
@@ -310,11 +292,6 @@ class SettingsPresenter @Inject constructor(
 
         // partisan
 
-        view.globalEncryptionKeySet()
-            .doOnNext(prefs.globalEncryptionKey::set)
-            .autoDisposable(view.scope())
-            .subscribe()
-
         view.smsForResetSet()
             .doOnNext { phrase ->
                 prefs.smsForReset.set(phrase)
@@ -324,13 +301,6 @@ class SettingsPresenter @Inject constructor(
                         .digest(phrase.toByteArray(Charsets.UTF_8))
                         .joinToString("") { "%02x".format(it) }
                 )
-            }
-            .autoDisposable(view.scope())
-            .subscribe()
-
-        view.deleteEncryptedAfterSelected()
-            .doOnNext { duration ->
-                prefs.deleteEncryptedAfter.set(duration)
             }
             .autoDisposable(view.scope())
             .subscribe()

@@ -41,23 +41,8 @@ class KeySettingsPresenter @Inject constructor(
     private var conversation: Subject<Optional<Conversation>> = BehaviorSubject.create()
 
     init {
-        if (threadId == KeySettingsInvalidThreadId || threadId == 0L) {
+        if (threadId == KeySettingsInvalidThreadId || threadId == 0L || threadId == -1L) {
             newState { copy(hasError = true) }
-        } else if (threadId == -1L) {
-            conversation.onNext(Optional(null))
-            newState {
-                val state = copy(
-                    key = prefs.globalEncryptionKey.get(),
-                    keyEnabled = prefs.globalEncryptionKey.get().isNotEmpty(),
-                    keySettingsIsShown = false,
-                    resetKeyIsShown = prefs.globalEncryptionKey.get().isNotEmpty(),
-                    keyValid = validateKey(prefs.globalEncryptionKey.get()),
-                    encodingScheme = prefs.encodingScheme.get(),
-                )
-                initialState = state
-                state
-            }
-            initialized = true
         } else {
             disposables += conversationRepo.getConversationAsync(threadId)
                 .asObservable()
@@ -76,7 +61,7 @@ class KeySettingsPresenter @Inject constructor(
                                 keyValid = validateKey(conv.encryptionKey),
                                 encodingScheme = conv.encodingSchemeId
                                     .takeIf { it != Conversation.SCHEME_NOT_DEF }
-                                    ?: GLOBAL_SCHEME_INDEX,
+                                    ?: 0,
                                 deleteEncryptedAfter = conv.deleteEncryptedAfter,
                                 deleteReceivedAfter = conv.deleteReceivedAfter,
                                 deleteSentAfter = conv.deleteSentAfter,
@@ -146,11 +131,11 @@ class KeySettingsPresenter @Inject constructor(
             .subscribe {
                 newState {
                     copy(
-                        key = "",
+                        key = generateKey(),
                         keyEnabled = true,
                         keySettingsIsShown = true,
-                        keyValid = false,
-                        resetKeyIsShown = false
+                        keyValid = true,
+                        resetKeyIsShown = true
                     )
                 }
             }
@@ -298,20 +283,12 @@ class KeySettingsPresenter @Inject constructor(
                 )
             )
             setEncryptionKey.execute(SetEncryptionKey.Params(threadId, lastState.key))
-            val schemeId = lastState.encodingScheme
-                .takeIf { it != GLOBAL_SCHEME_INDEX }
-                ?: Conversation.SCHEME_NOT_DEF
-            setEncodingScheme.execute(SetEncodingScheme.Params(threadId, schemeId))
-            if (conversation?.encryptionEnabled == true && lastState.key.isBlank() && prefs.globalEncryptionKey.get()
-                    .isBlank()
-            ) {
+            setEncodingScheme.execute(SetEncodingScheme.Params(threadId, lastState.encodingScheme))
+            if (conversation?.encryptionEnabled == true && lastState.key.isBlank()) {
                 setEncryptionEnabled.execute(SetEncryptionEnabled.Params(threadId, null))
             } else if (conversation?.encryptionEnabled == null && lastState.key.isNotBlank()) {
                 setEncryptionEnabled.execute(SetEncryptionEnabled.Params(threadId, true))
             }
-        } else {
-            prefs.globalEncryptionKey.set(lastState.key)
-            prefs.encodingScheme.set(lastState.encodingScheme)
         }
         initialState = lastState
         view.onSaved(if (lastState.keyValid) lastState.key else null)
@@ -329,8 +306,4 @@ class KeySettingsPresenter @Inject constructor(
         }
     }
 
-    companion object {
-        /*index of item "Use Scheme from Settings" at R.array.encoding_scheme_labels_conversation*/
-        private const val GLOBAL_SCHEME_INDEX = 3
-    }
 }

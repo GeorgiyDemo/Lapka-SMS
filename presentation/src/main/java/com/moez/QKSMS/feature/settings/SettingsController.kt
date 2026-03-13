@@ -44,7 +44,6 @@ import com.moez.QKSMS.common.util.Colors
 import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
 import com.moez.QKSMS.common.util.extensions.setBackgroundTint
 import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.common.widget.KeyInputDialog
 import com.moez.QKSMS.common.widget.PreferenceView
 import com.moez.QKSMS.common.widget.QkSwitch
 import com.moez.QKSMS.common.widget.TextInputDialog
@@ -87,9 +86,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     lateinit var sendDelayDialog: QkDialog
 
     @Inject
-    lateinit var deleteEncryptedAfterDialog: QkDialog
-
-    @Inject
     lateinit var prefs: Preferences
 
 
@@ -112,18 +108,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
     }
 
-    private var encryptionKeyDialog: KeyInputDialog? = null
-    private fun getEncryptionKeyDialog(): KeyInputDialog? {
-        return encryptionKeyDialog ?: activity?.let {
-            KeyInputDialog(
-                it,
-                context.getString(R.string.conversation_encryption_key_title),
-                globalEncryptionKeySubject::onNext
-            )
-                .also { d -> encryptionKeyDialog = d }
-        }
-    }
-
     private var smsForResetDialog: TextInputDialog? = null
     private fun getSmsForResetDialog(): TextInputDialog? {
         return smsForResetDialog ?: activity?.let {
@@ -139,7 +123,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val autoDeleteSubject: Subject<Int> = PublishSubject.create()
 
     // partisan
-    private val globalEncryptionKeySubject: Subject<String> = PublishSubject.create()
     private val smsForResetSubject: Subject<String> = PublishSubject.create()
     private val languageSubject: Subject<String> = PublishSubject.create()
 
@@ -161,8 +144,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val autoDelete: PreferenceView get() = containerView!!.findViewById(R.id.autoDelete)
     private val syncingProgress: ProgressBar get() = containerView!!.findViewById(R.id.syncingProgress)
     private val about: PreferenceView get() = containerView!!.findViewById(R.id.about)
-    private val globalEncryptionKey: PreferenceView get() = containerView!!.findViewById(R.id.globalEncryptionKey)
-    private val deleteEncryptedAfter: PreferenceView get() = containerView!!.findViewById(R.id.deleteEncryptedAfter)
     private val smsForReset: PreferenceView get() = containerView!!.findViewById(R.id.smsForReset)
     private val showInTaskSwitcher: PreferenceView get() = containerView!!.findViewById(R.id.showInTaskSwitcher)
     private val language: PreferenceView get() = containerView!!.findViewById(R.id.language)
@@ -192,7 +173,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
         textSizeDialog.adapter.setData(R.array.text_sizes)
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
-        deleteEncryptedAfterDialog.adapter.setData(R.array.delete_message_after_labels)
 
         about.summary = context.getString(
             R.string.settings_version,
@@ -241,11 +221,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject
 
     // partisan
-    override fun globalEncryptionKeySet(): Observable<String> = globalEncryptionKeySubject
-
     override fun smsForResetSet(): Observable<String> = smsForResetSubject
-
-    override fun deleteEncryptedAfterSelected(): Observable<Int> = deleteEncryptedAfterDialog.adapter.menuItemClicks
 
     override fun languageSelected(): Observable<String> = languageSubject
 
@@ -300,12 +276,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
 
         // partisan
-        globalEncryptionKey.summary = if (state.globalEncryptionKey.isNotEmpty()) "***" else ""
-
-        deleteEncryptedAfter.isVisible = state.globalEncryptionKey.isNotEmpty()
-        deleteEncryptedAfter.summary = state.deleteEncryptedAfterSummary
-        deleteEncryptedAfterDialog.adapter.selectedItem = state.deleteEncryptedAfterId
-
         smsForReset.summary = state.smsForReset
 
         showInTaskSwitcher.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.showInTaskSwitcher
@@ -396,8 +366,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         )
     }
 
-    override fun showGlobalEncryptionKeySettings() = navigator.showGlobalKeysSettings()
-
     override fun showSmsForResetDialog(smsForReset: String) {
         getSmsForResetDialog()?.setText(smsForReset)?.show()
     }
@@ -472,8 +440,5 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(localeList)
     }
 
-    override fun showDeleteEncryptedAfterDialog() {
-        activity?.let { deleteEncryptedAfterDialog.show(it) }
-    }
 
 }

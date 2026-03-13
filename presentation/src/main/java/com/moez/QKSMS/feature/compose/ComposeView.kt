@@ -59,5 +59,6 @@ interface ComposeView : QkView<ComposeState> {
     fun showSearch()
     fun clearSearch()
     fun showEncryptionKeySettings(conversation: Conversation)
+    fun showCallConfirmDialog(address: String)
 
 }

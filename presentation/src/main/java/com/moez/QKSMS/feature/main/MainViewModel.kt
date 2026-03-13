@@ -80,7 +80,6 @@ class MainViewModel @Inject constructor(
     private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations()))) {
 
-    private var keyDialogShowed = false
 
     init {
         disposables += deleteConversations
@@ -104,11 +103,6 @@ class MainViewModel @Inject constructor(
         // Show the rating UI
         disposables += ratingManager.shouldShowRating
             .subscribe { show -> newState { copy(showRating = show) } }
-
-        disposables += prefs.globalEncryptionKey.asObservable().subscribe {
-            newState { copy(keysIsUnset = it.isNullOrBlank()) }
-        }
-
 
         // Migrate the preferences from 2.7.3
         migratePreferences.execute(Unit)
@@ -176,17 +170,6 @@ class MainViewModel @Inject constructor(
             .take(1)
             .autoDisposable(view.scope())
             .subscribe { syncMessages.execute(Unit) }
-
-        // Show Generate Key dialog if needed
-        view.showGenerateKeyIntent
-            .first(false)
-            .autoDisposable(view.scope())
-            .subscribe { show ->
-                if (show && !keyDialogShowed) {
-                    keyDialogShowed = true
-                    view.showGenerateKeyDialog()
-                }
-            }
 
         // Launch screen from intent
         view.onNewIntentIntent
