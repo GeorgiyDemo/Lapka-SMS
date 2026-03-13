@@ -40,7 +40,6 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -151,8 +150,6 @@ class SettingsPresenter @Inject constructor(
         view.preferenceClicks()
             .autoDisposable(view.scope())
             .subscribe {
-                Timber.v("Preference click: ${context.resources.getResourceName(it.id)}")
-
                 when (it.id) {
                     R.id.language -> view.showLanguageDialog()
 
@@ -205,19 +202,6 @@ class SettingsPresenter @Inject constructor(
 
                     R.id.showInTaskSwitcher -> prefs.showInTaskSwitcher.set(!prefs.showInTaskSwitcher.get())
                 }
-            }
-
-        view.aboutLongClicks()
-            .map { !prefs.logging.get() }
-            .doOnNext { enabled -> prefs.logging.set(enabled) }
-            .autoDisposable(view.scope())
-            .subscribe { enabled ->
-                context.makeToast(
-                    when (enabled) {
-                        true -> R.string.settings_logging_enabled
-                        false -> R.string.settings_logging_disabled
-                    }
-                )
             }
 
         view.nightModeSelected()

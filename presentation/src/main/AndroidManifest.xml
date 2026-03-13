@@ -138,7 +138,7 @@
         <receiver android:name=".receiver.MarkReadReceiver" android:exported="false"/>
         <receiver android:name=".receiver.RemoteMessagingReceiver" android:exported="false"/>
         <receiver android:name=".receiver.NightModeReceiver" android:exported="false"/>
-        <receiver android:name=".receiver.SmsProviderChangedReceiver" android:exported="true">
+        <receiver android:name=".receiver.SmsProviderChangedReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE"/>
             </intent-filter>

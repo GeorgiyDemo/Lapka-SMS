@@ -22,8 +22,6 @@ import android.app.Application
 import androidx.emoji2.bundled.BundledEmojiCompatConfig
 import androidx.emoji2.text.EmojiCompat
 import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.CrashlyticsTree
-import com.moez.QKSMS.common.util.FileLoggingTree
 import com.moez.QKSMS.injection.AppComponentManager
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.manager.AnalyticsManager
@@ -43,7 +41,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class QKApplication : Application(), HasAndroidInjector {
@@ -64,9 +61,6 @@ class QKApplication : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var fileLoggingTree: FileLoggingTree
 
     @Inject
     lateinit var nightModeManager: NightModeManager
@@ -106,8 +100,6 @@ class QKApplication : Application(), HasAndroidInjector {
         nightModeManager.updateCurrentTheme()
 
         EmojiCompat.init(BundledEmojiCompatConfig(this))
-
-        Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 
         RxDogTag.builder()
             .configureWith(AutoDisposeConfigurer::configure)

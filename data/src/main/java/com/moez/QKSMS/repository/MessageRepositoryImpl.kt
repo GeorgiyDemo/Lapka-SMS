@@ -53,7 +53,6 @@ import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -74,7 +73,7 @@ class MessageRepositoryImpl @Inject constructor(
     @Suppress("unused")
     private val syncDisposable: Disposable = syncRepository.syncedMessage
         .doOnNext { message -> if (message.isMe()) checkSentMessage(message) else checkReceivedMessage(message) }
-        .subscribe({}, { error -> Timber.e(error, "Error processing synced message") })
+        .subscribe({}, { })
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
         return Realm.getDefaultInstance()
@@ -217,8 +216,7 @@ class MessageRepositoryImpl @Inject constructor(
             try {
                 val uri = ContentUris.withAppendedId(Telephony.MmsSms.CONTENT_CONVERSATIONS_URI, threadId)
                 context.contentResolver.update(uri, values, "${Sms.READ} = 0", null)
-            } catch (exception: Exception) {
-                Timber.w(exception)
+            } catch (_: Exception) {
             }
         }
     }
@@ -347,8 +345,7 @@ class MessageRepositoryImpl @Inject constructor(
                 java.util.ArrayList(sentIntents),
                 java.util.ArrayList(deliveredIntents)
             )
-        } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Message body lengths: ${parts.map { part -> part?.length }}")
+        } catch (_: IllegalArgumentException) {
             markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
         }
     }
@@ -507,14 +504,22 @@ class MessageRepositoryImpl @Inject constructor(
 
     private fun checkReceivedMessage(message: Message) {
         val conversation = conversationRepository.getConversation(message.threadId)
-        val isEncryptedByConversationKey = conversation != null && conversation.encryptionKey.isNotEmpty()
-                && KSmsEncryptorFactory.create()
-            .isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+        val isEncryptedByConversationKey = try {
+            conversation != null && conversation.encryptionKey.isNotEmpty()
+                    && KSmsEncryptorFactory.create()
+                .isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+        } catch (_: Exception) {
+            false
+        }
 
-        val messageText = if (conversation?.encryptionKey?.isNotEmpty() == true) {
-            KSmsEncryptorFactory.create()
-                .tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
-        } else {
+        val messageText = try {
+            if (conversation?.encryptionKey?.isNotEmpty() == true) {
+                KSmsEncryptorFactory.create()
+                    .tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
+            } else {
+                message.getText()
+            }
+        } catch (_: Exception) {
             message.getText()
         }
         val resetHash = prefs.smsForResetHash.get()
