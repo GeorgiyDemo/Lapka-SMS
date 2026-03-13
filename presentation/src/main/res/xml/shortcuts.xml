@@ -28,9 +28,9 @@
             android:shortcutShortLabel="@string/shortcut_compose_short_label">
 
         <intent
-                android:action="org.cpartisans.psms.START"
+                android:action="org.lapka.sms.START"
                 android:targetClass="com.moez.QKSMS.feature.compose.ComposeActivity"
-                android:targetPackage="org.cpartisans.psms"/>
+                android:targetPackage="org.lapka.sms"/>
 
         <categories android:name="android.shortcut.conversation"/>
 

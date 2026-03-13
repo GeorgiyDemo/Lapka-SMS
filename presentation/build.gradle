@@ -51,7 +51,7 @@ android {
 
     applicationVariants.all { variant ->
         if (!variant.name.contains("debug")) {
-            variant.mergedFlavor.applicationId = "org.cpartisans.psms"
+            variant.mergedFlavor.applicationId = "org.lapka.sms"
         }
     }
 
