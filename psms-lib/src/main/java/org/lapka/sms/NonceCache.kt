@@ -10,6 +10,7 @@ import java.util.LinkedList
  * the message is rejected as a replay.
  *
  * Thread-safe via synchronized blocks.
+ * O(1) lookup via HashSet, FIFO eviction via LinkedList.
  */
 class NonceCache(private val maxSize: Int = DEFAULT_MAX_SIZE) {
 
@@ -21,38 +22,43 @@ class NonceCache(private val maxSize: Int = DEFAULT_MAX_SIZE) {
         fun getDefault(): NonceCache = instance
     }
 
-    private val cache = LinkedList<NonceWrapper>()
+    private val order = LinkedList<NonceWrapper>()
+    private val set = HashSet<NonceWrapper>()
 
     @Synchronized
     fun contains(nonce: ByteArray): Boolean {
-        val wrapper = NonceWrapper(nonce)
-        return cache.any { it == wrapper }
+        return set.contains(NonceWrapper(nonce))
     }
 
     @Synchronized
     fun add(nonce: ByteArray) {
         val wrapper = NonceWrapper(nonce)
-        if (cache.any { it == wrapper }) return
-        cache.addLast(wrapper)
-        while (cache.size > maxSize) {
-            cache.removeFirst()
+        if (set.contains(wrapper)) return
+        order.addLast(wrapper)
+        set.add(wrapper)
+        while (order.size > maxSize) {
+            val evicted = order.removeFirst()
+            set.remove(evicted)
         }
     }
 
     @Synchronized
     fun clear() {
-        cache.clear()
+        order.clear()
+        set.clear()
     }
 
     @Synchronized
-    fun size(): Int = cache.size
+    fun size(): Int = set.size
 
     private class NonceWrapper(private val nonce: ByteArray) {
+        private val hash = nonce.contentHashCode()
+
         override fun equals(other: Any?): Boolean {
             if (other !is NonceWrapper) return false
             return nonce.contentEquals(other.nonce)
         }
 
-        override fun hashCode(): Int = nonce.contentHashCode()
+        override fun hashCode(): Int = hash
     }
 }

@@ -157,8 +157,30 @@ class PSmsEncryptor(
 
     // --- Utility ---
 
+    /**
+     * Quick pre-check: steg decode + min length + timestamp validation.
+     * Returns decoded bytes if plausible, null if definitely not encrypted.
+     * Avoids expensive GCM decryption on obviously non-encrypted messages.
+     */
+    private fun quickCheck(str: String, schemeId: Int): ByteArray? {
+        val encoder = encryptedDataEncoderFactory.create(schemeId)
+        val raw = try {
+            encoder.decode(str)
+        } catch (_: Exception) {
+            return null
+        }
+        val minSize = AesGcmEncryptor.GCM_NONCE_LENGTH + AesGcmEncryptor.GCM_TAG_BYTES + 1 // +1 for MetaInfo
+        if (raw.size < minSize) return null
+        val timestamp = AesGcmEncryptor.extractTimestampFromNonce(raw)
+        val now = System.currentTimeMillis() / 1000
+        val ts = timestamp.toLong() and 0xFFFFFFFFL
+        if (ts > now + MAX_FUTURE_SECONDS || ts < now - MAX_MESSAGE_AGE_SECONDS) return null
+        return raw
+    }
+
     fun isEncrypted(str: String, key: ByteArray): Boolean {
         for (scheme in Scheme.values()) {
+            if (quickCheck(str, scheme.ordinal) == null) continue
             try {
                 decode(str, key, scheme.ordinal)
                 return true
@@ -170,6 +192,7 @@ class PSmsEncryptor(
 
     fun tryDecode(str: String, key: ByteArray): Message {
         for (scheme in Scheme.values()) {
+            if (quickCheck(str, scheme.ordinal) == null) continue
             try {
                 return decode(str, key, scheme.ordinal)
             } catch (_: InvalidDataException) {

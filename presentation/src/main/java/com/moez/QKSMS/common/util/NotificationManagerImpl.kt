@@ -421,12 +421,13 @@ class NotificationManagerImpl @Inject constructor(
                 val conversation = conversationRepo.getConversation(threadId) ?: return
                 val channelId = buildNotificationChannelId(threadId)
                 val title = conversation.getTitle()
+                val hasEncryption = conversation.encryptionKey.isNotBlank()
                 NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_HIGH).apply {
                     enableLights(true)
                     lightColor = Color.WHITE
                     enableVibration(true)
                     vibrationPattern = VIBRATE_PATTERN
-                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                    lockscreenVisibility = if (hasEncryption) Notification.VISIBILITY_SECRET else Notification.VISIBILITY_PUBLIC
                     setSound(
                         prefs.ringtone().get().let(Uri::parse), AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_NOTIFICATION)

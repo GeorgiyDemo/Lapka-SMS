@@ -154,33 +154,6 @@ class Preferences @Inject constructor(
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
     val language = rxPrefs.getString("language", "")
 
-    init {
-        // Migrate sensitive data from plaintext to encrypted storage
-        val oldKey = sharedPrefs.getString("globalEncryptionKey", "")
-        if (!oldKey.isNullOrEmpty()) {
-            globalEncryptionKey.set(oldKey)
-            sharedPrefs.edit().remove("globalEncryptionKey").apply()
-        }
-        val oldReset = sharedPrefs.getString("smsForReset", "")
-        if (!oldReset.isNullOrEmpty()) {
-            smsForReset.set(oldReset)
-            sharedPrefs.edit().remove("smsForReset").apply()
-        }
-
-        // Migrate from old night mode preference to new one, now that we support android Q night mode
-        val nightModeSummary = rxPrefs.getInteger("nightModeSummary")
-        if (nightModeSummary.isSet) {
-            nightMode.set(
-                when (nightModeSummary.get()) {
-                    0 -> NIGHT_MODE_OFF
-                    1 -> NIGHT_MODE_ON
-                    2 -> NIGHT_MODE_AUTO
-                    else -> NIGHT_MODE_OFF
-                }
-            )
-            nightModeSummary.delete()
-        }
-    }
 
     /**
      * Returns a stream of preference keys for changing preferences

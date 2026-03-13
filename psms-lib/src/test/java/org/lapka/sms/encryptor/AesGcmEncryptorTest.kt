@@ -36,11 +36,11 @@ class AesGcmEncryptorTest {
     }
 
     @Test
-    fun `ciphertext is nonce plus ciphertext plus 96-bit tag`() {
+    fun `ciphertext is nonce plus ciphertext plus 128-bit tag`() {
         val plaintext = "test".toByteArray()
         val encrypted = encryptor.encrypt(key256, plaintext)
-        // 12 (nonce) + 4 (plaintext) + 12 (96-bit GCM tag) = 28
-        assertEquals(12 + plaintext.size + 12, encrypted.size)
+        // 12 (nonce) + 4 (plaintext) + 16 (128-bit GCM tag) = 32
+        assertEquals(12 + plaintext.size + 16, encrypted.size)
     }
 
     @Test
@@ -68,8 +68,8 @@ class AesGcmEncryptorTest {
 
     @Test(expected = InvalidDataException::class)
     fun `too short ciphertext throws InvalidDataException`() {
-        // Less than nonce (12) + 96-bit GCM tag (12) = 24 bytes
-        encryptor.decrypt(key256, ByteArray(23))
+        // Less than nonce (12) + 128-bit GCM tag (16) = 28 bytes
+        encryptor.decrypt(key256, ByteArray(27))
     }
 
     @Test

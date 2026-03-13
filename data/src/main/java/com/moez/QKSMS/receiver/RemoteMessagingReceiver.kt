@@ -21,13 +21,18 @@ package com.moez.QKSMS.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Base64
 import androidx.core.app.RemoteInput
 import com.moez.QKSMS.compat.SubscriptionManagerCompat
+import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import com.moez.QKSMS.interactor.MarkRead
 import com.moez.QKSMS.interactor.SendMessage
+import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.repository.MessageRepository
+import com.moez.QKSMS.util.Preferences
 import dagger.android.AndroidInjection
+import org.lapka.sms.Message as PSmsMessage
 import javax.inject.Inject
 
 class RemoteMessagingReceiver : BroadcastReceiver() {
@@ -47,6 +52,9 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
     @Inject
     lateinit var subscriptionManager: SubscriptionManagerCompat
 
+    @Inject
+    lateinit var prefs: Preferences
+
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
@@ -57,13 +65,42 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
         val body = remoteInput.getCharSequence("body").toString()
         markRead.execute(listOf(threadId))
 
+        val conversation = conversationRepo.getConversation(threadId) ?: return
+
+        // Encrypt the reply if the conversation has encryption enabled
+        val encryptedBody = encryptIfNeeded(body, conversation)
+
         val lastMessage = messageRepo.getMessages(threadId).lastOrNull()
         val subId = subscriptionManager.activeSubscriptionInfoList
             .firstOrNull { it.subscriptionId == lastMessage?.subId }
             ?.subscriptionId ?: -1
-        val addresses = conversationRepo.getConversation(threadId)?.recipients?.map { it.address } ?: return
+        val addresses = conversation.recipients.map { it.address }
 
         val pendingRepository = goAsync()
-        sendMessage.execute(SendMessage.Params(subId, threadId, addresses, body)) { pendingRepository.finish() }
+        sendMessage.execute(SendMessage.Params(subId, threadId, addresses, encryptedBody)) { pendingRepository.finish() }
+    }
+
+    private fun encryptIfNeeded(body: String, conversation: Conversation): String {
+        val encryptionKey = conversation.encryptionKey.takeIf { it.isNotBlank() }
+            ?: prefs.globalEncryptionKey.get().takeIf { it.isNotBlank() }
+            ?: return body
+
+        val encryptionEnabled = conversation.encryptionEnabled ?: true
+        if (!encryptionEnabled) return body
+
+        val encryptionSchemeId = conversation.encodingSchemeId
+            .takeIf { it != Conversation.SCHEME_NOT_DEF }
+            ?: prefs.encodingScheme.get()
+
+        return try {
+            KSmsEncryptorFactory.create().encode(
+                message = PSmsMessage(body),
+                key = Base64.decode(encryptionKey, Base64.DEFAULT),
+                encryptionSchemeId = encryptionSchemeId
+            )
+        } catch (e: Exception) {
+            // If encryption fails, don't send plaintext — that would be a silent security failure
+            throw RuntimeException("Failed to encrypt notification reply", e)
+        }
     }
 }

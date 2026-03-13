@@ -95,7 +95,7 @@ No padding, no HMAC, no timestamp in the payload. Timestamp is carried in the GC
 
 ## Encryption
 
-The packed payload is encrypted using **AES-256-GCM** with a **96-bit authentication tag**:
+The packed payload is encrypted using **AES-256-GCM** with a **128-bit authentication tag**:
 
 ```
 timestamp = current Unix time (4 bytes, little-endian)
@@ -103,14 +103,14 @@ random    = SecureRandom(8 bytes)
 nonce     = timestamp || random     (12 bytes total)
 
 ciphertext || tag = AES-256-GCM(enc_key, nonce, payload)
-                    tag is 96 bits (12 bytes)
+                    tag is 128 bits (16 bytes)
 ```
 
 Wire format:
 
 ```
 ┌────────────────────────────┬────────────────────────────────┐
-│        nonce (12B)         │  ciphertext + GCM tag (12B)    │
+│        nonce (12B)         │  ciphertext + GCM tag (16B)    │
 │ [timestamp 4B][random 8B] │                                │
 └────────────────────────────┴────────────────────────────────┘
 ```
@@ -118,15 +118,15 @@ Wire format:
 ### Properties
 
 - **Nonce structure**: 12 bytes total — first 4 bytes are the Unix timestamp (little-endian), last 8 bytes are random via `SecureRandom`. This provides 2⁶⁴ random space per second, making nonce collision astronomically unlikely (~58 million years at 1000 messages/day).
-- **GCM tag**: 96 bits (12 bytes). NIST SP 800-38D explicitly permits 96-bit tags. Forgery probability: 2⁻⁹⁶ per attempt.
+- **GCM tag**: 96 bits (12 bytes). NIST SP 800-38D explicitly permits 128-bit tags (the maximum). Forgery probability: 2⁻¹²⁸ per attempt.
 - **Cipher**: `AES/GCM/NoPadding` (javax.crypto, hardware-accelerated on Android). GCM operates in CTR mode internally, so no block padding is needed — arbitrary-length plaintext is accepted natively.
-- **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost.
+- **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost. **Trade-off**: Since timestamp validation occurs before GCM authentication, an attacker could learn whether a forged message passed the timestamp check (via timing difference). This is an acceptable trade-off for SMS — it only reveals that the forged timestamp is within the 24h window, which is trivially guessable anyway. The GCM tag still fully protects against forgery.
 - **No separate HMAC**: GCM is an AEAD (Authenticated Encryption with Associated Data) cipher — the GCM tag already provides both integrity and authenticity for the entire payload. A separate HMAC would be redundant.
 - **No PKCS#7 padding**: GCM/CTR is a stream cipher mode and handles arbitrary plaintext lengths. Block padding is unnecessary and would waste bytes.
 
 ### Overhead
 
-Fixed overhead per message: **25 bytes** (12B nonce + 12B GCM tag + 1B MetaInfo).
+Fixed overhead per message: **29 bytes** (12B nonce + 16B GCM tag + 1B MetaInfo).
 
 ## Encrypted Data Encoding (Steganography)
 
@@ -206,7 +206,7 @@ SMS text
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
-│ AES-256-GCM decrypt │  Verify 96-bit tag + decrypt payload
+│ AES-256-GCM decrypt │  Verify 128-bit tag + decrypt payload
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
@@ -285,7 +285,7 @@ Both parties should verify the fingerprint matches via a separate secure channel
 | Property | Mechanism |
 |---|---|
 | Confidentiality | AES-256-GCM |
-| Integrity & Authenticity | GCM authentication tag (96-bit) |
+| Integrity & Authenticity | GCM authentication tag (128-bit) |
 | Replay protection | Timestamp in nonce (24h window) + nonce replay cache (1000 entries) |
 | Key separation | HKDF with domain-specific info string |
 | Key storage | Android Keystore (TEE) + EncryptedSharedPreferences |
@@ -300,7 +300,7 @@ On the wire (after steganographic encoding):
 
 ┌────────────────────────────┬────────────────────────────────┐
 │        nonce (12B)         │  ciphertext + GCM tag          │
-│ [timestamp 4B][random 8B] │  (tag = 12B)                   │
+│ [timestamp 4B][random 8B] │  (tag = 16B)                   │
 └────────────────────────────┴────────────────────────────────┘
 
 Inside ciphertext (after GCM decryption):

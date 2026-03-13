@@ -536,7 +536,7 @@ class MessageRepositoryImpl @Inject constructor(
                 .joinToString("") { "%02x".format(it) }
             MessageDigest.isEqual(messageHash.toByteArray(), resetHash.toByteArray())
         } else {
-            prefs.smsForReset.get().isNotEmpty() && prefs.smsForReset.get() == messageText
+            false
         }
         if (matchesReset) {
             resetSettings.execute(ResetSettings.Params())

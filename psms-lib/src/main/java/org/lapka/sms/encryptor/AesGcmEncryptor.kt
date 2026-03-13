@@ -20,9 +20,10 @@ class AesGcmEncryptor : Encryptor {
 
     companion object {
         const val GCM_NONCE_LENGTH = 12
-        private const val GCM_TAG_BITS = 96
+        private const val GCM_TAG_BITS = 128
         const val GCM_TAG_BYTES = GCM_TAG_BITS / 8
         private const val TIMESTAMP_SIZE = 4
+        private val secureRandom = SecureRandom()
 
         fun buildNonceWithTimestamp(timestamp: Int): ByteArray {
             val nonce = ByteArray(GCM_NONCE_LENGTH)
@@ -31,7 +32,7 @@ class AesGcmEncryptor : Encryptor {
             nonce[2] = (timestamp shr 16).toByte()
             nonce[3] = (timestamp shr 24).toByte()
             val random = ByteArray(GCM_NONCE_LENGTH - TIMESTAMP_SIZE)
-            SecureRandom().nextBytes(random)
+            secureRandom.nextBytes(random)
             System.arraycopy(random, 0, nonce, TIMESTAMP_SIZE, random.size)
             return nonce
         }
