@@ -315,6 +315,11 @@ class MessageRepositoryImpl @Inject constructor(
             .divideMessage(message.body)
             ?: arrayListOf()
 
+        if (parts.isEmpty()) {
+            markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
+            return
+        }
+
         val sentIntents = parts.map {
             val intent = Intent(context, SmsSentReceiver::class.java).putExtra("id", message.id)
             PendingIntent.getBroadcast(

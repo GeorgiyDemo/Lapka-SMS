@@ -69,7 +69,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
 
     implementation "androidx.core:core-ktx:$androidx_core_version"
-    implementation "androidx.security:security-crypto:1.1.0-alpha06"
+    implementation "androidx.security:security-crypto:1.1.0"
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

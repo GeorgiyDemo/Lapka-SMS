@@ -8,25 +8,21 @@ class Base64 : EncryptedDataEncoder {
 
     override fun encode(data: ByteArray): String {
         return try {
-            org.apache.commons.codec.binary.Base64.encodeBase64String(data)
+            org.apache.commons.codec.binary.Base64.encodeBase64String(data).replace("\r\n", "").replace("\n", "")
         } catch (_: Throwable) {
-            android.util.Base64.encodeToString(data, android.util.Base64.DEFAULT)
+            android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP)
         }
     }
 
     override fun decode(str: String): ByteArray {
-        try {
-            org.apache.commons.codec.binary.Base64.isBase64(str)
+        return try {
+            org.apache.commons.codec.binary.Base64.decodeBase64(str)
         } catch (_: Throwable) {
-            return try {
-                android.util.Base64.decode(str, android.util.Base64.DEFAULT)
+            try {
+                android.util.Base64.decode(str, android.util.Base64.NO_WRAP)
             } catch (_: IllegalArgumentException) {
                 throw InvalidDataException("Not base64 string.")
             }
         }
-        if (!org.apache.commons.codec.binary.Base64.isBase64(str)) {
-            throw InvalidDataException("Not base64 string.")
-        }
-        return org.apache.commons.codec.binary.Base64.decodeBase64(str)
     }
 }

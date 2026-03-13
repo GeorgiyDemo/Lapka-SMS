@@ -11,14 +11,24 @@ class CyrillicBase64 : EncryptedDataEncoder {
 
     override fun encode(data: ByteArray): String {
         val base64 = Base64().encode(data)
-        return base64.map { c -> cyrillic[latin.indexOf(c)] }.toCharArray().concatToString()
+        return buildString(base64.length) {
+            for (c in base64) {
+                if (c.isWhitespace()) continue
+                val idx = latin.indexOf(c)
+                if (idx < 0) throw InvalidDataException("Unexpected Base64 character: '$c'")
+                append(cyrillic[idx])
+            }
+        }
     }
 
     override fun decode(str: String): ByteArray {
-        if (!str.all { it in cyrillic }) {
-            throw InvalidDataException("string is not in valid Cyrillic Base64 scheme")
+        val base64 = buildString(str.length) {
+            for (c in str) {
+                val idx = cyrillic.indexOf(c)
+                if (idx < 0) throw InvalidDataException("string is not in valid Cyrillic Base64 scheme")
+                append(latin[idx])
+            }
         }
-        val base64 = str.map { c -> latin[cyrillic.indexOf(c)] }.toCharArray().concatToString()
         return Base64().decode(base64)
     }
 }
