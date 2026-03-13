@@ -34,6 +34,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
 
+    <permission
+        android:name="${applicationId}.permission.NOTIFY_WIDGET"
+        android:protectionLevel="signature" />
+
     <application
             android:name=".common.QKApplication"
             android:allowBackup="false"
@@ -143,7 +147,10 @@
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".feature.widget.WidgetProvider" android:exported="true">
+        <receiver
+                android:name=".feature.widget.WidgetProvider"
+                android:exported="true"
+                android:permission="${applicationId}.permission.NOTIFY_WIDGET">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
                 <action android:name="com.moez.QKSMS.intent.action.ACTION_NOTIFY_DATASET_CHANGED"/>

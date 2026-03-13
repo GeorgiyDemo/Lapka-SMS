@@ -36,7 +36,7 @@ class DeleteOldMessages @Inject constructor(
         val counts = messageRepo.getOldMessageCounts(maxAge)
         val threadIds = counts.keys.toLongArray()
 
-        Timber.d("Deleting ${counts.values.sum()} old messages from ${threadIds.size} conversations")
+        Timber.d("Deleting old messages")
         messageRepo.deleteOldMessages(maxAge)
         conversationRepo.updateConversations(*threadIds)
     }

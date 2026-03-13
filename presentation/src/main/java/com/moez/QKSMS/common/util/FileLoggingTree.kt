@@ -40,6 +40,7 @@ class FileLoggingTree @Inject constructor(private val context: Context, private 
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (!prefs.logging.get()) return
+        if (priority < Log.WARN) return
 
         Schedulers.io().scheduleDirect {
             val timestamp =

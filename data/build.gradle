@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -87,7 +87,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':psms-lib')
 
-    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'commons-codec:commons-codec:1.17.1'
 }
 
 repositories {

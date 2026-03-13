@@ -65,7 +65,7 @@ android {
     }
 
     lint {
-        abortOnError false
+        abortOnError true
     }
 
     if (System.getenv("CI") == "true") {

@@ -21,13 +21,28 @@ package com.moez.QKSMS.common.util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 
 object ClipboardUtils {
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var clearRunnable: Runnable? = null
 
     fun copy(context: Context, string: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("SMS", string)
         clipboard.setPrimaryClip(clip)
+
+        clearRunnable?.let { handler.removeCallbacks(it) }
+        val runnable = Runnable {
+            try {
+                clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+            } catch (_: Exception) {
+            }
+        }
+        clearRunnable = runnable
+        handler.postDelayed(runnable, 30_000)
     }
 
 }

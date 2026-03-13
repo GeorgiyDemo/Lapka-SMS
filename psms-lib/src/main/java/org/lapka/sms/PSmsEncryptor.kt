@@ -13,8 +13,8 @@ import org.lapka.sms.plain_data_encoder.PlainDataEncoderFactoryImpl
 private const val CHANNEL_ID_SIZE = 4
 const val VERSION = 3
 private const val MAX_FRONT_PADDING_STRIP = 256
-private const val MAX_MESSAGE_AGE_SECONDS = 24 * 3600L
-private const val MAX_FUTURE_SECONDS = 300L
+private const val MAX_MESSAGE_AGE_SECONDS = 7 * 24 * 3600L
+private const val MAX_FUTURE_SECONDS = 600L
 
 private val ENC_KEY_INFO = "k-sms-v2-enc".toByteArray()
 
@@ -208,5 +208,23 @@ class PSmsEncryptor(
             }
         }
         return Message(str)
+    }
+
+    /**
+     * Checks if the string structurally looks like an encrypted message
+     * (valid steg decoding + minimum ciphertext size) without needing
+     * a key or performing actual decryption.
+     */
+    fun looksEncrypted(str: String): Boolean {
+        val minSize = AesGcmEncryptor.GCM_NONCE_LENGTH + AesGcmEncryptor.GCM_TAG_BYTES + 1
+        for (scheme in Scheme.values()) {
+            try {
+                val encoder = encryptedDataEncoderFactory.create(scheme.ordinal)
+                val raw = encoder.decode(str)
+                if (raw.size >= minSize) return true
+            } catch (_: Exception) {
+            }
+        }
+        return false
     }
 }

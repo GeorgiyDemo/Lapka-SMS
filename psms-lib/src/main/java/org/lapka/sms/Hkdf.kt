@@ -10,15 +10,15 @@ import javax.crypto.spec.SecretKeySpec
 object Hkdf {
 
     private const val HASH_LEN = 32 // SHA-256 output
-    private val SALT = "k-sms-hkdf-v2".toByteArray()
+    private val DEFAULT_SALT = "k-sms-hkdf-v2".toByteArray()
 
-    fun deriveKey(ikm: ByteArray, info: ByteArray, length: Int = 32): ByteArray {
-        val prk = extract(ikm)
+    fun deriveKey(ikm: ByteArray, info: ByteArray, length: Int = 32, salt: ByteArray = DEFAULT_SALT): ByteArray {
+        val prk = extract(ikm, salt)
         return expand(prk, info, length)
     }
 
-    private fun extract(ikm: ByteArray): ByteArray {
-        return hmacSha256(SALT, ikm)
+    private fun extract(ikm: ByteArray, salt: ByteArray): ByteArray {
+        return hmacSha256(salt, ikm)
     }
 
     private fun expand(prk: ByteArray, info: ByteArray, length: Int): ByteArray {

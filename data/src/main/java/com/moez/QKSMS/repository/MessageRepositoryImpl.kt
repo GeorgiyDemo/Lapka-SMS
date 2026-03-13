@@ -31,6 +31,7 @@ import android.provider.Telephony.Sms
 import android.telephony.SmsManager
 import android.util.Base64
 import androidx.core.content.contentValuesOf
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import java.security.MessageDigest
 import com.moez.QKSMS.common.util.extensions.now
@@ -345,7 +346,7 @@ class MessageRepositoryImpl @Inject constructor(
                 java.util.ArrayList(sentIntents),
                 java.util.ArrayList(deliveredIntents)
             )
-        } catch (_: IllegalArgumentException) {
+        } catch (_: Exception) {
             markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
         }
     }
@@ -456,7 +457,7 @@ class MessageRepositoryImpl @Inject constructor(
             return false
         }
         return KSmsEncryptorFactory.create()
-            .isEncrypted(message.getText(), Base64.decode(encryptionKey, Base64.DEFAULT))
+            .isEncrypted(message.getText(), ConversationKeyStore.unwrapKeyBytes(encryptionKey))
     }
 
     override fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long): Message {
@@ -507,7 +508,7 @@ class MessageRepositoryImpl @Inject constructor(
         val isEncryptedByConversationKey = try {
             conversation != null && conversation.encryptionKey.isNotEmpty()
                     && KSmsEncryptorFactory.create()
-                .isEncrypted(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT))
+                .isEncrypted(message.getText(), ConversationKeyStore.unwrapKeyBytes(conversation.encryptionKey))
         } catch (_: Exception) {
             false
         }
@@ -515,7 +516,7 @@ class MessageRepositoryImpl @Inject constructor(
         val messageText = try {
             if (conversation?.encryptionKey?.isNotEmpty() == true) {
                 KSmsEncryptorFactory.create()
-                    .tryDecode(message.getText(), Base64.decode(conversation.encryptionKey, Base64.DEFAULT)).text
+                    .tryDecode(message.getText(), ConversationKeyStore.unwrapKeyBytes(conversation.encryptionKey)).text
             } else {
                 message.getText()
             }

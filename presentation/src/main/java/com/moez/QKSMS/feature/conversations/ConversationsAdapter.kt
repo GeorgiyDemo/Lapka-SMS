@@ -28,6 +28,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import org.lapka.sms.InvalidVersionException
 import org.lapka.sms.PSmsEncryptor
 import org.lapka.sms.Message as PSmsMessage
@@ -141,7 +142,7 @@ class ConversationsAdapter @Inject constructor(
                 val decoded = try {
                     encryptor.tryDecode(
                         snippet.toString(),
-                        Base64.decode(conversation.encryptionKey, Base64.DEFAULT)
+                        ConversationKeyStore.unwrapKeyBytes(conversation.encryptionKey)
                     )
                 } catch (_: InvalidVersionException) {
                     PSmsMessage(snippet.toString())

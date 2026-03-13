@@ -22,6 +22,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
 import com.moez.QKSMS.compat.TelephonyCompat
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.extensions.anyOf
 import com.moez.QKSMS.extensions.asObservable
 import com.moez.QKSMS.extensions.map
@@ -432,13 +433,18 @@ class ConversationRepositoryImpl @Inject constructor(
     }
 
     override fun setEncryptionKey(threadId: Long, encryptionKey: String) {
+        val wrappedKey = if (encryptionKey.isNotEmpty()) {
+            ConversationKeyStore.wrapKey(encryptionKey)
+        } else {
+            encryptionKey
+        }
         Realm.getDefaultInstance().use { realm ->
             val conversation = realm.where(Conversation::class.java)
                 .equalTo("id", threadId)
                 .findFirst()
 
             realm.executeTransaction {
-                conversation?.encryptionKey = encryptionKey
+                conversation?.encryptionKey = wrappedKey
             }
         }
     }

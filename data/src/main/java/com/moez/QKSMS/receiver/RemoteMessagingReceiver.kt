@@ -24,6 +24,7 @@ import android.content.Intent
 import android.util.Base64
 import androidx.core.app.RemoteInput
 import com.moez.QKSMS.compat.SubscriptionManagerCompat
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import com.moez.QKSMS.interactor.MarkRead
 import com.moez.QKSMS.interactor.SendMessage
@@ -68,7 +69,7 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
         val conversation = conversationRepo.getConversation(threadId) ?: return
 
         // Encrypt the reply if the conversation has encryption enabled
-        val encryptedBody = encryptIfNeeded(body, conversation)
+        val encryptedBody = encryptIfNeeded(body, conversation) ?: return
 
         val lastMessage = messageRepo.getMessages(threadId).lastOrNull()
         val subId = subscriptionManager.activeSubscriptionInfoList
@@ -80,7 +81,7 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
         sendMessage.execute(SendMessage.Params(subId, threadId, addresses, encryptedBody)) { pendingRepository.finish() }
     }
 
-    private fun encryptIfNeeded(body: String, conversation: Conversation): String {
+    private fun encryptIfNeeded(body: String, conversation: Conversation): String? {
         val encryptionKey = conversation.encryptionKey.takeIf { it.isNotBlank() }
             ?: return body
 
@@ -94,12 +95,12 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
         return try {
             KSmsEncryptorFactory.create().encode(
                 message = PSmsMessage(body),
-                key = Base64.decode(encryptionKey, Base64.DEFAULT),
+                key = ConversationKeyStore.unwrapKeyBytes(encryptionKey),
                 encryptionSchemeId = encryptionSchemeId
             )
         } catch (e: Exception) {
-            // If encryption fails, don't send plaintext — that would be a silent security failure
-            throw RuntimeException("Failed to encrypt notification reply", e)
+            timber.log.Timber.e(e, "Failed to encrypt notification reply, message not sent")
+            null
         }
     }
 }

@@ -58,6 +58,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import android.util.Base64
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.common.widget.AvatarView
 import com.moez.QKSMS.common.widget.QkTextView
 import com.moez.QKSMS.common.widget.TightTextView
@@ -93,7 +94,6 @@ class MessagesAdapter @Inject constructor(
     val cancelSending: Subject<Long> = PublishSubject.create()
     val encryptionKey: BehaviorSubject<String> = BehaviorSubject.create()
 
-    private val encryptor = PSmsEncryptor()
     private val decryptionCache = android.util.LruCache<Long, DecryptedEntry>(DECRYPTION_CACHE_SIZE)
     private var cachedKeyBytes: ByteArray? = null
     private var cachedKeyString: String? = null
@@ -262,7 +262,7 @@ class MessagesAdapter @Inject constructor(
         if (encryptionKeyStr != cachedKeyString) {
             cachedKeyString = encryptionKeyStr
             cachedKeyBytes = if (!encryptionKeyStr.isNullOrEmpty()) {
-                try { Base64.decode(encryptionKeyStr, Base64.DEFAULT) } catch (_: Exception) { null }
+                try { ConversationKeyStore.unwrapKeyBytes(encryptionKeyStr) } catch (_: Exception) { null }
             } else null
             decryptionCache.evictAll()
         }
@@ -272,13 +272,22 @@ class MessagesAdapter @Inject constructor(
             val cached = decryptionCache.get(message.id)
             if (cached != null) {
                 isEncrypted = cached.isEncrypted
+                decryptionFailed = cached.isEncrypted && cached.message.text == messageText.toString()
                 cached.message
             } else {
                 try {
+                    val encryptor = PSmsEncryptor()
                     val result = encryptor.tryDecode(messageText.toString(), keyBytes)
-                    val encrypted = result.text != messageText.toString()
-                    isEncrypted = encrypted
-                    decryptionCache.put(message.id, DecryptedEntry(result, encrypted))
+                    val decoded = result.text != messageText.toString()
+                    if (decoded) {
+                        isEncrypted = true
+                    } else {
+                        // tryDecode returned original text — check if it structurally looks encrypted
+                        val looks = encryptor.looksEncrypted(messageText.toString())
+                        isEncrypted = looks
+                        decryptionFailed = looks
+                    }
+                    decryptionCache.put(message.id, DecryptedEntry(result, isEncrypted))
                     result
                 } catch (_: InvalidVersionException) {
                     decryptionFailed = true

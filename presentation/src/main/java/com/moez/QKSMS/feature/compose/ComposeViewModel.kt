@@ -23,6 +23,7 @@ import android.os.Vibrator
 import android.telephony.SmsMessage
 import android.util.Base64
 import androidx.core.content.getSystemService
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import org.lapka.sms.PSmsEncryptor
 import com.moez.QKSMS.R
@@ -337,7 +338,7 @@ class ComposeViewModel @Inject constructor(
 
                 fun Message.getDecodedText() = encryptionKey?.let {
                     KSmsEncryptorFactory.create()
-                        .tryDecode(getText(), Base64.decode(encryptionKey, Base64.DEFAULT)).text
+                        .tryDecode(getText(), ConversationKeyStore.unwrapKeyBytes(encryptionKey)).text
                 } ?: getText()
 
                 val text = when (messages.size) {
@@ -437,7 +438,7 @@ class ComposeViewModel @Inject constructor(
                 if (searchTextCache == null || searchCacheForKey != encryptionKey) {
                     val encryptor = PSmsEncryptor()
                     val keyBytes = if (!encryptionKey.isNullOrEmpty()) {
-                        try { Base64.decode(encryptionKey, Base64.DEFAULT) } catch (_: Exception) { null }
+                        try { ConversationKeyStore.unwrapKeyBytes(encryptionKey) } catch (_: Exception) { null }
                     } else null
                     searchTextCache = allMessages.associate { message ->
                         message.id to if (keyBytes != null) {
@@ -580,7 +581,7 @@ class ComposeViewModel @Inject constructor(
                             ?: prefs.encodingScheme.get()
                         KSmsEncryptorFactory.create().encode(
                             message = PSmsMessage(draft.toString()),
-                            key = Base64.decode(curState.encryptionKey, Base64.DEFAULT),
+                            key = ConversationKeyStore.unwrapKeyBytes(curState.encryptionKey!!),
                             encryptionSchemeId = encryptionSchemeId
                         )
                     } catch (_: Exception) {
@@ -643,16 +644,22 @@ class ComposeViewModel @Inject constructor(
                             .takeIf { it != Conversation.SCHEME_NOT_DEF }
                             ?: prefs.encodingScheme.get()
 
-                        KSmsEncryptorFactory.create().encode(
-                            message = PSmsMessage(body.toString()),
-                            key = Base64.decode(encryptionKey, Base64.DEFAULT),
-                            encryptionSchemeId = encryptionSchemeId
-                        )
+                        try {
+                            KSmsEncryptorFactory.create().encode(
+                                message = PSmsMessage(body.toString()),
+                                key = ConversationKeyStore.unwrapKeyBytes(encryptionKey),
+                                encryptionSchemeId = encryptionSchemeId
+                            )
+                        } catch (e: Exception) {
+                            context.makeToast(R.string.encryption_send_failed)
+                            null
+                        }
                     }
                 } else {
                     body
                 }
             }
+            .filter { it != null }
             .map { body -> body.toString() }
             .withLatestFrom(state, conversation, selectedChips) { body, state,
                                                                   conversation, chips ->
