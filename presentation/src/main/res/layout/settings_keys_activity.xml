@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
-                        android:minLines="1"
+                        android:minLines="3"
                         android:maxLines="3"
                         android:maxLength="64"
                         android:padding="24dp"
@@ -91,16 +91,28 @@
                     android:src="@drawable/qr_code"/>
 
             <com.moez.QKSMS.common.widget.QkTextView
+                    android:id="@+id/keyFingerprintLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingTop="4dp"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:text="@string/key_fingerprint_label"/>
+
+            <com.moez.QKSMS.common.widget.QkTextView
                     android:id="@+id/keyFingerprint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="24dp"
                     android:paddingBottom="8dp"
                     android:textIsSelectable="true"
-                    android:fontFamily="monospace"
-                    android:textSize="12sp"
+                    android:textSize="34sp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="8dp"
                     android:visibility="gone"
-                    tools:text="Fingerprint: ABCD 1234 EF56 7890"/>
+                    tools:text="😀🐶🌵🎄  🐱😎🤖🦊\n🐸🦋🐍🌹  🐧🦁🐬🌻"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -111,22 +123,6 @@
                 app:icon="@drawable/ic_delete_white_24dp"
                 app:title="@string/settings_reset_key"
                 android:visibility="gone"/>
-
-        <com.moez.QKSMS.common.widget.PreferenceView
-                android:id="@+id/legacyEncryption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:icon="@android:drawable/ic_partial_secure"
-                app:title="@string/settings_legacy_encryption_title"
-                app:widget="@layout/settings_switch_widget"/>
-
-        <com.moez.QKSMS.common.widget.PreferenceView
-                android:id="@+id/legacyEncryptionConversation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:icon="@android:drawable/ic_partial_secure"
-                app:title="@string/settings_legacy_encryption_title"
-                tools:summary="Use Mode from Settings"/>
 
         <com.moez.QKSMS.common.widget.QkTextView
                 style="@style/PreferenceCategory"

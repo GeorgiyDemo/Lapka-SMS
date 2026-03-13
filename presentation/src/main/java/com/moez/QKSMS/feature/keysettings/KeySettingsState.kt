@@ -14,7 +14,6 @@ data class KeySettingsState(
     val resetKeyIsShown: Boolean = false,
     val keyValid: Boolean = true,
     val encodingScheme: Int = -1,
-    val legacyEncryptionEnabled: Boolean? = null,
     val deleteEncryptedAfter: Int = 0,
     val deleteReceivedAfter: Int = 0,
     val deleteSentAfter: Int = 0,

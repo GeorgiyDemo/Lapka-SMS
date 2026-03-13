@@ -144,6 +144,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val encryptionKeySetIntent: Subject<Unit> = PublishSubject.create()
+    override val disableEncryptionConfirmed: Subject<Unit> = PublishSubject.create()
     override val searchQueryChangedIntent by lazy { searchInput.textChanges() }
 
     private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ComposeViewModel::class.java] }
@@ -359,6 +360,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun clearSearch() {
         searchInput.setText("")
         searchInput.hideKeyboard()
+    }
+
+    override fun showDisableEncryptionDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(R.string.disable_encryption_confirmation)
+            .setNegativeButton(R.string.button_cancel, null)
+            .setPositiveButton(R.string.button_disable) { _, _ ->
+                disableEncryptionConfirmed.onNext(Unit)
+            }
+            .show()
     }
 
     override fun showEncryptionKeySettings(conversation: Conversation) {

@@ -416,18 +416,32 @@ class ComposeViewModel @Inject constructor(
             }
 
         // Handle search query changes from in-conversation search
+        // Decrypts messages in memory so encrypted content is searchable
         view.searchQueryChangedIntent
             .debounce(300, TimeUnit.MILLISECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.computation())
             .doOnNext { query ->
                 newState { copy(query = query.toString()) }
             }
             .filter { it.isNotEmpty() }
-            .withLatestFrom(conversation) { query, conv ->
-                messageRepo.getMessages(conv.id, query.toString())
+            .withLatestFrom(messages, state) { query, allMessages, state ->
+                val queryStr = query.toString().lowercase()
+                val encryptionKey = state.encryptionKey
+                allMessages.filter { message ->
+                    val text = if (!encryptionKey.isNullOrEmpty()) {
+                        try {
+                            KSmsEncryptorFactory.create()
+                                .tryDecode(message.body, Base64.decode(encryptionKey, Base64.DEFAULT)).text
+                        } catch (_: Exception) {
+                            message.body
+                        }
+                    } else {
+                        message.body
+                    }
+                    text.lowercase().contains(queryStr)
+                }
             }
-            .switchMap { messages -> messages.asObservable() }
-            .filter { it.isLoaded && it.isValid }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(view.scope())
             .subscribe(searchResults::onNext)
 
@@ -541,7 +555,7 @@ class ComposeViewModel @Inject constructor(
         // Show the remaining character counter when necessary
         view.textChangedIntent
             .observeOn(Schedulers.computation())
-            .mapNotNull { draft -> tryOrNull { SmsMessage.calculateLength(draft, prefs.unicode.get()) } }
+            .mapNotNull { draft -> tryOrNull { SmsMessage.calculateLength(draft, false) } }
             .map { array ->
                 val messages = array[0]
                 val remaining = array[2]
@@ -665,7 +679,6 @@ class ComposeViewModel @Inject constructor(
                 if (state.editingMode) {
                     newState { copy(editingMode = false, hasError = !sendAsGroup) }
                 }
-                //deleteMessages.execute(DeleteMessages.Params(longArrayOf() , conversation.id))
             }
             .autoDisposable(view.scope())
             .subscribe()
@@ -709,9 +722,13 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe()
 
-        // Disable encryption
+        // Disable encryption (with confirmation)
         view.optionsItemIntent
             .filter { it == R.id.encrypted }
+            .autoDisposable(view.scope())
+            .subscribe { view.showDisableEncryptionDialog() }
+
+        view.disableEncryptionConfirmed
             .withLatestFrom(conversation) { _, conversation ->
                 SetEncryptionEnabled.Params(conversation.id, false)
             }

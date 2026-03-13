@@ -33,7 +33,6 @@ import android.util.Base64
 import androidx.core.content.contentValuesOf
 import com.moez.QKSMS.crypto.KSmsEncryptorFactory
 import java.security.MessageDigest
-import java.text.Normalizer
 import com.moez.QKSMS.common.util.extensions.now
 import com.moez.QKSMS.compat.TelephonyCompat
 import com.moez.QKSMS.extensions.anyOf
@@ -285,15 +284,9 @@ class MessageRepositoryImpl @Inject constructor(
             else -> prefs.signature.get()
         }
 
-        // We only care about stripping SMS
-        val strippedBody = when (prefs.unicode.get()) {
-            true -> stripAccents(signedBody)
-            false -> signedBody
-        }
-
         if (delay > 0) { // With delay
             val sendTime = System.currentTimeMillis() + delay
-            val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, sendTime)
+            val message = insertSentSms(subId, threadId, addresses.first(), signedBody, sendTime)
 
             val intent = getIntentForDelayedSms(message.id)
 
@@ -305,7 +298,7 @@ class MessageRepositoryImpl @Inject constructor(
             }
 
         } else { // No delay
-            val message = insertSentSms(subId, threadId, addresses.first(), strippedBody, now())
+            val message = insertSentSms(subId, threadId, addresses.first(), signedBody, now())
             sendSms(message)
         }
     }
@@ -316,7 +309,7 @@ class MessageRepositoryImpl @Inject constructor(
             ?: SmsManager.getDefault()
 
         val parts = smsManager
-            .divideMessage(if (prefs.unicode.get()) stripAccents(message.body) else message.body)
+            .divideMessage(message.body)
             ?: arrayListOf()
 
         val sentIntents = parts.map {
@@ -710,8 +703,4 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun stripAccents(text: String): String {
-        val normalized = Normalizer.normalize(text, Normalizer.Form.NFD)
-        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
-    }
 }

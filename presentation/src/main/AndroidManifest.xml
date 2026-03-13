@@ -17,7 +17,8 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -84,6 +85,11 @@
         </activity>
         <activity android:name=".feature.settings.SettingsActivity"/>
         <activity android:name=".feature.keysettings.KeySettingsActivity"/>
+        <activity
+                android:name="com.journeyapps.barcodescanner.CaptureActivity"
+                android:screenOrientation="portrait"
+                android:stateNotNeeded="true"
+                tools:replace="screenOrientation"/>
         <activity android:name=".feature.plus.PlusActivity"/>
         <activity android:name=".feature.conversationinfo.ConversationInfoActivity"/>
         <activity android:name=".feature.notificationprefs.NotificationPrefsActivity"/>

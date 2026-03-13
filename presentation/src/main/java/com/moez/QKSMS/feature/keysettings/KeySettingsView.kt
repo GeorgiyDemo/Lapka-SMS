@@ -17,7 +17,6 @@ interface KeySettingsView : QkViewContract<KeySettingsState> {
     val stateRestored: Subject<Optional<KeySettingsState>>
 
     fun preferenceClicks(): Observable<PreferenceView>
-    fun compatibilityModeSelected(): Observable<Int>
     fun copyKey()
     fun scanQrCode()
     fun keySet()
@@ -25,7 +24,6 @@ interface KeySettingsView : QkViewContract<KeySettingsState> {
     fun keyChanged(): Observable<String>
     fun showResetKeyDialog(disableKey: Boolean)
     fun showSaveDialog(allowSave: Boolean)
-    fun showCompatibilityModeDialog()
     fun goBack()
     fun onSaved(key: String?)
 

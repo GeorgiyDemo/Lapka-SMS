@@ -239,24 +239,28 @@ class MessagesAdapter @Inject constructor(
             holder.itemView.findViewById<TightTextView>(R.id.body).setBackgroundTint(theme.theme)
         }
 
-        // Bind encrypted icon
-
+        // Decrypt message and bind encrypted icon
         val encryptionKey = encryptionKey.value
+        val messageText = message.body
         var decryptionFailed = false
-        val isEncrypted = if (conversation != null) {
-            if (!encryptionKey.isNullOrEmpty()) {
-                try {
-                    KSmsEncryptorFactory.create()
-                        .isEncrypted(message.body, Base64.decode(encryptionKey, Base64.DEFAULT))
-                } catch (_: InvalidVersionException) {
-                    decryptionFailed = true
-                    true
-                }
-            } else {
-                false
+        var isEncrypted = false
+
+        // Call tryDecode once to both decrypt and detect encryption
+        // (calling isEncrypted + tryDecode separately breaks NonceCache anti-replay)
+        val decryptedMessage = if (conversation != null && !encryptionKey.isNullOrEmpty()) {
+            try {
+                val result = KSmsEncryptorFactory.create()
+                    .tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
+                // If tryDecode returned different text, the message was encrypted
+                isEncrypted = result.text != messageText.toString()
+                result
+            } catch (_: InvalidVersionException) {
+                decryptionFailed = true
+                isEncrypted = true
+                null
             }
         } else {
-            false
+            PSmsMessage(messageText.toString())
         }
 
         if (message.isMe()) {
@@ -266,7 +270,6 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the body text
-        val messageText = message.body
         val emojiOnly = messageText.isNotBlank() && messageText.matches(EMOJI_REGEX)
         textViewStyler.setTextSize(
             holder.itemView.findViewById<TightTextView>(R.id.body), when (emojiOnly) {
@@ -274,20 +277,6 @@ class MessagesAdapter @Inject constructor(
                 false -> TextViewStyler.SIZE_PRIMARY
             }
         )
-
-        val decryptedMessage = if (decryptionFailed) {
-            null
-        } else if (!encryptionKey.isNullOrEmpty()) {
-            try {
-                KSmsEncryptorFactory.create()
-                    .tryDecode(messageText.toString(), Base64.decode(encryptionKey, Base64.DEFAULT))
-            } catch (_: InvalidVersionException) {
-                decryptionFailed = true
-                null
-            }
-        } else {
-            PSmsMessage(messageText.toString())
-        }
 
         if (decryptionFailed) {
             holder.itemView.findViewById<TightTextView>(R.id.body).text =

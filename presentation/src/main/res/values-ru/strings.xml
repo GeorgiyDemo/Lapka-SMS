@@ -318,6 +318,8 @@
     <string name="button_yes">Да</string>
     <string name="button_continue">Продолжить</string>
     <string name="button_cancel">Отмена</string>
+    <string name="button_disable">Отключить</string>
+    <string name="disable_encryption_confirmation">Вы уверены, что хотите отключить шифрование для этого разговора?</string>
     <string name="button_delete">Удалить</string>
     <string name="button_save">Сохранить</string>
     <string name="button_stop">Остановить</string>
@@ -400,7 +402,6 @@
         его восстановить и не сможете прочитать сообщения, зашифрованные с его помощью.
     </string>
     <string name="settings_encryption_key_title">Ключ шифрования</string>
-    <string name="settings_legacy_encryption_title">Режим совместимости шифрования</string>
     <string name="conversation_delete_received_after">Удалять полученные сообщения через</string>
     <string name="conversation_delete_sent_after">Удалять отправленные сообщения через</string>
     <string name="sms_for_reset">СМС для сброса</string>
@@ -421,9 +422,4 @@
     <string name="settings_exit_with_no_changes">Выйти без сохранения изменений?</string>
     <string name="global_key_isnt_set">Ключ шифрования не установлен!</string>
     <string name="global_key_set">Настроить</string>
-    <string-array name="compatibility_mode_settings_conversation">
-        <item>Использовать режим из настроек</item>
-        <item>Отключён</item>
-        <item>Включён</item>
-    </string-array>
 </resources>

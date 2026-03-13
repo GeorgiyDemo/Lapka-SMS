@@ -128,7 +128,6 @@ class Preferences @Inject constructor(
     val autoEmoji = rxPrefs.getBoolean("autoEmoji", true)
     val delivery = rxPrefs.getBoolean("delivery", false)
     val signature = rxPrefs.getString("signature", "")
-    val unicode = rxPrefs.getBoolean("unicode", false)
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val autoDelete = rxPrefs.getInteger("autoDelete", 0)
     val logging = rxPrefs.getBoolean("logging", false)
@@ -150,7 +149,6 @@ class Preferences @Inject constructor(
     val smsForResetHash = securePrefs.getString("smsForResetHash", "")
     val deleteEncryptedAfter = rxPrefs.getInteger("deleteEncryptedAfter", 0)
     val encodingScheme = rxPrefs.getInteger("encodingScheme", getDefaultSchemeByLocale())
-    val legacyEncryptionEnabled = rxPrefs.getBoolean("legacyEncryptionEnabled", false)
     val showInTaskSwitcher = rxPrefs.getBoolean("showInTaskSwitcher", true)
     val language = rxPrefs.getString("language", "")
 

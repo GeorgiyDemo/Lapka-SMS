@@ -117,9 +117,6 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.systemFont.asObservable()
             .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
 
-        disposables += prefs.unicode.asObservable()
-            .subscribe { enabled -> newState { copy(stripUnicodeEnabled = enabled) } }
-
         disposables += prefs.mobileOnly.asObservable()
             .subscribe { enabled -> newState { copy(mobileOnly = enabled) } }
 
@@ -209,8 +206,6 @@ class SettingsPresenter @Inject constructor(
                     }
 
                     R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
-
-                    R.id.unicode -> prefs.unicode.set(!prefs.unicode.get())
 
                     R.id.mobileOnly -> prefs.mobileOnly.set(!prefs.mobileOnly.get())
 

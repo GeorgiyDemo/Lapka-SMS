@@ -118,7 +118,7 @@ Wire format:
 ### Properties
 
 - **Nonce structure**: 12 bytes total — first 4 bytes are the Unix timestamp (little-endian), last 8 bytes are random via `SecureRandom`. This provides 2⁶⁴ random space per second, making nonce collision astronomically unlikely (~58 million years at 1000 messages/day).
-- **GCM tag**: 96 bits (12 bytes). NIST SP 800-38D explicitly permits 128-bit tags (the maximum). Forgery probability: 2⁻¹²⁸ per attempt.
+- **GCM tag**: 128 bits (16 bytes), the maximum permitted by NIST SP 800-38D. Forgery probability: 2⁻¹²⁸ per attempt.
 - **Cipher**: `AES/GCM/NoPadding` (javax.crypto, hardware-accelerated on Android). GCM operates in CTR mode internally, so no block padding is needed — arbitrary-length plaintext is accepted natively.
 - **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost. **Trade-off**: Since timestamp validation occurs before GCM authentication, an attacker could learn whether a forged message passed the timestamp check (via timing difference). This is an acceptable trade-off for SMS — it only reveals that the forged timestamp is within the 24h window, which is trivially guessable anyway. The GCM tag still fully protects against forgery.
 - **No separate HMAC**: GCM is an AEAD (Authenticated Encryption with Associated Data) cipher — the GCM tag already provides both integrity and authenticity for the entire payload. A separate HMAC would be redundant.
@@ -272,10 +272,10 @@ Keys are exchanged **out-of-band** between users:
 1. **QR code**: One user generates a QR code containing the Base64-encoded key; the other scans it
 2. **Manual entry**: Users copy/paste the Base64-encoded key
 
-Key authenticity can be verified by comparing **SHA-256 fingerprints** (first 16 bytes, displayed as hex):
+Key authenticity can be verified by comparing **SHA-256 fingerprints** (first 16 bytes, displayed as emoji):
 
 ```
-Key bytes → SHA-256 → first 16 bytes → "A1 B2 C3 D4 E5 F6 ... "
+Key bytes → SHA-256 → first 16 bytes → each byte mapped to one of 256 unique emoji
 ```
 
 Both parties should verify the fingerprint matches via a separate secure channel.
@@ -310,7 +310,7 @@ Inside ciphertext (after GCM decryption):
 │ (variable)   │ (optional)      │          │
 └──────────────┴─────────────────┴──────────┘
 
-Fixed overhead: 25 bytes (12B nonce + 12B GCM tag + 1B MetaInfo)
+Fixed overhead: 29 bytes (12B nonce + 16B GCM tag + 1B MetaInfo)
 ```
 
 ## Limitations

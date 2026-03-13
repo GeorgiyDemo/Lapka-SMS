@@ -68,7 +68,6 @@ class ConversationTest {
         assertEquals("", conv.name)
         assertEquals("", conv.encryptionKey)
         assertEquals(Conversation.SCHEME_NOT_DEF, conv.encodingSchemeId)
-        assertNull(conv.legacyEncryptionEnabled)
         assertEquals(0, conv.deleteEncryptedAfter)
         assertEquals(0, conv.deleteReceivedAfter)
         assertEquals(0, conv.deleteSentAfter)

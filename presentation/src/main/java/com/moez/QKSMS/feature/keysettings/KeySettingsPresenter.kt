@@ -9,7 +9,6 @@ import com.moez.QKSMS.interactor.SetDeleteMessagesAfter
 import com.moez.QKSMS.interactor.SetEncodingScheme
 import com.moez.QKSMS.interactor.SetEncryptionEnabled
 import com.moez.QKSMS.interactor.SetEncryptionKey
-import com.moez.QKSMS.interactor.SetLegacyEncryptionEnabled
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.util.Preferences
@@ -28,7 +27,6 @@ const val KeySettingsInvalidThreadId = -2L
 class KeySettingsPresenter @Inject constructor(
     @Named("keySettingsConversationThreadId") threadId: Long,
     private val setDeleteMessagesAfter: SetDeleteMessagesAfter,
-    private val setLegacyEncryptionEnabled: SetLegacyEncryptionEnabled,
     private val setEncryptionKey: SetEncryptionKey,
     private val setEncodingScheme: SetEncodingScheme,
     private val setEncryptionEnabled: SetEncryptionEnabled,
@@ -55,7 +53,6 @@ class KeySettingsPresenter @Inject constructor(
                     resetKeyIsShown = prefs.globalEncryptionKey.get().isNotEmpty(),
                     keyValid = validateKey(prefs.globalEncryptionKey.get()),
                     encodingScheme = prefs.encodingScheme.get(),
-                    legacyEncryptionEnabled = prefs.legacyEncryptionEnabled.get(),
                 )
                 initialState = state
                 state
@@ -80,7 +77,6 @@ class KeySettingsPresenter @Inject constructor(
                                 encodingScheme = conv.encodingSchemeId
                                     .takeIf { it != Conversation.SCHEME_NOT_DEF }
                                     ?: GLOBAL_SCHEME_INDEX,
-                                legacyEncryptionEnabled = conv.legacyEncryptionEnabled,
                                 deleteEncryptedAfter = conv.deleteEncryptedAfter,
                                 deleteReceivedAfter = conv.deleteReceivedAfter,
                                 deleteSentAfter = conv.deleteSentAfter,
@@ -142,16 +138,6 @@ class KeySettingsPresenter @Inject constructor(
                         view.showResetKeyDialog(false)
                     }
 
-                    R.id.legacyEncryption -> {
-                        newState {
-                            val wasEnabled = legacyEncryptionEnabled ?: false
-                            copy(legacyEncryptionEnabled = !wasEnabled)
-                        }
-                    }
-
-                    R.id.legacyEncryptionConversation -> {
-                        view.showCompatibilityModeDialog()
-                    }
                 }
             }
 
@@ -180,20 +166,6 @@ class KeySettingsPresenter @Inject constructor(
                         keyValid = false,
                         resetKeyIsShown = false
                     )
-                }
-            }
-
-        view.compatibilityModeSelected()
-            .autoDisposable(view.scope())
-            .subscribe { modeIndex ->
-                newState {
-                    val mode = when (modeIndex) {
-                        0 -> null
-                        1 -> false
-                        2 -> true
-                        else -> null
-                    }
-                    copy(legacyEncryptionEnabled = mode)
                 }
             }
 
@@ -325,12 +297,6 @@ class KeySettingsPresenter @Inject constructor(
                     lastState.deleteSentAfter
                 )
             )
-            setLegacyEncryptionEnabled.execute(
-                SetLegacyEncryptionEnabled.Params(
-                    threadId,
-                    lastState.legacyEncryptionEnabled
-                )
-            )
             setEncryptionKey.execute(SetEncryptionKey.Params(threadId, lastState.key))
             val schemeId = lastState.encodingScheme
                 .takeIf { it != GLOBAL_SCHEME_INDEX }
@@ -346,7 +312,6 @@ class KeySettingsPresenter @Inject constructor(
         } else {
             prefs.globalEncryptionKey.set(lastState.key)
             prefs.encodingScheme.set(lastState.encodingScheme)
-            prefs.legacyEncryptionEnabled.set(lastState.legacyEncryptionEnabled ?: false)
         }
         initialState = lastState
         view.onSaved(if (lastState.keyValid) lastState.key else null)

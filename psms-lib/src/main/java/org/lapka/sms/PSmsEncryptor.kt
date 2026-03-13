@@ -110,6 +110,10 @@ class PSmsEncryptor(
     // --- Decode ---
 
     fun decode(str: String, key: ByteArray, encryptionSchemeId: Int): Message {
+        return decodeInternal(str, key, encryptionSchemeId, checkReplay = true)
+    }
+
+    private fun decodeInternal(str: String, key: ByteArray, encryptionSchemeId: Int, checkReplay: Boolean): Message {
         val encKey = deriveEncKey(key)
         encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
         var raw = encryptedDataEncoder!!.decode(str)
@@ -117,7 +121,7 @@ class PSmsEncryptor(
             var stripped = 0
             while (true) {
                 try {
-                    return decodeRaw(raw, encKey)
+                    return decodeRaw(raw, encKey, checkReplay)
                 } catch (_: InvalidDataException) {
                     raw = raw.sliceArray(1 until raw.size)
                     stripped++
@@ -125,10 +129,10 @@ class PSmsEncryptor(
                 }
             }
         }
-        return decodeRaw(raw, encKey)
+        return decodeRaw(raw, encKey, checkReplay)
     }
 
-    private fun decodeRaw(raw: ByteArray, encKey: ByteArray): Message {
+    private fun decodeRaw(raw: ByteArray, encKey: ByteArray, checkReplay: Boolean = true): Message {
         if (raw.size < AesGcmEncryptor.GCM_NONCE_LENGTH + AesGcmEncryptor.GCM_TAG_BYTES) {
             throw InvalidDataException()
         }
@@ -143,14 +147,15 @@ class PSmsEncryptor(
 
         if (decrypted.isEmpty()) throw InvalidDataException("Empty decrypted data")
 
-        // Check for replay (only after GCM auth succeeds — prevents cache poisoning)
-        if (nonceCache.contains(nonce)) {
-            throw InvalidDataException("Replayed message (duplicate nonce)")
+        if (checkReplay) {
+            // Check for replay (only after GCM auth succeeds — prevents cache poisoning)
+            if (nonceCache.contains(nonce)) {
+                throw InvalidDataException("Replayed message (duplicate nonce)")
+            }
+            nonceCache.add(nonce)
         }
 
         val (channelId, textBytes, _) = unpack(decrypted)
-
-        nonceCache.add(nonce)
 
         return Message(plainDataEncoder!!.decode(textBytes), channelId)
     }
@@ -182,7 +187,9 @@ class PSmsEncryptor(
         for (scheme in Scheme.values()) {
             if (quickCheck(str, scheme.ordinal) == null) continue
             try {
-                decode(str, key, scheme.ordinal)
+                // Skip replay check — isEncrypted is a read-only probe
+                // that must not poison the nonce cache
+                decodeInternal(str, key, scheme.ordinal, checkReplay = false)
                 return true
             } catch (_: InvalidDataException) {
             }
@@ -194,7 +201,9 @@ class PSmsEncryptor(
         for (scheme in Scheme.values()) {
             if (quickCheck(str, scheme.ordinal) == null) continue
             try {
-                return decode(str, key, scheme.ordinal)
+                // Skip replay check — tryDecode is used for display/read-back,
+                // not for incoming message processing
+                return decodeInternal(str, key, scheme.ordinal, checkReplay = false)
             } catch (_: InvalidDataException) {
             }
         }

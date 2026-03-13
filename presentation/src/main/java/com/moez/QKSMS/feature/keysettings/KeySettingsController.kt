@@ -28,7 +28,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.qrcode.QRCodeWriter
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
-import com.moez.QKSMS.common.QkDialog
 import com.moez.QKSMS.common.base.QkController
 import com.moez.QKSMS.common.util.Colors
 import com.moez.QKSMS.common.util.TextViewStyler
@@ -63,9 +62,6 @@ class KeySettingsController(
     lateinit var qrCodeWriter: QRCodeWriter
 
     @Inject
-    lateinit var compatibilityModeDialog: QkDialog
-
-    @Inject
     lateinit var textViewStyler: TextViewStyler
 
     @Inject
@@ -94,9 +90,8 @@ class KeySettingsController(
     private val keyField: EditText get() = containerView!!.findViewById(R.id.keyField)
     private val copyKey: ImageButton get() = containerView!!.findViewById(R.id.copyKey)
     private val qrCodeImage: ImageView get() = containerView!!.findViewById(R.id.qrCodeImage)
+    private val keyFingerprintLabel: TextView get() = containerView!!.findViewById(R.id.keyFingerprintLabel)
     private val keyFingerprint: TextView get() = containerView!!.findViewById(R.id.keyFingerprint)
-    private val legacyEncryption: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryption)
-    private val legacyEncryptionConversation: PreferenceView get() = containerView!!.findViewById(R.id.legacyEncryptionConversation)
     private val encodingSchemes: RadioGroup get() = containerView!!.findViewById(R.id.encodingSchemes)
     private val schemeBase64: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64)
     private val schemeBase64Cyrillic: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64Cyrillic)
@@ -118,8 +113,6 @@ class KeySettingsController(
         .mapNotNull { view -> view as? PreferenceView }
         .map { preference -> preference.clicks().map { preference } }
         .let { preferences -> Observable.merge(preferences) }
-
-    override fun compatibilityModeSelected(): Observable<Int> = compatibilityModeDialog.adapter.menuItemClicks
 
     override fun render(state: KeySettingsState) {
         if (!state.bound) {
@@ -149,35 +142,19 @@ class KeySettingsController(
                 keyField.error = null
                 qrCodeImage.visibility = View.VISIBLE
                 renderQr(state.key)
+                keyFingerprintLabel.visibility = View.VISIBLE
                 keyFingerprint.visibility = View.VISIBLE
-                keyFingerprint.text = context.getString(R.string.key_fingerprint, computeFingerprint(state.key))
+                keyFingerprint.text = computeFingerprint(state.key)
             } else {
                 keyField.error = context.getText(R.string.settings_bad_key)
                 qrCodeImage.visibility = View.GONE
+                keyFingerprintLabel.visibility = View.GONE
                 keyFingerprint.visibility = View.GONE
             }
         }
 
         val nonKeyEncryptionSettingsEnabled = state.keyEnabled
                 || state.isConversation && prefs.globalEncryptionKey.get().isNotBlank()
-        if (state.isConversation) {
-            val strings = context.resources.getStringArray(R.array.compatibility_mode_settings_conversation)
-            val selectedItem = when (state.legacyEncryptionEnabled) {
-                null -> 0
-                false -> 1
-                true -> 2
-            }
-            legacyEncryption.visibility = View.GONE
-            legacyEncryptionConversation.visibility = View.VISIBLE
-            legacyEncryptionConversation.summary = strings[selectedItem]
-            legacyEncryptionConversation.isEnabled = nonKeyEncryptionSettingsEnabled
-            compatibilityModeDialog.adapter.selectedItem = selectedItem
-        } else {
-            legacyEncryption.visibility = View.VISIBLE
-            legacyEncryption.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.legacyEncryptionEnabled ?: false
-            legacyEncryption.isEnabled = nonKeyEncryptionSettingsEnabled
-            legacyEncryptionConversation.visibility = View.GONE
-        }
 
         schemeDefault.visibility = if (state.isConversation) View.VISIBLE else View.GONE
         renderEncodingRadioButton(schemeBase64, nonKeyEncryptionSettingsEnabled)
@@ -216,7 +193,11 @@ class KeySettingsController(
     }
 
     private fun renderQr(key: String) {
-        val matrix = qrCodeWriter.encode(key, BarcodeFormat.QR_CODE, 512, 512)
+        val hints = mapOf(
+            com.google.zxing.EncodeHintType.ERROR_CORRECTION to com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.M,
+            com.google.zxing.EncodeHintType.MARGIN to 2
+        )
+        val matrix = qrCodeWriter.encode(key, BarcodeFormat.QR_CODE, 512, 512, hints)
         val bitmap = Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.RGB_565)
         for (i in 0 until matrix.width)
             for (j in 0 until matrix.height) {
@@ -225,11 +206,36 @@ class KeySettingsController(
         qrCodeImage.setImageBitmap(bitmap)
     }
 
+    companion object {
+        private val FINGERPRINT_EMOJI = arrayOf(
+            "😀","😃","😄","😁","😆","😅","🤣","😂","🙂","🙃","😉","😊","😇","🥰","😍","🤩",
+            "😘","😗","😚","😙","🥲","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🤐",
+            "🤨","😐","😑","😶","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒",
+            "🤕","🤢","🤮","🥵","🥶","🥴","😵","🤯","🤠","🥳","🥸","😎","🤓","🧐","😕","🫤",
+            "😟","🙁","😮","😯","😲","😳","🥺","🥹","😦","😧","😨","😰","😥","😢","😭","😱",
+            "😖","😣","😞","😓","😩","😫","🥱","😤","😡","😠","🤬","😈","👿","💀","☠️","💩",
+            "🤡","👹","👺","👻","👽","👾","🤖","😺","😸","😹","😻","😼","😽","🙀","😿","😾",
+            "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🙈",
+            "🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴",
+            "🦄","🐝","🪱","🐛","🦋","🐌","🐞","🐜","🪰","🪲","🪳","🦟","🦗","🕷️","🦂","🐢",
+            "🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🪼","🐡","🐠","🐟","🐬","🐳","🐋",
+            "🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃",
+            "🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐈","🐓","🦃","🦤",
+            "🦚","🦜","🦢","🦩","🕊️","🐇","🦝","🦨","🦡","🦫","🦦","🦥","🐁","🐀","🐿️","🦔",
+            "🌵","🎄","🌲","🌳","🌴","🪵","🌱","🌿","☘️","🍀","🎍","🪴","🎋","🍃","🍂","🍁",
+            "🍄","🌾","💐","🌷","🌹","🥀","🌺","🌸","🌼","🌻","🌞","🌝","🌛","🌜","🌚","🌕"
+        )
+    }
+
     private fun computeFingerprint(base64Key: String): String {
         return try {
             val keyBytes = Base64.decode(base64Key, Base64.DEFAULT)
             val hash = MessageDigest.getInstance("SHA-256").digest(keyBytes)
-            hash.take(16).joinToString(" ") { "%02X".format(it) }
+            hash.take(16)
+                .map { FINGERPRINT_EMOJI[it.toInt() and 0xFF] }
+                .chunked(4) { it.joinToString("") }
+                .chunked(2) { it.joinToString("  ") }
+                .joinToString("\n")
         } catch (e: Exception) {
             ""
         }
@@ -243,7 +249,6 @@ class KeySettingsController(
 
         keyField.addTextChangedListener(keyTextWatcher)
         copyKey.setOnClickListener { copyKey() }
-        compatibilityModeDialog.adapter.setData(R.array.compatibility_mode_settings_conversation)
     }
 
     override fun onAttach(view: View) {
@@ -331,10 +336,6 @@ class KeySettingsController(
             }, 30_000)
             true
         } else false
-    }
-
-    override fun showCompatibilityModeDialog() {
-        activity?.let { compatibilityModeDialog.show(it) }
     }
 
     override fun showResetKeyDialog(disableKey: Boolean) {

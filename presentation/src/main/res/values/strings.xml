@@ -362,6 +362,8 @@
     <string name="button_yes">Yes</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_disable">Disable</string>
+    <string name="disable_encryption_confirmation">Are you sure you want to disable encryption for this conversation?</string>
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="button_stop">Stop</string>
@@ -447,6 +449,7 @@
     <string name="encoding_scheme">Encoding Scheme</string>
     <string name="encryption_key_copied">Key copied. Delete from clipboard after sharing!</string>
     <string name="key_fingerprint">Fingerprint: %s</string>
+    <string name="key_fingerprint_label">Fingerprint</string>
     <string name="copy">Copy</string>
     <string name="encoding_scheme_default">Use Scheme from Settings</string>
     <string name="encoding_scheme_base64">Base64</string>
@@ -465,14 +468,8 @@
         able to recover it and you won\'t be able to read messages encrypted with it.
     </string>
     <string name="settings_encryption_key_title">Encryption key</string>
-    <string name="settings_legacy_encryption_title">Encryption compatibility mode</string>
     <string name="settings_messages_delete">Messages deletion</string>
     <string name="settings_exit_with_no_changes">Do you want to quit without saving changes?</string>
     <string name="global_key_isnt_set">Encryption key is not set!</string>
     <string name="global_key_set">Set key</string>
-    <string-array name="compatibility_mode_settings_conversation">
-        <item>Use Mode from Settings</item>
-        <item>Disabled</item>
-        <item>Enabled</item>
-    </string-array>
 </resources>

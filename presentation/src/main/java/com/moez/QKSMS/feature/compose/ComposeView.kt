@@ -42,9 +42,11 @@ interface ComposeView : QkView<ComposeState> {
     val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val encryptionKeySetIntent: Subject<Unit>
+    val disableEncryptionConfirmed: Subject<Unit>
     val searchQueryChangedIntent: Observable<CharSequence>
 
     fun clearSelection()
+    fun showDisableEncryptionDialog()
     fun showDetails(details: String)
     fun requestDefaultSms()
     fun requestSmsPermission()

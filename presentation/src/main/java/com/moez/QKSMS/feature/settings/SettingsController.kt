@@ -157,7 +157,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val textSize: PreferenceView get() = containerView!!.findViewById(R.id.textSize)
     private val autoColor: PreferenceView get() = containerView!!.findViewById(R.id.autoColor)
     private val systemFont: PreferenceView get() = containerView!!.findViewById(R.id.systemFont)
-    private val unicode: PreferenceView get() = containerView!!.findViewById(R.id.unicode)
     private val mobileOnly: PreferenceView get() = containerView!!.findViewById(R.id.mobileOnly)
     private val autoDelete: PreferenceView get() = containerView!!.findViewById(R.id.autoDelete)
     private val syncingProgress: ProgressBar get() = containerView!!.findViewById(R.id.syncingProgress)
@@ -280,7 +279,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         systemFont.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.systemFontEnabled
 
-        unicode.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.stripUnicodeEnabled
         mobileOnly.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.mobileOnly
 
         autoDelete.summary = when (state.autoDelete) {

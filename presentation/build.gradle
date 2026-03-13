@@ -178,7 +178,7 @@ dependencies {
 
     //ZXing qr code lib
     implementation "com.google.zxing:core:$zxing_version"
-    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
 
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
     implementation "com.google.android.flexbox:flexbox:3.0.0"
