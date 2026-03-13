@@ -78,6 +78,8 @@ class KeySettingsController(
 
     private val keyTextWatcher = KeyTextWatcher()
     private var scannedQr: String? = null
+    private val clipboardHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var clipboardClearRunnable: Runnable? = null
 
     // View accessors
     private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
@@ -247,6 +249,13 @@ class KeySettingsController(
         copyKey.setOnClickListener { copyKey() }
     }
 
+    override fun onDestroyView(view: View) {
+        clipboardClearRunnable?.let { clipboardHandler.removeCallbacks(it) }
+        keyTextWatcher.dispose()
+        containerView?.findViewById<EditText>(R.id.keyField)?.removeTextChangedListener(keyTextWatcher)
+        super.onDestroyView(view)
+    }
+
     override fun onAttach(view: View) {
         super.onAttach(view)
         presenter.bindIntents(this)
@@ -324,12 +333,15 @@ class KeySettingsController(
                 )
             )
             // Auto-clear clipboard after 30 seconds for security
-            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            clipboardClearRunnable?.let { clipboardHandler.removeCallbacks(it) }
+            val runnable = Runnable {
                 try {
                     clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
                 } catch (_: Exception) {
                 }
-            }, 30_000)
+            }
+            clipboardClearRunnable = runnable
+            clipboardHandler.postDelayed(runnable, 30_000)
             true
         } else false
     }

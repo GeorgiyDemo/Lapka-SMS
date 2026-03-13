@@ -39,6 +39,9 @@ class KeyInputDialog(private val context: Activity, private val hint: String, pr
             field.setText(Base64.encodeToString(keyGen.generateKey().encoded, Base64.NO_WRAP))
         }
 
+        val clipboardHandler = Handler(Looper.getMainLooper())
+        var clipboardClearRunnable: Runnable? = null
+
         layout.findViewById<View>(R.id.btnCopyKey).setOnClickListener {
             val clipboard = getSystemService(context, ClipboardManager::class.java)
             if (field.text.isNotBlank() && clipboard != null) {
@@ -48,12 +51,15 @@ class KeyInputDialog(private val context: Activity, private val hint: String, pr
                 field.selectAll()
                 Toast.makeText(context, R.string.encryption_key_copied, Toast.LENGTH_SHORT).show()
                 // Auto-clear clipboard after 30 seconds for security
-                Handler(Looper.getMainLooper()).postDelayed({
+                clipboardClearRunnable?.let { clipboardHandler.removeCallbacks(it) }
+                val runnable = Runnable {
                     try {
                         clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
                     } catch (_: Exception) {
                     }
-                }, 30_000)
+                }
+                clipboardClearRunnable = runnable
+                clipboardHandler.postDelayed(runnable, 30_000)
             }
         }
 
@@ -62,6 +68,10 @@ class KeyInputDialog(private val context: Activity, private val hint: String, pr
             .setNegativeButton(R.string.button_cancel, null)
             .setPositiveButton(R.string.button_save, null)
             .create()
+
+        dialog.setOnDismissListener {
+            clipboardClearRunnable?.let { clipboardHandler.removeCallbacks(it) }
+        }
 
         dialog.show()
 

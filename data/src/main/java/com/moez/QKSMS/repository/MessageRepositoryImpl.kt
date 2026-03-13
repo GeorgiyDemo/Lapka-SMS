@@ -52,6 +52,7 @@ import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -70,11 +71,10 @@ class MessageRepositoryImpl @Inject constructor(
     private val resetSettings: ResetSettings
 ) : MessageRepository {
 
-    init {
-        syncRepository.syncedMessage
-            .doOnNext { message -> if (message.isMe()) checkSentMessage(message) else checkReceivedMessage(message) }
-            .subscribe()
-    }
+    @Suppress("unused")
+    private val syncDisposable: Disposable = syncRepository.syncedMessage
+        .doOnNext { message -> if (message.isMe()) checkSentMessage(message) else checkReceivedMessage(message) }
+        .subscribe({}, { error -> Timber.e(error, "Error processing synced message") })
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
         return Realm.getDefaultInstance()
@@ -96,18 +96,22 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     override fun getMessage(id: Long): Message? {
-        return Realm.getDefaultInstance()
-            .also { realm -> realm.refresh() }
-            .where(Message::class.java)
-            .equalTo("id", id)
-            .findFirst()
+        return Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+            realm.where(Message::class.java)
+                .equalTo("id", id)
+                .findFirst()
+                ?.let(realm::copyFromRealm)
+        }
     }
 
     override fun getMessageForPart(id: Long): Message? {
-        return Realm.getDefaultInstance()
-            .where(Message::class.java)
-            .equalTo("parts.id", id)
-            .findFirst()
+        return Realm.getDefaultInstance().use { realm ->
+            realm.where(Message::class.java)
+                .equalTo("parts.id", id)
+                .findFirst()
+                ?.let(realm::copyFromRealm)
+        }
     }
 
     override fun getLastIncomingMessage(threadId: Long): RealmResults<Message> {

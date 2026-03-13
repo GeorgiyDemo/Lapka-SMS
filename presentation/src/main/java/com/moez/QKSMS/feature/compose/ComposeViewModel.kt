@@ -251,7 +251,7 @@ class ComposeViewModel @Inject constructor(
         val sharing = sharedText.isNotEmpty()
         if (shouldShowContacts) {
             shouldShowContacts = false
-            view.showContacts(sharing, selectedChips.blockingFirst())
+            view.showContacts(sharing, (selectedChips as BehaviorSubject).value ?: listOf())
         }
 
         view.chipsSelectedIntent

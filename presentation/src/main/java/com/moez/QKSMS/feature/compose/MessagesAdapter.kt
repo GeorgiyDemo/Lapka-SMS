@@ -122,8 +122,12 @@ class MessagesAdapter @Inject constructor(
         set(value) {
             if (field == value) return
 
+            val oldValue = field
             field = value
-            notifyDataSetChanged()
+            // Notify only affected items instead of entire dataset
+            if (oldValue != -1L || value != -1L) {
+                notifyItemRangeChanged(0, itemCount)
+            }
         }
 
     private val contactCache = ContactCache()
@@ -197,7 +201,7 @@ class MessagesAdapter @Inject constructor(
         holder.itemView.findViewById<ProgressBar>(R.id.cancel)?.let { cancel ->
             val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
             cancel.setVisible(isCancellable)
-            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
+            cancel.setOnClickListener { cancelSending.onNext(message.id) }
             cancel.progress = 2
 
             if (isCancellable) {

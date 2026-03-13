@@ -49,9 +49,12 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private val recipientId: Subject<Long> = BehaviorSubject.create()
 
+    private var pageChangeListener: ViewPager.OnPageChangeListener? = null
+
     var pager: ViewPager? = null
         set(value) {
             if (field !== value) {
+                pageChangeListener?.let { field?.removeOnPageChangeListener(it) }
                 field = value
                 recreate()
             }
@@ -80,13 +83,15 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
             getChildAt(index).isActivated = index == pager?.currentItem
         }
 
-        pager?.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        val listener = object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 childCount.forEach { index ->
                     getChildAt(index).isActivated = index == position
                 }
             }
-        })
+        }
+        pageChangeListener = listener
+        pager?.addOnPageChangeListener(listener)
     }
 
     override fun onAttachedToWindow() {

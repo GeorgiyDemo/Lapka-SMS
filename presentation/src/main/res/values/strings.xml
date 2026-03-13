@@ -475,4 +475,6 @@
     <string name="settings_exit_with_no_changes">Do you want to quit without saving changes?</string>
     <string name="global_key_isnt_set">Encryption key is not set!</string>
     <string name="global_key_set">Set key</string>
+    <string name="qr_code_content_description">QR code for encryption key</string>
+    <string name="encrypted_indicator_content_description">Encrypted message</string>
 </resources>

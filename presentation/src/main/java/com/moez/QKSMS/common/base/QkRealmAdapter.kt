@@ -75,9 +75,12 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     }
 
     fun clearSelection() {
+        val previousSelection = selection
         selection = listOf()
         selectionChanges.onNext(selection)
-        notifyDataSetChanged()
+        if (previousSelection.isNotEmpty()) {
+            notifyItemRangeChanged(0, itemCount)
+        }
     }
 
     override fun getItem(index: Int): T? {

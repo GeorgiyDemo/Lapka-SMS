@@ -138,6 +138,7 @@ class ConversationInfoPresenter @Inject constructor(
 
         // Set the conversation title
         view.nameChanges()
+            .observeOn(io.reactivex.schedulers.Schedulers.io())
             .withLatestFrom(conversation) { name, conversation ->
                 conversationRepo.setConversationName(conversation.id, name)
             }

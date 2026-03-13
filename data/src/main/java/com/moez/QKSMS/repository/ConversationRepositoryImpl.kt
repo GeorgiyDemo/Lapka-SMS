@@ -196,11 +196,13 @@ class ConversationRepositoryImpl @Inject constructor(
     }
 
     override fun getConversation(threadId: Long): Conversation? {
-        return Realm.getDefaultInstance()
-            .apply { refresh() }
-            .where(Conversation::class.java)
-            .equalTo("id", threadId)
-            .findFirst()
+        return Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+            realm.where(Conversation::class.java)
+                .equalTo("id", threadId)
+                .findFirst()
+                ?.let(realm::copyFromRealm)
+        }
     }
 
     override fun getConversations(vararg threadIds: Long): RealmResults<Conversation> {
@@ -226,7 +228,7 @@ class ConversationRepositoryImpl @Inject constructor(
             .filter { it.isValid }
             .map { realm.copyFromRealm(it) }
             .subscribeOn(AndroidSchedulers.mainThread())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
     }
 
     override fun getRecipients(): RealmResults<Recipient> {
@@ -247,10 +249,12 @@ class ConversationRepositoryImpl @Inject constructor(
     }
 
     override fun getRecipient(recipientId: Long): Recipient? {
-        return Realm.getDefaultInstance()
-            .where(Recipient::class.java)
-            .equalTo("id", recipientId)
-            .findFirst()
+        return Realm.getDefaultInstance().use { realm ->
+            realm.where(Recipient::class.java)
+                .equalTo("id", recipientId)
+                .findFirst()
+                ?.let(realm::copyFromRealm)
+        }
     }
 
     override fun getThreadId(recipient: String): Long? {
@@ -288,9 +292,7 @@ class ConversationRepositoryImpl @Inject constructor(
         return (getThreadId(addresses) ?: tryOrNull { TelephonyCompat.getOrCreateThreadId(context, addresses.toSet()) })
             ?.takeIf { threadId -> threadId != 0L }
             ?.let { threadId ->
-                getConversation(threadId)
-                    ?.let(Realm.getDefaultInstance()::copyFromRealm)
-                    ?: getConversationFromCp(threadId)
+                getConversation(threadId) ?: getConversationFromCp(threadId)
             }
     }
 
