@@ -34,6 +34,8 @@ import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.repository.ConversationRepository
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
@@ -94,6 +96,11 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
         pager?.addOnPageChangeListener(listener)
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        pageChangeListener?.let { pager?.removeOnPageChangeListener(it) }
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
@@ -104,8 +111,10 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
 
         recipientId
             .distinctUntilChanged()
+            .observeOn(Schedulers.io())
             .map { recipientId -> Optional(conversationRepo.getRecipient(recipientId)) }
             .switchMap { recipient -> colors.themeObservable(recipient.value) }
+            .observeOn(AndroidSchedulers.mainThread())
             .map { theme ->
                 val textSecondary = context.resolveThemeColor(android.R.attr.textColorSecondary)
                 ColorStateList(states, intArrayOf(theme.theme, textSecondary))

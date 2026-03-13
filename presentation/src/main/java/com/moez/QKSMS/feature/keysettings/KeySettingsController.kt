@@ -40,6 +40,10 @@ import com.moez.QKSMS.feature.keysettings.injection.KeySettingsModule
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.util.Preferences
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
@@ -80,6 +84,7 @@ class KeySettingsController(
     private var scannedQr: String? = null
     private val clipboardHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var clipboardClearRunnable: Runnable? = null
+    private var qrDisposable: Disposable? = null
 
     // View accessors
     private val preferences: LinearLayout get() = containerView!!.findViewById(R.id.preferences)
@@ -191,17 +196,27 @@ class KeySettingsController(
     }
 
     private fun renderQr(key: String) {
-        val hints = mapOf(
-            com.google.zxing.EncodeHintType.ERROR_CORRECTION to com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.M,
-            com.google.zxing.EncodeHintType.MARGIN to 2
-        )
-        val matrix = qrCodeWriter.encode(key, BarcodeFormat.QR_CODE, 512, 512, hints)
-        val bitmap = Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.RGB_565)
-        for (i in 0 until matrix.width)
-            for (j in 0 until matrix.height) {
-                bitmap.setPixel(i, j, if (matrix[i, j]) Color.BLACK else Color.WHITE)
+        qrDisposable?.dispose()
+        qrDisposable = Single.fromCallable {
+            val hints = mapOf(
+                com.google.zxing.EncodeHintType.ERROR_CORRECTION to com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.M,
+                com.google.zxing.EncodeHintType.MARGIN to 2
+            )
+            val matrix = qrCodeWriter.encode(key, BarcodeFormat.QR_CODE, 512, 512, hints)
+            val width = matrix.width
+            val height = matrix.height
+            val pixels = IntArray(width * height) { idx ->
+                if (matrix[idx % width, idx / width]) Color.BLACK else Color.WHITE
             }
-        qrCodeImage.setImageBitmap(bitmap)
+            Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565).apply {
+                setPixels(pixels, 0, width, 0, 0, width, height)
+            }
+        }
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ bitmap ->
+                qrCodeImage.setImageBitmap(bitmap)
+            }, { })
     }
 
     companion object {
@@ -250,6 +265,7 @@ class KeySettingsController(
     }
 
     override fun onDestroyView(view: View) {
+        qrDisposable?.dispose()
         clipboardClearRunnable?.let { clipboardHandler.removeCallbacks(it) }
         keyTextWatcher.dispose()
         containerView?.findViewById<EditText>(R.id.keyField)?.removeTextChangedListener(keyTextWatcher)

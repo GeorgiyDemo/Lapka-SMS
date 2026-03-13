@@ -51,6 +51,10 @@ import com.moez.QKSMS.model.Message
 import com.moez.QKSMS.model.Recipient
 import com.moez.QKSMS.util.PhoneNumberUtils
 import com.moez.QKSMS.util.Preferences
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
@@ -95,6 +99,7 @@ class MessagesAdapter @Inject constructor(
     val encryptionKey: BehaviorSubject<String> = BehaviorSubject.create()
 
     private val decryptionCache = android.util.LruCache<Long, DecryptedEntry>(DECRYPTION_CACHE_SIZE)
+    private val decryptionDisposables = HashMap<RecyclerView.ViewHolder, Disposable>()
     private var cachedKeyBytes: ByteArray? = null
     private var cachedKeyString: String? = null
 
@@ -124,11 +129,21 @@ class MessagesAdapter @Inject constructor(
 
             val oldValue = field
             field = value
-            // Notify only affected items instead of entire dataset
-            if (oldValue != -1L || value != -1L) {
-                notifyItemRangeChanged(0, itemCount)
+            // Notify only the old and new highlighted items
+            if (oldValue != -1L) {
+                findPositionById(oldValue)?.let { notifyItemChanged(it) }
+            }
+            if (value != -1L) {
+                findPositionById(value)?.let { notifyItemChanged(it) }
             }
         }
+
+    private fun findPositionById(messageId: Long): Int? {
+        for (i in 0 until itemCount) {
+            if (getItem(i)?.id == messageId) return i
+        }
+        return null
+    }
 
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
@@ -252,11 +267,12 @@ class MessagesAdapter @Inject constructor(
             holder.itemView.findViewById<TightTextView>(R.id.body).setBackgroundTint(theme.theme)
         }
 
+        // Cancel any pending decryption for this holder
+        decryptionDisposables.remove(holder)?.dispose()
+
         // Decrypt message and bind encrypted icon (with LruCache)
         val encryptionKeyStr = encryptionKey.value
         val messageText = message.body
-        var decryptionFailed = false
-        var isEncrypted = false
 
         // Invalidate cache if encryption key changed
         if (encryptionKeyStr != cachedKeyString) {
@@ -268,42 +284,53 @@ class MessagesAdapter @Inject constructor(
         }
 
         val keyBytes = cachedKeyBytes
-        val decryptedMessage = if (conversation != null && keyBytes != null) {
-            val cached = decryptionCache.get(message.id)
+        val msgId = message.id
+        val msgText = messageText.toString()
+        val isMe = message.isMe()
+
+        if (conversation != null && keyBytes != null) {
+            val cached = decryptionCache.get(msgId)
             if (cached != null) {
-                isEncrypted = cached.isEncrypted
-                decryptionFailed = cached.isEncrypted && cached.message.text == messageText.toString()
-                cached.message
+                val decryptionFailed = cached.isEncrypted && cached.message.text == msgText
+                bindDecryptedMessage(holder, msgText, cached.message, cached.isEncrypted, decryptionFailed, isMe)
             } else {
-                try {
-                    val encryptor = PSmsEncryptor()
-                    val result = encryptor.tryDecode(messageText.toString(), keyBytes)
-                    val decoded = result.text != messageText.toString()
-                    if (decoded) {
-                        isEncrypted = true
-                    } else {
-                        // tryDecode returned original text — check if it structurally looks encrypted
-                        val looks = encryptor.looksEncrypted(messageText.toString())
-                        isEncrypted = looks
-                        decryptionFailed = looks
+                // Show original text while decryption runs in background
+                bindDecryptedMessage(holder, msgText, PSmsMessage(msgText), false, false, isMe)
+
+                val keyBytesCopy = keyBytes.copyOf()
+                holder.itemView.tag = msgId
+                val disposable = Single.fromCallable {
+                    try {
+                        val encryptor = PSmsEncryptor()
+                        val result = encryptor.tryDecode(msgText, keyBytesCopy)
+                        val decoded = result.text != msgText
+                        val isEnc: Boolean
+                        val failed: Boolean
+                        if (decoded) {
+                            isEnc = true
+                            failed = false
+                        } else {
+                            val looks = encryptor.looksEncrypted(msgText)
+                            isEnc = looks
+                            failed = looks
+                        }
+                        Triple(result, isEnc, failed)
+                    } catch (_: InvalidVersionException) {
+                        Triple(PSmsMessage(msgText), true, true)
                     }
-                    decryptionCache.put(message.id, DecryptedEntry(result, isEncrypted))
-                    result
-                } catch (_: InvalidVersionException) {
-                    decryptionFailed = true
-                    isEncrypted = true
-                    decryptionCache.put(message.id, DecryptedEntry(PSmsMessage(messageText.toString()), true))
-                    null
                 }
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ (result, isEnc, failed) ->
+                        decryptionCache.put(msgId, DecryptedEntry(result, isEnc))
+                        if (holder.itemView.tag == msgId) {
+                            bindDecryptedMessage(holder, msgText, result, isEnc, failed, isMe)
+                        }
+                    }, { })
+                decryptionDisposables[holder] = disposable
             }
         } else {
-            PSmsMessage(messageText.toString())
-        }
-
-        if (message.isMe()) {
-            holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setVisible(isEncrypted, View.INVISIBLE)
-        } else {
-            holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setVisible(isEncrypted, View.INVISIBLE)
+            bindDecryptedMessage(holder, msgText, PSmsMessage(msgText), false, false, isMe)
         }
 
         // Bind the body text
@@ -315,18 +342,7 @@ class MessagesAdapter @Inject constructor(
             }
         )
 
-        if (decryptionFailed) {
-            holder.itemView.findViewById<TightTextView>(R.id.body).text =
-                context.getString(R.string.decryption_failed)
-        } else if (decryptedMessage?.channelId != null) {
-            val channelIdStr = context.resources.getString(R.string.channel_id)
-            holder.itemView.findViewById<TightTextView>(R.id.body).text =
-                decryptedMessage.text + " (${channelIdStr}: ${decryptedMessage.channelId})"
-        } else {
-            holder.itemView.findViewById<TightTextView>(R.id.body).text = decryptedMessage?.text ?: messageText
-        }
-
-        if (message.isMe()) {
+        if (isMe) {
             holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setImageResource(android.R.drawable.ic_secure)
         } else {
             holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setImageResource(android.R.drawable.ic_secure)
@@ -342,6 +358,39 @@ class MessagesAdapter @Inject constructor(
             )
         )
 
+    }
+
+    private fun bindDecryptedMessage(
+        holder: QkViewHolder, msgText: String, decryptedMessage: PSmsMessage?,
+        isEncrypted: Boolean, decryptionFailed: Boolean, isMe: Boolean
+    ) {
+        if (isMe) {
+            holder.itemView.findViewById<ImageView>(R.id.encrypted_out).setVisible(isEncrypted, View.INVISIBLE)
+        } else {
+            holder.itemView.findViewById<ImageView>(R.id.encrypted_in).setVisible(isEncrypted, View.INVISIBLE)
+        }
+
+        if (decryptionFailed) {
+            holder.itemView.findViewById<TightTextView>(R.id.body).text =
+                context.getString(R.string.decryption_failed)
+        } else if (decryptedMessage?.channelId != null) {
+            val channelIdStr = context.resources.getString(R.string.channel_id)
+            holder.itemView.findViewById<TightTextView>(R.id.body).text =
+                decryptedMessage.text + " (${channelIdStr}: ${decryptedMessage.channelId})"
+        } else {
+            holder.itemView.findViewById<TightTextView>(R.id.body).text = decryptedMessage?.text ?: msgText
+        }
+    }
+
+    override fun onViewRecycled(holder: QkViewHolder) {
+        super.onViewRecycled(holder)
+        decryptionDisposables.remove(holder)?.dispose()
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        decryptionDisposables.values.forEach { it.dispose() }
+        decryptionDisposables.clear()
     }
 
     private fun bindStatus(holder: QkViewHolder, message: Message, next: Message?) {

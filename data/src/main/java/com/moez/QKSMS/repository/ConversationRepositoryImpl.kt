@@ -137,42 +137,43 @@ class ConversationRepositoryImpl @Inject constructor(
 
     override fun searchConversations(query: CharSequence): List<SearchResult> {
         val realm = Realm.getDefaultInstance()
+        try {
+            val normalizedQuery = query.removeAccents()
+            val conversations = realm.copyFromRealm(
+                realm
+                    .where(Conversation::class.java)
+                    .notEqualTo("id", 0L)
+                    .isNotNull("lastMessage")
+                    .equalTo("blocked", false)
+                    .isNotEmpty("recipients")
+                    .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
+                    .findAll()
+            )
 
-        val normalizedQuery = query.removeAccents()
-        val conversations = realm.copyFromRealm(
-            realm
-                .where(Conversation::class.java)
-                .notEqualTo("id", 0L)
-                .isNotNull("lastMessage")
-                .equalTo("blocked", false)
-                .isNotEmpty("recipients")
-                .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
-                .findAll()
-        )
+            val messagesByConversation = realm.copyFromRealm(
+                realm
+                    .where(Message::class.java)
+                    .beginGroup()
+                    .contains("body", normalizedQuery, Case.INSENSITIVE)
+                    .or()
+                    .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
+                    .endGroup()
+                    .findAll()
+            )
+                .asSequence()
+                .groupBy { message -> message.threadId }
+                .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
+                .map { (threadId, messages) -> Pair(conversations.first { it.id == threadId }, messages.size) }
+                .map { (conversation, messages) -> SearchResult(normalizedQuery, conversation, messages) }
+                .sortedByDescending { result -> result.messages }
+                .toList()
 
-        val messagesByConversation = realm.copyFromRealm(
-            realm
-                .where(Message::class.java)
-                .beginGroup()
-                .contains("body", normalizedQuery, Case.INSENSITIVE)
-                .or()
-                .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
-                .endGroup()
-                .findAll()
-        )
-            .asSequence()
-            .groupBy { message -> message.threadId }
-            .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
-            .map { (threadId, messages) -> Pair(conversations.first { it.id == threadId }, messages.size) }
-            .map { (conversation, messages) -> SearchResult(normalizedQuery, conversation, messages) }
-            .sortedByDescending { result -> result.messages }
-            .toList()
-
-        realm.close()
-
-        return conversations
-            .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
-            .map { conversation -> SearchResult(normalizedQuery, conversation, 0) } + messagesByConversation
+            return conversations
+                .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
+                .map { conversation -> SearchResult(normalizedQuery, conversation, 0) } + messagesByConversation
+        } finally {
+            realm.close()
+        }
     }
 
     override fun getBlockedConversations(): RealmResults<Conversation> {
@@ -228,6 +229,7 @@ class ConversationRepositoryImpl @Inject constructor(
             .filter { it.isLoaded }
             .filter { it.isValid }
             .map { realm.copyFromRealm(it) }
+            .doFinally { realm.close() }
             .subscribeOn(AndroidSchedulers.mainThread())
             .observeOn(Schedulers.computation())
     }
@@ -246,6 +248,7 @@ class ConversationRepositoryImpl @Inject constructor(
             .asObservable()
             .filter { it.isLoaded && it.isValid }
             .map { realm.copyFromRealm(it) }
+            .doFinally { realm.close() }
             .subscribeOn(AndroidSchedulers.mainThread())
     }
 

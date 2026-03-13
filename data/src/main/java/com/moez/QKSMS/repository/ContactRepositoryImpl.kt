@@ -104,6 +104,7 @@ class ContactRepositoryImpl @Inject constructor(
             .filter { it.isLoaded }
             .filter { it.isValid }
             .map { realm.copyFromRealm(it) }
+            .doFinally { realm.close() }
             .subscribeOn(AndroidSchedulers.mainThread())
             .observeOn(Schedulers.io())
             .map { contacts ->
@@ -142,6 +143,7 @@ class ContactRepositoryImpl @Inject constructor(
             .filter { it.isLoaded }
             .filter { it.isValid }
             .map { realm.copyFromRealm(it) }
+            .doFinally { realm.close() }
             .subscribeOn(AndroidSchedulers.mainThread())
             .observeOn(Schedulers.io())
     }

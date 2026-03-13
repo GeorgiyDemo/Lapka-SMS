@@ -48,6 +48,10 @@ import com.moez.QKSMS.util.Preferences
 import javax.inject.Inject
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 class ConversationsAdapter @Inject constructor(
     private val colors: Colors,
@@ -60,8 +64,8 @@ class ConversationsAdapter @Inject constructor(
 
     private data class CachedSnippet(val originalSnippet: String, val decoded: PSmsMessage)
 
-    private val encryptor = PSmsEncryptor()
     private val snippetCache = android.util.LruCache<Long, CachedSnippet>(128)
+    private val decryptionDisposables = HashMap<RecyclerView.ViewHolder, Disposable>()
 
     init {
         // This is how we access the threadId for the swipe actions
@@ -133,28 +137,53 @@ class ConversationsAdapter @Inject constructor(
         holder.itemView.findViewById<QkTextView>(R.id.date).text =
             conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
+        // Cancel any pending decryption for this holder
+        decryptionDisposables.remove(holder)?.dispose()
+
         val snippet = conversation.snippet ?: ""
-        val snippetMessage = if (conversation.encryptionKey.isNotEmpty()) {
-            val cached = snippetCache.get(conversation.id)
+        val conversationId = conversation.id
+        val encryptionKey = conversation.encryptionKey
+        val draft = conversation.draft
+        val isMe = conversation.me
+
+        if (encryptionKey.isNotEmpty()) {
+            val cached = snippetCache.get(conversationId)
             if (cached != null && cached.originalSnippet == snippet.toString()) {
-                cached.decoded
+                bindSnippet(holder, cached.decoded, draft, isMe)
             } else {
-                val decoded = try {
-                    encryptor.tryDecode(
-                        snippet.toString(),
-                        ConversationKeyStore.unwrapKeyBytes(conversation.encryptionKey)
-                    )
-                } catch (_: InvalidVersionException) {
-                    PSmsMessage(snippet.toString())
+                // Show original text while decrypting
+                bindSnippet(holder, PSmsMessage(snippet.toString()), draft, isMe)
+
+                val snippetStr = snippet.toString()
+                holder.itemView.tag = conversationId
+                val disposable = Single.fromCallable {
+                    try {
+                        PSmsEncryptor().tryDecode(
+                            snippetStr,
+                            ConversationKeyStore.unwrapKeyBytes(encryptionKey)
+                        )
+                    } catch (_: InvalidVersionException) {
+                        PSmsMessage(snippetStr)
+                    }
                 }
-                snippetCache.put(conversation.id, CachedSnippet(snippet.toString(), decoded))
-                decoded
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ decoded ->
+                        snippetCache.put(conversationId, CachedSnippet(snippetStr, decoded))
+                        if (holder.itemView.tag == conversationId) {
+                            bindSnippet(holder, decoded, draft, isMe)
+                        }
+                    }, { })
+                decryptionDisposables[holder] = disposable
             }
         } else {
-            PSmsMessage(snippet.toString())
+            bindSnippet(holder, PSmsMessage(snippet.toString()), draft, isMe)
         }
+        holder.itemView.findViewById<ImageView>(R.id.pinned).isVisible = conversation.pinned
+        holder.itemView.findViewById<ImageView>(R.id.unread).setTint(theme)
+    }
 
-
+    private fun bindSnippet(holder: QkViewHolder, snippetMessage: PSmsMessage, draft: String, isMe: Boolean) {
         val snippetText = if (snippetMessage.channelId != null) {
             val channelIdStr = context.resources.getString(R.string.channel_id)
             snippetMessage.text + " (${channelIdStr}: ${snippetMessage.channelId})"
@@ -163,12 +192,21 @@ class ConversationsAdapter @Inject constructor(
         }
 
         holder.itemView.findViewById<QkTextView>(R.id.snippet).text = when {
-            conversation.draft.isNotEmpty() -> conversation.draft
-            conversation.me -> context.getString(R.string.main_sender_you, snippetText)
+            draft.isNotEmpty() -> draft
+            isMe -> context.getString(R.string.main_sender_you, snippetText)
             else -> snippetText
         }
-        holder.itemView.findViewById<ImageView>(R.id.pinned).isVisible = conversation.pinned
-        holder.itemView.findViewById<ImageView>(R.id.unread).setTint(theme)
+    }
+
+    override fun onViewRecycled(holder: QkViewHolder) {
+        super.onViewRecycled(holder)
+        decryptionDisposables.remove(holder)?.dispose()
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        decryptionDisposables.values.forEach { it.dispose() }
+        decryptionDisposables.clear()
     }
 
     override fun getItemId(position: Int): Long {
