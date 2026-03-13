@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+            android:id="@+id/help"
+            android:title=""
+            app:showAsAction="always"
+            android:visible="true"
+            android:icon="@drawable/ic_help_outline_24dp"
+    />
+    <item
             android:id="@+id/confirm"
             android:title=""
             app:showAsAction="always"

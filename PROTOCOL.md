@@ -120,7 +120,7 @@ Wire format:
 - **Nonce structure**: 12 bytes total — first 4 bytes are the Unix timestamp (little-endian), last 8 bytes are random via `SecureRandom`. This provides 2⁶⁴ random space per second, making nonce collision astronomically unlikely (~58 million years at 1000 messages/day).
 - **GCM tag**: 128 bits (16 bytes), the maximum permitted by NIST SP 800-38D. Forgery probability: 2⁻¹²⁸ per attempt.
 - **Cipher**: `AES/GCM/NoPadding` (javax.crypto, hardware-accelerated on Android). GCM operates in CTR mode internally, so no block padding is needed — arbitrary-length plaintext is accepted natively.
-- **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost. **Trade-off**: Since timestamp validation occurs before GCM authentication, an attacker could learn whether a forged message passed the timestamp check (via timing difference). This is an acceptable trade-off for SMS — it only reveals that the forged timestamp is within the 24h window, which is trivially guessable anyway. The GCM tag still fully protects against forgery.
+- **Timestamp in nonce**: The nonce is transmitted in cleartext (before the ciphertext). This allows the receiver to validate message freshness *before* performing the expensive GCM decryption, enabling early rejection of old/replayed messages at near-zero CPU cost. **Trade-off**: Since timestamp validation occurs before GCM authentication, an attacker could learn whether a forged message passed the timestamp check (via timing difference). This is an acceptable trade-off for SMS — it only reveals that the forged timestamp is within the 7-day window, which is trivially guessable anyway. The GCM tag still fully protects against forgery.
 - **No separate HMAC**: GCM is an AEAD (Authenticated Encryption with Associated Data) cipher — the GCM tag already provides both integrity and authenticity for the entire payload. A separate HMAC would be redundant.
 - **No PKCS#7 padding**: GCM/CTR is a stream cipher mode and handles arbitrary plaintext lengths. Block padding is unnecessary and would waste bytes.
 
@@ -172,8 +172,8 @@ Replay protection uses two independent mechanisms:
 
 Each message carries a 4-byte Unix timestamp embedded in the first 4 bytes of the GCM nonce. On decryption, the timestamp is extracted and validated **before** GCM decryption:
 
-- Messages older than **24 hours** are rejected
-- Messages more than **5 minutes** in the future are rejected
+- Messages older than **7 days** are rejected
+- Messages more than **10 minutes** in the future are rejected
 
 This provides fast rejection of old messages without any cryptographic overhead.
 
@@ -185,7 +185,8 @@ The cache is checked *after* GCM authentication to prevent cache poisoning — a
 
 Cache properties:
 - **Size**: Up to 1000 entries (~12 KB memory)
-- **Eviction**: FIFO — oldest entries are evicted when the cache is full
+- **TTL**: 7 days — entries older than 7 days are evicted automatically
+- **Eviction**: By age (TTL) and FIFO when capacity is exceeded
 - **Persistence**: In-memory only (cleared on app restart)
 - **Thread safety**: Synchronized access
 
@@ -202,7 +203,7 @@ SMS text
            ▼
 ┌─────────────────────┐
 │ Extract nonce       │  Read first 12 bytes; extract timestamp from bytes 0-3
-│ Validate timestamp  │  Reject if outside 24h window (before GCM decryption)
+│ Validate timestamp  │  Reject if outside 7-day window (before GCM decryption)
 └──────────┬──────────┘
            ▼
 ┌─────────────────────┐
@@ -276,6 +277,7 @@ Key authenticity can be verified by comparing **SHA-256 fingerprints** (first 16
 
 ```
 Key bytes → SHA-256 → first 16 bytes → each byte mapped to one of 256 unique emoji
+Displayed as 4 rows of 4 emoji for easy visual comparison
 ```
 
 Both parties should verify the fingerprint matches via a separate secure channel.
@@ -286,7 +288,7 @@ Both parties should verify the fingerprint matches via a separate secure channel
 |---|---|
 | Confidentiality | AES-256-GCM |
 | Integrity & Authenticity | GCM authentication tag (128-bit) |
-| Replay protection | Timestamp in nonce (24h window) + nonce replay cache (1000 entries) |
+| Replay protection | Timestamp in nonce (7-day window) + nonce replay cache (1000 entries, 7-day TTL) |
 | Key separation | HKDF with domain-specific info string |
 | Key storage | Android Keystore (TEE) + EncryptedSharedPreferences |
 | Steganography | Base64 / Cyrillic Base64 / Russian Words encoding |
@@ -320,4 +322,4 @@ Fixed overhead: 29 bytes (12B nonce + 16B GCM tag + 1B MetaInfo)
 - **Timestamp granularity**: 1-second resolution, 32-bit Unix timestamp (overflows in 2106)
 - **SMS size constraints**: Steganographic encoding expands message size; long messages may be split into multiple SMS segments by the carrier
 - **No deniability**: Both parties share the same symmetric key and can prove the other sent a message
-- **Nonce cache is in-memory**: Replay detection is lost on app restart; within the 24-hour timestamp window, a restart allows replay of previously seen messages
+- **Nonce cache is in-memory**: Replay detection is lost on app restart; within the 7-day timestamp window, a restart allows replay of previously seen messages

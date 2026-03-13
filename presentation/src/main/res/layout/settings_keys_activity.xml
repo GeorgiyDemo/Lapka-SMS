@@ -15,49 +15,6 @@
             android:orientation="vertical"
             android:paddingBottom="8dp">
 
-        <androidx.cardview.widget.CardView
-                android:id="@+id/guideCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="4dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="?android:attr/colorBackground">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                <com.moez.QKSMS.common.widget.QkTextView
-                        android:id="@+id/guideToggle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:textStyle="bold"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:text="@string/encryption_guide_toggle"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?android:attr/selectableItemBackground"/>
-
-                <com.moez.QKSMS.common.widget.QkTextView
-                        android:id="@+id/guideText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingBottom="16dp"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:lineSpacingExtra="2dp"
-                        android:text="@string/encryption_guide_text"
-                        android:visibility="gone"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
         <com.moez.QKSMS.common.widget.QkTextView
                 android:id="@+id/encryptionKeyCategory"
                 style="@style/PreferenceCategory"

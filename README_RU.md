@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English version</a> · <a href="SETUP_GUIDE_RU.md">Настройка шифрования</a> · <a href="PROTOCOL_RU.md">Протокол</a>
+  <a href="README.md">English version</a> · <a href="PROTOCOL_RU.md">Протокол</a>
 </p>
 
 ---

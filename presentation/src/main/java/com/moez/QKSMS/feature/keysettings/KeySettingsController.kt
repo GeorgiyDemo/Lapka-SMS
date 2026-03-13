@@ -246,8 +246,7 @@ class KeySettingsController(
             val hash = MessageDigest.getInstance("SHA-256").digest(keyBytes)
             hash.take(16)
                 .map { FINGERPRINT_EMOJI[it.toInt() and 0xFF] }
-                .chunked(4) { it.joinToString("") }
-                .chunked(2) { it.joinToString("  ") }
+                .chunked(4) { it.joinToString(" ") }
                 .joinToString("\n")
         } catch (e: Exception) {
             ""
@@ -262,18 +261,6 @@ class KeySettingsController(
 
         keyField.addTextChangedListener(keyTextWatcher)
         copyKey.setOnClickListener { copyKey() }
-
-        val guideToggle = containerView!!.findViewById<TextView>(R.id.guideToggle)
-        val guideText = containerView!!.findViewById<TextView>(R.id.guideText)
-        guideToggle.setOnClickListener {
-            if (guideText.visibility == View.GONE) {
-                guideText.visibility = View.VISIBLE
-                guideToggle.setText(R.string.encryption_guide_toggle_expanded)
-            } else {
-                guideText.visibility = View.GONE
-                guideToggle.setText(R.string.encryption_guide_toggle)
-            }
-        }
     }
 
     override fun onDestroyView(view: View) {
@@ -303,8 +290,29 @@ class KeySettingsController(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.help) {
+            showEncryptionGuide()
+            return true
+        }
         optionsItemIntent.onNext(item.itemId)
         return true
+    }
+
+    private fun showEncryptionGuide() {
+        val ctx = activity ?: return
+        val html = context.getString(R.string.encryption_guide_text)
+            .replace("\n", "<br>")
+        val spanned = android.text.Html.fromHtml(html, android.text.Html.FROM_HTML_MODE_LEGACY)
+
+        val view = android.view.LayoutInflater.from(ctx)
+            .inflate(R.layout.dialog_encryption_guide, null)
+        view.findViewById<TextView>(R.id.guideContent).text = spanned
+
+        MaterialAlertDialogBuilder(ctx)
+            .setTitle(R.string.encryption_guide_toggle)
+            .setView(view)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     override fun handleBack(): Boolean {
