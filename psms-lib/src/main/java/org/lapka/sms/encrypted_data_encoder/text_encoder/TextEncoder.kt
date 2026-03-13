@@ -22,6 +22,8 @@ class TextEncoder(
     )
 
     companion object {
+        private const val MAX_PADDING_ATTEMPTS = 1024
+
         @JvmStatic
         fun getInstance(): TextEncoder = instanceHolder
 
@@ -34,10 +36,15 @@ class TextEncoder(
         var dataCopy = data
         var actualData = data
         val bytesList = mutableListOf<Byte>()
+        var totalAttempts = 0
         while (true) {
             try {
                 return actualEncode(actualData)
             } catch (_: RequirePadding) {
+                totalAttempts++
+                if (totalAttempts > MAX_PADDING_ATTEMPTS) {
+                    throw InvalidDataException("Failed to encode: padding attempts exhausted")
+                }
                 if (bytesList.isEmpty()) {
                     dataCopy = actualData
                     val bytes = ByteArray(256) { it.toByte() }

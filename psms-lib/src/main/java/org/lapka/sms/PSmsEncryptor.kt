@@ -24,8 +24,6 @@ class PSmsEncryptor(
     private val aesGcmEncryptor: AesGcmEncryptor = AesGcmEncryptor(),
     private val nonceCache: NonceCache = NonceCache.getDefault()
 ) {
-    private var plainDataEncoder: PlainDataEncoder? = null
-    private var encryptedDataEncoder: EncryptedDataEncoder? = null
 
     private fun deriveEncKey(masterKey: ByteArray): ByteArray {
         return Hkdf.deriveKey(masterKey, ENC_KEY_INFO, 32)
@@ -54,14 +52,20 @@ class PSmsEncryptor(
                 (data[0].toInt() and 0xFF)
     }
 
-    private fun pack(data: ByteArray, channelId: Int?): ByteArray {
-        val encoder = plainDataEncoder!!
+    private fun pack(data: ByteArray, channelId: Int?, encoder: PlainDataEncoder): ByteArray {
         val metaInfo = MetaInfo(encoder.mode, VERSION, channelId != null)
         val channelIdBytes = if (channelId != null) intToByteArray(channelId) else byteArrayOf()
         return data + channelIdBytes + byteArrayOf(metaInfo.toByte())
     }
 
-    private fun unpack(data: ByteArray): Triple<Int?, ByteArray, MetaInfo> {
+    private data class UnpackResult(
+        val channelId: Int?,
+        val textBytes: ByteArray,
+        val metaInfo: MetaInfo,
+        val plainDataEncoder: PlainDataEncoder
+    )
+
+    private fun unpack(data: ByteArray): UnpackResult {
         if (data.isEmpty()) throw InvalidDataException("Empty data")
 
         val metaInfoByte = data[data.size - 1]
@@ -72,7 +76,7 @@ class PSmsEncryptor(
 
         if (metaInfo.isChannel && payloadEnd < CHANNEL_ID_SIZE) throw InvalidDataException()
 
-        plainDataEncoder = plainDataEncoderFactory.create(metaInfo.mode)
+        val plainDataEncoder = plainDataEncoderFactory.create(metaInfo.mode)
 
         val dataEnd = if (metaInfo.isChannel) payloadEnd - CHANNEL_ID_SIZE else payloadEnd
         val channelId = if (metaInfo.isChannel) {
@@ -80,7 +84,7 @@ class PSmsEncryptor(
         } else null
         val textBytes = data.copyOf(dataEnd)
 
-        return Triple(channelId, textBytes, metaInfo)
+        return UnpackResult(channelId, textBytes, metaInfo, plainDataEncoder)
     }
 
     // --- Encode ---
@@ -99,12 +103,11 @@ class PSmsEncryptor(
 
     fun encode(message: Message, key: ByteArray, encryptionSchemeId: Int, plainDataEncoder: PlainDataEncoder): String {
         val encKey = deriveEncKey(key)
-        this.plainDataEncoder = plainDataEncoder
-        this.encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
+        val encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
         val encoded = plainDataEncoder.encode(message.text)
-        val packed = pack(encoded, message.channelId)
+        val packed = pack(encoded, message.channelId, plainDataEncoder)
         val encrypted = aesGcmEncryptor.encrypt(encKey, packed)
-        return encryptedDataEncoder!!.encode(encrypted)
+        return encryptedDataEncoder.encode(encrypted)
     }
 
     // --- Decode ---
@@ -115,9 +118,9 @@ class PSmsEncryptor(
 
     private fun decodeInternal(str: String, key: ByteArray, encryptionSchemeId: Int, checkReplay: Boolean): Message {
         val encKey = deriveEncKey(key)
-        encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
-        var raw = encryptedDataEncoder!!.decode(str)
-        if (encryptedDataEncoder!!.hasFrontPadding()) {
+        val encryptedDataEncoder = encryptedDataEncoderFactory.create(encryptionSchemeId)
+        var raw = encryptedDataEncoder.decode(str)
+        if (encryptedDataEncoder.hasFrontPadding()) {
             var stripped = 0
             while (true) {
                 try {
@@ -155,9 +158,9 @@ class PSmsEncryptor(
             nonceCache.add(nonce)
         }
 
-        val (channelId, textBytes, _) = unpack(decrypted)
+        val result = unpack(decrypted)
 
-        return Message(plainDataEncoder!!.decode(textBytes), channelId)
+        return Message(result.plainDataEncoder.decode(result.textBytes), result.channelId)
     }
 
     // --- Utility ---

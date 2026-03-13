@@ -130,8 +130,6 @@ class Preferences @Inject constructor(
     val signature = rxPrefs.getString("signature", "")
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val autoDelete = rxPrefs.getInteger("autoDelete", 0)
-    val logging = rxPrefs.getBoolean("logging", false)
-
     // partisan
     private val securePrefs: RxSharedPreferences = run {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
