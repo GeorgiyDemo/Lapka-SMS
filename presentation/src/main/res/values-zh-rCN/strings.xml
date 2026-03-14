@@ -329,6 +329,7 @@
     <string name="encoding_scheme_base64_cyrillic">西里尔 Base64</string>
     <string name="encoding_scheme_default">使用设置中的方案</string>
     <string name="encoding_scheme_russian_words">俄语单词</string>
+    <string name="encoding_scheme_english_words">英语单词</string>
     <string name="encrypted_indicator_content_description">加密消息</string>
     <string name="encryption_key_copied">密钥已复制。分享后请从剪贴板删除！</string>
     <string name="encryption_send_failed">加密失败，消息未发送</string>

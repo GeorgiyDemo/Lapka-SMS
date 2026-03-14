@@ -340,6 +340,7 @@
     <string name="encoding_scheme_base64">Base64</string>
     <string name="encoding_scheme_base64_cyrillic">Base64 Cyrillic</string>
     <string name="encoding_scheme_russian_words">کلمات روسی</string>
+    <string name="encoding_scheme_english_words">کلمات انگلیسی</string>
     <string name="show_in_task_switcher">نمایش محتوای برنامه در Task Switcher</string>
     <string name="channel_id">مشخصه کانال</string>
     <string name="invalid_key">کلید نامعتبر</string>

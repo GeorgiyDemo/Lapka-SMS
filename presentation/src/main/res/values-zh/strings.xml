@@ -330,6 +330,7 @@
     <string name="encoding_scheme_base64_cyrillic">西里爾 Base64</string>
     <string name="encoding_scheme_default">使用設定中的方案</string>
     <string name="encoding_scheme_russian_words">俄語單詞</string>
+    <string name="encoding_scheme_english_words">英語單詞</string>
     <string name="encrypted_indicator_content_description">加密訊息</string>
     <string name="encryption_key_copied">金鑰已複製。分享後請從剪貼簿刪除！</string>
     <string name="encryption_send_failed">加密失敗，訊息未發送</string>

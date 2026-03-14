@@ -337,6 +337,7 @@
     <string name="encoding_scheme_base64_cyrillic">سیریلک Base64</string>
     <string name="encoding_scheme_default">سیٹنگز سے اسکیم استعمال کریں</string>
     <string name="encoding_scheme_russian_words">روسی الفاظ</string>
+    <string name="encoding_scheme_english_words">انگریزی الفاظ</string>
     <string name="encrypted_indicator_content_description">انکرپٹڈ پیغام</string>
     <string name="encryption_key_copied">کی کاپی ہو گئی۔ شیئر کرنے کے بعد کلپ بورڈ سے حذف کریں!</string>
     <string name="encryption_send_failed">انکرپشن ناکام، پیغام نہیں بھیجا گیا</string>
