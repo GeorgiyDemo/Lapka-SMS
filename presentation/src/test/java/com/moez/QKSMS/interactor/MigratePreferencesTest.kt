@@ -37,8 +37,6 @@ class MigratePreferencesTest {
     private lateinit var qkreplyTapDismissOldPref: Preference<Boolean>
     private lateinit var textSizePref: Preference<Int>
     private lateinit var textSizeStringPref: Preference<String>
-    private lateinit var unicodePref: Preference<Boolean>
-    private lateinit var unicodeOldPref: Preference<Boolean>
 
     @Suppress("UNCHECKED_CAST")
     @Before
@@ -93,11 +91,6 @@ class MigratePreferencesTest {
         doReturn(textSizePref).`when`(prefs).textSize
         doReturn(1).`when`(textSizePref).get()
 
-        unicodePref = mock(Preference::class.java) as Preference<Boolean>
-        unicodeOldPref = mock(Preference::class.java) as Preference<Boolean>
-        doReturn(unicodePref).`when`(prefs).unicode
-        doReturn(false).`when`(unicodePref).get()
-
         migratePreferences = MigratePreferences(nightModeManager, prefs, rxPrefs)
     }
 
@@ -113,8 +106,7 @@ class MigratePreferencesTest {
         delivery: Boolean = false,
         qkreply: Boolean = false,
         qkreplyDismiss: Boolean = true,
-        fontSize: String = "1",
-        unicode: Boolean = false
+        fontSize: String = "1"
     ) {
         doReturn(themeStringPref).`when`(rxPrefs).getString(eq("pref_key_theme"), anyString())
         doReturn(theme).`when`(themeStringPref).get()
@@ -137,8 +129,6 @@ class MigratePreferencesTest {
         doReturn(textSizeStringPref).`when`(rxPrefs).getString(eq("pref_key_font_size"), anyString())
         doReturn(fontSize).`when`(textSizeStringPref).get()
 
-        doReturn(unicodeOldPref).`when`(rxPrefs).getBoolean(eq("pref_key_strip_unicode"), anyBoolean())
-        doReturn(unicode).`when`(unicodeOldPref).get()
     }
 
     @Test
@@ -226,18 +216,6 @@ class MigratePreferencesTest {
         subscriber.awaitTerminalEvent()
 
         verify(deliveryPref).set(true)
-    }
-
-    @Test
-    fun `migrates unicode preference`() {
-        setupWelcomeSeen(true)
-        setupOldPreferences(unicode = true)
-
-        val subscriber = TestSubscriber<Any>()
-        migratePreferences.buildObservable(Unit).subscribe(subscriber)
-        subscriber.awaitTerminalEvent()
-
-        verify(unicodePref).set(true)
     }
 
     @Test
