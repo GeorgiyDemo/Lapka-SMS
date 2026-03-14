@@ -411,6 +411,7 @@
     <string name="encoding_scheme_base64">Base64</string>
     <string name="encoding_scheme_base64_cyrillic">Base64 Cyrillic</string>
     <string name="encoding_scheme_russian_words">Russian Words</string>
+    <string name="encoding_scheme_english_words">English Words</string>
     <string name="show_in_task_switcher">Show App Content in Task Switcher</string>
     <string name="channel_id">Channel ID</string>
     <string name="invalid_key">Invalid Key</string>
@@ -433,6 +434,6 @@
 
     <string name="encryption_guide_toggle">How to enable encryption ▼</string>
     <string name="encryption_guide_toggle_expanded">How to enable encryption ▲</string>
-    <string name="encryption_guide_text"><b>1.</b> Tap <b>\"Encryption key\"</b> to enable the toggle.\n\n<b>2.</b> Tap <b>\"Generate new key\"</b> — or scan your partner\'s QR code.\n\n<b>3.</b> Share the key with your partner — show the QR code or copy and send via a <b>secure channel</b> (in person, Signal, etc.). Do NOT send the key via regular SMS!\n\n<b>4.</b> Choose an <b>encoding scheme</b>:\n    • <b>Base64</b> — compact, looks like random characters\n    • <b>Cyrillic Base64</b> — same but in Cyrillic\n    • <b>Russian Words</b> — steganography: messages look like normal Russian text\n\n<b>5.</b> In the chat, tap the <b>lock icon</b> to toggle encryption on/off per message.\n\n<b>Emoji fingerprint</b> below the key must match on both devices — this confirms you have the same key.</string>
+    <string name="encryption_guide_text"><b>1.</b> Tap <b>\"Encryption key\"</b> to enable the toggle.\n\n<b>2.</b> Tap <b>\"Generate new key\"</b> — or scan your partner\'s QR code.\n\n<b>3.</b> Share the key with your partner — show the QR code or copy and send via a <b>secure channel</b> (in person, Signal, etc.). Do NOT send the key via regular SMS!\n\n<b>4.</b> Choose an <b>encoding scheme</b>:\n    • <b>Base64</b> — compact, looks like random characters\n    • <b>Cyrillic Base64</b> — same but in Cyrillic\n    • <b>Russian Words</b> — steganography: messages look like normal Russian text\n    • <b>English Words</b> — steganography: messages look like normal English text\n\n<b>5.</b> In the chat, tap the <b>lock icon</b> to toggle encryption on/off per message.\n\n<b>Emoji fingerprint</b> below the key must match on both devices — this confirms you have the same key.</string>
     <string name="encrypted_indicator_content_description">Encrypted message</string>
 </resources>

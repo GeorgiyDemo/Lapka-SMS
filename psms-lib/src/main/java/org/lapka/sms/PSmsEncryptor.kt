@@ -179,11 +179,17 @@ class PSmsEncryptor(
         }
         val minSize = AesGcmEncryptor.GCM_NONCE_LENGTH + AesGcmEncryptor.GCM_TAG_BYTES + 1 // +1 for MetaInfo
         if (raw.size < minSize) return null
-        val timestamp = AesGcmEncryptor.extractTimestampFromNonce(raw)
+        // Front-padding encoders (TEXT, TEXT_ENGLISH) produce decoded bytes with
+        // a few leading bytes that need stripping before the nonce. Try multiple
+        // offsets so quickCheck doesn't reject valid messages.
+        val maxOffset = if (encoder.hasFrontPadding()) minOf(MAX_FRONT_PADDING_STRIP, raw.size - minSize) else 0
         val now = System.currentTimeMillis() / 1000
-        val ts = timestamp.toLong() and 0xFFFFFFFFL
-        if (ts > now + MAX_FUTURE_SECONDS || ts < now - MAX_MESSAGE_AGE_SECONDS) return null
-        return raw
+        for (offset in 0..maxOffset) {
+            val timestamp = AesGcmEncryptor.extractTimestampFromNonce(raw.sliceArray(offset until raw.size))
+            val ts = timestamp.toLong() and 0xFFFFFFFFL
+            if (ts in (now - MAX_MESSAGE_AGE_SECONDS)..(now + MAX_FUTURE_SECONDS)) return raw
+        }
+        return null
     }
 
     fun isEncrypted(str: String, key: ByteArray): Boolean {

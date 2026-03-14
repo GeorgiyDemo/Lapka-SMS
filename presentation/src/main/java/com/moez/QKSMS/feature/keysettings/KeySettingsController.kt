@@ -103,6 +103,7 @@ class KeySettingsController(
     private val schemeBase64: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64)
     private val schemeBase64Cyrillic: RadioButton get() = containerView!!.findViewById(R.id.schemeBase64Cyrillic)
     private val schemeRussianWords: RadioButton get() = containerView!!.findViewById(R.id.schemeRussianWords)
+    private val schemeEnglishWords: RadioButton get() = containerView!!.findViewById(R.id.schemeEnglishWords)
 
     init {
         appComponent
@@ -164,6 +165,7 @@ class KeySettingsController(
         renderEncodingRadioButton(schemeBase64, nonKeyEncryptionSettingsEnabled)
         renderEncodingRadioButton(schemeBase64Cyrillic, nonKeyEncryptionSettingsEnabled)
         renderEncodingRadioButton(schemeRussianWords, nonKeyEncryptionSettingsEnabled)
+        renderEncodingRadioButton(schemeEnglishWords, nonKeyEncryptionSettingsEnabled)
         if (state.encodingScheme >= 0) {
             encodingSchemes.check(encodingSchemes[state.encodingScheme].id)
         }
