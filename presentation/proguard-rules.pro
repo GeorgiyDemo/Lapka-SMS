@@ -86,7 +86,7 @@
 
 # Crypto & steganography classes — must not be obfuscated or removed by R8
 -keep class org.lapka.sms.** { *; }
--keep class com.moez.QKSMS.crypto.** { *; }
+-keep class org.lapka.sms.crypto.** { *; }
 
 # psms-lib encryption classes — must not be obfuscated or removed by R8
 -keep class org.lapka.sms.** { *; }

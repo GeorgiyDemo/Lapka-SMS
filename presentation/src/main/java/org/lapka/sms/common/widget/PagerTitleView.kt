@@ -1,0 +1,130 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.lapka.sms.common.widget
+
+import android.content.Context
+import android.content.res.ColorStateList
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
+import org.lapka.sms.R
+import org.lapka.sms.common.util.Colors
+import org.lapka.sms.common.util.extensions.forEach
+import org.lapka.sms.common.util.extensions.resolveThemeColor
+import org.lapka.sms.extensions.Optional
+import org.lapka.sms.injection.appComponent
+import org.lapka.sms.repository.ConversationRepository
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
+import javax.inject.Inject
+
+class PagerTitleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    LinearLayout(context, attrs) {
+
+    @Inject
+    lateinit var colors: Colors
+
+    @Inject
+    lateinit var conversationRepo: ConversationRepository
+
+    private val recipientId: Subject<Long> = BehaviorSubject.create()
+
+    private var pageChangeListener: ViewPager.OnPageChangeListener? = null
+
+    var pager: ViewPager? = null
+        set(value) {
+            if (field !== value) {
+                pageChangeListener?.let { field?.removeOnPageChangeListener(it) }
+                field = value
+                recreate()
+            }
+        }
+
+    init {
+        if (!isInEditMode) appComponent.inject(this)
+    }
+
+    fun setRecipientId(id: Long) {
+        recipientId.onNext(id)
+    }
+
+    private fun recreate() {
+        removeAllViews()
+
+        pager?.adapter?.count?.forEach { position ->
+            val view = LayoutInflater.from(context).inflate(R.layout.tab_view, this, false)
+            view.findViewById<TextView>(R.id.label).text = pager?.adapter?.getPageTitle(position)
+            view.setOnClickListener { pager?.currentItem = position }
+
+            addView(view)
+        }
+
+        childCount.forEach { index ->
+            getChildAt(index).isActivated = index == pager?.currentItem
+        }
+
+        val listener = object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                childCount.forEach { index ->
+                    getChildAt(index).isActivated = index == position
+                }
+            }
+        }
+        pageChangeListener = listener
+        pager?.addOnPageChangeListener(listener)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        pageChangeListener?.let { pager?.removeOnPageChangeListener(it) }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_activated),
+            intArrayOf(-android.R.attr.state_activated)
+        )
+
+        recipientId
+            .distinctUntilChanged()
+            .observeOn(Schedulers.io())
+            .map { recipientId -> Optional(conversationRepo.getRecipient(recipientId)) }
+            .switchMap { recipient -> colors.themeObservable(recipient.value) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { theme ->
+                val textSecondary = context.resolveThemeColor(android.R.attr.textColorSecondary)
+                ColorStateList(states, intArrayOf(theme.theme, textSecondary))
+            }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe { colorStateList ->
+                childCount.forEach { index ->
+                    (getChildAt(index) as? TextView)?.setTextColor(colorStateList)
+                }
+            }
+    }
+
+}

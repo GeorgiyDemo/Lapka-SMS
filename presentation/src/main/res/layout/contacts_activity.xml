@@ -24,7 +24,7 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    android:orientation="vertical"
-                                                   tools:context="com.moez.QKSMS.feature.compose.ComposeActivity">
+                                                   tools:context="org.lapka.sms.feature.compose.ComposeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contacts"
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true">
 
-            <com.moez.QKSMS.common.widget.QkEditText
+            <org.lapka.sms.common.widget.QkEditText
                     android:id="@+id/search"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

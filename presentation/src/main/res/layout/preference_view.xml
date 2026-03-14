@@ -24,7 +24,7 @@
        android:background="?attr/selectableItemBackground"
        android:gravity="center_vertical"
        android:orientation="horizontal"
-       tools:parentTag="com.moez.QKSMS.common.widget.PreferenceView">
+       tools:parentTag="org.lapka.sms.common.widget.PreferenceView">
 
     <ImageView
             android:id="@+id/icon"
@@ -46,7 +46,7 @@
             android:paddingRight="24dp"
             android:paddingBottom="16dp">
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <org.lapka.sms.common.widget.QkTextView
                 android:id="@+id/titleView"
                 style="@style/TextPrimary"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 android:duplicateParentState="true"
                 tools:text="Default SMS App"/>
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <org.lapka.sms.common.widget.QkTextView
                 android:id="@+id/summaryView"
                 style="@style/TextSecondary"
                 android:layout_width="match_parent"

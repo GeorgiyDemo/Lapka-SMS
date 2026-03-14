@@ -40,13 +40,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.lapka.sms.common.widget.QkTextView
                     android:id="@+id/toolbarTitle"
                     style="@style/ToolbarText"
                     android:layout_marginStart="16dp"
                     android:visibility="gone"/>
 
-            <com.moez.QKSMS.common.widget.QkEditText
+            <org.lapka.sms.common.widget.QkEditText
                     android:id="@+id/toolbarSearch"
                     style="@style/ToolbarText"
                     android:layout_height="48dp"
@@ -86,7 +86,7 @@
                     android:src="@drawable/ic_message_black_24dp"
                     android:importantForAccessibility="no"/>
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.lapka.sms.common.widget.QkTextView
                     android:id="@+id/empty"
                     style="@style/TextSecondary"
                     android:layout_width="wrap_content"

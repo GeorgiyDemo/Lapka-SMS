@@ -23,14 +23,14 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    namespace "com.moez.QKSMS"
+    namespace "org.lapka.sms"
     compileSdkVersion 35
     defaultConfig {
-        applicationId "com.moez.QKSMS"
+        applicationId "org.lapka.sms"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 5001
-        versionName "5.0.1"
+        versionCode 5002
+        versionName "5.0.2"
         setProperty("archivesBaseName", "Lapka-SMS-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,12 +45,6 @@ android {
             shrinkResources false
             signingConfig signingConfigs.release
             applicationIdSuffix ""
-        }
-    }
-
-    applicationVariants.all { variant ->
-        if (!variant.name.contains("debug")) {
-            variant.mergedFlavor.applicationId = "org.lapka.sms"
         }
     }
 

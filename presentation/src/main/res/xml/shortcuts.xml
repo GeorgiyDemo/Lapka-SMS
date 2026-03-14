@@ -29,7 +29,7 @@
 
         <intent
                 android:action="org.lapka.sms.START"
-                android:targetClass="com.moez.QKSMS.feature.compose.ComposeActivity"
+                android:targetClass="org.lapka.sms.feature.compose.ComposeActivity"
                 android:targetPackage="org.lapka.sms"/>
 
         <categories android:name="android.shortcut.conversation"/>

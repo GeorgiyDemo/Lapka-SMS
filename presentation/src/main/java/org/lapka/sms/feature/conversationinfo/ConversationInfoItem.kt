@@ -1,0 +1,22 @@
+package org.lapka.sms.feature.conversationinfo
+
+import org.lapka.sms.model.Recipient
+import io.realm.RealmList
+
+sealed class ConversationInfoItem {
+
+    data class ConversationInfoRecipient(val value: Recipient) : ConversationInfoItem()
+
+    data class ConversationInfoSettings(
+        val name: String,
+        val recipients: RealmList<Recipient>,
+        val archived: Boolean,
+        val blocked: Boolean,
+        // partisan
+        val encryptionKeyExist: Boolean,
+        val deleteEncryptedAfter: Int,
+        var deleteReceivedAfter: Int,
+        var deleteSentAfter: Int
+    ) : ConversationInfoItem()
+
+}

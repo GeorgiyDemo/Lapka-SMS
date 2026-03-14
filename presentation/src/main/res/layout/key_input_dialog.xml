@@ -20,7 +20,7 @@
                 android:contentDescription="@string/button_generate"
                 android:tint="?android:attr/textColorPrimary"/>
 
-        <com.moez.QKSMS.common.widget.QkEditText
+        <org.lapka.sms.common.widget.QkEditText
                 android:id="@+id/field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <org.lapka.sms.common.widget.QkTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"

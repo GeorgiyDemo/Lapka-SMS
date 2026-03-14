@@ -20,7 +20,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace "com.moez.QKSMS.common"
+    namespace "org.lapka.sms.common"
     compileSdkVersion 35
 
     compileOptions {

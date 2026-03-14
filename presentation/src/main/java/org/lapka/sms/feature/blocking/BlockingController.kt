@@ -1,0 +1,105 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.lapka.sms.feature.blocking
+
+import android.view.View
+import android.widget.LinearLayout
+import com.bluelinelabs.conductor.RouterTransaction
+import com.jakewharton.rxbinding2.view.clicks
+import org.lapka.sms.R
+import org.lapka.sms.common.QkChangeHandler
+import org.lapka.sms.common.base.QkController
+import org.lapka.sms.common.util.Colors
+import org.lapka.sms.common.util.extensions.animateLayoutChanges
+import org.lapka.sms.common.widget.PreferenceView
+import org.lapka.sms.common.widget.QkSwitch
+import org.lapka.sms.feature.blocking.manager.BlockingManagerController
+import org.lapka.sms.feature.blocking.messages.BlockedMessagesController
+import org.lapka.sms.feature.blocking.numbers.BlockedNumbersController
+import org.lapka.sms.injection.appComponent
+import javax.inject.Inject
+
+class BlockingController : QkController<BlockingView, BlockingState, BlockingPresenter>(), BlockingView {
+
+    private val blockingManager: PreferenceView get() = containerView!!.findViewById(R.id.blockingManager)
+    private val blockedNumbers: PreferenceView get() = containerView!!.findViewById(R.id.blockedNumbers)
+    private val blockedMessages: PreferenceView get() = containerView!!.findViewById(R.id.blockedMessages)
+    private val drop: PreferenceView get() = containerView!!.findViewById(R.id.drop)
+    private val parent: LinearLayout get() = containerView!!.findViewById(R.id.parent)
+
+    override val blockingManagerIntent by lazy { blockingManager.clicks() }
+    override val blockedNumbersIntent by lazy { blockedNumbers.clicks() }
+    override val blockedMessagesIntent by lazy { blockedMessages.clicks() }
+    override val dropClickedIntent by lazy { drop.clicks() }
+
+    @Inject
+    lateinit var colors: Colors
+
+    @Inject
+    override lateinit var presenter: BlockingPresenter
+
+    init {
+        appComponent.inject(this)
+        retainViewMode = RetainViewMode.RETAIN_DETACH
+        layoutRes = R.layout.blocking_controller
+    }
+
+    override fun onViewCreated() {
+        super.onViewCreated()
+        parent.postDelayed({ containerView?.findViewById<LinearLayout>(R.id.parent)?.animateLayoutChanges = true }, 100)
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        presenter.bindIntents(this)
+        setTitle(R.string.blocking_title)
+        showBackButton(true)
+    }
+
+    override fun render(state: BlockingState) {
+        blockingManager.summary = state.blockingManager
+        drop.findViewById<QkSwitch>(R.id.checkbox).isChecked = state.dropEnabled
+        blockedMessages.isEnabled = !state.dropEnabled
+    }
+
+    override fun openBlockedNumbers() {
+        router.pushController(
+            RouterTransaction.with(BlockedNumbersController())
+                .pushChangeHandler(QkChangeHandler())
+                .popChangeHandler(QkChangeHandler())
+        )
+    }
+
+    override fun openBlockedMessages() {
+        router.pushController(
+            RouterTransaction.with(BlockedMessagesController())
+                .pushChangeHandler(QkChangeHandler())
+                .popChangeHandler(QkChangeHandler())
+        )
+    }
+
+    override fun openBlockingManager() {
+        router.pushController(
+            RouterTransaction.with(BlockingManagerController())
+                .pushChangeHandler(QkChangeHandler())
+                .popChangeHandler(QkChangeHandler())
+        )
+    }
+
+}

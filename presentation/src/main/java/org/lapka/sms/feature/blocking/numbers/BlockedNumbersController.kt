@@ -1,0 +1,104 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.lapka.sms.feature.blocking.numbers
+
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding2.view.clicks
+import org.lapka.sms.R
+import org.lapka.sms.common.base.QkController
+import org.lapka.sms.common.util.Colors
+import org.lapka.sms.common.util.extensions.setBackgroundTint
+import org.lapka.sms.common.util.extensions.setTint
+import org.lapka.sms.injection.appComponent
+import org.lapka.sms.util.PhoneNumberUtils
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import javax.inject.Inject
+
+class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbersState, BlockedNumbersPresenter>(),
+    BlockedNumbersView {
+
+    @Inject
+    override lateinit var presenter: BlockedNumbersPresenter
+
+    @Inject
+    lateinit var colors: Colors
+
+    @Inject
+    lateinit var phoneNumberUtils: PhoneNumberUtils
+
+    private val adapter = BlockedNumbersAdapter()
+    private val saveAddressSubject: Subject<String> = PublishSubject.create()
+
+    private val add: ImageView get() = containerView!!.findViewById(R.id.add)
+    private val empty: TextView get() = containerView!!.findViewById(R.id.empty)
+    private val numbers: RecyclerView get() = containerView!!.findViewById(R.id.numbers)
+
+    init {
+        appComponent.inject(this)
+        retainViewMode = RetainViewMode.RETAIN_DETACH
+        layoutRes = R.layout.blocked_numbers_controller
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        presenter.bindIntents(this)
+        setTitle(R.string.blocked_numbers_title)
+        showBackButton(true)
+    }
+
+    override fun onViewCreated() {
+        super.onViewCreated()
+        add.setBackgroundTint(colors.theme().theme)
+        add.setTint(colors.theme().textPrimary)
+        adapter.emptyView = empty
+        numbers.adapter = adapter
+    }
+
+    override fun render(state: BlockedNumbersState) {
+        adapter.updateData(state.numbers)
+    }
+
+    override fun unblockAddress(): Observable<Long> = adapter.unblockAddress
+    override fun addAddress(): Observable<*> = add.clicks()
+    override fun saveAddress(): Observable<String> = saveAddressSubject
+
+    override fun showAddDialog() {
+        val layout = LayoutInflater.from(activity).inflate(R.layout.blocked_numbers_add_dialog, null)
+        val input = layout.findViewById<EditText>(R.id.input)
+        val textWatcher = BlockedNumberTextWatcher(input, phoneNumberUtils)
+        val ctx = activity ?: return
+        val dialog = MaterialAlertDialogBuilder(ctx)
+            .setView(layout)
+            .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
+                saveAddressSubject.onNext(input.text.toString())
+            }
+            .setNegativeButton(R.string.button_cancel) { _, _ -> }
+            .setOnDismissListener { textWatcher.dispose() }
+        dialog.show()
+    }
+
+}

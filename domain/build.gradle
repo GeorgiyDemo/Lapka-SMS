@@ -23,7 +23,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    namespace "com.moez.QKSMS.domain"
+    namespace "org.lapka.sms.domain"
     compileSdkVersion 35
 
     compileOptions {
