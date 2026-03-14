@@ -28,7 +28,6 @@ import com.moez.QKSMS.common.util.extensions.makeToast
 import com.moez.QKSMS.interactor.DeleteOldMessages
 import com.moez.QKSMS.interactor.SyncMessages
 import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
 import com.moez.QKSMS.repository.MessageRepository
 import com.moez.QKSMS.repository.SyncRepository
 import com.moez.QKSMS.service.AutoDeleteService
@@ -37,7 +36,6 @@ import com.moez.QKSMS.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import java.util.*
@@ -49,7 +47,6 @@ class SettingsPresenter @Inject constructor(
     syncRepo: SyncRepository,
     private val analytics: AnalyticsManager,
     private val context: Context,
-    private val billingManager: BillingManager,
     private val dateFormatter: DateFormatter,
     private val deleteOldMessages: DeleteOldMessages,
     private val messageRepo: MessageRepository,
@@ -205,19 +202,8 @@ class SettingsPresenter @Inject constructor(
             }
 
         view.nightModeSelected()
-            .withLatestFrom(billingManager.upgradeStatus) { mode, upgraded ->
-                if (!upgraded && mode == Preferences.NIGHT_MODE_AUTO) {
-                    view.showQksmsPlusSnackbar()
-                } else {
-                    nightModeManager.updateNightMode(mode)
-                }
-            }
             .autoDisposable(view.scope())
-            .subscribe()
-
-        view.viewQksmsPlusClicks()
-            .autoDisposable(view.scope())
-            .subscribe { navigator.showQksmsPlusActivity("settings_night") }
+            .subscribe { mode -> nightModeManager.updateNightMode(mode) }
 
         view.nightStartSelected()
             .autoDisposable(view.scope())
@@ -232,15 +218,8 @@ class SettingsPresenter @Inject constructor(
             .subscribe(prefs.textSize::set)
 
         view.sendDelaySelected()
-            .withLatestFrom(billingManager.upgradeStatus) { duration, upgraded ->
-                if (!upgraded && duration != 0) {
-                    view.showQksmsPlusSnackbar()
-                } else {
-                    prefs.sendDelay.set(duration)
-                }
-            }
             .autoDisposable(view.scope())
-            .subscribe()
+            .subscribe { duration -> prefs.sendDelay.set(duration) }
 
         view.signatureChanged()
             .doOnNext(prefs.signature::set)

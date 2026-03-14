@@ -23,7 +23,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatDelegate
-import com.moez.QKSMS.manager.WidgetManager
 import com.moez.QKSMS.receiver.NightModeReceiver
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,8 +33,7 @@ import javax.inject.Singleton
 @Singleton
 class NightModeManager @Inject constructor(
     private val context: Context,
-    private val prefs: Preferences,
-    private val widgetManager: WidgetManager
+    private val prefs: Preferences
 ) {
 
     fun updateCurrentTheme() {
@@ -65,7 +63,6 @@ class NightModeManager @Inject constructor(
                         false -> AppCompatDelegate.MODE_NIGHT_NO
                     }
                 )
-                widgetManager.updateTheme()
             }
         }
     }
@@ -84,7 +81,6 @@ class NightModeManager @Inject constructor(
                     else -> AppCompatDelegate.MODE_NIGHT_NO
                 }
             )
-            widgetManager.updateTheme()
         }
 
         updateAlarms()

@@ -53,8 +53,10 @@ import com.moez.QKSMS.repository.ConversationRepository
 import com.moez.QKSMS.repository.MessageRepository
 import com.moez.QKSMS.util.GlideApp
 import com.moez.QKSMS.util.PhoneNumberUtils
+import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.util.Preferences
 import com.moez.QKSMS.util.tryOrNull
+import org.lapka.sms.PSmsEncryptor
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -176,7 +178,18 @@ class NotificationManagerImpl @Inject constructor(
                     ?.let(person::setUri)
             }
 
-            NotificationCompat.MessagingStyle.Message(message.getSummary(), message.date, person.build()).apply {
+            val summary = message.getSummary()
+            val displayText = if (conversation.encryptionKey.isNotEmpty()) {
+                try {
+                    PSmsEncryptor().tryDecode(summary, ConversationKeyStore.unwrapKeyBytes(conversation.encryptionKey)).text
+                } catch (_: Exception) {
+                    summary
+                }
+            } else {
+                summary
+            }
+
+            NotificationCompat.MessagingStyle.Message(displayText, message.date, person.build()).apply {
                 messagingStyle.addMessage(this)
             }
         }

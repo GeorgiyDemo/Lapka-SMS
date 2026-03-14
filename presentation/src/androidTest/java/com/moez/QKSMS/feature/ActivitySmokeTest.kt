@@ -11,7 +11,6 @@ import com.moez.QKSMS.feature.conversationinfo.ConversationInfoActivity
 import com.moez.QKSMS.feature.keysettings.KeySettingsActivity
 import com.moez.QKSMS.feature.main.MainActivity
 import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivity
-import com.moez.QKSMS.feature.plus.PlusActivity
 import com.moez.QKSMS.feature.qkreply.QkReplyActivity
 import com.moez.QKSMS.feature.settings.SettingsActivity
 import org.junit.Test
@@ -53,11 +52,6 @@ class ActivitySmokeTest {
         launchAndVerify<KeySettingsActivity> {
             putExtra("threadId", -1L)
         }
-    }
-
-    @Test
-    fun plusActivity_launches() {
-        launchAndVerify<PlusActivity>()
     }
 
     @Test

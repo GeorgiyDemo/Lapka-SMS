@@ -66,11 +66,8 @@
     <string name="drawer_blocking">مسدود</string>
     <string name="drawer_more">بيشتر</string>
     <string name="drawer_settings">تنظیمات</string>
-    <string name="drawer_plus">اهدا کردن</string>
     <string name="drawer_help">راهنما &amp; بازخورد</string>
     <string name="drawer_invite">دعوت دوستان</string>
-    <string name="drawer_plus_banner_summary">ویژگی های جدید شگفت انگیز را باز کرده و از توسعه نرم‌افزار پشتیبانی کنید
-    </string>
     <string name="rate_title">از QKsms لذت می برید؟</string>
     <string name="rate_summary">علاقه ی خود رابا امتیاز دادن به ما در گوگل پلی به اشتراک بگذارید</string>
     <string name="rate_okay">باشه!</string>
@@ -244,40 +241,6 @@
     <string name="about_contact_title">مخاطب</string>
     <string name="about_license_title">مجوز</string>
     <string name="about_copyright_title">حق نشر</string>
-    <string name="qksms_plus_description_title">حمایت از تولید کننده،بازشدن همه چیز</string>
-    <string name="qksms_plus_description_summary">شما میتوانید با %s از ما حمایت کنید</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">ارتقا مادام العمر به‌ازای %1$s %2$s</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">نسخه پیشرفته و حمایت به‌ازای %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">سپاس از شما برای حمایت از QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">حال شما به همه امکانات QKSMS+ دسترسی دارید</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">P-SMS یک برنامه رایگان است! اگر دوست دارید از توسعه دهندگان حمایت کنید، از
-        حمایت مالی شما به شدت قدردانی می شود.
-    </string>
-    <string name="qksms_plus_donate">اهدا کردن</string>
-    <string name="qksms_plus_coming_soon">به زودی</string>
-    <string name="qksms_plus_themes_title">پوسته‌های ویژه</string>
-    <string name="qksms_plus_themes_summary">در حالت متریال دیزاین رنگبندی پوسته امکانپذیر نیست</string>
-    <string name="qksms_plus_emoji_title">شکلک خودکار سفارشی</string>
-    <string name="qksms_plus_emoji_summary">ساخت میانبرهای سفارشی برای شکلک خودکار</string>
-    <string name="qksms_plus_delayed_title">ارسال با درنگ</string>
-    <string name="qksms_plus_delayed_summary">قبل از ارسال پیامتان چند ثانیه صبر کنید</string>
-    <string name="qksms_plus_night_title">حالت شب خودکار</string>
-    <string name="qksms_plus_night_summary">فعال کردن حالت شب براساس زمان روز</string>
-    <string name="qksms_plus_blacklist_title">مسدود کردن پیشرفته</string>
-    <string name="qksms_plus_blacklist_summary">پیام‌های دارای کلیدواژه‌ها یا مطابق با الگوها را مسدود کن</string>
-    <string name="qksms_plus_forward_title">هدایت خودکار</string>
-    <string name="qksms_plus_forward_summary">هدایت کردن پیام از فرستندگان خاص</string>
-    <string name="qksms_plus_respond_title">پاسخ خودکار</string>
-    <string name="qksms_plus_respond_summary">پاسخ خودکار به پیام‌های دریافتی با پاسخ از پیش تعیین شده</string>
-    <string name="qksms_plus_more_title">بیشتر</string>
-    <string name="qksms_plus_more_summary">QKSMS در حال توسعه فعال است، و خرید شما شامل تمام ویژگی های آینده QKSMS + نیز
-        هست !
-    </string>
-    <string name="widget_loading">درحال بارگذاری&#8230;</string>
-    <string name="widget_more">مشاهده گفتگوهای بیشتر</string>
     <string name="qkreply_menu_read">نشان به‌عنوان خوانده شده</string>
     <string name="qkreply_menu_call">تماس</string>
     <string name="qkreply_menu_delete">پاک کردن</string>
@@ -307,7 +270,6 @@
     <string name="button_undo">برگرده</string>
     <string name="toast_copied">کپی شد</string>
     <string name="toast_archived">گفتگوی بایگانی شده</string>
-    <string name="toast_qksms_plus">باید نسخه پیشرفته را فعال کنید</string>
     <plurals name="notification_new_messages">
         <item quantity="one">پیام جدید</item>
         <item quantity="other">پیام جدید</item>

@@ -30,7 +30,6 @@ import android.widget.ProgressBar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
 import com.moez.QKSMS.BuildConfig
@@ -116,7 +115,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         }
     }
 
-    private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
     private val startTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
     private val endTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
     private val signatureSubject: Subject<String> = PublishSubject.create()
@@ -204,8 +202,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun aboutLongClicks(): Observable<*> = about.longClicks()
 
-    override fun viewQksmsPlusClicks(): Observable<*> = viewQksmsPlusSubject
-
     override fun nightModeSelected(): Observable<Int> = nightModeDialog.adapter.menuItemClicks
 
     override fun nightStartSelected(): Observable<Pair<Int, Int>> = startTimeSelectedSubject
@@ -284,16 +280,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
             activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        }
-    }
-
-    override fun showQksmsPlusSnackbar() {
-        view?.let { v ->
-            Snackbar.make(v, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
-                setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
-                setActionTextColor(colors.theme().theme)
-                show()
-            }
         }
     }
 

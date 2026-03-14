@@ -29,7 +29,6 @@ import com.moez.QKSMS.crypto.ConversationKeyStore
 import com.moez.QKSMS.injection.AppComponentManager
 import com.moez.QKSMS.injection.appComponent
 import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
 import com.moez.QKSMS.manager.ReferralManager
 import com.moez.QKSMS.migration.QkMigration
 import com.moez.QKSMS.migration.QkRealmMigration
@@ -62,9 +61,6 @@ class QKApplication : Application(), HasAndroidInjector {
     @Suppress("unused")
     @Inject
     lateinit var qkMigration: QkMigration
-
-    @Inject
-    lateinit var billingManager: BillingManager
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -108,8 +104,6 @@ class QKApplication : Application(), HasAndroidInjector {
 
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             referralManager.trackReferrer()
-            billingManager.checkForPurchases()
-            billingManager.queryProducts()
         }
 
         nightModeManager.updateCurrentTheme()

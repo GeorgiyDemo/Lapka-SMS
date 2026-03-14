@@ -27,7 +27,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.R
 import com.moez.QKSMS.common.base.QkController
@@ -39,8 +38,6 @@ import com.moez.QKSMS.common.widget.PagerTitleView
 import com.moez.QKSMS.feature.themepicker.injection.ThemePickerModule
 import com.moez.QKSMS.injection.appComponent
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 class ThemePickerController(
@@ -58,8 +55,6 @@ class ThemePickerController(
 
     @Inject
     lateinit var themePagerAdapter: ThemePagerAdapter
-
-    private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
 
     private val pager: ViewPager get() = containerView!!.findViewById(R.id.pager)
     private val tabs: PagerTitleView get() = containerView!!.findViewById(R.id.tabs)
@@ -112,15 +107,6 @@ class ThemePickerController(
         }
     }
 
-    override fun showQksmsPlusSnackbar() {
-        val v = view ?: return
-        Snackbar.make(v, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
-            setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
-            setActionTextColor(colors.theme().theme)
-            show()
-        }
-    }
-
     override fun themeSelected(): Observable<Int> = themeAdapter.colorSelected
 
     override fun hsvThemeSelected(): Observable<Int> = picker.selectedColor
@@ -128,8 +114,6 @@ class ThemePickerController(
     override fun clearHsvThemeClicks(): Observable<*> = clear.clicks()
 
     override fun applyHsvThemeClicks(): Observable<*> = apply.clicks()
-
-    override fun viewQksmsPlusClicks(): Observable<*> = viewQksmsPlusSubject
 
     override fun systemDefaultClicks(): Observable<*> = systemDefault.clicks()
 

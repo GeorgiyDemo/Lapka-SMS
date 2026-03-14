@@ -38,7 +38,6 @@ import com.moez.QKSMS.extensions.asObservable
 import com.moez.QKSMS.extensions.mapNotNull
 import com.moez.QKSMS.interactor.*
 import com.moez.QKSMS.manager.ActiveConversationManager
-import com.moez.QKSMS.manager.BillingManager
 import com.moez.QKSMS.manager.PermissionManager
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Message
@@ -75,7 +74,6 @@ class ComposeViewModel @Inject constructor(
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
-    private val billingManager: BillingManager,
     private val cancelMessage: CancelDelayedMessage,
     private val conversationRepo: ConversationRepository,
     private val deleteMessages: DeleteMessages,
@@ -725,11 +723,6 @@ class ComposeViewModel @Inject constructor(
             }
             .autoDisposable(view.scope())
             .subscribe()
-
-        // View QKSMS+
-        view.viewQksmsPlusIntent
-            .autoDisposable(view.scope())
-            .subscribe { navigator.showQksmsPlusActivity("compose_schedule") }
 
         // Navigate back
         view.optionsItemIntent

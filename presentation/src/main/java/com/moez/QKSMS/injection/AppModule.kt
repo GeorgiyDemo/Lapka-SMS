@@ -29,7 +29,6 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.moez.QKSMS.blocking.BlockingClient
 import com.moez.QKSMS.blocking.BlockingManager
 import com.moez.QKSMS.common.ViewModelFactory
-import com.moez.QKSMS.common.util.BillingManagerImpl
 import com.moez.QKSMS.common.util.NotificationManagerImpl
 import com.moez.QKSMS.common.util.ShortcutManagerImpl
 import com.moez.QKSMS.feature.conversationinfo.injection.ConversationInfoComponent
@@ -43,7 +42,6 @@ import com.moez.QKSMS.manager.AlarmManager
 import com.moez.QKSMS.manager.AlarmManagerImpl
 import com.moez.QKSMS.manager.AnalyticsManager
 import com.moez.QKSMS.manager.AnalyticsManagerImpl
-import com.moez.QKSMS.manager.BillingManager
 import com.moez.QKSMS.manager.ChangelogManager
 import com.moez.QKSMS.manager.ChangelogManagerImpl
 import com.moez.QKSMS.manager.KeyManager
@@ -55,8 +53,6 @@ import com.moez.QKSMS.manager.RatingManager
 import com.moez.QKSMS.manager.ReferralManager
 import com.moez.QKSMS.manager.ReferralManagerImpl
 import com.moez.QKSMS.manager.ShortcutManager
-import com.moez.QKSMS.manager.WidgetManager
-import com.moez.QKSMS.manager.WidgetManagerImpl
 import com.moez.QKSMS.mapper.CursorToContact
 import com.moez.QKSMS.mapper.CursorToContactGroup
 import com.moez.QKSMS.mapper.CursorToContactGroupImpl
@@ -132,9 +128,6 @@ class AppModule(private var application: Application) {
     // Manager
 
     @Provides
-    fun provideBillingManager(manager: BillingManagerImpl): BillingManager = manager
-
-    @Provides
     fun provideActiveConversationManager(manager: ActiveConversationManagerImpl): ActiveConversationManager = manager
 
     @Provides
@@ -167,10 +160,7 @@ class AppModule(private var application: Application) {
     @Provides
     fun provideReferralManager(manager: ReferralManagerImpl): ReferralManager = manager
 
-    @Provides
-    fun provideWidgetManager(manager: WidgetManagerImpl): WidgetManager = manager
-
-    // Mapper
+// Mapper
 
     @Provides
     fun provideCursorToContact(mapper: CursorToContactImpl): CursorToContact = mapper

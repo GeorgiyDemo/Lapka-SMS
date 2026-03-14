@@ -18,7 +18,6 @@
  */
 package com.moez.QKSMS.feature.compose
 
-import androidx.annotation.StringRes
 import com.moez.QKSMS.common.base.QkView
 import com.moez.QKSMS.model.Conversation
 import com.moez.QKSMS.model.Recipient
@@ -39,7 +38,6 @@ interface ComposeView : QkView<ComposeState> {
     val textChangedIntent: Observable<CharSequence>
     val changeSimIntent: Observable<*>
     val sendIntent: Observable<Unit>
-    val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val encryptionKeySetIntent: Subject<Unit>
     val disableEncryptionConfirmed: Subject<Unit>
@@ -55,7 +53,6 @@ interface ComposeView : QkView<ComposeState> {
     fun showKeyboard()
     fun setDraft(draft: String)
     fun scrollToMessage(id: Long)
-    fun showQksmsPlusSnackbar(@StringRes message: Int)
     fun showSearch()
     fun clearSearch()
     fun showEncryptionKeySettings(conversation: Conversation)

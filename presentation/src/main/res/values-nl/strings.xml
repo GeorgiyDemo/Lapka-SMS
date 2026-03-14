@@ -68,8 +68,6 @@
     <string name="drawer_settings">Instellingen</string>
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Vrienden uitnodigen</string>
-    <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling
-    </string>
     <string name="rate_title">Aan het genieten van QKSMS?</string>
     <string name="rate_summary">Deel je liefde voor QKSMS door een beoordeling op Google Play te plaatsen!</string>
     <string name="rate_okay">Ok</string>
@@ -244,44 +242,6 @@
     <string name="about_contact_title">Contact</string>
     <string name="about_license_title">Licentie</string>
     <string name="about_copyright_title">Copyright</string>
-    <string name="qksms_plus_description_title">Ondersteun ontwikkeling, ontgrendel alles</string>
-    <string name="qksms_plus_description_summary">Je kan de developer al helpen vanaf %s</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">Levenslange upgrade voor %1$s %2$s</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">Ontgrendel en doneer voor %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Bedankt voor het onderhouden van QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Je hebt nu toegang tot alle QKSMS+ functies</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ is gratis voor F-Droid gebruikers. Als je verdere ontwikkelingen wilt
-        helpen, kun je gerust een donatie overwegen.
-    </string>
-    <string name="qksms_plus_donate">Doneren via PayPal</string>
-    <string name="qksms_plus_coming_soon">Binnenkort</string>
-    <string name="qksms_plus_themes_title">Premium thema\'s</string>
-    <string name="qksms_plus_themes_summary">Ontgrendel vele mooie kleuren die niet beschikbaar zijn in het Material
-        Design kleurenschema
-    </string>
-    <string name="qksms_plus_emoji_title">Aangepaste auto-emoji</string>
-    <string name="qksms_plus_emoji_summary">Maak aangepaste auto-emoji sneltoetsen</string>
-    <string name="qksms_plus_delayed_title">Vertraagd verzenden</string>
-    <string name="qksms_plus_delayed_summary">Wacht enkele seconden voor het versturen van je bericht</string>
-    <string name="qksms_plus_night_title">Automatische nachtmodus</string>
-    <string name="qksms_plus_night_summary">Schakel de nachtmodus in gebaseerd op de tijd van de dag</string>
-    <string name="qksms_plus_blacklist_title">Geavanceerd blokkeren</string>
-    <string name="qksms_plus_blacklist_summary">Blokkeer berichten die specifieke woorden of patronen bevatten</string>
-    <string name="qksms_plus_forward_title">Auto-doorsturen</string>
-    <string name="qksms_plus_forward_summary">Automatisch doorsturen van berichten van bepaalde afzenders</string>
-    <string name="qksms_plus_respond_title">Auto-antwoorden</string>
-    <string name="qksms_plus_respond_summary">Automatisch reageren op inkomende berichten met een vooraf ingestelde
-        reactie
-    </string>
-    <string name="qksms_plus_more_title">Meer</string>
-    <string name="qksms_plus_more_summary">QKSMS is in actieve ontwikkeling, uw aankoop bevat alle toekomstige
-        nieuwigheden exclusief voor QKSMS+!
-    </string>
-    <string name="widget_loading">Laden&#8230;</string>
-    <string name="widget_more">Bekijk meer conversaties</string>
     <string name="qkreply_menu_read">Markeren als gelezen</string>
     <string name="qkreply_menu_call">Bel</string>
     <string name="qkreply_menu_delete">Verwijderen</string>
@@ -311,7 +271,6 @@
     <string name="button_undo">Ongedaan maken</string>
     <string name="toast_copied">Gekopieerd</string>
     <string name="toast_archived">Conversatie gearchiveerd</string>
-    <string name="toast_qksms_plus">Je dient QKSMS+ te ontgrendelen om dit te gebruiken</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nieuw bericht</item>
         <item quantity="other">%s nieuwe berichten</item>

@@ -19,11 +19,8 @@
 package com.moez.QKSMS.feature.themepicker
 
 import com.f2prateek.rx.preferences2.Preference
-import com.moez.QKSMS.common.Navigator
 import com.moez.QKSMS.common.base.QkPresenter
 import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.manager.BillingManager
-import com.moez.QKSMS.manager.WidgetManager
 import com.moez.QKSMS.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -35,10 +32,7 @@ import javax.inject.Named
 class ThemePickerPresenter @Inject constructor(
     prefs: Preferences,
     @Named("recipientId") private val recipientId: Long,
-    private val billingManager: BillingManager,
-    private val colors: Colors,
-    private val navigator: Navigator,
-    private val widgetManager: WidgetManager
+    private val colors: Colors
 ) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(recipientId = recipientId)) {
 
     private val theme: Preference<Int> = prefs.theme(recipientId)
@@ -53,12 +47,7 @@ class ThemePickerPresenter @Inject constructor(
         // Update the theme when a material theme is clicked
         view.themeSelected()
             .autoDisposable(view.scope())
-            .subscribe { color ->
-                theme.set(color)
-                if (recipientId == 0L) {
-                    widgetManager.updateTheme()
-                }
-            }
+            .subscribe { color -> theme.set(color) }
 
         // Update the color of the apply button
         view.hsvThemeSelected()
@@ -76,23 +65,8 @@ class ThemePickerPresenter @Inject constructor(
         // Update the theme, when apply is clicked
         view.applyHsvThemeClicks()
             .withLatestFrom(view.hsvThemeSelected()) { _, color -> color }
-            .withLatestFrom(billingManager.upgradeStatus) { color, upgraded ->
-                if (!upgraded) {
-                    view.showQksmsPlusSnackbar()
-                } else {
-                    theme.set(color)
-                    if (recipientId == 0L) {
-                        widgetManager.updateTheme()
-                    }
-                }
-            }
             .autoDisposable(view.scope())
-            .subscribe()
-
-        // Show QKSMS+ activity
-        view.viewQksmsPlusClicks()
-            .autoDisposable(view.scope())
-            .subscribe { navigator.showQksmsPlusActivity("settings_theme") }
+            .subscribe { color -> theme.set(color) }
 
         // Reset the theme
         view.clearHsvThemeClicks()
@@ -103,12 +77,7 @@ class ThemePickerPresenter @Inject constructor(
         // Reset to system default color
         view.systemDefaultClicks()
             .autoDisposable(view.scope())
-            .subscribe {
-                theme.set(Preferences.THEME_DEFAULT_DYNAMIC)
-                if (recipientId == 0L) {
-                    widgetManager.updateTheme()
-                }
-            }
+            .subscribe { theme.set(Preferences.THEME_DEFAULT_DYNAMIC) }
     }
 
 }

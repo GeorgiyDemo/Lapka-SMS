@@ -282,8 +282,8 @@ class KeySettingsController(
     }
 
     private fun checkScannedQr() {
-        val qr = scannedQr
-        if (qr != null) {
+        val qr = scannedQr ?: return
+        if (qrScannedIntent.hasObservers()) {
             qrScannedIntent.onNext(qr)
             scannedQr = null
         }
@@ -341,6 +341,7 @@ class KeySettingsController(
                 val qrResult = IntentIntegrator.parseActivityResult(Activity.RESULT_OK, data)
                 if (qrResult != null && qrResult.contents != null) {
                     scannedQr = qrResult.contents
+                    checkScannedQr()
                 }
             }
         }

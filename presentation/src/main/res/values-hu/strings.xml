@@ -69,7 +69,6 @@
     <string name="drawer_settings">Beállítások</string>
     <string name="drawer_help">Súgó és visszajelzés</string>
     <string name="drawer_invite">Ismerősök meghívása</string>
-    <string name="drawer_plus_banner_summary">Juss érdekes, új lehetőségekhez és támogasd fejlesztést</string>
     <string name="rate_title">Tetszik a QKSMS?</string>
     <string name="rate_summary">Oszd meg a szeretetet és értékelj minket a Google Playen!</string>
     <string name="rate_okay">OKÉ!</string>
@@ -241,44 +240,6 @@
     <string name="about_contact_title">Kapcsolat</string>
     <string name="about_license_title">Licensz</string>
     <string name="about_copyright_title">Copyright</string>
-    <string name="qksms_plus_description_title">Fejlesztés támogatása, minden funkció engedélyezése</string>
-    <string name="qksms_plus_description_summary">Csak %s hogy megmenthess egy éhező fejlesztőt</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">Életre szóló upgrade %1$s %2$s</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">Minden funkció engedélyezése + adomány %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a QKSMS-t!</string>
-    <string name="qksms_plus_thanks_summary">MOst hozzáférsz minden QKSMS+ funkcióhoz</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">A QKSMS+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a
-        fejlesztést az alábbi módon megteheted.
-    </string>
-    <string name="qksms_plus_donate">Támogatás PayPalon keresztül</string>
-    <string name="qksms_plus_coming_soon">Hamarosan</string>
-    <string name="qksms_plus_themes_title">Prémium témák</string>
-    <string name="qksms_plus_themes_summary">Használj olyan csodaszép témákat amik nem érhetőek el a Material Design
-        palettáján
-    </string>
-    <string name="qksms_plus_emoji_title">Személyre szabott auto-emoji</string>
-    <string name="qksms_plus_emoji_summary">Készíts személyre szabott emoji rövidítéseket</string>
-    <string name="qksms_plus_delayed_title">Késleltetett küldés</string>
-    <string name="qksms_plus_delayed_summary">Küldés előtt várjon pár másodpercet</string>
-    <string name="qksms_plus_night_title">Automatikus éjjeli mód</string>
-    <string name="qksms_plus_night_summary">Az éjjeli mód beálíltása napszaktól függően</string>
-    <string name="qksms_plus_blacklist_title">Fejlett blokkolás</string>
-    <string name="qksms_plus_blacklist_summary">Megadott kulcsszavakat vagy szövegrészleteket tartalmazó üzenetek
-        blokkolása
-    </string>
-    <string name="qksms_plus_forward_title">Automatikus továbbítás</string>
-    <string name="qksms_plus_forward_summary">Adott küldőktől jövő üzenetek automatikus továbbítása</string>
-    <string name="qksms_plus_respond_title">Automatikus válasz</string>
-    <string name="qksms_plus_respond_summary">Előre megadott sablonok küldése bejövő üzenetekre</string>
-    <string name="qksms_plus_more_title">Tovább</string>
-    <string name="qksms_plus_more_summary">A QKSMS folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QKSMS+
-        funkciókat is tartalmazza!
-    </string>
-    <string name="widget_loading">Betöltés&#8230;</string>
-    <string name="widget_more">További társalgások megtekintése</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Hívás</string>
     <string name="qkreply_menu_delete">Törlés</string>
@@ -308,7 +269,6 @@
     <string name="button_undo">Visszavonás</string>
     <string name="toast_copied">Átmásolva</string>
     <string name="toast_archived">Archivált beszélgetés</string>
-    <string name="toast_qksms_plus">Ehhez ki kell nyitnod a QKSMS+-t</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Új üzenet</item>
         <item quantity="other">%s új üzenet</item>

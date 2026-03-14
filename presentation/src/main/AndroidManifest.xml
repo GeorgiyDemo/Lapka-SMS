@@ -34,11 +34,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
 
-    <permission
-        android:name="${applicationId}.permission.NOTIFY_WIDGET"
-        android:protectionLevel="signature" />
-
-    <application
+<application
             android:name=".common.QKApplication"
             android:allowBackup="false"
             android:enableOnBackInvokedCallback="true"
@@ -94,7 +90,7 @@
                 android:screenOrientation="portrait"
                 android:stateNotNeeded="true"
                 tools:replace="screenOrientation"/>
-        <activity android:name=".feature.plus.PlusActivity"/>
+
         <activity android:name=".feature.conversationinfo.ConversationInfoActivity"/>
         <activity android:name=".feature.notificationprefs.NotificationPrefsActivity"/>
         <activity android:name=".feature.blocking.BlockingActivity"/>
@@ -147,25 +143,8 @@
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE"/>
             </intent-filter>
         </receiver>
-        <receiver
-                android:name=".feature.widget.WidgetProvider"
-                android:exported="true"
-                android:permission="${applicationId}.permission.NOTIFY_WIDGET">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.moez.QKSMS.intent.action.ACTION_NOTIFY_DATASET_CHANGED"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/widget_info"/>
-        </receiver>
         <receiver android:name=".receiver.SendSmsReceiver" android:exported="false"/>
 
-        <service
-                android:name=".feature.widget.WidgetService"
-                android:exported="false"
-                android:permission="android.permission.BIND_REMOTEVIEWS"/>
         <service
                 android:name=".service.AutoDeleteService"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>

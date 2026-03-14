@@ -39,7 +39,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.moez.QKSMS.R
@@ -141,7 +140,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val textChangedIntent by lazy { message.textChanges() }
     override val changeSimIntent by lazy { sim.clicks() }
     override val sendIntent by lazy { send.clicks() }
-    override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val encryptionKeySetIntent: Subject<Unit> = PublishSubject.create()
     override val disableEncryptionConfirmed: Subject<Unit> = PublishSubject.create()
@@ -328,14 +326,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             ?.indexOfLast { message -> message.id == id }
             ?.takeIf { position -> position != -1 }
             ?.let(messageList::scrollToPosition)
-    }
-
-    override fun showQksmsPlusSnackbar(message: Int) {
-        Snackbar.make(contentView, message, Snackbar.LENGTH_LONG).run {
-            setAction(R.string.button_more) { viewQksmsPlusIntent.onNext(Unit) }
-            setActionTextColor(colors.theme().theme)
-            show()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

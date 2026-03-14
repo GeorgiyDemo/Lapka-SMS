@@ -68,7 +68,6 @@
     <string name="drawer_settings">Indstillinger</string>
     <string name="drawer_help">Hjælp og feedback</string>
     <string name="drawer_invite">Invitér venner</string>
-    <string name="drawer_plus_banner_summary">Oplås fantastiske nye funktioner og støt udvikling</string>
     <string name="rate_title">Synes om QKSMS?</string>
     <string name="rate_summary">Del og bedøm os på Google Play!</string>
     <string name="rate_okay">OKAY!</string>
@@ -240,42 +239,6 @@
     <string name="about_contact_title">Kontakt</string>
     <string name="about_license_title">Licens</string>
     <string name="about_copyright_title">Copyright</string>
-    <string name="qksms_plus_description_title">Støt udviklingen, oplås alt</string>
-    <string name="qksms_plus_description_summary">Du kan redde en sultende udvikler for kun %s</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">Livstidsopgradering for %1$s %2$s</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">Oplås + donér for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Tak for din støtte til QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Du har nu adgang til alle QKSMS+-funktioner</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brugere! Ønsker du at støtte udviklingen, er du
-        velkommen til at donere.
-    </string>
-    <string name="qksms_plus_donate">Donér via PayPal</string>
-    <string name="qksms_plus_coming_soon">Kommer snart</string>
-    <string name="qksms_plus_themes_title">Premium-temaer</string>
-    <string name="qksms_plus_themes_summary">Oplås smukke temafarver, som ikke er tilgængelig på Material
-        Design-paletten
-    </string>
-    <string name="qksms_plus_emoji_title">Tilpasset auto-emoji</string>
-    <string name="qksms_plus_emoji_summary">Opret tilpassede auto-emoji-genveje</string>
-    <string name="qksms_plus_delayed_title">Forsinket afsendelse</string>
-    <string name="qksms_plus_delayed_summary">Vent et par sekunder før du afsender beskeden</string>
-    <string name="qksms_plus_night_title">Automatisk nattilstand</string>
-    <string name="qksms_plus_night_summary">Aktivér nattilstanden baseret på klokkeslæt</string>
-    <string name="qksms_plus_blacklist_title">Avanceret blokering</string>
-    <string name="qksms_plus_blacklist_summary">Blokér beskeder indeholdende nøgleord eller mønstermatch</string>
-    <string name="qksms_plus_forward_title">Auto-videresendelse</string>
-    <string name="qksms_plus_forward_summary">Videresend automatisk beskeder fra bestemte afsendere</string>
-    <string name="qksms_plus_respond_title">Autosvar</string>
-    <string name="qksms_plus_respond_summary">Besvarer automatisk indgående beskeder med et foruddefineret svar</string>
-    <string name="qksms_plus_more_title">Flere</string>
-    <string name="qksms_plus_more_summary">QKSMS er under aktiv udvikling, og dit køb vil omfatte alle fremtidige QKSMS+
-        funktioner!
-    </string>
-    <string name="widget_loading">Indlæser&#8230;</string>
-    <string name="widget_more">Se flere samtaler</string>
     <string name="qkreply_menu_read">Markér som læst</string>
     <string name="qkreply_menu_call">Ring op</string>
     <string name="qkreply_menu_delete">Slet</string>
@@ -305,7 +268,6 @@
     <string name="button_undo">Fortryd</string>
     <string name="toast_copied">Kopieret</string>
     <string name="toast_archived">Arkiveret samtale</string>
-    <string name="toast_qksms_plus">Dette kræver oplåsning af QKSMS+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Ny besked</item>
         <item quantity="other">%s nye beskeder</item>

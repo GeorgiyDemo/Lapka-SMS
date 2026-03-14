@@ -68,7 +68,6 @@
     <string name="drawer_settings">Postavke</string>
     <string name="drawer_help">Pomoć i povratne informacije</string>
     <string name="drawer_invite">Invite friends</string>
-    <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
     <string name="rate_title">Uživate u QKSMS?</string>
     <string name="rate_summary">Podijelite malo ljubavi i ocijenite nas na Google Playu!</string>
     <string name="rate_okay">U REDU!</string>
@@ -244,42 +243,6 @@
     <string name="about_contact_title">Kontakt</string>
     <string name="about_license_title">Licenca</string>
     <string name="about_copyright_title">Autorska prava</string>
-    <string name="qksms_plus_description_title">Podržite razvoj, otključajte sve</string>
-    <string name="qksms_plus_description_summary">Možete spasiti izgladnjelog programera za samo %s</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">Doživotna nadogradnja za %1$s %2$s</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">Otključajte + za %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Hvala vam za podržavanje QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Sada imate pristup svim QKSMS+ značajkama</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, a
-        donation would be highly appreciated.
-    </string>
-    <string name="qksms_plus_donate">Donirajte putem PayPala</string>
-    <string name="qksms_plus_coming_soon">Uskoro dolazi</string>
-    <string name="qksms_plus_themes_title">Premium teme</string>
-    <string name="qksms_plus_themes_summary">Otključajte lijepe boje tema koje nisu dostupne na paleti materijalnog
-        dizajna
-    </string>
-    <string name="qksms_plus_emoji_title">Prilagođeni automatski emoji</string>
-    <string name="qksms_plus_emoji_summary">Stvorite prilagođene prečace za automatski emoji</string>
-    <string name="qksms_plus_delayed_title">Odgođeno slanje</string>
-    <string name="qksms_plus_delayed_summary">Pričekajte nekoliko sekundi prije slanja poruke</string>
-    <string name="qksms_plus_night_title">Automatski noćni način</string>
-    <string name="qksms_plus_night_summary">Omogućite noćni način prema dobi dana</string>
-    <string name="qksms_plus_blacklist_title">Napredno blokiranje</string>
-    <string name="qksms_plus_blacklist_summary">Blokirajte poruke koje sadrže ključne riječi ili obrasce</string>
-    <string name="qksms_plus_forward_title">Automatsko prosljeđivanje</string>
-    <string name="qksms_plus_forward_summary">Automatski proslijedite poruke određenih pošiljatelja</string>
-    <string name="qksms_plus_respond_title">Automatsko odgovaranje</string>
-    <string name="qksms_plus_respond_summary">Automatski odgovorite na poruke sa prilagođenim odgovorima</string>
-    <string name="qksms_plus_more_title"> Više</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future
-        QKSMS+ features!
-    </string>
-    <string name="widget_loading">Učitavanje&#8230;</string>
-    <string name="widget_more">View more conversations</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Call</string>
     <string name="qkreply_menu_delete">Delete</string>
@@ -309,7 +272,6 @@
     <string name="button_undo">Poništi</string>
     <string name="toast_copied">Kopirano</string>
     <string name="toast_archived">Razgovor je arhiviran</string>
-    <string name="toast_qksms_plus">Morate otključati QKSMS+ za korištenje ovog</string>
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>
         <item quantity="few">%s new messages</item>

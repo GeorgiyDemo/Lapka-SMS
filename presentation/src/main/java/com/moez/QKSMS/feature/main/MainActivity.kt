@@ -121,11 +121,8 @@ class MainActivity : QkThemedActivity(), MainView {
     private val archivedIcon: ImageView by lazy { findViewById(R.id.archivedIcon) }
     private val blocking: LinearLayout by lazy { findViewById(R.id.blocking) }
     private val settings: LinearLayout by lazy { findViewById(R.id.settings) }
-    private val plus: LinearLayout by lazy { findViewById(R.id.plus) }
     private val help: LinearLayout by lazy { findViewById(R.id.help) }
     private val invite: LinearLayout by lazy { findViewById(R.id.invite) }
-    private val plusBanner: ConstraintLayout by lazy { findViewById(R.id.plusBanner) }
-    private val plusIcon: ImageView by lazy { findViewById(R.id.plusIcon) }
     private val rateLayout: ConstraintLayout by lazy { findViewById(R.id.rateLayout) }
     private val rateIcon: ImageView by lazy { findViewById(R.id.rateIcon) }
     private val rateDismiss: QkTextView by lazy { findViewById(R.id.rateDismiss) }
@@ -149,13 +146,11 @@ class MainActivity : QkThemedActivity(), MainView {
                 archived.clicks().map { NavItem.ARCHIVED },
                 blocking.clicks().map { NavItem.BLOCKING },
                 settings.clicks().map { NavItem.SETTINGS },
-                plus.clicks().map { NavItem.PLUS },
                 help.clicks().map { NavItem.HELP },
                 invite.clicks().map { NavItem.INVITE })
         )
     }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
-    override val plusBannerIntent by lazy { plusBanner.clicks() }
     override val dismissRatingIntent by lazy { rateDismiss.clicks() }
     override val rateIntent by lazy { rateOkay.clicks() }
     override val conversationsSelectedIntent by lazy { conversationsAdapter.selectionChanges }
@@ -254,7 +249,6 @@ class MainActivity : QkThemedActivity(), MainView {
                 // Miscellaneous views
                 syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
                 syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
-                plusIcon.setTint(theme.theme)
                 rateIcon.setTint(theme.theme)
                 swipeRefresh.setColorSchemeColors(theme.theme)
                 compose.backgroundTintList = ColorStateList.valueOf(theme.theme)
@@ -323,8 +317,6 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbar.menu.findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
         toolbar.menu.findItem(R.id.block)?.isVisible = selectedConversations != 0
 
-        plus.isVisible = false
-        plusBanner.isVisible = false
         rateLayout.setVisible(false)
 
         compose.setVisible(state.page is Inbox || state.page is Archived)

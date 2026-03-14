@@ -68,7 +68,6 @@
     <string name="drawer_settings">設定</string>
     <string name="drawer_help">ヘルプとフィードバック</string>
     <string name="drawer_invite">友達を招待する</string>
-    <string name="drawer_plus_banner_summary">驚くべき新機能のロックを解除し、開発をサポート</string>
     <string name="rate_title">QKSMS をお楽みいただいていますか?</string>
     <string name="rate_summary">Google Play で愛を共有して私たちを評価してください!</string>
     <string name="rate_okay">OK!</string>
@@ -236,43 +235,6 @@
     <string name="about_contact_title">お問い合わせ</string>
     <string name="about_license_title">ライセンス</string>
     <string name="about_copyright_title">著作権</string>
-    <string name="qksms_plus_description_title">開発をサポートして、すべてのロックを解除します</string>
-    <string name="qksms_plus_description_summary">ちょうど %s 人の飢えている開発者を助けることができます</string>
-    <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
-    <string name="qksms_plus_upgrade">%1$s %2$s のライフタイムのアップグレード</string>
-    <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
-    <string name="qksms_plus_upgrade_donate">%1$s %2$s のロック解除と寄付</string>
-    <string name="qksms_plus_thanks_title">QKSMS を支援いただきありがとうございます!</string>
-    <string name="qksms_plus_thanks_summary">QKSMS+ のすべての機能にアクセスできます</string>
-    <string name="qksms_plus_error">エラーが発生しました。もう一度やり直してください</string>
-    <string name="qksms_plus_free_title">QKSMS+ は F-Droid ユーザーは無料です!
-        開発をサポートしたい場合は、気軽に寄付をしてください。
-    </string>
-    <string name="qksms_plus_donate">PayPal で寄付する</string>
-    <string name="qksms_plus_coming_soon">近日登場</string>
-    <string name="qksms_plus_themes_title">プレミアムテーマ</string>
-    <string name="qksms_plus_themes_summary">
-        マテリアルデザインパレットで利用できない美しいテーマカラーのロックを解除します
-    </string>
-    <string name="qksms_plus_emoji_title">カスタム自動絵文字</string>
-    <string name="qksms_plus_emoji_summary">カスタム自動絵文字のショートカットを作成します</string>
-    <string name="qksms_plus_delayed_title">送信を遅らせる</string>
-    <string name="qksms_plus_delayed_summary">メッセージを送信する前に、数秒間待ちます</string>
-    <string name="qksms_plus_night_title">自動夜間モード</string>
-    <string name="qksms_plus_night_summary">時間に基づいて夜間モードを有効にします</string>
-    <string name="qksms_plus_blacklist_title">高度なブロック</string>
-    <string name="qksms_plus_blacklist_summary">キーワードを含む、またはパターンに一致するメッセージをブロックします
-    </string>
-    <string name="qksms_plus_forward_title">自動転送</string>
-    <string name="qksms_plus_forward_summary">特定の送信者からのメッセージを自動的に転送します</string>
-    <string name="qksms_plus_respond_title">自動応答</string>
-    <string name="qksms_plus_respond_summary">あらかじめ設定された応答で、受信したメッセージに自動的に返信します</string>
-    <string name="qksms_plus_more_title">さらに</string>
-    <string name="qksms_plus_more_summary">
-        QKMSは活発に開発中です、そして、あなたの購入はすべての将来のQKMS+機能を含みます！
-    </string>
-    <string name="widget_loading">ロード中...</string>
-    <string name="widget_more">さらに会話を表示</string>
     <string name="qkreply_menu_read">既読にする</string>
     <string name="qkreply_menu_call">電話する</string>
     <string name="qkreply_menu_delete">削除</string>
@@ -302,7 +264,6 @@
     <string name="button_undo">元に戻す</string>
     <string name="toast_copied">コピーしました</string>
     <string name="toast_archived">会話をアーカイブしました</string>
-    <string name="toast_qksms_plus">これを使用するには QKSMS+ のロックを解除する必要があります</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s 新着メッセージ</item>
     </plurals>

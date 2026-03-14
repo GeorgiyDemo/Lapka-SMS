@@ -53,16 +53,17 @@
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:animateLayoutChanges="true">
 
             <com.moez.QKSMS.common.widget.QkEditText
                     android:id="@+id/search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:background="@drawable/rounded_rectangle_24dp"
                     android:backgroundTint="?attr/bubbleColor"
                     android:hint="@string/title_compose"

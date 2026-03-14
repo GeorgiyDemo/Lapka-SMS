@@ -40,7 +40,6 @@ import com.moez.QKSMS.feature.settings.SettingsController
 import com.moez.QKSMS.feature.settings.about.AboutController
 import com.moez.QKSMS.feature.settings.swipe.SwipeActionsController
 import com.moez.QKSMS.feature.themepicker.injection.ThemePickerComponent
-import com.moez.QKSMS.feature.widget.WidgetAdapter
 import com.moez.QKSMS.injection.android.ActivityBuilderModule
 import com.moez.QKSMS.injection.android.BroadcastReceiverBuilderModule
 import com.moez.QKSMS.injection.android.ServiceBuilderModule
@@ -74,8 +73,6 @@ interface AppComponent {
     fun inject(controller: SwipeActionsController)
 
     fun inject(dialog: QkDialog)
-
-    fun inject(service: WidgetAdapter)
 
     /**
      * This can't use AndroidInjection, or else it will crash on pre-marshmallow devices

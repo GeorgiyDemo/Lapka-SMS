@@ -18,7 +18,6 @@
  */
 package com.moez.QKSMS.injection.android
 
-import com.moez.QKSMS.feature.widget.WidgetProvider
 import com.moez.QKSMS.injection.scope.ActivityScope
 import com.moez.QKSMS.receiver.BlockThreadReceiver
 import com.moez.QKSMS.receiver.BootReceiver
@@ -90,9 +89,5 @@ abstract class BroadcastReceiverBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindSmsSentReceiver(): SmsSentReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindWidgetProvider(): WidgetProvider
 
 }
