@@ -1,0 +1,5 @@
+- Changed package namespace from com.moez.QKSMS to org.lapka.sms
+- Added conversation deduplication for duplicate threads
+- Recolored shortcut icons to match app theme
+- Added installation troubleshooting guide to README
+- Added screenshot-based encryption setup guide
