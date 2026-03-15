@@ -572,7 +572,62 @@ class ConversationRepositoryImpl @Inject constructor(
                 conversation.recipients.clear()
                 conversation.recipients.addAll(recipients)
                 conversation.lastMessage = lastMessage
-                realm.executeTransaction { it.insertOrUpdate(conversation) }
+
+                // Check for existing conversation with matching recipients but different threadId.
+                // This happens when Android deletes an empty thread and creates a new one
+                // for the same phone number — we need to preserve encryption settings.
+                realm.executeTransaction { r ->
+                    val existingConversation = r.where(Conversation::class.java)
+                        .notEqualTo("id", threadId)
+                        .findAll()
+                        .firstOrNull { existing ->
+                            existing.recipients.size == recipients.size &&
+                            existing.recipients.all { er ->
+                                recipients.any { nr -> phoneNumberUtils.compare(er.address, nr.address) }
+                            }
+                        }
+
+                    if (existingConversation != null) {
+                        // Migrate encryption and user settings from old conversation
+                        if (!existingConversation.encryptionKey.isNullOrEmpty()) {
+                            conversation.encryptionKey = existingConversation.encryptionKey
+                        }
+                        existingConversation.encryptionEnabled?.let { conversation.encryptionEnabled = it }
+                        if (existingConversation.encodingSchemeId >= 0) {
+                            conversation.encodingSchemeId = existingConversation.encodingSchemeId
+                        }
+                        if (existingConversation.deleteEncryptedAfter > 0) {
+                            conversation.deleteEncryptedAfter = existingConversation.deleteEncryptedAfter
+                        }
+                        if (existingConversation.deleteReceivedAfter > 0) {
+                            conversation.deleteReceivedAfter = existingConversation.deleteReceivedAfter
+                        }
+                        if (existingConversation.deleteSentAfter > 0) {
+                            conversation.deleteSentAfter = existingConversation.deleteSentAfter
+                        }
+                        if (existingConversation.name.isNotEmpty()) {
+                            conversation.name = existingConversation.name
+                        }
+                        conversation.pinned = conversation.pinned || existingConversation.pinned
+                        conversation.archived = conversation.archived && existingConversation.archived
+
+                        // Move messages from old conversation to new threadId
+                        r.where(Message::class.java)
+                            .equalTo("threadId", existingConversation.id)
+                            .findAll()
+                            .forEach { msg -> msg.threadId = threadId }
+
+                        // Refresh lastMessage after merging
+                        conversation.lastMessage = r.where(Message::class.java)
+                            .equalTo("threadId", threadId)
+                            .sort("date", Sort.DESCENDING)
+                            .findFirst()
+
+                        existingConversation.deleteFromRealm()
+                    }
+
+                    r.insertOrUpdate(conversation)
+                }
                 realm.close()
 
                 conversation

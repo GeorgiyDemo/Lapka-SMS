@@ -167,6 +167,45 @@ class SyncRepositoryImpl @Inject constructor(
                 }
             }
 
+            // Deduplicate conversations with matching recipients but different thread IDs.
+            // Android can create separate threads for the same number in different formats
+            // (e.g., +79991234567 vs 89991234567). Merge them into the one with the latest message.
+            val allConversations = realm.where(Conversation::class.java).findAll()
+            val merged = mutableSetOf<Long>()
+            for (conv in allConversations) {
+                if (conv.id in merged || conv.recipients.isEmpty()) continue
+                val duplicates = allConversations.filter { other ->
+                    other.id != conv.id && other.id !in merged &&
+                    other.recipients.size == conv.recipients.size &&
+                    conv.recipients.all { r ->
+                        other.recipients.any { o -> phoneNumberUtils.compare(r.address, o.address) }
+                    }
+                }
+                if (duplicates.isEmpty()) continue
+                // Pick the conversation with the latest message as the primary
+                val allCandidates = listOf(conv) + duplicates
+                val primary = allCandidates.maxByOrNull { it.lastMessage?.date ?: 0 } ?: conv
+                for (dup in allCandidates) {
+                    if (dup.id == primary.id) continue
+                    // Move messages from duplicate to primary
+                    realm.where(Message::class.java)
+                        .equalTo("threadId", dup.id)
+                        .findAll()
+                        .forEach { msg -> msg.threadId = primary.id }
+                    // Preserve encryption settings from duplicate if primary doesn't have them
+                    if (primary.encryptionKey.isNullOrEmpty() && !dup.encryptionKey.isNullOrEmpty()) {
+                        primary.encryptionKey = dup.encryptionKey
+                    }
+                    merged.add(dup.id)
+                    dup.deleteFromRealm()
+                }
+                // Refresh lastMessage on primary
+                primary.lastMessage = realm.where(Message::class.java)
+                    .sort("date", Sort.DESCENDING)
+                    .equalTo("threadId", primary.id)
+                    .findFirst()
+            }
+
             // Sync recipients
             recipientCursor?.use {
                 val contacts = realm.copyToRealmOrUpdate(getContacts())
