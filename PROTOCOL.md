@@ -130,7 +130,7 @@ Fixed overhead per message: **29 bytes** (12B nonce + 16B GCM tag + 1B MetaInfo)
 
 ## Encrypted Data Encoding (Steganography)
 
-The encrypted byte array is encoded into a text string for transmission via SMS. Three schemes are available:
+The encrypted byte array is encoded into a text string for transmission via SMS. Four schemes are available:
 
 ### Base64 (Scheme 0)
 
@@ -249,7 +249,7 @@ Master keys for message encryption are stored using **EncryptedSharedPreferences
 - Key encryption: AES-256-SIV
 - Value encryption: AES-256-GCM
 
-Keys can be set globally (for all conversations) or per-conversation (stored in encrypted Realm database).
+Keys are set per-conversation (stored in encrypted Realm database).
 
 ### Realm Database Key
 

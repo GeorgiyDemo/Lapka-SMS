@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="README_RU.md">Русская версия</a> · <a href="README_FA.md">نسخه فارسی</a> · <a href="PROTOCOL.md">Protocol</a>
+  <a href="README_RU.md">Русская версия</a> · <a href="README_ZH.md">中文版</a> · <a href="README_FA.md">نسخه فارسی</a> · <a href="PROTOCOL.md">Protocol</a>
 </p>
 
 ---
@@ -45,7 +45,6 @@ Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted
 
 ### Key management
 - **Per-conversation keys** — different key for each contact
-- **Global key** — fallback key for all conversations
 - **QR code sharing** — scan to exchange keys
 - **SHA-256 fingerprint** — verify key authenticity
 - **Android Keystore** — hardware-backed key storage
@@ -157,13 +156,23 @@ Key patterns:
 Lapka SMS is a fork of [Partisan-SMS](https://github.com/wrwrabbit/Partisan-SMS) (itself a fork of [QKSMS](https://github.com/moezbhatti/qksms)). Changes in Lapka SMS:
 
 - Upgraded encryption protocol to v3 with new steganography encoders
-- Upgraded dependencies (Dagger 2.52, Glide 4.16, Kotlin 1.9, compileSdk 35)
+- New Russian word dictionary (~84K words) for Russian Words steganography
+- Added English Words steganography scheme (~150K word dictionary)
+- Removed global encryption key — per-conversation keys only
+- Upgraded to 128-bit GCM authentication tag
 - Encrypted database storage (Realm encryption via Android Keystore)
 - EncryptedSharedPreferences for key material
-- Key fingerprint verification
+- Key fingerprint verification (SHA-256 emoji fingerprint)
+- Conversation deduplication (fixes duplicate threads for same number)
+- Changed package namespace from `com.moez.QKSMS` to `org.lapka.sms`
+- New app icon and shortcut icons
+- In-app encryption setup guide (help button in key settings)
 - In-app language selector
+- Disabled R8 obfuscation to reduce antivirus false positives
+- Fixed tryDecode/isEncrypted for text steganography schemes
 - Security hardening (network security config, private file logging, FLAG_SECURE)
-- CI/CD pipeline
+- Upgraded dependencies (Dagger 2.52, Glide 4.16, Kotlin 1.9, compileSdk 35)
+- CI/CD pipeline with automated releases
 - Modernized codebase (deprecated API cleanup, AndroidX migration)
 
 ## License
