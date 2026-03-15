@@ -1,0 +1,5 @@
+- Added English words steganography scheme
+- Fixed tryDecode/isEncrypted for text-based encoding schemes
+- Changed package namespace to org.lapka.sms
+- Disabled R8 obfuscation to reduce false positives from antivirus
+- Added localized strings for all supported languages

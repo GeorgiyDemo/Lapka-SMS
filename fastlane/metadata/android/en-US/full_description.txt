@@ -1,0 +1,14 @@
+Lapka SMS is a privacy-focused SMS messaging app with built-in encryption and steganography.
+
+Features:
+- End-to-end encryption for SMS messages using AES-GCM
+- Steganography: encrypted messages look like normal text (Russian or English words)
+- Multiple encoding schemes: Base64, Cyrillic Base64, Russian Words, English Words
+- QR code key exchange for easy setup
+- Emoji fingerprints to verify shared keys
+- Auto-delete encrypted messages after a configurable timeout
+- Per-conversation encryption keys
+- Material Design UI with themes and dark mode
+- Full-featured SMS client: group messaging, MMS, search, archiving
+
+Based on QKSMS, an open-source SMS app. Lapka SMS adds strong encryption so your private conversations stay private, even over insecure SMS channels.
