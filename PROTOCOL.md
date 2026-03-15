@@ -24,7 +24,7 @@ Plaintext
            ▼
 ┌─────────────────────┐
 │ Encrypted Data      │  Encode ciphertext as Base64 / Cyrillic Base64 /
-│ Encoder             │  Russian Words
+│ Encoder             │  Russian Words / English Words
 └──────────┬──────────┘
            ▼
       SMS text
@@ -156,13 +156,17 @@ The output looks like Cyrillic text to a casual observer.
 
 Encodes encrypted bytes as natural-looking Russian text using a system of sub-encoders:
 
-- **Words sub-encoders**: Map byte values to Russian words from dictionaries
+- **Words sub-encoders**: Map byte values to Russian words from dictionaries (~84K words)
 - **DateTime sub-encoder**: Encodes values as date/time strings
 - **Punctuation sub-encoder**: Encodes values as punctuation marks
 
 The encoding treats the encrypted data as a large integer and performs mixed-radix decomposition across the available sub-encoders. A random front-padding byte is prepended if needed to ensure the integer maps cleanly to the available word space.
 
 The output looks like a sequence of Russian words with natural punctuation and spacing. During decoding, up to 256 front-padding bytes are stripped to find the correct alignment.
+
+### English Words / Text English (Scheme 3)
+
+Same architecture as Russian Words but uses English dictionaries (~150K words). The output looks like a sequence of English words with natural punctuation and spacing. Useful when English text is less suspicious than Russian in the recipient's context.
 
 ## Replay Protection
 
@@ -197,7 +201,7 @@ SMS text
    │
    ▼
 ┌─────────────────────┐
-│ Encrypted Data      │  Decode from Base64/Cyrillic/Russian Words
+│ Encrypted Data      │  Decode from Base64/Cyrillic/Russian Words/English Words
 │ Decoder             │  (strip front-padding if needed)
 └──────────┬──────────┘
            ▼
@@ -291,7 +295,7 @@ Both parties should verify the fingerprint matches via a separate secure channel
 | Replay protection | Timestamp in nonce (7-day window) + nonce replay cache (1000 entries, 7-day TTL) |
 | Key separation | HKDF with domain-specific info string |
 | Key storage | Android Keystore (TEE) + EncryptedSharedPreferences |
-| Steganography | Base64 / Cyrillic Base64 / Russian Words encoding |
+| Steganography | Base64 / Cyrillic Base64 / Russian Words / English Words encoding |
 | Timing attack resistance | Constant-time hash comparison for smsForReset |
 | Nonce reuse resistance | timestamp(4B) + random(8B) = 2⁶⁴ random space per second |
 

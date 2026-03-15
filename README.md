@@ -24,7 +24,7 @@
 
 ## What is this?
 
-Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted messages are encoded using steganography — they can look like Cyrillic text or Russian words to anyone intercepting them. The primary adversary is the **mobile operator** who can read SMS content in transit.
+Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted messages are encoded using steganography — they look like English or Russian text to anyone intercepting them. The primary adversary is the **mobile operator** who can read SMS content in transit.
 
 > **Both parties need Lapka SMS** with the same encryption key to exchange encrypted messages. Unencrypted SMS works with any phone.
 
@@ -40,7 +40,8 @@ Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted
 |---|---|---|
 | Base64 | `dGVzdA==` | Universal, compact |
 | Cyrillic Base64 | `дГВздА==` | Blends with Cyrillic text |
-| Russian Words | `молоко дерево книга` | Looks like natural language |
+| Russian Words | `молоко дерево книга` | Looks like Russian text |
+| English Words | `Drawcut Foussa Miranda` | Looks like English text |
 
 ### Key management
 - **Per-conversation keys** — different key for each contact
@@ -65,7 +66,7 @@ Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted
 - Delivery reports
 - Dual SIM support
 - Swipe actions
-- 40 languages
+- 38 languages
 
 ## Threat Model
 
@@ -82,17 +83,49 @@ Lapka SMS is a full-featured SMS app with built-in message encryption. Encrypted
 
 Download the latest APK from [Releases](https://github.com/GeorgiyDemo/Lapka-SMS/releases) and install it. Set as default SMS app when prompted.
 
+> **Google Play Protect may block installation** because the app is not distributed through Google Play. This is a false positive — the app is open-source and contains no malware. To install:
+>
+> 1. If you see **"App blocked for your protection"** — you need to temporarily disable Play Protect:
+>    - Open **Google Play** → tap your **profile icon** → **Play Protect** → **Settings** (gear icon) → turn off **"Scan apps with Play Protect"**
+>    - Install the APK
+>    - Re-enable Play Protect after installation
+> 2. If you see **"Default SMS app request denied"** after installation — Android 13+ restricts sideloaded apps from becoming the default SMS handler. To fix:
+>    - Go to **Android Settings** → **Apps** → find **Lapka SMS** → tap **⋮** (three dots, top right) → **"Allow restricted settings"**
+>    - Now open Lapka SMS and accept the default SMS app prompt
+
 ### 2. Set up encryption
 
-1. Open **Settings** → **Encryption Key Settings**
-2. Tap **Generate Key** to create an AES-256 key
-3. Share the key with your contact via **QR code** (meet in person or use a secure channel)
-4. Verify the **key fingerprint** matches on both devices
-5. Choose an **encoding scheme** (Base64 / Cyrillic Base64 / Russian Words)
+Open a conversation → tap **⋮** menu → **Details** → **Encryption key**.
+
+1. Enable the **Encryption key** toggle
+2. Tap **Generate new key** — a random AES-256 key is created
+3. Share the key with your contact via **QR code** (meet in person) or copy it via a secure channel. **Never send the key via regular SMS!**
+4. Verify the **emoji fingerprint** matches on both devices
+5. Scroll down and choose an **encoding scheme**
+
+<img src="assets/guide/generate_key.png" width="300">
+
+<img src="assets/guide/encoding.png" width="300">
+
+Available encoding schemes:
+
+| Scheme | Looks like |
+|---|---|
+| Base64 | `dGVzdA==` — random characters |
+| Cyrillic Base64 | `дГВздА==` — Cyrillic random characters |
+| Russian Words | `молоко дерево книга` — Russian text |
+| English Words | `Drawcut Foussa Miranda` — English text |
 
 ### 3. Send encrypted messages
 
-Just send messages as usual. If encryption is enabled for a conversation, messages are encrypted and encoded automatically. Incoming encrypted messages are decrypted transparently.
+The **lock icon** 🔒 next to each message indicates encryption is active. Just type and send — messages are encrypted automatically. Incoming encrypted messages are decrypted transparently.
+
+<p float="left">
+  <img src="assets/guide/encryption.png" width="300">
+  <img src="assets/guide/default_messenger.png" width="300">
+</p>
+
+*Left: Lapka SMS (decrypted view) · Right: how it looks in a regular SMS app*
 
 ## Building from source
 
