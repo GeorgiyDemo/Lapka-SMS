@@ -103,9 +103,10 @@ Lapka SMS — полноценное SMS-приложение со встрое�
 4. Убедитесь, что **эмодзи-отпечаток** совпадает на обоих устройствах
 5. Прокрутите вниз и выберите **схему кодирования**
 
-<img src="assets/guide/generate_key.png" width="300">
-
-<img src="assets/guide/encoding.png" width="300">
+<p float="left">
+  <img src="assets/guide/generate_key.png" width="300">
+  <img src="assets/guide/encoding.png" width="300">
+</p>
 
 Доступные схемы кодирования:
 

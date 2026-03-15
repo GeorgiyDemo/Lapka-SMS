@@ -103,9 +103,10 @@ Open a conversation → tap **⋮** menu → **Details** → **Encryption key**.
 4. Verify the **emoji fingerprint** matches on both devices
 5. Scroll down and choose an **encoding scheme**
 
-<img src="assets/guide/generate_key.png" width="300">
-
-<img src="assets/guide/encoding.png" width="300">
+<p float="left">
+  <img src="assets/guide/generate_key.png" width="300">
+  <img src="assets/guide/encoding.png" width="300">
+</p>
 
 Available encoding schemes:
 

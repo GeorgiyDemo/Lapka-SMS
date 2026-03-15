@@ -103,9 +103,10 @@ Lapka SMS یک اپلیکیشن کامل SMS با رمزنگاری داخلی پ
 ۴. مطمئن شوید که **اثر انگشت اموجی** در هر دو دستگاه مطابقت دارد
 ۵. به پایین بروید و **طرح کدگذاری** را انتخاب کنید
 
-<img src="assets/guide/generate_key.png" width="300">
-
-<img src="assets/guide/encoding.png" width="300">
+<p float="left">
+  <img src="assets/guide/generate_key.png" width="300">
+  <img src="assets/guide/encoding.png" width="300">
+</p>
 
 طرح‌های کدگذاری موجود:
 
