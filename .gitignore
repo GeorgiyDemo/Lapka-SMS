@@ -56,3 +56,7 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
